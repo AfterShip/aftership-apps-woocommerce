@@ -1,0 +1,15 @@
+.hidden-field {
+	display: none;
+}
+
+#aftership_tracking_provider {
+	width: 100%;
+}
+
+.aftership_input_text {
+	width: 300px;
+}
+
+.aftership_dropdown {
+	width: 300px;
+}
