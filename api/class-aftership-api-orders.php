@@ -445,7 +445,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 
 		$query_args = $this->merge_query_args($query_args, $args);
 
-		return new WP_Query($query_args);
+        return new WP_Query($query_args);
 	}
 
 	/**

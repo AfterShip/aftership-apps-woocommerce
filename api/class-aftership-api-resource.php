@@ -158,7 +158,13 @@ class AfterShip_API_Resource
 		// resource page
 		$args['paged'] = (isset($request_args['page'])) ? absint($request_args['page']) : 1;
 
-		return array_merge($base_args, $args);
+        // order
+        if (!empty($request_args['orderby']))
+            $args['orderby'] = $request_args['orderby'];
+        if (!empty($request_args['order']))
+            $args['order'] = $request_args['order'];
+
+        return array_merge($base_args, $args);
 	}
 
 	/**
