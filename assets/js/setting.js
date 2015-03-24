@@ -17,6 +17,7 @@ jQuery(function () {
 
         jQuery('#couriers_select').val(selected_couriers);
         jQuery('#couriers_select').chosen();
+	    jQuery('#couriers_select').trigger('chosen:updated');
     }
 
     function set_track_message_demo(){
@@ -41,7 +42,7 @@ jQuery(function () {
             jQuery('#couriers').parent().parent().hide();
             jQuery('#track_message_demo_1').parent().parent().hide();
         }
-    })
+    });
 
     if (jQuery('#couriers')) {
         var couriers_select = jQuery('#couriers').val();
