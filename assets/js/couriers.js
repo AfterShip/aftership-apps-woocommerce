@@ -61,6 +61,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "airpak-express",
+			"name": "Airpak Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "an-post",
 			"name": "An Post",
 			"other_name": "Ireland Post",
@@ -169,6 +175,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "bondscouriers",
+			"name": "Bonds Couriers",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "boxc",
 			"name": "BOXC",
 			"other_name": "BOXC快遞",
@@ -183,7 +195,7 @@ function get_couriers() {
 		{
 			"slug": "bpost-international",
 			"name": "bpost international",
-			"other_name": "Belgium Post International, Minipak DDU",
+			"other_name": "Landmark Global",
 			"required_fields": []
 		},
 		{
@@ -734,8 +746,8 @@ function get_couriers() {
 		},
 		{
 			"slug": "gojavas",
-			"name": "GoJaVAS",
-			"other_name": "JaVAS",
+			"name": "GoJavas",
+			"other_name": "Javas",
 			"required_fields": []
 		},
 		{
@@ -778,6 +790,12 @@ function get_couriers() {
 			"slug": "i-parcel",
 			"name": "i-parcel",
 			"other_name": "iparcel",
+			"required_fields": []
+		},
+		{
+			"slug": "imxmail",
+			"name": "IMX Mail",
+			"other_name": "IMX International Mail Consolidator",
 			"required_fields": []
 		},
 		{
@@ -844,6 +862,12 @@ function get_couriers() {
 			"slug": "jcex",
 			"name": "JCEX",
 			"other_name": "JiaCheng, 杭州佳成",
+			"required_fields": []
+		},
+		{
+			"slug": "jet-ship",
+			"name": "Jet-Ship Worldwide",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -971,7 +995,7 @@ function get_couriers() {
 		{
 			"slug": "nationwide-my",
 			"name": "Nationwide Express",
-			"other_name": "",
+			"other_name": "nationwide2u",
 			"required_fields": []
 		},
 		{
@@ -987,9 +1011,33 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "nhans-solutions",
+			"name": "Nhans Solutions",
+			"other_name": "Nhans Courier",
+			"required_fields": []
+		},
+		{
+			"slug": "nightline",
+			"name": "Nightline",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ninjavan",
+			"name": "Ninja Van",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "nipost",
 			"name": "NiPost",
 			"other_name": "Nigerian Postal Service",
+			"required_fields": []
+		},
+		{
+			"slug": "norsk-global",
+			"name": "Norsk Global",
+			"other_name": "Norsk European Wholesale",
 			"required_fields": []
 		},
 		{
@@ -1659,7 +1707,7 @@ function get_couriers() {
 		{
 			"slug": "yunexpress",
 			"name": "Yun Express",
-			"other_name": "u4e91u9014u7269u6d41",
+			"other_name": "云途物流",
 			"required_fields": []
 		},
 		{
