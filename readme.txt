@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: shipping, tracking, ups, usps, fedex, dhl, tnt, dpd, post, shipment, woocommerce, tracking number, aftership, package tracking, fulfilment, tracking link, carrier, courier, woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 4.2.2
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,29 +31,26 @@ Upgrade to [Premium](https://www.aftership.com/premium) to automatically send ou
 [youtube http://www.youtube.com/watch?v=1zCCx8Ap9ms]
 
 ###Full list of supported carriers (200+):
-**①. US, Canada & Global Tracking (23)**
+**①. US, Canada & Global Tracking (35)**
+ABF Freight • APC Postal Logistics • Aramex • Asendia USA • Canada Post • Canpar Courier • Con-way Freight • DACHSER • DHL Express • DHL eCommerce • DHL Express (Piece ID) • DPD • DSV • Echo • Ensenda • Estes • FedEx • FedEx Freight • Globegistics Inc. • Greyhound • i-parcel • LaserShip • Newgistics • Old Dominion Freight Line • OnTrac • Purolator • RL Carriers • RR Donnelley • TNT • TNT Reference • UPS • UPS Freight • UPS Mail Innovations • USPS • YRC
 
-FedEx • UPS • DHL Express • USPS • UPS Mail Innovations • TNT • DPD • Aramex • DHL Global Mail • Toll Global Express • UPS Freight • Canada Post • Purolator • APC Postal Logistics • OnTrac • YRC • Asendia USA • LaserShip • i-parcel • ABF Freight • Estes • RL Carriers • Greyhound
+**②. UK & Ireland Tracking (30)**
+4Square Group • An Post • APC Overnight • Arrow XL • Asendia UK • Collect+ • Deltec Courier • DPD Ireland • DPD UK • Fastway Ireland • FedEx UK • Hermesworld • Homedirect Logistics • Interlink Express • myHermes UK • Nightline • Norsk Global • Panther • Parcel Force • Royal Mail • SkyNet Worldwide Express • Skynet Worldwide Express UK • TNT UK • TNT UK Reference • Tuffnells Parcels Express • UK Mail • XDP Express • XDP Express Reference • Yodel Domestic • Yodel International
 
-**②. UK & Ireland Tracking (19)**
+**③. Europe Tracking (93)**
+ACS Courier • Asendia Germany • ASM • Austrian Post (Express) • Austrian Post (Registered) • Belpost • Bert Transport • Bulgarian Posts • JP BH Pošta • Belgium Post • bpost international • BRT Bartolini • CBL Logistics • Česká Pošta • Chronopost France • Chronopost Portugal • Colis Privé • Colissimo • Correos Express • Cyprus Post • Post Danmark • DB Schenker Sweden • Deutsche Post Mail • DHL Benelux • DHL 2-Mann-Handling • DHL Spain Domestic • Deutsche Post DHL • DHL Netherlands • DHL Poland Domestic • DHL Parcel NL • Direct Link • DMM Network • DPD Germany • DPD Poland • Easy Mail • ELTA Hellenic Post • Envialia • Exapaq • FERCAM Logistics & Transport • Geodis Calberson France • GLS • GLS Italy • GLS Netherlands • Hermes Germany • Hrvatska Pošta • IMX Mail • InPost Paczkomaty • International Seur • Italy SDA • Kuehne + Nagel • La Poste • Lietuvos Paštas • Magyar Posta • Matkahuolto • Mondial Relay • MRW • NACEX Spain • Nova Poshta • FedEx Poland Domestic • Packlink • Poczta Polska • Portugal CTT • Portugal Seur • Poșta Română • Poste Italiane • Poste Italiane Paccocelere • Posten Norge / Bring • Itella Posti • PostNL Domestic • PostNL International 3S • PostNL International • PostNord Logistics • Iceland Post • PTT Posta • Raben Group • Redur Spain • Russian Post • SGT Corriere Espresso • Teliway SIC Express • Siodemka • Correos de España • Spanish Seur • Speed Couriers • Sweden Posten • Swiss Post • Geniki Taxydromiki • TNT-Click Italy • TNT France • TNT Italy • Nexive (TNT Post Italy) • TrakPak • TransMission • UkrPoshta
 
-Royal Mail • Parcel Force • FedEx UK • DPD UK • SkyNet Worldwide Express • TNT UK • Interlink Express • UK Mail • YODEL • myHermes UK • City Link • Collect+ • DX • Deltec Courier • XDP Express • An Post • DPD Ireland • Fastway Ireland • Arrow XL
+**④. Asia & China Tracking (125)**
 
-**③. Europe Tracking (66)**
+2GO • ABX Express • AIR21 • Airpak Express • Airspeed International Corporation • Bluedart • Cambodia Post • City-Link Express • CJ GLS • Delcart • Delhivery • Delivree King • Detrack • DHL Global Mail Asia • Dotzot • DPEX • DTDC India • Dynamic Logistics • Ecargo • Ecom Express • Fastrak Services • First Flight Couriers • First Logistics • Gati-KWE • GDEX • Giao hÃ ng nhanh • GoJavas • India Post Domestic • India Post International • Jam Express • Japan Post • Jayon Express (JEX) • Jet-Ship Worldwide • JNE • Kangaroo Worldwide Express • Kerry Express Thailand • Kerry TTC Express • KGM Hub • Korea Post • Lao Post • LBC Express • Lion Parcel • Malaysia Post EMS / Poslaju • Malaysia Post - Registered • Maxcellents Pte Ltd • Mypostonline • Nationwide Express • Nhans Solutions • Ninja Van • Ninja Van Malaysia • NuvoEx • Omni Parcel • Pandu Logistics • Parcel Express • Parcelled.in • Parcel Post Singapore • Pos Indonesia Domestic • Pos Indonesia Int'l • Professional Couriers • Quantium • Qxpress • RAF Philippines • Red Express • Red Express Waybill • RPX Indonesia • RPX Online • RZY Express • Safexpress • Sagawa • Singapore Post • Singapore Speedpost • SingParcel Service • SkyNet Malaysia • Spreadel • SRE Korea • Taiwan Post • Yamato Japan • TAQBIN Malaysia • TAQBIN Singapore • Thailand Thai Post • Tiki • ViettelPost • Vietnam Post • Vietnam Post EMS • Wahana • Xend Express • XpressBees • Zalora 7-Eleven • 17 Post Service • 4PX • Best Express • AuPost China • BOXC • China EMS • China Post • CNE Express • Cuckoo Express • DHL Hong Kong • EC-Firstclass • EC Express • EMPS Express • Equick China • Flyt Express • GoFly • Hua Han Logistics • Hong Kong Post • JCEX • Logistic Worldwide Express • Nanjing Woyuan • One World Express • Post56 • PayPal Package • SEKO Logistics • S.F. Express • S.F International • STO Express • DPEX China • TAQBIN Hong Kong • TGX • WeDo Logistics • WishPost • Yanwen • Yunda Express • Yun Express • ZJS International
 
-Direct Link • International Seur • GLS • DHL Benelux • PostNord Logistics • Deutsche Post Mail • Deutsche Post DHL • Hermes Germany • DPD Germany • Austrian Post (Registered) • Austrian Post (Express) • Swiss Post • Correos de España • NACEX Spain • Spanish Seur • ASM • MRW • Redur Spain • Portugal CTT • Chronopost Portugal • Portugal Seur • La Poste • Colissimo • Chronopost France • Colis Privé • TNT France • Geodis Calberson France • PostNL Domestic • PostNL International • PostNL International 3S • DHL Netherlands • GLS Netherlands • Selektvracht • DHL Parcel NL • Belgium Post • bpost international • Itella Posti • Posten Norge • Sweden Posten • Post Danmark • Italy SDA • Poste Italiane Paccocelere • Poste Italiane • BRT Bartolini • GLS Italy • TNT Italy • Nexive (TNT Post Italy) • Russian Post • Nova Poshta • DHL Poland • Poczta Polska • DPD Poland • Siodemka • OPEK • Lietuvos paštas • Česká Pošta • ELTA Hellenic Post • ACS Courier • PTT Posta • Belpost • Bulgarian Posts • Hrvatska PoÅ¡ta • Kuehne + Nagel • Poșta Română • Cyprus Post • UkrPoshta
+**⑤. Australia & New Zealand Tracking (14)**
 
-**④. Asia & China Tracking (57)**
+ADSOne • Australia Post • Bonds Couriers • CourierPost • Couriers Please • Fastway Australia • Fastway New Zealand • New Zealand Post • StarTrack • Star Track Express • TNT Australia • Toll IPEC • Toll Priority • UBI Logistics Australia
 
-DHL Global Mail Asia • Kerry Express Thailand • Singapore Post • Singapore Speedpost • TAQBIN Singapore • Korea Post • CJ GLS • India Post Domestic • India Post International • Delhivery • Bluedart • DTDC India • Professional Couriers • Safexpress • Red Express • Red Express Waybill • First Flight Couriers • Gati-KWE • GoJaVAS • Japan Post • Yamato Japan • Sagawa • Taiwan Post • Malaysia Post EMS / Poslaju • Malaysia Post - Registered • TAQBIN Malaysia • GDEX • SkyNet Malaysia • City-Link Express • Thailand Thai Post • Dynamic Logistics • 2GO • Xend • AIR21 • Jam Express • Pos Indonesia Domestic • Pos Indonesia Int'l • JNE • RPX Indonesia • Tiki • Wahana • LBC Express • First Logistics • Vietnam Post • Vietnam Post EMS • ViettelPost • Cambodia Post • S.F. Express • China Post • China EMS • 4PX • Yanwen • EC-Firstclass • AuPost China • WeDo Logistics • PayPal Package • JCEX • STO Express • Flyt Express • Hong Kong Post • TAQBIN Hong Kong • TGX
+**⑥. Latin America, Middle East & Other Tracking (27)**
 
-**⑤. Australia & New Zealand Tracking (10)**
-
-Australia Post • Toll Priority • Toll IPEC • TNT Australia • Fastway Australia • StarTrack • Star Track Express • Couriers Please • New Zealand Post • CourierPost
-
-**⑥. Latin America, Middle East & Other Tracking (18)**
-
-Correos de Mexico • Estafeta • Mexico Senda Express • Mexico Redpack • Mexico Multipack • Mexico AeroFlash • Brazil Correios • Flash Courier • Correos Chile • Correo Argentino • OCA Argentina • Israel Post • Israel Post Domestic • South African Post Office • Fastway South Africa • Saudi Post • NiPost • Evergreen
+4-72 Entregando • Mexico AeroFlash • Brazil Correios • Correo Argentino • Correos Chile • Correos de Mexico • Cosmetics Now • Courier Plus • Courier IT • Dawn Wing • DPE South Africa • Emirates Post • Estafeta • Fastway South Africa • Israel Post • Israel Post Domestic • Mexico Redpack • Mexico Senda Express • NiPost • OCA Argentina • Post Serbia • RAM • South African Post Office • Saudi Post • SMSA Express • Specialised Freight • Speedex Courier
 
 
 == Installation ==
@@ -94,6 +91,9 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 7. Automatically send out delivery notifications
 
 == Changelog ==
+
+= 1.4.6 =
+* Add new couriers
 
 = 1.4.5 =
 * Compatible up to WordPress 4.2.2

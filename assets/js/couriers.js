@@ -13,6 +13,18 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "360lion",
+			"name": "360 Lion Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "4-72",
+			"name": "4-72 Entregando",
+			"other_name": "Colombia Postal Service",
+			"required_fields": []
+		},
+		{
 			"slug": "4px",
 			"name": "4PX",
 			"other_name": "递四方",
@@ -49,6 +61,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "adsone",
+			"name": "ADSOne",
+			"other_name": "ADSOne Group",
+			"required_fields": []
+		},
+		{
 			"slug": "aeroflash",
 			"name": "Mexico AeroFlash",
 			"other_name": "AeroFlash",
@@ -64,6 +82,12 @@ function get_couriers() {
 			"slug": "airpak-express",
 			"name": "Airpak Express",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "airspeed",
+			"name": "Airspeed International Corporation",
+			"other_name": "Airspeed Philippines",
 			"required_fields": []
 		},
 		{
@@ -166,6 +190,12 @@ function get_couriers() {
 			"slug": "bgpost",
 			"name": "Bulgarian Posts",
 			"other_name": "Български пощи",
+			"required_fields": []
+		},
+		{
+			"slug": "bh-posta",
+			"name": "JP BH Pošta",
+			"other_name": "Bosnia and Herzegovina Post",
 			"required_fields": []
 		},
 		{
@@ -301,6 +331,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "con-way",
+			"name": "Con-way Freight",
+			"other_name": "Conway",
+			"required_fields": []
+		},
+		{
 			"slug": "correo-argentino",
 			"name": "Correo Argentino",
 			"other_name": "Argentina Post",
@@ -327,6 +363,12 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "costmeticsnow",
+			"name": "Cosmetics Now",
+			"other_name": "CosmeticsNow",
+			"required_fields": []
+		},
+		{
 			"slug": "courier-plus",
 			"name": "Courier Plus",
 			"other_name": "Courier Plus",
@@ -348,6 +390,12 @@ function get_couriers() {
 			"slug": "couriers-please",
 			"name": "Couriers Please",
 			"other_name": "CouriersPlease",
+			"required_fields": []
+		},
+		{
+			"slug": "cuckooexpress",
+			"name": "Cuckoo Express",
+			"other_name": "布谷鸟",
 			"required_fields": []
 		},
 		{
@@ -405,6 +453,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "detrack",
+			"name": "Detrack",
+			"other_name": "Detrack Singapore",
+			"required_fields": []
+		},
+		{
 			"slug": "deutsch-post",
 			"name": "Deutsche Post Mail",
 			"other_name": "dpdhl",
@@ -454,6 +508,12 @@ function get_couriers() {
 			"slug": "dhl-global-mail-asia",
 			"name": "DHL Global Mail Asia",
 			"other_name": "DGM Asia",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-hk",
+			"name": "DHL Hong Kong",
+			"other_name": "DHL HK Domestic",
 			"required_fields": []
 		},
 		{
@@ -535,6 +595,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dpex",
+			"name": "DPEX",
+			"other_name": "TGX, Toll Global Express Asia",
+			"required_fields": []
+		},
+		{
 			"slug": "dsv",
 			"name": "DSV",
 			"other_name": "",
@@ -573,6 +639,18 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ecexpress-cn",
+			"name": "EC Express",
+			"other_name": "CIS Post, u4e0au6d77u4e1cu64ce",
+			"required_fields": []
+		},
+		{
+			"slug": "echo",
+			"name": "Echo",
+			"other_name": "Echo Global Logistics",
+			"required_fields": []
+		},
+		{
 			"slug": "ecom-express",
 			"name": "Ecom Express",
 			"other_name": "EcomExpress",
@@ -593,7 +671,13 @@ function get_couriers() {
 		{
 			"slug": "empsexpress",
 			"name": "EMPS Express",
-			"other_name": "Shenzhen Express Mail & Parcel Service Freight Forwarding Co.,",
+			"other_name": "快信快包",
+			"required_fields": []
+		},
+		{
+			"slug": "ensenda",
+			"name": "Ensenda",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -660,6 +744,12 @@ function get_couriers() {
 			"slug": "fedex",
 			"name": "FedEx",
 			"other_name": "Federal Express",
+			"required_fields": []
+		},
+		{
+			"slug": "fedex-freight",
+			"name": "FedEx Freight",
+			"other_name": "FedEx LTL",
 			"required_fields": []
 		},
 		{
@@ -745,6 +835,12 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "gofly",
+			"name": "GoFly",
+			"other_name": "GoFlyi",
+			"required_fields": []
+		},
+		{
 			"slug": "gojavas",
 			"name": "GoJavas",
 			"other_name": "Javas",
@@ -766,6 +862,12 @@ function get_couriers() {
 			"slug": "hermes-de",
 			"name": "Hermes Germany",
 			"other_name": "myhermes.de, Hermes Logistik Gruppe Deutschland",
+			"required_fields": []
+		},
+		{
+			"slug": "hh-exp",
+			"name": "Hua Han Logistics",
+			"other_name": "u534eu7ff0u56fdu9645u7269u6d41",
 			"required_fields": []
 		},
 		{
@@ -808,6 +910,12 @@ function get_couriers() {
 			"slug": "india-post-int",
 			"name": "India Post International",
 			"other_name": "भारतीय डाक, Speed Post & eMO, EMS, IPS Web",
+			"required_fields": []
+		},
+		{
+			"slug": "inpost-paczkomaty",
+			"name": "InPost Paczkomaty",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -889,6 +997,18 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "kerryttc-vn",
+			"name": "Kerry TTC Express",
+			"other_name": "KTTC",
+			"required_fields": []
+		},
+		{
+			"slug": "kgmhub",
+			"name": "KGM Hub",
+			"other_name": "KGM",
+			"required_fields": []
+		},
+		{
 			"slug": "kn",
 			"name": "Kuehne + Nagel",
 			"other_name": "KN",
@@ -907,6 +1027,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "lao-post",
+			"name": "Lao Post",
+			"other_name": "Laos Postal Service",
+			"required_fields": []
+		},
+		{
 			"slug": "lasership",
 			"name": "LaserShip",
 			"other_name": "LaserShip",
@@ -920,8 +1046,14 @@ function get_couriers() {
 		},
 		{
 			"slug": "lietuvos-pastas",
-			"name": "Lietuvos paštas",
+			"name": "Lietuvos Paštas",
 			"other_name": "Lithuania Post, LP Express",
+			"required_fields": []
+		},
+		{
+			"slug": "lion-parcel",
+			"name": "Lion Parcel",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -949,6 +1081,24 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "matdespatch",
+			"name": "Matdespatch",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "matkahuolto",
+			"name": "Matkahuolto",
+			"other_name": "Oy Matkahuolto Ab",
+			"required_fields": []
+		},
+		{
+			"slug": "maxcellents",
+			"name": "Maxcellents Pte Ltd",
+			"other_name": "Maxcellent",
+			"required_fields": []
+		},
+		{
 			"slug": "mexico-redpack",
 			"name": "Mexico Redpack",
 			"other_name": "TNT Mexico",
@@ -959,6 +1109,14 @@ function get_couriers() {
 			"name": "Mexico Senda Express",
 			"other_name": "Mexico Senda Express",
 			"required_fields": []
+		},
+		{
+			"slug": "mondialrelay",
+			"name": "Mondial Relay",
+			"other_name": "Mondial Relay France",
+			"required_fields": [
+				"tracking_postal_code"
+			]
 		},
 		{
 			"slug": "mrw-spain",
@@ -1029,6 +1187,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ninjavan-my",
+			"name": "Ninja Van Malaysia",
+			"other_name": "NinjaVan MY",
+			"required_fields": []
+		},
+		{
 			"slug": "nipost",
 			"name": "NiPost",
 			"other_name": "Nigerian Postal Service",
@@ -1047,9 +1211,33 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "nuvoex",
+			"name": "NuvoEx",
+			"other_name": "Nuvo Ex",
+			"required_fields": []
+		},
+		{
 			"slug": "oca-ar",
 			"name": "OCA Argentina",
 			"other_name": "OCA e-Pak",
+			"required_fields": []
+		},
+		{
+			"slug": "old-dominion",
+			"name": "Old Dominion Freight Line",
+			"other_name": "ODFL",
+			"required_fields": []
+		},
+		{
+			"slug": "omniparcel",
+			"name": "Omni Parcel",
+			"other_name": "Omni-Channel Logistics (Seko)",
+			"required_fields": []
+		},
+		{
+			"slug": "oneworldexpress",
+			"name": "One World Express",
+			"other_name": "u6613u65f6u9039u7269u6d41",
 			"required_fields": []
 		},
 		{
@@ -1085,9 +1273,33 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "parcel-express",
+			"name": "Parcel Express",
+			"other_name": "Parcel Express Pte Ltd",
+			"required_fields": []
+		},
+		{
 			"slug": "parcel-force",
 			"name": "Parcel Force",
 			"other_name": "Parcelforce UK",
+			"required_fields": []
+		},
+		{
+			"slug": "parcelled-in",
+			"name": "Parcelled.in",
+			"other_name": "Parcelled",
+			"required_fields": []
+		},
+		{
+			"slug": "parcelpost-sg",
+			"name": "Parcel Post Singapore",
+			"other_name": "ParcelPost",
+			"required_fields": []
+		},
+		{
+			"slug": "pfcexpress",
+			"name": "PFC Express",
+			"other_name": "PFCu7687u5bb6u7269u6d41",
 			"required_fields": []
 		},
 		{
@@ -1118,6 +1330,12 @@ function get_couriers() {
 			"slug": "pos-indonesia-int",
 			"name": "Pos Indonesia Int'l",
 			"other_name": "Indonesian Post International EMS",
+			"required_fields": []
+		},
+		{
+			"slug": "post-serbia",
+			"name": "Post Serbia",
+			"other_name": "Pou0161ta Srbije",
 			"required_fields": []
 		},
 		{
@@ -1186,6 +1404,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "postur-is",
+			"name": "Iceland Post",
+			"other_name": "Postur.is, Íslandspóstur",
+			"required_fields": []
+		},
+		{
 			"slug": "ppbyb",
 			"name": "PayPal Package",
 			"other_name": "贝邮宝",
@@ -1210,15 +1434,33 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "quantium",
+			"name": "Quantium",
+			"other_name": "u51a0u5eadu7269u6d41",
+			"required_fields": []
+		},
+		{
 			"slug": "qxpress",
 			"name": "Qxpress",
 			"other_name": "Qxpress Qoo10",
 			"required_fields": []
 		},
 		{
+			"slug": "raben-group",
+			"name": "Raben Group",
+			"other_name": "myRaben",
+			"required_fields": []
+		},
+		{
 			"slug": "raf",
 			"name": "RAF Philippines",
 			"other_name": "RAF Int'l. Forwarding",
+			"required_fields": []
+		},
+		{
+			"slug": "raiderex",
+			"name": "RaidereX",
+			"other_name": "Detrack",
 			"required_fields": []
 		},
 		{
@@ -1252,6 +1494,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "rocketparcel",
+			"name": "Rocket Parcel International",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "royal-mail",
 			"name": "Royal Mail",
 			"other_name": "Royal Mail United Kingdom",
@@ -1270,9 +1518,21 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "rrdonnelley",
+			"name": "RR Donnelley",
+			"other_name": "RRD",
+			"required_fields": []
+		},
+		{
 			"slug": "russian-post",
 			"name": "Russian Post",
 			"other_name": "Почта России, EMS Post RU",
+			"required_fields": []
+		},
+		{
+			"slug": "rzyexpress",
+			"name": "RZY Express",
+			"other_name": "RZYExpress",
 			"required_fields": []
 		},
 		{
@@ -1297,6 +1557,12 @@ function get_couriers() {
 			"slug": "saudi-post",
 			"name": "Saudi Post",
 			"other_name": "البريد السعودي",
+			"required_fields": []
+		},
+		{
+			"slug": "sekologistics",
+			"name": "SEKO Logistics",
+			"other_name": "SEKO",
 			"required_fields": []
 		},
 		{
@@ -1339,6 +1605,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "singparcel",
+			"name": "SingParcel Service",
+			"other_name": "SPS",
+			"required_fields": []
+		},
+		{
 			"slug": "siodemka",
 			"name": "Siodemka",
 			"other_name": "Siodemka Kurier",
@@ -1360,6 +1632,12 @@ function get_couriers() {
 			"slug": "skynetworldwide-uk",
 			"name": "Skynet Worldwide Express UK",
 			"other_name": "Skynet UK",
+			"required_fields": []
+		},
+		{
+			"slug": "smsa-express",
+			"name": "SMSA Express",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -1525,21 +1803,27 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "tnt-reference",
+			"name": "TNT Reference",
+			"other_name": "TNT consignment reference",
+			"required_fields": []
+		},
+		{
 			"slug": "tnt-uk",
 			"name": "TNT UK",
 			"other_name": "TNT United Kingdom",
 			"required_fields": []
 		},
 		{
-			"slug": "tntpost-it",
-			"name": "Nexive (TNT Post Italy)",
-			"other_name": "Postnl TNT",
+			"slug": "tnt-uk-reference",
+			"name": "TNT UK Reference",
+			"other_name": "TNT UK consignment reference",
 			"required_fields": []
 		},
 		{
-			"slug": "toll-global-express",
-			"name": "Toll Global Express",
-			"other_name": "DPEX",
+			"slug": "tntpost-it",
+			"name": "Nexive (TNT Post Italy)",
+			"other_name": "Postnl TNT",
 			"required_fields": []
 		},
 		{
@@ -1663,6 +1947,14 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "xdp-uk-reference",
+			"name": "XDP Express Reference",
+			"other_name": "XDP UK",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
 			"slug": "xend",
 			"name": "Xend Express",
 			"other_name": "Xend Business Solutions",
@@ -1708,6 +2000,12 @@ function get_couriers() {
 			"slug": "yunexpress",
 			"name": "Yun Express",
 			"other_name": "云途物流",
+			"required_fields": []
+		},
+		{
+			"slug": "zalora-7-eleven",
+			"name": "Zalora 7-Eleven",
+			"other_name": "7-11",
 			"required_fields": []
 		},
 		{
