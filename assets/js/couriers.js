@@ -61,6 +61,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "adicional",
+			"name": "Adicional Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "adsone",
 			"name": "ADSOne",
 			"other_name": "ADSOne Group",
@@ -390,6 +396,12 @@ function get_couriers() {
 			"slug": "couriers-please",
 			"name": "Couriers Please",
 			"other_name": "CouriersPlease",
+			"required_fields": []
+		},
+		{
+			"slug": "cpacket",
+			"name": "cPacket",
+			"other_name": "u52a0u90aeu5b9d",
 			"required_fields": []
 		},
 		{
@@ -1578,6 +1590,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "sfcservice",
+			"name": "SFC Service",
+			"other_name": "u6df1u5733u4e09u6001u56fdu9645u901fu9012",
+			"required_fields": []
+		},
+		{
 			"slug": "sgt-it",
 			"name": "SGT Corriere Espresso",
 			"other_name": "SoGeTras Corriere Espresso",
@@ -1988,6 +2006,12 @@ function get_couriers() {
 			"slug": "yrc",
 			"name": "YRC",
 			"other_name": "YRC Freight",
+			"required_fields": []
+		},
+		{
+			"slug": "yto",
+			"name": "YTO Express",
+			"other_name": "u5706u901au901fu9012",
 			"required_fields": []
 		},
 		{
