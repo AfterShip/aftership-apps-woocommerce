@@ -54,6 +54,16 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 			array(array($this, 'get_order_notes'), AfterShip_API_Server::READABLE),
 		);
 
+		# PUT /update/tracking
+		$routes[$this->base . '/update/tracking'] = array(
+			array(array($this, 'update_tracking'), AfterShip_API_Server::EDITABLE | AfterShip_API_Server::ACCEPT_DATA),
+		);
+
+		# GET /ping
+		$routes[$this->base . '/ping'] = array(
+			array(array($this, 'ping'), AfterShip_API_Server::READABLE),
+		);
+
 		return $routes;
 	}
 
@@ -290,6 +300,65 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 			return new WP_Error('aftership_api_user_cannot_read_orders_count', __('You do not have permission to read the orders count', 'aftership'), array('status' => 401));
 
 		return array('count' => (int)$query->found_posts);
+	}
+
+	/**
+	 * Update tracking info
+	 *
+	 * @since 2.1
+	 * @param int $id the order ID
+	 * @param array $fields
+	 * @return string
+	 */
+	public function update_tracking($id, $tracking_provider = null, $tracking_number = null, $tracking_ship_date = null, $tracking_postal_code = null, $tracking_account_number = null, $tracking_key = null, $tracking_destination_country = null) {
+
+		$id = $this->validate_request($id, 'shop_order', 'read');
+
+		if (is_wp_error($id))
+			return $id;
+
+		$order = new WC_Order($id);
+		$post_id = $order->post->ID;
+
+		if (isset($tracking_provider)) {
+			update_post_meta($post_id, '_aftership_tracking_provider_name', wc_clean($tracking_provider));
+		}
+
+		if (isset($tracking_number)) {
+			update_post_meta($post_id, '_aftership_tracking_number', wc_clean($tracking_number));
+		}
+
+		if (isset($tracking_ship_date)) {
+			update_post_meta($post_id, '_aftership_tracking_ship_date', wc_clean(strtotime($tracking_ship_date)));
+		}
+
+		if (isset($tracking_postal_code)) {
+			update_post_meta($post_id, '_aftership_tracking_postal_code', wc_clean($tracking_postal_code));
+		}
+
+		if (isset($tracking_account_number)) {
+			update_post_meta($post_id, '_aftership_tracking_account_number', wc_clean($tracking_account_number));
+		}
+
+		if (isset($tracking_key)) {
+			update_post_meta($post_id, '_aftership_tracking_key', wc_clean($tracking_key));
+		}
+
+		if (isset($tracking_destination_country)) {
+			update_post_meta($post_id, '_aftership_tracking_destination_country', wc_clean($tracking_destination_country));
+		}
+
+		return $post_id;
+	}
+
+	/**
+	 * Ping method for easily veryfing credentials
+	 *
+	 * @since 2.1
+	 * @return string
+	 */
+	public function ping() {
+		return 'pong';
 	}
 
 	/**
