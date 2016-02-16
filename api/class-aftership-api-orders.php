@@ -310,7 +310,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 	 * @param array $fields
 	 * @return string
 	 */
-	public function update_tracking($id, $tracking_provider = null, $tracking_number = null, $tracking_ship_date = null, $tracking_postal_code = null, $tracking_account_number = null, $tracking_key = null, $tracking_destination_country = null) {
+	public function update_tracking($id, $tracking_provider_name = null, $tracking_provider = null, $tracking_number = null, $tracking_ship_date = null, $tracking_postal_code = null, $tracking_account_number = null, $tracking_key = null, $tracking_destination_country = null) {
 
 		$id = $this->validate_request($id, 'shop_order', 'read');
 
@@ -320,8 +320,15 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		$order = new WC_Order($id);
 		$post_id = $order->post->ID;
 
+		if (isset($tracking_provider_name)) {
+			update_post_meta($post_id, '_aftership_tracking_provider_name', wc_clean($tracking_provider_name));
+		}
+
 		if (isset($tracking_provider)) {
-			update_post_meta($post_id, '_aftership_tracking_provider_name', wc_clean($tracking_provider));
+			update_post_meta($post_id, '_aftership_tracking_provider', wc_clean($tracking_provider));
+			if (!isset($tracking_provider_name)) {
+				update_post_meta($post_id, '_aftership_tracking_provider_name', wc_clean($tracking_provider));
+			}
 		}
 
 		if (isset($tracking_number)) {
@@ -348,7 +355,9 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 			update_post_meta($post_id, '_aftership_tracking_destination_country', wc_clean($tracking_destination_country));
 		}
 
-		return $post_id;
+		getAfterShipInstance()->display_tracking_info($id);
+
+		return 'OK';
 	}
 
 	/**
