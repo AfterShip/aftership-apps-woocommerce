@@ -302,13 +302,12 @@ class AfterShip_API_Server
 			case 'GET':
 				$method = self::METHOD_GET;
 				break;
+			case 'PUT':
+				$method = self::METHOD_PUT;
+				break;
 			/*
 						case 'POST':
 							$method = self::METHOD_POST;
-							break;
-
-						case 'PUT':
-							$method = self::METHOD_PUT;
 							break;
 
 						case 'PATCH':
