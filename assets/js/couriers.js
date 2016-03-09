@@ -247,6 +247,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "buylogic",
+			"name": "Buylogic",
+			"other_name": "捷买送",
+			"required_fields": []
+		},
+		{
 			"slug": "cambodia-post",
 			"name": "Cambodia Post",
 			"other_name": "Cambodia Post",
@@ -372,6 +378,12 @@ function get_couriers() {
 			"slug": "costmeticsnow",
 			"name": "Cosmetics Now",
 			"other_name": "CosmeticsNow",
+			"required_fields": []
+		},
+		{
+			"slug": "courex",
+			"name": "Courex",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -553,6 +565,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "directfreight-au",
+			"name": "Direct Freight Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "directlink",
 			"name": "Direct Link",
 			"other_name": "Direct Link",
@@ -598,6 +616,12 @@ function get_couriers() {
 			"slug": "dpd-uk",
 			"name": "DPD UK",
 			"other_name": "Dynamic Parcel Distribution UK",
+			"required_fields": []
+		},
+		{
+			"slug": "dpe-express",
+			"name": "DPE Express",
+			"other_name": "Delivery Perfect Express Co.",
 			"required_fields": []
 		},
 		{
@@ -907,6 +931,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "idexpress",
+			"name": "IDEX",
+			"other_name": "上海宏杉国际物流",
+			"required_fields": []
+		},
+		{
 			"slug": "imxmail",
 			"name": "IMX Mail",
 			"other_name": "IMX International Mail Consolidator",
@@ -958,6 +988,12 @@ function get_couriers() {
 			"slug": "italy-sda",
 			"name": "Italy SDA",
 			"other_name": "SDA Express Courier",
+			"required_fields": []
+		},
+		{
+			"slug": "itis",
+			"name": "ITIS International",
+			"other_name": "ITIS International",
 			"required_fields": []
 		},
 		{
@@ -1382,7 +1418,7 @@ function get_couriers() {
 		},
 		{
 			"slug": "posti",
-			"name": "Itella Posti",
+			"name": "Posti",
 			"other_name": "Finland Post",
 			"required_fields": []
 		},
@@ -1650,6 +1686,12 @@ function get_couriers() {
 			"slug": "skynetworldwide-uk",
 			"name": "Skynet Worldwide Express UK",
 			"other_name": "Skynet UK",
+			"required_fields": []
+		},
+		{
+			"slug": "skypostal",
+			"name": "Asendia HK (LATAM)",
+			"other_name": "SkyPostal (Postrac)",
 			"required_fields": []
 		},
 		{
@@ -1982,6 +2024,12 @@ function get_couriers() {
 			"slug": "xpressbees",
 			"name": "XpressBees",
 			"other_name": "XpressBees logistics",
+			"required_fields": []
+		},
+		{
+			"slug": "xq-express",
+			"name": "XQ Express",
+			"other_name": "u661fu4e7eu7269u6d41",
 			"required_fields": []
 		},
 		{
