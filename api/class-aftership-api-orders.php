@@ -162,7 +162,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 				'postcode' => $order->shipping_postcode,
 				'country' => $order->shipping_country,
 			),
-//			'note' => $order->customer_note,
+			'note' => $order->customer_note,
 //			'customer_ip' => $order->customer_ip_address,
 //			'customer_user_agent' => $order->customer_user_agent,
 //			'customer_id' => $order->customer_user,
