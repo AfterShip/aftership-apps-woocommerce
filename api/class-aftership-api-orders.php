@@ -54,6 +54,11 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 			array(array($this, 'get_order_notes'), AfterShip_API_Server::READABLE),
 		);
 
+		# GET /orders/ping
+		$routes[$this->base . '/ping'] = array(
+			array(array($this, 'ping'), AfterShip_API_Server::READABLE),
+		);
+
 		return $routes;
 	}
 
@@ -469,6 +474,19 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		}
 
 		return $subtotal;
+	}
+
+	/**
+	 * Get the total number of orders
+	 *
+	 * @since 2.1
+	 * @param string $status
+	 * @param array $filter
+	 * @return array
+	 */
+	public function ping()
+	{
+		return "pong";
 	}
 
 }
