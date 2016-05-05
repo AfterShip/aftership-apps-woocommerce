@@ -31,12 +31,6 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "4squaregroup",
-			"name": "4Square Group",
-			"other_name": "4 Square",
-			"required_fields": []
-		},
-		{
 			"slug": "800bestex",
 			"name": "Best Express",
 			"other_name": "百世汇通",
@@ -97,6 +91,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "alphafast",
+			"name": "alphaFAST",
+			"other_name": "Alpha",
+			"required_fields": []
+		},
+		{
 			"slug": "an-post",
 			"name": "An Post",
 			"other_name": "Ireland Post",
@@ -111,6 +111,14 @@ function get_couriers() {
 		{
 			"slug": "apc-overnight",
 			"name": "APC Overnight",
+			"other_name": "The Alternative Parcels Company Limited",
+			"required_fields": [
+				"tracking_account_number"
+			]
+		},
+		{
+			"slug": "apc-overnight-reference",
+			"name": " APC Overnight Reference",
 			"other_name": "The Alternative Parcels Company Limited",
 			"required_fields": [
 				"tracking_account_number"
@@ -179,6 +187,15 @@ function get_couriers() {
 			"name": "Austrian Post (Registered)",
 			"other_name": "Österreichische Post AG",
 			"required_fields": []
+		},
+		{
+			"slug": "b2ceurope",
+			"name": "B2C Europe",
+			"other_name": "trackyourparcel.eu",
+			"required_fields": [
+				"tracking_postal_code",
+				"tracking_destination_country"
+			]
 		},
 		{
 			"slug": "belpost",
@@ -465,12 +482,6 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "delivreeking",
-			"name": "Delivree King",
-			"other_name": "delivery king",
-			"required_fields": []
-		},
-		{
 			"slug": "deltec-courier",
 			"name": "Deltec Courier",
 			"other_name": "Deltec Interntional Courier",
@@ -649,6 +660,20 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dtdc-au",
+			"name": "DTDC Australia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dx",
+			"name": "DX",
+			"other_name": "-",
+			"required_fields": [
+				"tracking_account_number"
+			]
+		},
+		{
 			"slug": "dynamic-logistics",
 			"name": "Dynamic Logistics",
 			"other_name": "Dynamic Logistics Thailand",
@@ -672,12 +697,6 @@ function get_couriers() {
 			"slug": "ecargo-asia",
 			"name": "Ecargo",
 			"other_name": "Ecargo Pte. Ltd",
-			"required_fields": []
-		},
-		{
-			"slug": "ecexpress-cn",
-			"name": "EC Express",
-			"other_name": "CIS Post, u4e0au6d77u4e1cu64ce",
 			"required_fields": []
 		},
 		{
@@ -744,6 +763,12 @@ function get_couriers() {
 			"slug": "exapaq",
 			"name": "Exapaq",
 			"other_name": "DPD France",
+			"required_fields": []
+		},
+		{
+			"slug": "expeditors",
+			"name": "Expeditors",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -832,7 +857,7 @@ function get_couriers() {
 		},
 		{
 			"slug": "geodis-calberson-fr",
-			"name": "Geodis Calberson France",
+			"name": "GEODIS - Distribution & Express",
 			"other_name": "Geodiscalberson",
 			"required_fields": [
 				"tracking_postal_code"
@@ -934,6 +959,12 @@ function get_couriers() {
 			"slug": "idexpress",
 			"name": "IDEX",
 			"other_name": "上海宏杉国际物流",
+			"required_fields": []
+		},
+		{
+			"slug": "imexglobalsolutions",
+			"name": " IMEX Global Solutions",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -1232,6 +1263,12 @@ function get_couriers() {
 			"slug": "ninjavan",
 			"name": "Ninja Van",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ninjavan-id",
+			"name": "Ninja Van Indonesia",
+			"other_name": "NinjaVan Indonesia",
 			"required_fields": []
 		},
 		{
@@ -1608,6 +1645,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "scudex-express",
+			"name": "Scudex Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "sekologistics",
 			"name": "SEKO Logistics",
 			"other_name": "SEKO",
@@ -1656,12 +1699,6 @@ function get_couriers() {
 			"slug": "singapore-speedpost",
 			"name": "Singapore Speedpost",
 			"other_name": "Singapore EMS",
-			"required_fields": []
-		},
-		{
-			"slug": "singparcel",
-			"name": "SingParcel Service",
-			"other_name": "SPS",
 			"required_fields": []
 		},
 		{
@@ -1824,6 +1861,12 @@ function get_couriers() {
 			"slug": "thailand-post",
 			"name": "Thailand Thai Post",
 			"other_name": "ไปรษณีย์ไทย",
+			"required_fields": []
+		},
+		{
+			"slug": "thecourierguy",
+			"name": "The Courier Guy",
+			"other_name": "TheCourierGuy",
 			"required_fields": []
 		},
 		{
@@ -2089,4 +2132,3 @@ function get_couriers() {
 	];
 	return data;
 }
-
