@@ -448,7 +448,8 @@ if (is_woocommerce_active()) {
                 print_r($provider_required_fields);
                 echo '<br/>';
 
-                foreach ($provider_required_fields as $field) {
+                for ($i = 0 ; $i < count($provider_required_fields); $i++) {
+                    $field = $provider_required_fields[$i];
                     foreach ($this->aftership_fields as $aftership_field) {
                         if (array_key_exists('key', $aftership_field) && $field == $aftership_field['key']) {
                             array_push($required_fields_values, $values[$aftership_field['id']]);
