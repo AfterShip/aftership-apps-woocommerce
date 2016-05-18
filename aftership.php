@@ -83,6 +83,12 @@ if (is_woocommerce_active()) {
                         $this->use_track_button = false;
                     }
 
+                    if (isset($options['custom_domain'])) {
+                        $this->custom_domain = $options['custom_domain'];
+                    } else {
+                        $this->custom_domain = '';
+                    }
+
                     add_action('woocommerce_view_order', array(&$this, 'display_tracking_info'));
                     add_action('woocommerce_email_before_order_table', array(&$this, 'email_display'));
 
@@ -456,7 +462,7 @@ if (is_woocommerce_active()) {
                 echo $track_message_1 . $values['aftership_tracking_provider_name'] . '<br/>' . $track_message_2 . $values['aftership_tracking_number'] . $required_fields_msg;
 
                 if (!$for_email && $this->use_track_button) {
-                    $this->display_track_button($values['aftership_tracking_provider'], $values['aftership_tracking_number']);
+                    $this->display_track_button($values['aftership_tracking_provider'], $values['aftership_tracking_number'], $required_fields_values);
                 }
 
                 //-------------------------------------------------------------------------------------
@@ -518,6 +524,7 @@ if (is_woocommerce_active()) {
                 $tracking = get_post_meta($order_id, '_tracking_number', true);
                 $sharp = strpos($tracking, '#');
                 $colon = strpos($tracking, ':');
+                $required_fields = array();
                 if ($sharp && $colon && $sharp >= $colon) {
                     return;
                 } else if (!$sharp && $colon) {
@@ -526,6 +533,8 @@ if (is_woocommerce_active()) {
                     $tracking_provider = substr($tracking, 0, $sharp);
                     if ($colon) {
                         $tracking_number = substr($tracking, $sharp + 1, $colon - $sharp - 1);
+                        $temp = substr($tracking, $sharp + 1, strlen($tracking));
+                        $required_fields = split(':', $temp);
                     } else {
                         $tracking_number = substr($tracking, $sharp + 1, strlen($tracking));
                     }
@@ -534,7 +543,7 @@ if (is_woocommerce_active()) {
                     $tracking_number = $tracking;
                 }
                 if ($tracking_number) {
-                    $this->display_track_button($tracking_provider, $tracking_number);
+                    $this->display_track_button($tracking_provider, $tracking_number, $required_fields);
                 }
             }
 
@@ -549,7 +558,7 @@ if (is_woocommerce_active()) {
                 $this->display_tracking_info($order->id, true);
             }
 
-            private function display_track_button($tracking_provider, $tracking_number)
+            private function display_track_button($tracking_provider, $tracking_number, $required_fields_values)
             {
 
                 $js = '(function(e,t,n){var r,i=e.getElementsByTagName(t)[0];if(e.getElementById(n))return;r=e.createElement(t);r.id=n;r.src="//apps.aftership.com/all.js";i.parentNode.insertBefore(r,i)})(document,"script","aftership-jssdk")';
@@ -560,7 +569,11 @@ if (is_woocommerce_active()) {
                     $woocommerce->add_inline_js($js);
                 }
 
-                $track_button = '<div id="as-root"></div><div class="as-track-button" data-slug="' . $tracking_provider . '" data-tracking-number="' . $tracking_number . '" data-support="true" data-width="400" data-size="normal" data-hide-tracking-number="true"></div>';
+                if (count($required_fields_values)) {
+                    $tracking_number = $tracking_number . ':' . join(':', $required_fields_values);
+                }
+
+                $track_button = '<div id="as-root"></div><div class="as-track-button" data-slug="' . $tracking_provider . '" data-tracking-number="' . $tracking_number . '" data-domain="' . $this->custom_domain . '" data-support="true" data-width="400" data-size="normal" data-hide-tracking-number="true"></div>';
                 echo wpautop(sprintf('%s', $track_button));
                 echo "<br><br>";
             }
