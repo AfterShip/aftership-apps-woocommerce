@@ -445,22 +445,14 @@ if (is_woocommerce_active()) {
                 $required_fields_values = array();
                 $provider_required_fields = explode(",", $values['aftership_tracking_required_fields']);
 
-                print_r($provider_required_fields);
-                echo '<br/>';
-
                 for ($i = 0 ; $i < count($provider_required_fields); $i++) {
                     $field = $provider_required_fields[$i];
                     foreach ($this->aftership_fields as $aftership_field) {
                         if (array_key_exists('key', $aftership_field) && $field == $aftership_field['key']) {
-                            echo $aftership_field['key'] . '<br/>';
-                            echo $aftership_field['id'] . '<br/>';
                             array_unshift($required_fields_values, $values[$aftership_field['id']]);
                         }
                     }
                 }
-
-                print_r($required_fields_values);
-                echo '<br/>';
 
                 if (count($required_fields_values)) {
                     $required_fields_msg = ' (' . join(', ', $required_fields_values) . ')';
