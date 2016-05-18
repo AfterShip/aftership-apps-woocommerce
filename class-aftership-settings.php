@@ -147,6 +147,14 @@ class AfterShip_Settings
         );
 
         add_settings_field(
+            'custom_domain',
+            'Display Tracking Information at Custom Domain',
+            array($this, 'custom_domain_callback'),
+            'aftership-setting-admin',
+            'aftership_setting_section_id'
+        );
+
+        add_settings_field(
             'track_message',
             'Content',
             array($this, 'track_message_callback'),
@@ -166,6 +174,10 @@ class AfterShip_Settings
 
         if (isset($input['couriers'])) {
             $new_input['couriers'] = sanitize_text_field($input['couriers']);
+        }
+
+        if (isset($input['custom_domain'])) {
+            $new_input['custom_domain'] = sanitize_text_field($input['custom_domain']);
         }
 
         if (isset($input['plugin'])) {
@@ -239,6 +251,14 @@ class AfterShip_Settings
 
         printf(
             '<select id="plugin" name="aftership_option_name[plugin]" class="aftership_dropdown">' . $options . '</select>'
+        );
+    }
+
+    public function custom_domain_callback()
+    {
+        printf(
+            '<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
+            isset($this->options['custom_domain']) ? $this->options['custom_domain'] : 'track.aftership.com'
         );
     }
 
