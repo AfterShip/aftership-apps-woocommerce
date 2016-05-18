@@ -454,7 +454,7 @@ if (is_woocommerce_active()) {
                         if (array_key_exists('key', $aftership_field) && $field == $aftership_field['key']) {
                             echo $aftership_field['key'] . '<br/>';
                             echo $aftership_field['id'] . '<br/>';
-                            array_shift($required_fields_values, $values[$aftership_field['id']]);
+                            array_unshift($required_fields_values, $values[$aftership_field['id']]);
                         }
                     }
                 }
