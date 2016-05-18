@@ -445,7 +445,8 @@ if (is_woocommerce_active()) {
                 $required_fields_values = array();
                 $provider_required_fields = explode(",", $values['aftership_tracking_required_fields']);
 
-                echo $provider_required_fields . '<br/>';
+                print_r($provider_required_fields);
+                echo '<br/>';
 
                 foreach ($provider_required_fields as $field) {
                     foreach ($this->aftership_fields as $aftership_field) {
@@ -455,7 +456,8 @@ if (is_woocommerce_active()) {
                     }
                 }
 
-                echo $required_fields_values . '<br/>';
+                print_r($required_fields_values);
+                echo '<br/>';
 
                 if (count($required_fields_values)) {
                     $required_fields_msg = ' (' . join(', ', $required_fields_values) . ')';
