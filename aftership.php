@@ -573,7 +573,14 @@ if (is_woocommerce_active()) {
                     $tracking_number = $tracking_number . ':' . join(':', $required_fields_values);
                 }
 
-                $track_button = '<div id="as-root"></div><div class="as-track-button" data-slug="' . $tracking_provider . '" data-tracking-number="' . $tracking_number . '" data-domain="' . $this->custom_domain . '" data-support="true" data-width="400" data-size="normal" data-hide-tracking-number="true"></div>';
+                $temp_url = '';
+                $temp_slug = ' data-slug="' . $tracking_provider . '"';
+                if($this->custom_domain != '') {
+                    $temp_url = '" data-domain="' . $this->custom_domain;
+                    $temp_slug = '';
+                }
+
+                $track_button = '<div id="as-root"></div><div class="as-track-button"' . $temp_slug . ' data-tracking-number="' . $tracking_number . $temp_url .'" data-support="true" data-width="400" data-size="normal" data-hide-tracking-number="true"></div>';
                 echo wpautop(sprintf('%s', $track_button));
                 echo "<br><br>";
             }
