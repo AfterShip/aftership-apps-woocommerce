@@ -265,7 +265,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
                 'tracking_key' => get_post_meta($order->id, '_aftership_tracking_key', true),
                 'tracking_destination_country' => get_post_meta($order->id, '_aftership_tracking_destination_country', true),
 			);
-		} else if ($plugin == 'wc-shipment-tracking') { //$49
+		} else { //$49
 			$order_data['aftership']['woocommerce']['trackings'][] = array(
 				'tracking_number' => get_post_meta($order->id, '_tracking_number', true),
 			);
