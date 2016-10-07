@@ -91,6 +91,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ajexpress",
+			"name": "a j express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "alphafast",
 			"name": "alphaFAST",
 			"other_name": "Alpha",
@@ -111,15 +117,15 @@ function get_couriers() {
 		{
 			"slug": "apc-overnight",
 			"name": "APC Overnight",
-			"other_name": "The Alternative Parcels Company Limited",
+			"other_name": "Net Despatch",
 			"required_fields": [
 				"tracking_account_number"
 			]
 		},
 		{
 			"slug": "apc-overnight-reference",
-			"name": " APC Overnight Reference",
-			"other_name": "The Alternative Parcels Company Limited",
+			"name": "APC Overnight Reference",
+			"other_name": "Net Despatch",
 			"required_fields": [
 				"tracking_account_number"
 			]
@@ -177,6 +183,14 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "australia-post-sftp",
+			"name": "Australia Post Sftp",
+			"other_name": "AusPostSftp",
+			"required_fields": [
+				"tracking_account_number"
+			]
+		},
+		{
 			"slug": "austrian-post",
 			"name": "Austrian Post (Express)",
 			"other_name": "Österreichische Post AG",
@@ -186,6 +200,12 @@ function get_couriers() {
 			"slug": "austrian-post-registered",
 			"name": "Austrian Post (Registered)",
 			"other_name": "Österreichische Post AG",
+			"required_fields": []
+		},
+		{
+			"slug": "axl",
+			"name": "AXL Express & Logistics",
+			"other_name": "AXL",
 			"required_fields": []
 		},
 		{
@@ -260,6 +280,12 @@ function get_couriers() {
 		{
 			"slug": "brt-it",
 			"name": "BRT Bartolini",
+			"other_name": "BRT Corriere Espresso, DPD Italy",
+			"required_fields": []
+		},
+		{
+			"slug": "brt-it-parcelid",
+			"name": "BRT Bartolini(Parcel ID)",
 			"other_name": "BRT Corriere Espresso, DPD Italy",
 			"required_fields": []
 		},
@@ -502,9 +528,21 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "dex-i",
+			"name": "DEX-I",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "dhl",
 			"name": "DHL Express",
 			"other_name": "DHL International",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-active-tracing",
+			"name": "DHL Active Tracing",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -531,6 +569,12 @@ function get_couriers() {
 			"slug": "dhl-germany",
 			"name": "Deutsche Post DHL",
 			"other_name": "DHL Germany",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-global-forwarding",
+			"name": "DHL Global Forwarding",
+			"other_name": "DHL Logistics",
 			"required_fields": []
 		},
 		{
@@ -585,6 +629,12 @@ function get_couriers() {
 			"slug": "directlink",
 			"name": "Direct Link",
 			"other_name": "Direct Link",
+			"required_fields": []
+		},
+		{
+			"slug": "directlog",
+			"name": "Directlog",
+			"other_name": "Direct Express",
 			"required_fields": []
 		},
 		{
@@ -712,6 +762,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ekart",
+			"name": "Ekart",
+			"other_name": "Ekart Logistics",
+			"required_fields": []
+		},
+		{
 			"slug": "elta-courier",
 			"name": "ELTA Hellenic Post",
 			"other_name": "Greece Post, Ελληνικά Ταχυδρομεία, ELTA Courier, Ταχυμεταφορές ΕΛΤΑ",
@@ -739,6 +795,12 @@ function get_couriers() {
 			"slug": "envialia",
 			"name": "Envialia",
 			"other_name": "Envialia Spain",
+			"required_fields": []
+		},
+		{
+			"slug": "eparcel-kr",
+			"name": "eParcel Korea",
+			"other_name": "Yong Seoung",
 			"required_fields": []
 		},
 		{
@@ -864,6 +926,14 @@ function get_couriers() {
 			]
 		},
 		{
+			"slug": "geodis-espace",
+			"name": "Geodis E-space",
+			"other_name": "Geodis Distribution & Express",
+			"required_fields": [
+				"tracking_key"
+			]
+		},
+		{
 			"slug": "ghn",
 			"name": "Giao hàng nhanh",
 			"other_name": "Giaohangnhanh.vn, GHN",
@@ -950,6 +1020,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "hunter-express",
+			"name": "Hunter Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "i-parcel",
 			"name": "i-parcel",
 			"other_name": "iparcel",
@@ -996,6 +1072,14 @@ function get_couriers() {
 			"name": "Interlink Express",
 			"other_name": "Interlink UK",
 			"required_fields": []
+		},
+		{
+			"slug": "interlink-express-reference",
+			"name": "Interlink Express Reference",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
 		},
 		{
 			"slug": "international-seur",
@@ -1052,6 +1136,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "jersey-post",
+			"name": "Jersey Post",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "jet-ship",
 			"name": "Jet-Ship Worldwide",
 			"other_name": "",
@@ -1061,6 +1151,12 @@ function get_couriers() {
 			"slug": "jne",
 			"name": "JNE",
 			"other_name": "Express Across Nation, Tiki Jalur Nugraha Ekakurir",
+			"required_fields": []
+		},
+		{
+			"slug": "jocom",
+			"name": "Jocom",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -1103,6 +1199,12 @@ function get_couriers() {
 			"slug": "la-poste-colissimo",
 			"name": "La Poste",
 			"other_name": "Coliposte",
+			"required_fields": []
+		},
+		{
+			"slug": "landmark-global",
+			"name": "Landmark Global",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -1149,7 +1251,7 @@ function get_couriers() {
 		},
 		{
 			"slug": "malaysia-post",
-			"name": "Malaysia Post EMS / Poslaju",
+			"name": "Malaysia Post EMS / Pos Laju",
 			"other_name": "Pos Ekspres, Pos Malaysia Express",
 			"required_fields": []
 		},
@@ -1353,9 +1455,7 @@ function get_couriers() {
 			"slug": "panther",
 			"name": "Panther",
 			"other_name": "Panther Group UK",
-			"required_fields": [
-				"tracking_account_number"
-			]
+			"required_fields": []
 		},
 		{
 			"slug": "parcel-express",
@@ -1579,6 +1679,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "roadbull",
+			"name": "Roadbull Logistics",
+			"other_name": "Roadbull Logistics Pte Ltd",
+			"required_fields": []
+		},
+		{
 			"slug": "rocketparcel",
 			"name": "Rocket Parcel International",
 			"other_name": "",
@@ -1657,9 +1763,15 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "sendle",
+			"name": "Sendle",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "sf-express",
 			"name": "S.F. Express",
-			"other_name": "順豊快遞",
+			"other_name": "順豊快遞, SF",
 			"required_fields": []
 		},
 		{
@@ -1688,6 +1800,12 @@ function get_couriers() {
 				"tracking_account_number",
 				"tracking_key"
 			]
+		},
+		{
+			"slug": "simplypost",
+			"name": "SimplyPost",
+			"other_name": "",
+			"required_fields": []
 		},
 		{
 			"slug": "singapore-post",
@@ -1800,7 +1918,7 @@ function get_couriers() {
 		{
 			"slug": "sweden-posten",
 			"name": "Sweden Posten",
-			"other_name": "Sweden Post",
+			"other_name": "Sweden Post, Posten, PostNord",
 			"required_fields": []
 		},
 		{
@@ -2024,6 +2142,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "vtfe",
+			"name": "VicTas Freight Express",
+			"other_name": "VTFE",
+			"required_fields": []
+		},
+		{
 			"slug": "wahana",
 			"name": "Wahana",
 			"other_name": "Wahana Indonesia",
@@ -2064,6 +2188,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "xl-express",
+			"name": "XL Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "xpressbees",
 			"name": "XpressBees",
 			"other_name": "XpressBees logistics",
@@ -2073,6 +2203,12 @@ function get_couriers() {
 			"slug": "xq-express",
 			"name": "XQ Express",
 			"other_name": "u661fu4e7eu7269u6d41",
+			"required_fields": []
+		},
+		{
+			"slug": "yakit",
+			"name": "Yakit",
+			"other_name": "",
 			"required_fields": []
 		},
 		{
@@ -2127,6 +2263,12 @@ function get_couriers() {
 			"slug": "zjs-express",
 			"name": "ZJS International",
 			"other_name": "宅急送快運",
+			"required_fields": []
+		},
+		{
+			"slug": "zyllem",
+			"name": "Zyllem",
+			"other_name": "RocketUncle",
 			"required_fields": []
 		}
 	];
