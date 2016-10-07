@@ -4,33 +4,38 @@ Donate link: https://www.aftership.com/
 Tags: shipping, tracking, ups, usps, fedex, dhl, tnt, dpd, post, shipment, woocommerce, tracking number, aftership, package tracking, fulfilment, tracking link, carrier, courier, woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 4.2.2
-Stable tag: 1.6.3
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add tracking number and carrier name to WooCommerce, display tracking info at order history page, auto import tracking numbers to AfterShip.
+Auto import tracking of all your shipments in one place to WooCommerce (Free), branded tracking page to view order status in one click and ensure great post-purchase experience for your customers, send email / SMS delivery notifications to engage your customers after sales (Premium).
+AfterShip is free for 100 first shipments, then try Premium.
 
 == Description ==
 
-###Add tracking number and carrier name fields (Free)
-By installing AfterShip plugin, you can automatically add Tracking Number and Carrier fields to your admin panel. After you fulfill an order, simply enter the tracking number and select a carrier at WooCommerce, the same info will be displayed at customer's order history page. AfterShip supports over 200 carriers worldwide, you can select carriers by [signing up a free AfterShip account](https://www.aftership.com/signup).
+###Top Shipment Tracking Plugin (Free)
+By installing AfterShip plugin, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill an order, simply enter the tracking number and select a courier at WooCommerce, the same info will be displayed at customer's order history page. AfterShip supports over 360+ carriers worldwide, you can select couriers by [signing up a free AfterShip account](https://secure.aftership.com/signup).
 
 ###Display tracking info at order history page (Free)
 The plugin allows you to insert the AfterShip Track Button to order history page, so that your customers can track the latest order status in one click.
 
-###Support 200+ International Carrier (Free)
-AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 200+ carriers worlwide. Please scroll down to see the full list of our supported carriers.
+###Support 360+ International Courier (Free)
+AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 360+ carriers worldwide. Please scroll down to see the full list of our supported carriers.
 
 
 ###Track all shipments in one place (Free)
-By setting up an auto import of tracking numbers to AfterShip, you can get the latest tracking info of all shipments in one place. Each free account comes with a Dashboard to monitor current statuses of all shipments. You can also filter your shipments by dates, statuses, couriers and destination. Find out if all your shipments are delivered on time and discover any exceptions. Support [WooCommerce Shipment Tracking Plugin](http://www.woothemes.com/products/shipment-tracking/) as well.
+By setting up an auto import of tracking numbers to AfterShip, you can get the latest tracking info of all your shipments in one place. Each free account comes with a Dashboard to monitor current statuses of all shipments. You can also filter your shipments by dates, statuses, couriers and destination. Find out if all your shipments are delivered on time and discover any exceptions. Support [WooCommerce Shipment Tracking Plugin](http://www.woothemes.com/products/shipment-tracking/) as well.
+
+###Branded Tracking Page (Free)
+
+AfterShip automatically generates a tracking page for each shipment. Customize tracking page by adding your brand logo, store URL and Instagram pictures to improve SEO and generate more sales. You can also embed the [AfterShip Track Button](http://support.aftership.com/article/111-how-can-i-add-track-button-to-wordpress-or-woocommerce) to allow tracking at your store. Improve your customer experience on tracking.
 
 ###Notify customers of delivery updates (Premium)
-Upgrade to [Premium](https://www.aftership.com/premium) to automatically send out delivery notifications to customers or yourself. Your choice of notification triggers - In transit, Out for delivery, Delivered, Failed delivery attempt or Exceptions. Use your own email to send out notifications, and customize messages to add store logo, URL, a tracking link to get more returned customers after shipping!
+Upgrade to [Premium](https://www.aftership.com/pricing) to automatically send out delivery notifications to customers or yourself. Your choice of notification triggers - In transit, Out for delivery, Delivered, Failed delivery attempt or Exceptions. Use your own email to send out notifications, and customize messages to add store logo, URL, a tracking link to get more returned customers after shipping!
 
 [youtube http://www.youtube.com/watch?v=1zCCx8Ap9ms]
 
-###Full list of supported carriers (200+):
+###Full list of supported carriers (360+):
 **①. US, Canada & Global Tracking (35)**
 ABF Freight • APC Postal Logistics • Aramex • Asendia USA • Canada Post • Canpar Courier • Con-way Freight • DACHSER • DHL Express • DHL eCommerce • DHL Express (Piece ID) • DPD • DSV • Echo • Ensenda • Estes • FedEx • FedEx Freight • Globegistics Inc. • Greyhound • i-parcel • LaserShip • Newgistics • Old Dominion Freight Line • OnTrac • Purolator • RL Carriers • RR Donnelley • TNT • TNT Reference • UPS • UPS Freight • UPS Mail Innovations • USPS • YRC
 
@@ -55,7 +60,7 @@ ADSOne • Australia Post • Bonds Couriers • CourierPost • Couriers Please
 
 == Installation ==
 
-1. [Sign up AfterShip account for FREE](https://www.aftership.com/signup)
+1. [Sign up AfterShip account for FREE](https://secure.aftership.com/signup)
 2. [Download AfterShip plugin](http://downloads.wordpress.org/plugin/aftership-woocommerce-tracking.zip), then install and activate at wordpress.
 3. Select AfterShip Plugin or [WooCommerce Shipment Tracking Plugin](http://www.woothemes.com/products/shipment-tracking/) for entering tracking number
 4. Check `Use Track Button` for displaying tracking info at order history page
@@ -68,10 +73,10 @@ ADSOne • Australia Post • Bonds Couriers • CourierPost • Couriers Please
 ###Further Reading
 
 * [How to insert AfterShip Track Button to WordPress or WooCommerce](https://aftership.uservoice.com/knowledgebase/articles/268665)
-* [Premium account pricing](https://www.aftership.com/premium)
+* [Premium account pricing](https://www.aftership.com/pricing)
 * [List of supported couriers](https://www.aftership.com/courier)
-* [Free vs Premium](https://www.aftership.com/free-vs-premium)
-* [SMS Charges](https://www.aftership.com/sms-pricing)
+* [Free vs Premium](https://www.aftership.com/pricing)
+* [SMS Charges](https://www.aftership.com/pricing)
 * [Isn’t my store or courier sending notifications already?](https://aftership.uservoice.com/knowledgebase/articles/169634-isn-t-my-store-or-courier-sending-notifications-al)
 
 
@@ -84,13 +89,16 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 1. Add tracking number and carrier to WooCommerce
 2. Display tracking info at order history page
-3. Support tracking of UPS, DHL, FedEx, USPS and 200+ carriers
+3. Support tracking of UPS, DHL, FedEx, USPS and 360+ carriers
 4. AfterShip dashboard
 5. Track all shipments in one place
 6. View exception, and filter by status
 7. Automatically send out delivery notifications
 
 == Changelog ==
+
+= 1.6.4 =
+* Add new couriers
 
 = 1.6.3 =
 * Improved compatibility with PHP7
