@@ -40,7 +40,7 @@ class AfterShip_Settings
         $this->plugins[] = array(
             'value' => 'wc-shipment-tracking',
             'label' => 'WooCommerce Shipment Tracking',
-            'path' => 'woocommerce-shipment-tracking/shipment-tracking.php'
+            'path' => array('woocommerce-shipment-tracking/shipment-tracking.php', 'woocommerce-shipment-tracking/woocommerce-shipment-tracking.php')
         );
 
         add_action('admin_menu', array($this, 'add_plugin_page'));

@@ -13,7 +13,17 @@ class AfterShip_Dependencies {
 
 	public static function plugin_active_check($plugin){
 		if ( ! self::$active_plugins ) self::init();
-		return in_array( $plugin, self::$active_plugins ) || array_key_exists( $plugin, self::$active_plugins );
+		if (is_array($plugin)) {
+		    foreach ($plugin as $path) {
+                if (in_array( $path, self::$active_plugins ) || array_key_exists( $path, self::$active_plugins )) {
+                    return true;
+                }
+            }
+            return false;
+		} else {
+		    return in_array( $plugin, self::$active_plugins ) || array_key_exists( $plugin, self::$active_plugins );
+		}
+
 	}
 
 	public static function woocommerce_active_check() {
