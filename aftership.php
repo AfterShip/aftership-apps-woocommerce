@@ -63,6 +63,7 @@ if (is_woocommerce_active()) {
                         $plugin = $options['plugin'];
                         if ($plugin == 'aftership') {
                             add_action('admin_print_scripts', array(&$this, 'library_scripts'));
+                            add_action('in_admin_footer', array(&$this, 'include_footer_script'));
                             add_action('admin_print_styles', array(&$this, 'admin_styles'));
                             add_action('add_meta_boxes', array(&$this, 'add_meta_box'));
                             add_action('woocommerce_process_shop_order_meta', array(&$this, 'save_meta_box'), 0, 2);
@@ -148,6 +149,9 @@ if (is_woocommerce_active()) {
                 wp_enqueue_script('aftership_script_util', plugins_url(basename(dirname(__FILE__))) . '/assets/js/util.js');
                 wp_enqueue_script('aftership_script_couriers', plugins_url(basename(dirname(__FILE__))) . '/assets/js/couriers.js');
                 wp_enqueue_script('aftership_script_admin', plugins_url(basename(dirname(__FILE__))) . '/assets/js/admin.js');
+            }
+            public function include_footer_script()
+            {
                 wp_enqueue_script('aftership_script_footer', plugins_url(basename(dirname(__FILE__))) . '/assets/js/footer.js', true);
             }
 

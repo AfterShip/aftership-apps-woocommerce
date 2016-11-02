@@ -121,7 +121,3 @@ var aftership_woocommerce_tracking_onload = function () {
 
 	return aftership_woocommerce_tracking_onload_run;
 };
-
-jQuery(function () {
-	aftership_woocommerce_tracking_onload();
-});
