@@ -157,9 +157,6 @@ class AfterShip_API
 
 		// self api
 		include_once('api/class-aftership-api-orders.php');
-
-		// allow plugins to load other response handlers or resource classes
-		do_action('woocommerce_api_loaded');
 	}
 
 	/**
