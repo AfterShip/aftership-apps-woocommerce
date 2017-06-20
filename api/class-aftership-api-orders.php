@@ -271,15 +271,15 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 			$tn = get_post_meta($order->id, '_tracking_number', true);
 			if ($tn == NULL) {
 				// Handle new Shipping Tracking plugin version higher than 1.6.4 
-					$order_data['aftership']['woocommerce']['trackings'][] = array(
-				'tracking_number' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['tracking_number'],
-				'tracking_provider' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
-			);
-				} else {
-					$order_data['aftership']['woocommerce']['trackings'][] = array(
-				'tracking_number' => $tn,
-			);
-				}
+				$order_data['aftership']['woocommerce']['trackings'][] = array(
+					'tracking_number' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['tracking_number'],
+					'tracking_provider' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
+				);
+			} else {
+				$order_data['aftership']['woocommerce']['trackings'][] = array(
+					'tracking_number' => $tn,
+				);
+			}
 		}
 		// aftership add finish
 
