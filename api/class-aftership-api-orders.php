@@ -265,10 +265,21 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
                 'tracking_key' => get_post_meta($order->id, '_aftership_tracking_key', true),
                 'tracking_destination_country' => get_post_meta($order->id, '_aftership_tracking_destination_country', true),
 			);
-		} else { //$49
-			$order_data['aftership']['woocommerce']['trackings'][] = array(
-				'tracking_number' => get_post_meta($order->id, '_tracking_number', true),
+		}
+		if ($tn == NULL) {
+			// Handle old Shipping Tracking plugin 
+			$tn = get_post_meta($order->id, '_tracking_number', true);
+			if ($tn == NULL) {
+				// Handle new Shipping Tracking plugin version higher than 1.6.4 
+					$order_data['aftership']['woocommerce']['trackings'][] = array(
+				'tracking_number' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['tracking_number'],
+				'tracking_provider' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
 			);
+				} else {
+					$order_data['aftership']['woocommerce']['trackings'][] = array(
+				'tracking_number' => $tn,
+			);
+				}
 		}
 		// aftership add finish
 
