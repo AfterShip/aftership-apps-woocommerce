@@ -561,7 +561,7 @@ if (is_woocommerce_active()) {
              */
             function email_display($order)
             {
-                $this->display_tracking_info($order->id, true);
+                $this->display_tracking_info($order->get_id(), true);
             }
 
             private function display_track_button($tracking_provider, $tracking_number, $required_fields_values)

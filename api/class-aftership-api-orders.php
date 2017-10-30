@@ -120,7 +120,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		$order_post = get_post($id);
 
 		$order_data = array(
-			'id' => $order->id,
+			'id' => $order->get_id(),
 			'order_number' => $order->get_order_number(),
 			'created_at' => $this->server->format_datetime($order_post->post_date_gmt),
 			'updated_at' => $this->server->format_datetime($order_post->post_modified_gmt),
@@ -193,7 +193,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 				'quantity' => (int)$item['qty'],
 //				'tax_class' => (!empty($item['tax_class'])) ? $item['tax_class'] : null,
 				'name' => $item['name'],
-//				'product_id' => (isset($product->variation_id)) ? $product->variation_id : $product->id,
+//				'product_id' => (isset($product->variation_id)) ? $product->variation_id : $product->get_id(),
 //				'sku' => is_object($product) ? $product->get_sku() : null,
 			);
 		}
@@ -252,28 +252,28 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //            $result = array();
 //            foreach($this->aftership_fields as $field){
 //                $id = $field['id'];
-//                $result[substr($id,10)] = get_post_meta($order->id, '_' . $field['id'], true);
+//                $result[substr($id,10)] = get_post_meta($order->get_id(), '_' . $field['id'], true);
 //            }
 //            $order_data['aftership']['woocommerce']['trackings'][] = $result;
 
 			$order_data['aftership']['woocommerce']['trackings'][] = array(
-				'tracking_provider' => get_post_meta($order->id, '_aftership_tracking_provider', true),
-				'tracking_number' => get_post_meta($order->id, '_aftership_tracking_number', true),
-				'tracking_ship_date' => get_post_meta($order->id, '_aftership_tracking_shipdate', true),
-				'tracking_postal_code' => get_post_meta($order->id, '_aftership_tracking_postal', true),
-				'tracking_account_number' => get_post_meta($order->id, '_aftership_tracking_account', true),
-                'tracking_key' => get_post_meta($order->id, '_aftership_tracking_key', true),
-                'tracking_destination_country' => get_post_meta($order->id, '_aftership_tracking_destination_country', true),
+				'tracking_provider' => get_post_meta($order->get_id(), '_aftership_tracking_provider', true),
+				'tracking_number' => get_post_meta($order->get_id(), '_aftership_tracking_number', true),
+				'tracking_ship_date' => get_post_meta($order->get_id(), '_aftership_tracking_shipdate', true),
+				'tracking_postal_code' => get_post_meta($order->get_id(), '_aftership_tracking_postal', true),
+				'tracking_account_number' => get_post_meta($order->get_id(), '_aftership_tracking_account', true),
+                'tracking_key' => get_post_meta($order->get_id(), '_aftership_tracking_key', true),
+                'tracking_destination_country' => get_post_meta($order->get_id(), '_aftership_tracking_destination_country', true),
 			);
 		}
 		if ($tn == NULL) {
 			// Handle old Shipping Tracking plugin 
-			$tn = get_post_meta($order->id, '_tracking_number', true);
+			$tn = get_post_meta($order->get_id(), '_tracking_number', true);
 			if ($tn == NULL) {
 				// Handle new Shipping Tracking plugin version higher than 1.6.4 
 				$order_data['aftership']['woocommerce']['trackings'][] = array(
-					'tracking_number' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['tracking_number'],
-					'tracking_provider' => get_post_meta($order->id, '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
+					'tracking_number' => get_post_meta($order->get_id(), '_wc_shipment_tracking_items', true)[0]['tracking_number'],
+					'tracking_provider' => get_post_meta($order->get_id(), '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
 				);
 			} else {
 				$order_data['aftership']['woocommerce']['trackings'][] = array(
