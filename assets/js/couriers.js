@@ -1,5 +1,11 @@
 function get_couriers() {
 	var data = [
+        {
+            "slug": "alliedexpress",
+            "name": "Allied Express",
+            "other_name": "",
+            "required_fields": []
+        },
 		{
 			"slug": "17postservice",
 			"name": "17 Post Service",
