@@ -3,7 +3,7 @@
 	Plugin Name: AfterShip - WooCommerce Tracking
 	Plugin URI: http://aftership.com/
 	Description: Add tracking number and carrier name to WooCommerce, display tracking info at order history page, auto import tracking numbers to AfterShip.
-	Version: 1.7.3
+	Version: 1.7.4
 	Author: AfterShip
 	Author URI: http://aftership.com
 
@@ -298,15 +298,15 @@ if (is_woocommerce_active()) {
                 if (isset($_POST['aftership_tracking_number'])) {
 //
 //                    // Download data
-                    $tracking_provider = woocommerce_clean($_POST['aftership_tracking_provider']);
-//                    $tracking_number = woocommerce_clean($_POST['aftership_tracking_number']);
-//                    $tracking_provider_name = woocommerce_clean($_POST['aftership_tracking_provider_name']);
-//                    $tracking_required_fields = woocommerce_clean($_POST['aftership_tracking_required_fields']);
-//                    $shipdate = woocommerce_clean(strtotime($_POST['aftership_tracking_shipdate']));
-//                    $postal = woocommerce_clean($_POST['aftership_tracking_postal']);
-//                    $account = woocommerce_clean($_POST['aftership_tracking_account']);
-//                    $tracking_key = woocommerce_clean($_POST['aftership_tracking_key']);
-//                    $tracking_destination_country = woocommerce_clean($_POST['aftership_tracking_destination_country']);
+                    $tracking_provider = wc_clean($_POST['aftership_tracking_provider']);
+//                    $tracking_number = wc_clean($_POST['aftership_tracking_number']);
+//                    $tracking_provider_name = wc_clean($_POST['aftership_tracking_provider_name']);
+//                    $tracking_required_fields = wc_clean($_POST['aftership_tracking_required_fields']);
+//                    $shipdate = wc_clean(strtotime($_POST['aftership_tracking_shipdate']));
+//                    $postal = wc_clean($_POST['aftership_tracking_postal']);
+//                    $account = wc_clean($_POST['aftership_tracking_account']);
+//                    $tracking_key = wc_clean($_POST['aftership_tracking_key']);
+//                    $tracking_destination_country = wc_clean($_POST['aftership_tracking_destination_country']);
 //
 //                    // Update order data
                     update_post_meta($post_id, '_aftership_tracking_provider', $tracking_provider);
@@ -322,9 +322,9 @@ if (is_woocommerce_active()) {
 
                     foreach ($this->aftership_fields as $field) {
                         if ($field['type'] == 'date') {
-                            update_post_meta($post_id, '_' . $field['id'], woocommerce_clean(strtotime($_POST[$field['id']])));
+                            update_post_meta($post_id, '_' . $field['id'], wc_clean(strtotime($_POST[$field['id']])));
                         } else {
-                            update_post_meta($post_id, '_' . $field['id'], woocommerce_clean($_POST[$field['id']]));
+                            update_post_meta($post_id, '_' . $field['id'], wc_clean($_POST[$field['id']]));
                         }
                     }
                 }

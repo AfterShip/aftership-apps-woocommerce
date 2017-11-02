@@ -120,7 +120,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		$order_post = get_post($id);
 
 		$order_data = array(
-			'id' => (method_exists($order, 'get_id'))? $order->get_id() : $order->id,
+			'id' => get_order_id($order),
 			'order_number' => $order->get_order_number(),
 			'created_at' => $this->server->format_datetime($order_post->post_date_gmt),
 			'updated_at' => $this->server->format_datetime($order_post->post_modified_gmt),
@@ -144,30 +144,30 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //				'paid' => isset($order->paid_date),
 //			),
 			'billing_address' => array(
-				'first_name' => $order->billing_first_name,
-				'last_name' => $order->billing_last_name,
-				'company' => $order->billing_company,
-				'address_1' => $order->billing_address_1,
-				'address_2' => $order->billing_address_2,
-				'city' => $order->billing_city,
-				'state' => $order->billing_state,
-				'postcode' => $order->billing_postcode,
-				'country' => $order->billing_country,
-				'email' => $order->billing_email,
-				'phone' => $order->billing_phone,
+				'first_name' => order_post_meta_getter($order, 'billing_first_name'),
+				'last_name' => order_post_meta_getter($order, 'billing_last_name'),
+				'company' => order_post_meta_getter($order, 'billing_company'),
+				'address_1' => order_post_meta_getter($order, 'billing_address_1'),
+				'address_2' => order_post_meta_getter($order, 'billing_address_2'),
+				'city' => order_post_meta_getter($order, 'billing_city'),
+				'state' => order_post_meta_getter($order, 'billing_state'),
+				'postcode' => order_post_meta_getter($order, 'billing_postcode'),
+				'country' => order_post_meta_getter($order,'billing_country'),
+				'email' => order_post_meta_getter($order,'billing_email'),
+				'phone' => order_post_meta_getter($order,'billing_phone'),
 			),
 			'shipping_address' => array(
-				'first_name' => $order->shipping_first_name,
-				'last_name' => $order->shipping_last_name,
-				'company' => $order->shipping_company,
-				'address_1' => $order->shipping_address_1,
-				'address_2' => $order->shipping_address_2,
-				'city' => $order->shipping_city,
-				'state' => $order->shipping_state,
-				'postcode' => $order->shipping_postcode,
-				'country' => $order->shipping_country,
+				'first_name' => order_post_meta_getter($order,'shipping_first_name'),
+				'last_name' => order_post_meta_getter($order,'shipping_last_name'),
+				'company' => order_post_meta_getter($order,'shipping_company'),
+				'address_1' => order_post_meta_getter($order,'shipping_address_1'),
+				'address_2' => order_post_meta_getter($order,'shipping_address_2'),
+				'city' => order_post_meta_getter($order,'shipping_city'),
+				'state' => order_post_meta_getter($order,'shipping_state'),
+				'postcode' => order_post_meta_getter($order,'shipping_postcode'),
+				'country' => order_post_meta_getter($order,'shipping_country'),
 			),
-			'note' => $order->customer_note,
+			'note' => (method_exists($order, 'get_customer_note'))? $order->get_customer_note() : $order->customer_note,
 //			'customer_ip' => $order->customer_ip_address,
 //			'customer_user_agent' => $order->customer_user_agent,
 //			'customer_id' => $order->customer_user,
@@ -257,23 +257,25 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //            $order_data['aftership']['woocommerce']['trackings'][] = $result;
 
 			$order_data['aftership']['woocommerce']['trackings'][] = array(
-				'tracking_provider' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_provider', true),
-				'tracking_number' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_number', true),
-				'tracking_ship_date' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_shipdate', true),
-				'tracking_postal_code' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_postal', true),
-				'tracking_account_number' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_account', true),
-                'tracking_key' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_key', true),
-                'tracking_destination_country' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_aftership_tracking_destination_country', true),
+				'tracking_provider' => order_post_meta_getter($order, 'aftership_tracking_provider'),
+				'tracking_number' => order_post_meta_getter($order, 'aftership_tracking_number'),
+				'tracking_ship_date' => order_post_meta_getter($order, 'aftership_tracking_shipdate'),
+				'tracking_postal_code' => order_post_meta_getter($order, 'aftership_tracking_postal'),
+				'tracking_account_number' => order_post_meta_getter($order, 'aftership_tracking_account'),
+				'tracking_key' => order_post_meta_getter($order, 'aftership_tracking_key'),
+        'tracking_destination_country' => order_post_meta_getter($order, 'aftership_tracking_destination_country'),
 			);
 		}
 		if ($tn == NULL) {
 			// Handle old Shipping Tracking plugin
-			$tn = get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_tracking_number', true);
+			$tn = order_post_meta_getter($order, 'tracking_number');
 			if ($tn == NULL) {
 				// Handle new Shipping Tracking plugin version higher than 1.6.4
+				$tracking_items = order_post_meta_getter($order, 'wc_shipment_tracking_items')[0];
+
 				$order_data['aftership']['woocommerce']['trackings'][] = array(
-					'tracking_number' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_wc_shipment_tracking_items', true)[0]['tracking_number'],
-					'tracking_provider' => get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_wc_shipment_tracking_items', true)[0]['custom_tracking_provider'],
+					'tracking_number' => $tracking_items['tracking_number'],
+					'tracking_provider' => $tracking_items['custom_tracking_provider']
 				);
 			} else {
 				$order_data['aftership']['woocommerce']['trackings'][] = array(
