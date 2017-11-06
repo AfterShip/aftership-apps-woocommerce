@@ -18,9 +18,9 @@ defined('ABSPATH') or die("No script kiddies please!");
 /**
  * Required functions
  */
-// if (!function_exists('is_woocommerce_active'))
-require_once('aftership-functions.php');
-
+if (!function_exists('is_woocommerce_active'))
+    require_once('aftership-functions.php');
+require_once('aftership-backward-compatibility.php');
 
 /**
  * Plugin updates
