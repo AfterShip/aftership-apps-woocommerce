@@ -97,6 +97,12 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
+= 1.7.4 =
+* Remove deprecated warning on Woocommerce 3
+
+= 1.7.2 =
+* Add new couriers
+
 = 1.6.8 =
 * Fix compatibility issue with Sendcloud plugin
 
