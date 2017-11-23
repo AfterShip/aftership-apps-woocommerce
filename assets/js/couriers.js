@@ -2146,10 +2146,10 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-            "slug": "tcs",
-            "name": "TCS",
-            "other_name": "TCS",
-            "required_fields": []
+			"slug": "tcs",
+			"name": "TCS",
+			"other_name": "TCS",
+			"required_fields": []
 		},
 		{
 			"slug": "tgx",
