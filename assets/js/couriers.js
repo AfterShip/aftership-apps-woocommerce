@@ -1,11 +1,11 @@
 function get_couriers() {
 	var data = [
-        {
-            "slug": "alliedexpress",
-            "name": "Allied Express",
-            "other_name": "",
-            "required_fields": []
-        },
+		{
+			"slug": "alliedexpress",
+			"name": "Allied Express",
+			"other_name": "",
+			"required_fields": []
+		},
 		{
 			"slug": "17postservice",
 			"name": "17 Post Service",
@@ -2481,6 +2481,12 @@ function get_couriers() {
 			"slug": "zyllem",
 			"name": "Zyllem",
 			"other_name": "RocketUncle",
+			"required_fields": []
+		},
+		{
+			"slug": "tipsa",
+			"name": "TIPSA",
+			"other_name": "",
 			"required_fields": []
 		}
 	];
