@@ -2488,6 +2488,12 @@ function get_couriers() {
 			"name": "TIPSA",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "dpd-ro",
+			"name": "DPD Romania",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
