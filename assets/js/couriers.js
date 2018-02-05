@@ -1506,6 +1506,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ninjavan-thai",
+			"name": "Ninja Van Thailand",
+			"other_name": "Ninja Van Thailand",
+			"required_fields": []
+		},
+		{
 			"slug": "nipost",
 			"name": "NiPost",
 			"other_name": "Nigerian Postal Service",
