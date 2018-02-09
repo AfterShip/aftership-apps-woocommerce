@@ -94,9 +94,6 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 2. Customize Email/SMS notifications
 3. Add Tracking number and carrier to WooCommerce
 4. AfterShip Dashboard
-5. Track all shipments in one place
-6. View exception, and filter by status
-7. Automatically send out delivery notifications
 
 == Changelog ==
 
