@@ -13,6 +13,9 @@ AfterShip is free for 100 first shipments, then try Premium.
 
 == Description ==
 
+###[NEW] New Theme for Branded Tracking Page
+With more customization and ability to upload a promotion banner to further engage your customers. (PREMIUM)
+
 ###Top Shipment Tracking Plugin (Free)
 By installing AfterShip plugin, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill an order, simply enter the tracking number and select a courier at WooCommerce, the same info will be displayed at customer's order history page. AfterShip supports over 360+ carriers worldwide, you can select couriers by [signing up a free AfterShip account](https://secure.aftership.com/signup).
 
@@ -87,10 +90,10 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Screenshots ==
 
-1. Add tracking number and carrier to WooCommerce
-2. Display tracking info at order history page
-3. Support tracking of UPS, DHL, FedEx, USPS and 360+ carriers
-4. AfterShip dashboard
+1. [NEW] New Theme for Branded Tracking Page
+2. Customize Email/SMS notifications
+3. Add Tracking number and carrier to WooCommerce
+4. AfterShip Dashboard
 5. Track all shipments in one place
 6. View exception, and filter by status
 7. Automatically send out delivery notifications
