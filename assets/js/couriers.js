@@ -2488,6 +2488,18 @@ function get_couriers() {
 			"name": "TIPSA",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "omniva",
+			"name": "Omniva",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pilot-freight",
+			"name": "Pilot Freight",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
