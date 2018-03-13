@@ -2490,6 +2490,12 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dpd-ro",
+			"name": "DPD Romania",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "omniva",
 			"name": "Omniva",
 			"other_name": "",
