@@ -2506,6 +2506,12 @@ function get_couriers() {
 			"name": "Pilot Freight",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "xpost",
+			"name": "Xpost.ph",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
