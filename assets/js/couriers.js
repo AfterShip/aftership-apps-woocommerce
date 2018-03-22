@@ -2494,6 +2494,24 @@ function get_couriers() {
 			"name": "DPD Romania",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "omniva",
+			"name": "Omniva",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pilot-freight",
+			"name": "Pilot Freight",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "xpost",
+			"name": "Xpost.ph",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
