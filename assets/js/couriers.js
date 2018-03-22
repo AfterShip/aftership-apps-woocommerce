@@ -2512,6 +2512,18 @@ function get_couriers() {
 			"name": "Xpost.ph",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "ninjavan-philippines",
+			"name": "Ninja Van Philippines",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "omniva",
+			"name": "Omniva",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
