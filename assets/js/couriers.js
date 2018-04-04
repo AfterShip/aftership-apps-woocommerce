@@ -2524,6 +2524,18 @@ function get_couriers() {
 			"name": "Omniva",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "ninjavan-thai",
+			"name": "Ninja Van Thailand",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "efs",
+			"name": "EFS (E-commerce Fulfillment Service)",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
