@@ -2536,6 +2536,12 @@ function get_couriers() {
 			"name": "EFS (E-commerce Fulfillment Service)",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "zto-express",
+			"name": "ZTO Express",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
