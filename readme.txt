@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: shipping, tracking, ups, usps, fedex, dhl, tnt, dpd, post, shipment, woocommerce, tracking number, aftership, package tracking, fulfilment, tracking link, carrier, courier, woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 4.2.2
-Stable tag: 1.8.5
+Stable tag: 1.8.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ By installing AfterShip plugin, you can automatically add Tracking Number and Co
 ###Display tracking info at order history page (Free)
 The plugin allows you to insert the AfterShip Track Button to order history page, so that your customers can track the latest order status in one click.
 
-###Support 360+ International Courier (Free)
+###Support 450+ International Courier (Free)
 AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 360+ carriers worldwide. Please scroll down to see the full list of our supported carriers.
 
 
