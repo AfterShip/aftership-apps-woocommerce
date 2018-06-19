@@ -19,7 +19,7 @@ By installing AfterShip plugin, you can automatically add Tracking Number and Co
 ###Display tracking info at order history page (Free)
 The plugin allows you to insert the AfterShip Track Button to order history page, so that your customers can track the latest order status in one click.
 
-###Support 360+ International Courier (Free)
+###Support 450+ International Courier (Free)
 AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 360+ carriers worldwide. Please scroll down to see the full list of our supported carriers.
 
 
