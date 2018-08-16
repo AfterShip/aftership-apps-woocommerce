@@ -19,12 +19,6 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "zalora-7-eleven",
-			"name": "Zalora 7-Eleven",
-			"other_name": "7-11",
-			"required_fields": []
-		},
-		{
 			"slug": "india-post-int",
 			"name": "India Post International",
 			"other_name": "भारतीय डाक, Speed Post & eMO, EMS, IPS Web",
@@ -637,12 +631,6 @@ function get_couriers() {
 			"slug": "dpd-uk",
 			"name": "DPD UK",
 			"other_name": "Dynamic Parcel Distribution UK",
-			"required_fields": []
-		},
-		{
-			"slug": "correo-argentino",
-			"name": "Correo Argentino",
-			"other_name": "Argentina Post",
 			"required_fields": []
 		},
 		{
@@ -1876,12 +1864,6 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "nuvoex",
-			"name": "NuvoEx",
-			"other_name": "Nuvo Ex",
-			"required_fields": []
-		},
-		{
 			"slug": "dhl-hk",
 			"name": "DHL Hong Kong",
 			"other_name": "DHL HK Domestic",
@@ -2029,7 +2011,7 @@ function get_couriers() {
 		},
 		{
 			"slug": "courex",
-			"name": "Courex",
+			"name": "Urbanfox",
 			"other_name": "",
 			"required_fields": []
 		},
@@ -2937,7 +2919,9 @@ function get_couriers() {
 			"slug": "bluestar",
 			"name": "Blue Star",
 			"other_name": "",
-			"required_fields": []
+			"required_fields": [
+				"tracking_postal_code"
+			]
 		},
 		{
 			"slug": "megasave",
@@ -2948,6 +2932,108 @@ function get_couriers() {
 		{
 			"slug": "007ex",
 			"name": "007EX",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pixsell",
+			"name": "PIXSELL LOGISTICS",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cloudwish-asia",
+			"name": "Cloudwish Asia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dhlparcel-es",
+			"name": "DHL Parcel Spain",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cj-philippines",
+			"name": "CJ Transnational Philippines",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "shippit",
+			"name": "Shippit",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "shopfans",
+			"name": "ShopfansRU LLC",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "kronos",
+			"name": "Kronos Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pitney-bowes",
+			"name": "Pitney Bowes",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "shree-maruti",
+			"name": "Shree Maruti Courier Services Pvt Ltd",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "tophatterexpress",
+			"name": "Tophatter Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "celeritas",
+			"name": "Celeritas Transporte, S.L",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dimerco",
+			"name": "Dimerco Express Group",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "skynet-za",
+			"name": "Skynet World Wide Express South Africa",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "fedex-crossborder",
+			"name": "Fedex Cross Border",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mailplus",
+			"name": "MailPlus",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "spoton",
+			"name": "SPOTON Logistics Pvt Ltd",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "tolos",
+			"name": "Tolos",
 			"other_name": "",
 			"required_fields": []
 		}
