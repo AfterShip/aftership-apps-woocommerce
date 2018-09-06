@@ -119,7 +119,9 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 
 		$order_post = get_post($id);
 
-		$meta_keys = array_keys(get_post_meta($order->id));
+		$order_id = get_order_id($order);
+
+		$meta_keys = array_keys(get_post_meta($order_id));
 
 		// set up the array with keys that is not part of custom field
 		$filter_list = array("_edit_last","_aftership_tracking_provider_name","_aftership_tracking_required_fields"
@@ -133,14 +135,16 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 							"_shipping_last_name","_shipping_company","_shipping_address_1","_shipping_address_2","_shipping_city",
 							"_shipping_state","_shipping_postcode","_shipping_country","_order_currency","_cart_discount",
 							"_cart_discount_tax","_order_shipping","_order_shipping_tax","_order_tax","_order_total","_order_version",
-							"_prices_include_tax","_billing_address_index","_shipping_address_index","_edit_lock");
+							"_prices_include_tax","_billing_address_index","_shipping_address_index","_edit_lock",
+							"_aftership_tracking_provider", "_download_permissions_granted", "_recorded_sales", "_recorded_coupon_usage_counts"
+						);
 							
 		// set an empty custom_field array
 		$custom_field = array();
 
 		foreach($meta_keys as $key) {
 			if (!(in_array($key, $filter_list))) {
-				$custom_field[$key] = get_post_meta($order->id, $key, true);
+				$custom_field[$key] = get_post_meta($order_id, $key, true);
 			}
 		}
 
