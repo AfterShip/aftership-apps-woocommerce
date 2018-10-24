@@ -2049,14 +2049,6 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "apc-overnight-reference",
-			"name": "APC Overnight Reference",
-			"other_name": "Net Despatch",
-			"required_fields": [
-				"tracking_account_number"
-			]
-		},
-		{
 			"slug": "ninjavan-id",
 			"name": "Ninja Van Indonesia",
 			"other_name": "NinjaVan Indonesia",
@@ -2072,12 +2064,6 @@ function get_couriers() {
 			"slug": "alphafast",
 			"name": "alphaFAST",
 			"other_name": "Alpha",
-			"required_fields": []
-		},
-		{
-			"slug": "axl",
-			"name": "AXL Express & Logistics",
-			"other_name": "AXL",
 			"required_fields": []
 		},
 		{
@@ -2824,7 +2810,9 @@ function get_couriers() {
 			"slug": "parcelpoint",
 			"name": "ParcelPoint Pty Ltd",
 			"other_name": "",
-			"required_fields": []
+			"required_fields": [
+				"tracking_key"
+			]
 		},
 		{
 			"slug": "ep-box",
@@ -3034,6 +3022,66 @@ function get_couriers() {
 		{
 			"slug": "tolos",
 			"name": "Tolos",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "kwt",
+			"name": "Shenzhen Jinghuada Logistics Co., Ltd",
+			"other_name": "KWT",
+			"required_fields": []
+		},
+		{
+			"slug": "sap-express",
+			"name": "SAP EXPRESS",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "sending",
+			"name": "Sending Transporte Urgente y Comunicacion, S.A.U",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "sypost",
+			"name": "Shunyou Post",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "qualitypost",
+			"name": "QualityPost",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "intexpress",
+			"name": "Internet Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "seino",
+			"name": "Seino",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "jtexpress",
+			"name": "J&T EXPRESS MALAYSIA",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "linkbridge",
+			"name": "Link Bridge(BeiJing)international logistics co.,ltd",
+			"other_name": "联博瑞翔（北京）国际物流股份有限公司",
+			"required_fields": []
+		},
+		{
+			"slug": "national-sameday",
+			"name": "National Sameday",
 			"other_name": "",
 			"required_fields": []
 		}
