@@ -3084,6 +3084,12 @@ function get_couriers() {
 			"name": "National Sameday",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "gso",
+			"name": "GSO",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
