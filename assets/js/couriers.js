@@ -3090,6 +3090,12 @@ function get_couriers() {
 			"name": "GSO",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "latvijas-pasts",
+			"name": "Latvijas Pasts",
+			"other_name": "",
+			"required_fields": []
 		}
 	];
 	return data;
