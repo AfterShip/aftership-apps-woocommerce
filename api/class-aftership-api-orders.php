@@ -290,9 +290,8 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		*/
 
 		// aftership add
-		$options = get_option('aftership_option_name');
-		$plugin = $options['plugin'];
-		if ($plugin == 'aftership') {
+        $aftership_tracking_number = order_post_meta_getter($order, 'aftership_tracking_number');
+        if (!empty($aftership_tracking_number)) {
 
 //            $result = array();
 //            foreach($this->aftership_fields as $field){
@@ -319,13 +318,13 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 				$tracking_items = order_post_meta_getter($order, 'wc_shipment_tracking_items')[0];
 
 				if(!empty($tracking_items)) {
-					$order_data['aftership']['woocommerce']['trackings'][] = array(
+					$order_data['aftership']['woocommerce']['trackings'][0] = array(
 						'tracking_number' => $tracking_items['tracking_number'],
 						'tracking_provider' => $tracking_items['custom_tracking_provider']
 					);
 				}
 			} else {
-				$order_data['aftership']['woocommerce']['trackings'][] = array(
+				$order_data['aftership']['woocommerce']['trackings'][0] = array(
 					'tracking_number' => $tn,
 				);
 			}
