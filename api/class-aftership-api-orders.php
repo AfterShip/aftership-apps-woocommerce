@@ -206,7 +206,22 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //			'tax_lines' => array(),
 //			'fee_lines' => array(),
 //			'coupon_lines' => array(),
-			'custom_fields' => $custom_field
+			'custom_fields' => $custom_field,
+            'aftership' => array(
+                'woocommerce' => array(
+                    'trackings' => array(
+                        array(
+                            'tracking_provider' => '',
+                            'tracking_number' => '',
+                            'tracking_ship_date' => '',
+                            'tracking_postal_code' => '',
+                            'tracking_account_number' => '',
+                            'tracking_key' => '',
+                            'tracking_destination_country' => '',
+                        )
+                    ),
+                ),
+            ),
 		);
 
 		// add line items
@@ -275,9 +290,8 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 		*/
 
 		// aftership add
-		$options = get_option('aftership_option_name');
-		$plugin = $options['plugin'];
-		if ($plugin == 'aftership') {
+        $aftership_tracking_number = order_post_meta_getter($order, 'aftership_tracking_number');
+        if (!empty($aftership_tracking_number)) {
 
 //            $result = array();
 //            foreach($this->aftership_fields as $field){
@@ -286,14 +300,14 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //            }
 //            $order_data['aftership']['woocommerce']['trackings'][] = $result;
 
-			$order_data['aftership']['woocommerce']['trackings'][] = array(
+			$order_data['aftership']['woocommerce']['trackings'][0] = array(
 				'tracking_provider' => order_post_meta_getter($order, 'aftership_tracking_provider'),
 				'tracking_number' => order_post_meta_getter($order, 'aftership_tracking_number'),
 				'tracking_ship_date' => order_post_meta_getter($order, 'aftership_tracking_shipdate'),
 				'tracking_postal_code' => order_post_meta_getter($order, 'aftership_tracking_postal'),
 				'tracking_account_number' => order_post_meta_getter($order, 'aftership_tracking_account'),
 				'tracking_key' => order_post_meta_getter($order, 'aftership_tracking_key'),
-        'tracking_destination_country' => order_post_meta_getter($order, 'aftership_tracking_destination_country'),
+                'tracking_destination_country' => order_post_meta_getter($order, 'aftership_tracking_destination_country'),
 			);
 		}
 		if ($tn == NULL) {
@@ -304,13 +318,13 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 				$tracking_items = order_post_meta_getter($order, 'wc_shipment_tracking_items')[0];
 
 				if(!empty($tracking_items)) {
-					$order_data['aftership']['woocommerce']['trackings'][] = array(
+					$order_data['aftership']['woocommerce']['trackings'][0] = array(
 						'tracking_number' => $tracking_items['tracking_number'],
 						'tracking_provider' => $tracking_items['custom_tracking_provider']
 					);
 				}
 			} else {
-				$order_data['aftership']['woocommerce']['trackings'][] = array(
+				$order_data['aftership']['woocommerce']['trackings'][0] = array(
 					'tracking_number' => $tn,
 				);
 			}
