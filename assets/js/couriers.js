@@ -3096,7 +3096,15 @@ function get_couriers() {
 			"name": "Latvijas Pasts",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "australia-post-api",
+			"name": "Australia Post API",
+			"other_name": "",
+			"required_fields": []
 		}
+
+
 	];
 	return data;
 }
