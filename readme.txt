@@ -3,8 +3,8 @@ Contributors: aftership
 Donate link: https://www.aftership.com/
 Tags: shipping, tracking, ups, usps, fedex, dhl, tnt, dpd, post, shipment, woocommerce, tracking number, aftership, package tracking, fulfilment, tracking link, carrier, courier, woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
-Tested up to: 4.2.2
-Stable tag: 1.9.7
+Tested up to: 5.2.1
+Stable tag: 1.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,13 +14,13 @@ AfterShip is free for 100 first shipments, then try Premium.
 == Description ==
 
 ###Top Shipment Tracking Plugin (Free)
-By installing AfterShip plugin, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill an order, simply enter the tracking number and select a courier at WooCommerce, the same info will be displayed at customer's order history page. AfterShip supports over 360+ carriers worldwide, you can select couriers by [signing up a free AfterShip account](https://secure.aftership.com/signup).
+By installing AfterShip plugin, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill an order, simply enter the tracking number and select a courier at WooCommerce, the same info will be displayed at customer's order history page. AfterShip supports over 550+ carriers worldwide, you can select couriers by [signing up a free AfterShip account](https://secure.aftership.com/signup).
 
 ###Display tracking info at order history page (Free)
 The plugin allows you to insert the AfterShip Track Button to order history page, so that your customers can track the latest order status in one click.
 
-###Support 450+ International Courier (Free)
-AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 360+ carriers worldwide. Please scroll down to see the full list of our supported carriers.
+###Support 550+ International Courier (Free)
+AfterShip supports UPS tracking, FedEx tracking, USPS tracking, DHL tracking and shipment tracking of over 550+ carriers worldwide. Please scroll down to see the full list of our supported carriers.
 
 
 ###Track all shipments in one place (Free)
@@ -35,7 +35,7 @@ Upgrade to [Premium](https://www.aftership.com/pricing) to automatically send ou
 
 [youtube http://www.youtube.com/watch?v=1zCCx8Ap9ms]
 
-###Full list of supported carriers (360+):
+###Partial list of supported carriers (550+):
 **①. US, Canada & Global Tracking (35)**
 ABF Freight • APC Postal Logistics • Aramex • Asendia USA • Canada Post • Canpar Courier • Con-way Freight • DACHSER • DHL Express • DHL eCommerce • DHL Express (Piece ID) • DPD • DSV • Echo • Ensenda • Estes • FedEx • FedEx Freight • Globegistics Inc. • Greyhound • i-parcel • LaserShip • Newgistics • Old Dominion Freight Line • OnTrac • Purolator • RL Carriers • RR Donnelley • TNT • TNT Reference • UPS • UPS Freight • UPS Mail Innovations • USPS • YRC
 
@@ -89,13 +89,17 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 1. Add tracking number and carrier to WooCommerce
 2. Display tracking info at order history page
-3. Support tracking of UPS, DHL, FedEx, USPS and 360+ carriers
+3. Support tracking of UPS, DHL, FedEx, USPS and 550+ carriers
 4. AfterShip dashboard
 5. Track all shipments in one place
 6. View exception, and filter by status
 7. Automatically send out delivery notifications
 
 == Changelog ==
+
+= 1.9.8 =
+* Update readme.txt
+
 = 1.9.7 =
 * Add new couriers
 
