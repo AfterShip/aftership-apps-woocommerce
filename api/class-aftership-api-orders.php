@@ -349,26 +349,37 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 
     // 从wc ShipmentTracking 插件获取 Postalcode  - postnl
 	private function getTrackingInfoByShipmentTracking($tracking_items) {
+        if(!isset($tracking_items['custom_tracking_link'])) {
+            return array();
+        }
 
-	    // 获取 postnl  Postalcode
-        $urlArr = parse_url($tracking_items['custom_tracking_link']);
-        if (isset($urlArr[host])) {
-            $hostArr = explode(".", $urlArr[host]);
-            if(empty($hostArr) || !isset($hostArr[1])) {
+        // 获取 postnl  Postalcode
+        $urlArr = parse_url(stripslashes($tracking_items['custom_tracking_link']));
+
+        if($urlArr === false) {
+            return array();
+        }
+
+        if (!isset($urlArr['host'])) {
+            return array();
+        }
+
+        $hostArr = explode(".", $urlArr['host']);
+        $hostArrIndex = count($hostArr)  - 2;
+        if(empty($hostArr) || !isset($hostArr[$hostArrIndex])) {
+            return array();
+        }
+
+        if($hostArr[$hostArrIndex] == 'postnl') {
+            parse_str($urlArr['query'], $queryArr);
+            if(!isset($queryArr['Postalcode'])) {
                 return array();
             }
 
-            if($hostArr[1] == 'postnl') {
-                parse_str($urlArr['query'], $queryArr = null);
-                if(isset($queryArr['Postalcode'])) {
-                    $return = array(
-                        'tracking_provider' => 'postnl',
-                        'tracking_postal_code' => str_replace(" ", "", $queryArr['Postalcode']),
-
-                    );
-                    return $return;
-                }
-            }
+            return array(
+                'tracking_provider' => 'postnl',
+                'tracking_postal_code' => str_replace(" ", "", $queryArr['Postalcode']),
+            );
         }
         return array();
     }
