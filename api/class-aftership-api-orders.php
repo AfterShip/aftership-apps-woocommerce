@@ -317,11 +317,23 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 				// Handle new Shipping Tracking plugin version higher than 1.6.4
 				$tracking_items = order_post_meta_getter($order, 'wc_shipment_tracking_items')[0];
 
+
 				if(!empty($tracking_items)) {
 					$order_data['aftership']['woocommerce']['trackings'][0] = array(
 						'tracking_number' => $tracking_items['tracking_number'],
-						'tracking_provider' => $tracking_items['custom_tracking_provider']
+						'tracking_provider' => $tracking_items['custom_tracking_provider'],
+                        'tracking_ship_date' =>  '',
+                        'tracking_postal_code' =>  '',
+                        'tracking_account_number' =>  '',
+                        'tracking_key' =>  '',
+                        'tracking_destination_country' =>  '',
 					);
+                    // 获取 tracking_provider, tracking_postal_code
+                    $trackingArr =  $this->getTrackingInfoByShipmentTracking($tracking_items);
+                    if(!empty($trackingArr)) {
+                        $order_data['aftership']['woocommerce']['trackings'][0]['tracking_postal_code'] = $trackingArr['tracking_postal_code'];
+                        $order_data['aftership']['woocommerce']['trackings'][0]['tracking_provider'] = $trackingArr['tracking_provider'];
+                    }
 				}
 			} else {
 				$order_data['aftership']['woocommerce']['trackings'][0] = array(
@@ -333,6 +345,45 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 
 		return array('order' => apply_filters('aftership_api_order_response', $order_data, $order, $fields, $this->server));
 	}
+
+
+    // 从wc ShipmentTracking 插件获取 Postalcode  - postnl
+	private function getTrackingInfoByShipmentTracking($tracking_items) {
+        if(!isset($tracking_items['custom_tracking_link'])) {
+            return array();
+        }
+
+        // 获取 postnl  Postalcode
+        $urlArr = parse_url(stripslashes($tracking_items['custom_tracking_link']));
+
+        if($urlArr === false) {
+            return array();
+        }
+
+        if (!isset($urlArr['host'])) {
+            return array();
+        }
+
+        $hostArr = explode(".", $urlArr['host']);
+        $hostArrIndex = count($hostArr)  - 2;
+        if(empty($hostArr) || !isset($hostArr[$hostArrIndex])) {
+            return array();
+        }
+
+        if($hostArr[$hostArrIndex] == 'postnl') {
+            parse_str($urlArr['query'], $queryArr);
+            if(!isset($queryArr['Postalcode'])) {
+                return array();
+            }
+
+            return array(
+                'tracking_provider' => 'postnl',
+                'tracking_postal_code' => str_replace(" ", "", $queryArr['Postalcode']),
+            );
+        }
+        return array();
+    }
+
 
 	/**
 	 * Get the total number of orders
