@@ -97,6 +97,9 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
+= 1.9.10 =
+* Add new couriers
+
 = 1.9.9 =
 * Add PostNL Domestic postal code data
 
