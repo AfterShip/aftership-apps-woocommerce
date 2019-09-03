@@ -3102,8 +3102,13 @@ function get_couriers() {
 			"name": "Australia Post API",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "cjpacket",
+			"name": "CJ Packet",
+			"other_name": "",
+			"required_fields": []
 		}
-
 
 	];
 	return data;
