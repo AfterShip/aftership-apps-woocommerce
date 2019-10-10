@@ -98,7 +98,7 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 == Changelog ==
 
 = 1.9.11 =
-* Add new couriers(total-express)
+* Add new couriers (total-express)
 
 = 1.9.10 =
 * Add new couriers
