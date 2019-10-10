@@ -3108,6 +3108,12 @@ function get_couriers() {
 			"name": "CJ Packet",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "total-express",
+			"name": "Total Express",
+			"other_name": "",
+			"required_fields": []
 		}
 
 	];
