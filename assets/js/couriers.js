@@ -3114,6 +3114,12 @@ function get_couriers() {
 			"name": "Total Express",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "speedee",
+			"name": "Spee-Dee Delivery",
+			"other_name": "",
+			"required_fields": []
 		}
 
 	];
