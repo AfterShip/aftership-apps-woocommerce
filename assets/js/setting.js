@@ -21,11 +21,18 @@ jQuery(function () {
     }
 
     function set_track_message_demo(){
-        jQuery('#track_message_demo_1').html(
-            jQuery('#track_message_1').val() + 'UPS' +
-                '<br/>'+
-            jQuery('#track_message_2').val() + '1Z0X118A0324011613'
-        );
+        if (jQuery('#override_track_message').val()) {
+            let demo_html = jQuery('#override_track_message').val();
+            demo_html = demo_html.replace(/%tracking_provider_name%/gi, 'UPS');
+            demo_html = demo_html.replace(/%tracking_number%/gi, '1Z0X118A0324011613');
+            jQuery('#track_message_demo_1').html(demo_html);
+        } else {
+            jQuery('#track_message_demo_1').html(
+                jQuery('#track_message_1').val() + 'UPS' +
+                    '<br/>' +
+                jQuery('#track_message_2').val() + '1Z0X118A0324011613'
+            );
+        }     
     }
 
     jQuery('#couriers_select').change(function () {
