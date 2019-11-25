@@ -200,6 +200,29 @@ class AfterShip_Settings
             $new_input['track_message_2'] = sanitize_text_field($input['track_message_2']) . $postfix;
         }
 
+        if (isset($input['override_track_message'])) {
+            $postfix = '';
+            if (substr($input['override_track_message'], -1) == ' ') {
+                $postfix = ' ';
+            }
+            $allowed_html = array (
+              'a' => array (
+                'href' => array(),
+                'class' => array(),
+              ),
+              'br' => array(),
+              'em' => array(),
+              'strong' => array(),
+              'p' => array(),
+              'h1' => array(),
+              'h2' => array(),
+              'h3' => array(),
+              'h4' => array(),
+              'h5' => array(),
+            );
+            $new_input['override_track_message'] = wp_kses($input['override_track_message'],$allowed_html);
+        }
+
         if (isset($input['use_track_button'])) {
             $new_input['use_track_button'] = true;
         }
@@ -275,6 +298,11 @@ class AfterShip_Settings
         );
         printf('<br/>');
         printf('<br/>');
+        printf('<b>Override track messages with the following (use %tracking_number% and %shipping_method% variables):</b>');
+        printf(
+          '<input type="text" id="override_track_message" name="aftership_option_name[override_track_message]" value="%s" style="width:100%%">',
+          isset($this->options['override_track_message']) ? htmlspecialchars($this->options['override_track_message']) : ''
+        );
         printf('<b>Demo:</b>');
         printf(
             '<div id="track_message_demo_1" style="width:100%%"></div>'
