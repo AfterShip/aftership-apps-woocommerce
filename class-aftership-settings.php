@@ -298,7 +298,7 @@ class AfterShip_Settings
         );
         printf('<br/>');
         printf('<br/>');
-        printf('<b>Override track messages with the following (use %tracking_number% and %shipping_method% variables):</b>');
+        printf('<b>Override track messages with the following (use %tracking_number% and %tracking_provider_name% variables):</b>');
         printf(
           '<input type="text" id="override_track_message" name="aftership_option_name[override_track_message]" value="%s" style="width:100%%">',
           isset($this->options['override_track_message']) ? htmlspecialchars($this->options['override_track_message']) : ''
