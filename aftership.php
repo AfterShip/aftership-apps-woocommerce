@@ -445,6 +445,12 @@ if (is_woocommerce_active()) {
                     $track_message_1 = 'Your order was shipped via ';
                     $track_message_2 = 'Tracking number is ';
                 }
+                
+                if (array_key_exists('override_track_message', $options)) {
+                    $override_track_message = $options['override_track_message']; 
+                } else {
+                  $override_track_message = '';
+                }
 
                 $required_fields_values = array();
                 $provider_required_fields = explode(",", $values['aftership_tracking_required_fields']);
@@ -464,9 +470,14 @@ if (is_woocommerce_active()) {
                     $required_fields_msg = '';
                 }
 
-
-                echo $track_message_1 . $values['aftership_tracking_provider_name'] . '<br/>' . $track_message_2 . $values['aftership_tracking_number'] . $required_fields_msg;
-
+                if(strlen($override_track_message)){
+                  $override_track_message = str_replace('%tracking_number%', $values['aftership_tracking_number'], $override_track_message);
+                  $override_track_message = str_replace('%tracking_provider_name%', $values['aftership_tracking_provider_name'], $override_track_message);
+                  echo $override_track_message . $required_fields_msg;
+                } else {
+                  echo $track_message_1 . $values['aftership_tracking_provider_name'] . '<br/>' . $track_message_2 . $values['aftership_tracking_number'] . $required_fields_msg;
+                }
+                
                 if (!$for_email && $this->use_track_button) {
                     $this->display_track_button($values['aftership_tracking_provider'], $values['aftership_tracking_number'], $required_fields_values);
                 }
