@@ -3120,6 +3120,12 @@ function get_couriers() {
 			"name": "Spee-Dee Delivery",
 			"other_name": "",
 			"required_fields": []
+		},
+		{
+			"slug": "zeleris",
+			"name": "Zeleris",
+			"other_name": "",
+			"required_fields": []
 		}
 
 	];
