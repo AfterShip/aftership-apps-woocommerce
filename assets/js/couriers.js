@@ -3086,14 +3086,279 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "gso",
-			"name": "GSO",
+			"slug": "shiptor",
+			"name": "Shiptor",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "bh-worldwide",
+			"name": "B&H Worldwide",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "parcel2go",
+			"name": "Parcel2Go",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "endeavour-delivery",
+			"name": "Endeavour Delivery",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "kerrytj",
+			"name": "Kerry TJ Logistics",
+			"other_name": "KTJ嘉里大榮物流",
+			"required_fields": []
+		},
+		{
+			"slug": "aaa-cooper",
+			"name": "AAA Cooper",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "aersure",
+			"name": "Aersure",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mglobal",
+			"name": "PT MGLOBAL LOGISTICS INDONESIA",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "watkins-shepard",
+			"name": "Watkins Shepard",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ocs",
+			"name": "OCS ANA Group",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "descartes",
+			"name": "Innovel",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "champion-logistics",
+			"name": "Champion Logistics",
+			"other_name": "Champlog",
+			"required_fields": []
+		},
+		{
+			"slug": "usf-reddaway",
+			"name": "USF Reddaway",
 			"other_name": "",
 			"required_fields": []
 		},
 		{
 			"slug": "latvijas-pasts",
 			"name": "Latvijas Pasts",
+			"other_name": "Latvijas Pasts",
+			"required_fields": []
+		},
+		{
+			"slug": "fedex-fims",
+			"name": "FedEx International MailService",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "sefl",
+			"name": "Southeastern Freight Lines",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "danske-fragt",
+			"name": "Danske Fragtmænd",
+			"other_name": "Fragt DK",
+			"required_fields": []
+		},
+		{
+			"slug": "gso",
+			"name": "GSO",
+			"other_name": "GSO Freight",
+			"required_fields": []
+		},
+		{
+			"slug": "sf-express-webhook",
+			"name": "SF Express (Webhook)",
+			"other_name": "顺丰速运 (丰桥路由状态推送)",
+			"required_fields": []
+		},
+		{
+			"slug": "efex",
+			"name": "eFEx (E-Commerce Fulfillment & Express)",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "wmg",
+			"name": "WMG Delivery",
+			"other_name": "World Marketing Group Pte Ltd",
+			"required_fields": []
+		},
+		{
+			"slug": "paack-webhook",
+			"name": "Paack",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "apc-overnight-connum",
+			"name": "APC Overnight Consignment Number",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "usps-webhook",
+			"name": "USPS Informed Visibility - Webhook",
+			"other_name": "USPS IV",
+			"required_fields": []
+		},
+		{
+			"slug": "osm-worldwide",
+			"name": "OSM Worldwide",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "expeditors-api",
+			"name": "Expeditors API",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "seko-sftp",
+			"name": "SEKO Worldwide, LLC",
+			"other_name": "SEKO Logistics",
+			"required_fields": []
+		},
+		{
+			"slug": "antron",
+			"name": "Antron Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pickupp-vnm",
+			"name": "Pickupp Vietnam",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "janio",
+			"name": "Janio Asia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "brt-it-sender-ref",
+			"name": "BRT Bartolini(Sender Reference)",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "kurasi",
+			"name": "KURASI",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gls-spain",
+			"name": "GLS Spain",
+			"other_name": "",
+			"required_fields": [
+				"tracking_key"
+			]
+		},
+		{
+			"slug": "total-express",
+			"name": "Total Express",
+			"other_name": "",
+			"required_fields": [
+				"tracking_account_number",
+				"tracking_key"
+			]
+		},
+		{
+			"slug": "newzealand-couriers",
+			"name": "NEW ZEALAND COURIERS",
+			"other_name": "",
+			"required_fields": [
+				"tracking_account_number"
+			]
+		},
+		{
+			"slug": "lotte",
+			"name": "Lotte Global Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "fmx",
+			"name": "FMX",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "knuk",
+			"name": "KNAirlink Aerospace Domestic Network",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "hx-express",
+			"name": "HX Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "shippify",
+			"name": "Shippify, Inc",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gls-croatia",
+			"name": "GLS Croatia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dpd-fr-reference",
+			"name": "DPD France",
+			"other_name": "",
+			"required_fields": [
+				"tracking_account_number"
+			]
+		},
+		{
+			"slug": "dhl-supply-chain-au",
+			"name": "DHL Supply Chain Australia",
+			"other_name": "DHL ConnectedView",
+			"required_fields": []
+		},
+		{
+			"slug": "always-express",
+			"name": "Always Express",
 			"other_name": "",
 			"required_fields": []
 		},
@@ -3104,14 +3369,320 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "fetchr",
+			"name": "Fetchr",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "inexpost",
+			"name": "Inexpost",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "expresssale",
+			"name": "Expresssale",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "hipshipper",
+			"name": "Hipshipper",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "westbank-courier",
+			"name": "West Bank Courier",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mailplus-jp",
+			"name": "MailPlus",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ky-express",
+			"name": "Kua Yue Express",
+			"other_name": "KYE",
+			"required_fields": []
+		},
+		{
+			"slug": "misumi-cn",
+			"name": "MISUMI Group Inc.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cae-delivers",
+			"name": "CAE Delivers",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dayton-freight",
+			"name": "Dayton Freight",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pony-express",
+			"name": "Pony express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dajin",
+			"name": "Shanghai Aqrum Chemical Logistics Co.Ltd",
+			"other_name": "Dajin",
+			"required_fields": []
+		},
+		{
+			"slug": "xpert-delivery",
+			"name": "Xpert Delivery",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mainway",
+			"name": "Mainway",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "amazon",
+			"name": "Amazon Ground",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gls-slovakia",
+			"name": "GLS General Logistics Systems Slovakia s.r.o.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "aquiline",
+			"name": "Aquiline",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dao365",
+			"name": "DAO365",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "urgent-cargus",
+			"name": "Urgent Cargus",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "lalamove",
+			"name": "Lalamove",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "jne-api",
+			"name": "JNE",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gba",
+			"name": "GBA Services Ltd",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "globaltranz",
+			"name": "GlobalTranz",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ao-courier",
+			"name": "AO Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "general-overnight",
+			"name": "Go!Express and logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "planzer",
+			"name": "Planzer Group",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "naqel-express",
+			"name": "Naqel Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "parknparcel",
+			"name": "Park N Parcel",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "i-dika",
+			"name": "i-dika",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-global-mail-asia-api",
+			"name": "DHL eCommerce Asia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mx-cargo",
+			"name": "M&X cargo",
+			"other_name": "M&X International Shipping Agency Co.,LTD",
+			"required_fields": []
+		},
+		{
+			"slug": "smg-express",
+			"name": "SMG Direct",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "zeleris",
+			"name": "Zeleris",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "virtransport",
+			"name": "VIR Transport",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "eu-fleet-solutions",
+			"name": "EU Fleet Solutions",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "tuffnells-reference",
+			"name": "Tuffnells Parcels Express- Reference",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "speedy",
+			"name": "Speedy",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "neway",
+			"name": "Neway Transport",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ids-logistics",
+			"name": "IDS Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "landmark-global-reference",
+			"name": "Landmark Global Reference",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pioneer-logistics",
+			"name": "Pioneer Logistics Systems, Inc.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "apg",
+			"name": "APG eCommerce Solutions Ltd.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "delnext",
+			"name": "Delnext",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gls-slovenia",
+			"name": "GLS Slovenia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pittohio",
+			"name": "PITT OHIO",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cope",
+			"name": "Cope Sensitive Freight",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "cjpacket",
 			"name": "CJ Packet",
 			"other_name": "",
 			"required_fields": []
 		},
 		{
-			"slug": "total-express",
-			"name": "Total Express",
+			"slug": "pil-logistics",
+			"name": "PIL Logistics (China) Co., Ltd",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "milkman",
+			"name": "Milkman",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "intel-valley",
+			"name": "Intel-Valley Supply chain (ShenZhen) Co. Ltd",
+			"other_name": "智谷供应链（深圳）有限公司",
+			"required_fields": []
+		},
+		{
+			"slug": "fetchr-webhook",
+			"name": "Mena 360 (Fetchr)",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "logicmena",
+			"name": "Logic Mena",
 			"other_name": "",
 			"required_fields": []
 		},
@@ -3122,8 +3693,344 @@ function get_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "zeleris",
-			"name": "Zeleris",
+			"slug": "carriers",
+			"name": "Carriers",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "forrun",
+			"name": "forrun Pvt Ltd (Arpatech Venture)",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "correosexpress-api",
+			"name": "Correos Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "eshipping",
+			"name": "Eshipping",
+			"other_name": "Eshipping Global Supply Chain Management(Shenzhen)Co. Ltd",
+			"required_fields": []
+		},
+		{
+			"slug": "xpedigo",
+			"name": "Xpedigo",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "spanish-seur-api",
+			"name": "Spanish Seur API",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "continental",
+			"name": "Continental",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "fasttrack",
+			"name": "Fasttrack",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "paper-express",
+			"name": "Paper Express",
+			"other_name": "",
+			"required_fields": [
+				"tracking_postal_code"
+			]
+		},
+		{
+			"slug": "relaiscolis",
+			"name": "Relais Colis",
+			"other_name": "",
+			"required_fields": [
+				"tracking_key"
+			]
+		},
+		{
+			"slug": "weaship",
+			"name": "Weaship",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "sutton",
+			"name": "Sutton Transport",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-supplychain-id",
+			"name": "DHL Supply Chain Indonesia",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "budbee-webhook",
+			"name": "Budbee",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mazet",
+			"name": "Groupe Mazet",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "liefery",
+			"name": "liefery",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "legion-express",
+			"name": "Legion Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "wizmo",
+			"name": "Wizmo",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "tourline",
+			"name": "tourline",
+			"other_name": "ctt",
+			"required_fields": []
+		},
+		{
+			"slug": "huodull",
+			"name": "Huodull",
+			"other_name": "货兜",
+			"required_fields": []
+		},
+		{
+			"slug": "sfplus-webhook",
+			"name": "SF Plus",
+			"other_name": "Kin Shun Information Technology Limited",
+			"required_fields": []
+		},
+		{
+			"slug": "doordash-webhook",
+			"name": "DoorDash",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dhlparcel-uk",
+			"name": "DHL Parcel UK",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "hdb",
+			"name": "Haidaibao",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ceva",
+			"name": "CEVA LOGISTICS",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "okayparcel",
+			"name": "OkayParcel",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ocs-worldwide",
+			"name": "OCS WORLDWIDE",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "up-express",
+			"name": "UP-express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "amazon-logistics-uk",
+			"name": "Amazon Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "toll-nz",
+			"name": "Toll New Zealand",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "box-berry",
+			"name": "Boxberry",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "loomis-express",
+			"name": "Loomis Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ets-express",
+			"name": "RETS express",
+			"other_name": "绥芬河俄通收国际货物运输代理有限责任公司",
+			"required_fields": []
+		},
+		{
+			"slug": "cbl-logistica-api",
+			"name": "CBL Logistica",
+			"other_name": "",
+			"required_fields": [
+				"tracking_ship_date"
+			]
+		},
+		{
+			"slug": "dnj-express",
+			"name": "DNJ Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dms-matrix",
+			"name": "DMSMatrix",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "logistyx-transgroup",
+			"name": "Transgroup",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cdek-tr",
+			"name": "CDEK TR",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "nowlog-api",
+			"name": "NOWLOG LOGISTICA INTELIGENTE LTD",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "2ebox",
+			"name": "2ebox",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "freterapido",
+			"name": "Frete Rápido",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "carry-flap",
+			"name": "Carry-Flap Co.,Ltd.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "hdb-box",
+			"name": "Haidaibao",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cfl-logistics",
+			"name": "CFL Logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "xpo-logistics",
+			"name": "XPO logistics",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "gemworldwide",
+			"name": "GEM Worldwide",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "fitzmark-api",
+			"name": "FitzMark",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mail-box-etc",
+			"name": "Mail Boxes Etc.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "bond",
+			"name": "Bond",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "firstmile",
+			"name": "FirstMile",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "bring",
+			"name": "Bring",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "tck-express",
+			"name": "TCK Express",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "cubyn",
+			"name": "Cubyn",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "ecoutier",
+			"name": "eCoutier",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "sk-posta",
+			"name": "Slovenská pošta, a.s.",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "allied-express-ftp",
+			"name": "Allied Express",
 			"other_name": "",
 			"required_fields": []
 		}
