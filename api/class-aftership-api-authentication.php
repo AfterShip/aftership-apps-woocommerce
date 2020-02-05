@@ -76,7 +76,7 @@ class AfterShip_API_Authentication
 		$key = 'AFTERSHIP_WP_KEY';
 		$key1 = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
 		$key2 = 'AFTERSHIP-WP-KEY';
-		$qskey = $_GET['key'];
+		$qskey = isset($_GET['key']) ? $_GET['key'] : null;
 
 		// get aftership wp key
 		if (!empty($headers[$key])) {

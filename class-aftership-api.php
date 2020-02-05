@@ -32,6 +32,8 @@ class AfterShip_API
 	 */
 	public function __construct()
 	{
+	    // disable notice output in api json response
+        error_reporting(0);
 
 		// add query vars
 		add_filter('query_vars', array($this, 'add_query_vars'), 0);
@@ -148,6 +150,7 @@ class AfterShip_API
 		include_once('api/class-aftership-api-server.php');
 		include_once('api/interface-aftership-api-handler.php');
 		include_once('api/class-aftership-api-json-handler.php');
+		include_once('api/class-aftership-api-v2-json-handler.php');
 
 		// authentication
 		include_once('api/class-aftership-api-authentication.php');
@@ -157,6 +160,8 @@ class AfterShip_API
 
 		// self api
 		include_once('api/class-aftership-api-orders.php');
+		include_once('api/class-aftership-api-v2-orders.php');
+
 	}
 
 	/**
@@ -171,6 +176,7 @@ class AfterShip_API
 		$api_classes = apply_filters('aftership_api_classes',
 			array(
 				'AfterShip_API_Orders',
+				'AfterShip_API_V2_Orders',
 			)
 		);
 
