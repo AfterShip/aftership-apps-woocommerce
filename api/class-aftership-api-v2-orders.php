@@ -121,16 +121,20 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
         }
         $order = new WC_Order($id);
         $customer = new WC_Customer($order->get_customer_id());
-        $shipping_method = current($order->get_shipping_methods());
+        $current_shipping_method = current($order->get_shipping_methods());
+        $shipping_method = null;
+        if($current_shipping_method['method_id'] && $current_shipping_method['name']) {
+            $shipping_method = [
+                'code' => $shipping_method['method_id'],
+                'name' => $shipping_method['name'],
+            ];
+        }
         $order_data = [
             'id' => (string)$order->get_id(),
             'order_number' => $order->get_order_number(),
             'order_name' => $order->get_order_number(),
             'taxes_included' => ($order->get_total_tax() > 0),
-            'shipping_method' => [
-                'code' => $shipping_method['method_id'],
-                'name' => $shipping_method['name'],
-            ],
+            'shipping_method' => $shipping_method,
             'order_total' => [
                 'currency' => $order->get_currency(),
                 'amount' => (float)wc_format_decimal($order->get_total(), 2),
@@ -219,8 +223,8 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
                 $product_categories[] = $categoriesVal->name;
             }
             $order_data['items'][] = [
-                'id' => $item_id,
-                'product_id' => $product_id,
+                'id' => (string)$item_id,
+                'product_id' => (string)$product_id,
                 'sku' => is_object($product) ? $product->get_sku() : null,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
@@ -235,7 +239,7 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
                     'amount' => (float)wc_format_decimal($order->get_item_total($item), 2),
                 ],
                 'discount' => null,
-                'image_urls' => [wp_get_attachment_url($product->image_id)],
+                'image_urls' => wp_get_attachment_url($product->image_id) ? [wp_get_attachment_url($product->image_id)] : [],
                 'tags' => $product_tags,
                 'categories' => $product_categories,
             ];
