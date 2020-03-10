@@ -125,8 +125,8 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
         $shipping_method = null;
         if($current_shipping_method['method_id'] && $current_shipping_method['name']) {
             $shipping_method = [
-                'code' => $shipping_method['method_id'],
-                'name' => $shipping_method['name'],
+                'code' => $current_shipping_method['method_id'],
+                'name' => $current_shipping_method['name'],
             ];
         }
         $order_data = [
