@@ -266,12 +266,12 @@ class AfterShip_Settings
     {
         printf(
             '<input type="text" id="track_message_1" name="aftership_option_name[track_message_1]" value="%s" style="width:100%%">',
-            isset($this->options['track_message_1']) ? $this->options['track_message_1'] : 'Your order was shipped via '
+            isset($this->options['track_message_1']) ? $this->options['track_message_1'] : 'Carrier'
         );
         printf('<br/>');
         printf(
             '<input type="text" id="track_message_2" name="aftership_option_name[track_message_2]" value="%s" style="width:100%%">',
-            isset($this->options['track_message_2']) ? $this->options['track_message_2'] : 'Tracking number is '
+            isset($this->options['track_message_2']) ? $this->options['track_message_2'] : 'Tracking Number'
         );
         printf('<br/>');
         printf('<br/>');
