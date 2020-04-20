@@ -22,9 +22,16 @@ jQuery(function () {
 
     function set_track_message_demo(){
         jQuery('#track_message_demo_1').html(
-            jQuery('#track_message_1').val() + 'UPS' +
-                '<br/>'+
-            jQuery('#track_message_2').val() + '1Z0X118A0324011613'
+            '<H2 style="FONT-SIZE: 18px; FONT-FAMILY: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; FONT-WEIGHT: bold; COLOR: #557da1; TEXT-ALIGN: left; MARGIN: 0px 0px 18px; DISPLAY: block; LINE-HEIGHT: 130%">Tracking Information</H2>' +
+            '<section><table class="shop_table shop_table_responsive yqtrack_tracking" style="width: 100%; border-collapse: collapse;">' +
+            '<thead><tr><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">' +
+            jQuery('#track_message_1').val() + '</th><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">' +
+            jQuery('#track_message_2').val() + '</th><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">' +
+            '</th></tr></thead><tbody><tr><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">' +
+            'UPS' + '</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">' +
+            '123123123123' + '</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">' +
+            '<a href="'+jQuery('#custom_domain').val()+'/'+'123123123123'+'" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on Aftership</a><br>or<br>' +
+            '<a href="https://t.17track.net#nums='+'123123123123'+'&amp;fc=09061" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on 17Track</a></td></tr></tbody></table></section><br>'+
         );
     }
 
