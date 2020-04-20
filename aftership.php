@@ -441,9 +441,11 @@ if (is_woocommerce_active()) {
                 if (array_key_exists('track_message_1', $options) && array_key_exists('track_message_2', $options)) {
                     $track_message_1 = $options['track_message_1'];
                     $track_message_2 = $options['track_message_2'];
+                    $custom_domain = $options['custom_domain'];
                 } else {
-                    $track_message_1 = 'Your order was shipped via ';
-                    $track_message_2 = 'Tracking number is ';
+                    $track_message_1 = 'Carrier';
+                    $track_message_2 = 'Tracking Number';
+                    $custom_domain = 'https://track.aftership.com/';
                 }
 
                 $required_fields_values = array();
@@ -465,7 +467,16 @@ if (is_woocommerce_active()) {
                 }
 
 
-                echo $track_message_1 . $values['aftership_tracking_provider_name'] . '<br/>' . $track_message_2 . $values['aftership_tracking_number'] . $required_fields_msg;
+                echo '<H2 style="FONT-SIZE: 18px; FONT-FAMILY: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; FONT-WEIGHT: bold; COLOR: #557da1; TEXT-ALIGN: left; MARGIN: 0px 0px 18px; DISPLAY: block; LINE-HEIGHT: 130%">Tracking Information</H2>';
+                echo '<section><table class="shop_table shop_table_responsive yqtrack_tracking" style="width: 100%; border-collapse: collapse;">';
+                echo '<thead><tr><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">';
+                echo $track_message_1.'</th><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">';
+                echo $track_message_2.'</th><th style="text-align: center; font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">';
+                echo '</th></tr></thead><tbody><tr><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">';
+                echo $values['aftership_tracking_provider_name'].'</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">';
+                echo $values['aftership_tracking_number'].'</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">';
+                echo '<a href="'.$custom_domain.'/'.$values['aftership_tracking_number'].'" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on Aftership</a><br>or<br>';
+                echo '<a href="https://t.17track.net#nums='.$values['aftership_tracking_number'].'&amp;fc=09061" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on 17Track</a></td></tr></tbody></table></section><br>';
 
                 if (!$for_email && $this->use_track_button) {
                     $this->display_track_button($values['aftership_tracking_provider'], $values['aftership_tracking_number'], $required_fields_values);
