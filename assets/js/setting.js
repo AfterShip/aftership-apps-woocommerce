@@ -31,7 +31,7 @@ jQuery(function () {
             'UPS' + '</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">' +
             '123123123123' + '</td><td style="font-family: \'Helvetica Neue\', Helvetica, Roboto, Arial, sans-serif; font-size: px; color: #737373; border: 1px solid #e4e4e4; padding: 12px; text-align: center;">' +
             '<a href="'+jQuery('#custom_domain').val()+'/'+'123123123123'+'" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on Aftership</a><br>or<br>' +
-            '<a href="https://t.17track.net#nums='+'123123123123'+'&amp;fc=09061" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on 17Track</a></td></tr></tbody></table></section><br>'+
+            '<a href="https://t.17track.net#nums='+'123123123123'+'&amp;fc=09061" target="_blank" class="button" style="color: #557da1; font-weight: normal; text-decoration: underline;">Track on 17Track</a></td></tr></tbody></table></section><br>'
         );
     }
 
