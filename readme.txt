@@ -97,6 +97,9 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
+= 1.9.20 =
+* Fix known issue
+
 = 1.9.18 =
 * Add new couriers (borderexpress)
 
