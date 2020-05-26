@@ -142,8 +142,8 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
             'note' => $order->get_customer_note(),
             'locale' => get_locale(),
             'metrics' => [
-                'placed_at' => $this->server->format_datetime($order->get_date_created()),
-                'updated_at' => $this->server->format_datetime($order->get_date_modified()),
+                'placed_at' => $this->server->format_datetime($order->get_date_created()->getTimestamp()),
+                'updated_at' => $this->server->format_datetime($order->get_date_modified()->getTimestamp()),
                 'fully_shipped_at' => null,
                 'expected_earliest_delivery_at' => null,
                 'expected_last_delivery_at' => null,
