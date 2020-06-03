@@ -98,7 +98,7 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 == Changelog ==
 
 = 1.9.25 =
-* Don’t import any data to AfterShip tracking custom_fields
+* Don't import any data to AfterShip tracking custom_fields
 
 = 1.9.24 =
 * Fix known issue

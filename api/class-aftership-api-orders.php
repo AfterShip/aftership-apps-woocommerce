@@ -121,23 +121,6 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 
 		$order_id = get_order_id($order);
 
-		// set up the array with keys that is not part of custom field
-		$filter_list = array("_edit_last","_aftership_tracking_provider_name","_aftership_tracking_required_fields"
-							,"_aftership_tracking_number","_aftership_tracking_shipdate","_aftership_tracking_postal"
-							,"_aftership_tracking_account","_aftership_tracking_key","_aftership_tracking_destination_country"
-							,"_order_key","_customer_user","_payment_method","_payment_method_title","_transaction_id"
-							,"_customer_ip_address","_customer_user_agent","_created_via","_date_completed"
-							,"_completed_date","_date_paid","_paid_date","_cart_hash","_billing_first_name","_billing_last_name"
-							,"_billing_company","_billing_address_1","_billing_address_2","_billing_city","_billing_state",
-							"_billing_postcode","_billing_country","_billing_email","_billing_phone","_shipping_first_name",
-							"_shipping_last_name","_shipping_company","_shipping_address_1","_shipping_address_2","_shipping_city",
-							"_shipping_state","_shipping_postcode","_shipping_country","_order_currency","_cart_discount",
-							"_cart_discount_tax","_order_shipping","_order_shipping_tax","_order_tax","_order_total","_order_version",
-							"_prices_include_tax","_billing_address_index","_shipping_address_index","_edit_lock",
-							"_aftership_tracking_provider", "_download_permissions_granted", "_recorded_sales", "_recorded_coupon_usage_counts"
-						);
-
-
 		$order_data = array(
 			'id' => get_order_id($order),
 			'order_number' => $order->get_order_number(),
