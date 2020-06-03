@@ -196,7 +196,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource
 //			'tax_lines' => array(),
 //			'fee_lines' => array(),
 //			'coupon_lines' => array(),
-//			'custom_fields' => $custom_field,
+			'custom_fields' => array(),
             'aftership' => array(
                 'woocommerce' => array(
                     'trackings' => array(
