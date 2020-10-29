@@ -114,6 +114,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
     public function get_order($id)
     {
         $weight_unit = get_option('woocommerce_weight_unit');
+        $dp = wc_get_price_decimals();
         // ensure order ID is valid & user has permission to read
         $id = $this->validate_request($id, 'shop_order', 'read');
         if (is_wp_error($id)) {
@@ -131,8 +132,8 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
         }
         $order_data = [
             'id' => (string)$order->get_id(),
-            'order_number' => $order->get_order_number(),
-            'order_name' => $order->get_order_number(),
+            'order_number' => (string)$order->get_order_number(),
+            'order_name' => '#' . (string)$order->get_order_number(),
             'taxes_included' => ($order->get_total_tax() > 0),
             'shipping_method' => $shipping_method,
             'order_total' => [
@@ -209,7 +210,10 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             }
             if (empty($product)) continue;
             $weight = $product->get_weight();
-            $product_id = (isset($product->variation_id)) ? $product->variation_id : $product->get_id();
+            $product_id = $product->get_id();
+            $variation_id = isset($product->variation_id) ? $product->variation_id : null;
+            $subtotal = wc_format_decimal( $order->get_line_subtotal( $item, false, false ), $dp );
+            $total = wc_format_decimal( $order->get_line_total( $item, false, false ), $dp );
             // set the response object
             $terms_tags = get_the_terms($product_id, 'product_tag');
             $product_tags = [];
@@ -225,6 +229,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             $order_data['items'][] = [
                 'id' => (string)$item_id,
                 'product_id' => (string)$product_id,
+                'variation_id' => $variation_id ? (string)$variation_id : null,
                 'sku' => is_object($product) ? $product->get_sku() : null,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
@@ -238,7 +243,10 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                     'currency' => $order->get_currency(),
                     'amount' => (float)wc_format_decimal($order->get_item_total($item), 2),
                 ],
-                'discount' => null,
+                'discount' => [
+                    'currency' => $order->get_currency(),
+                    'amount' => (float)($subtotal - $total),
+                ],
                 'image_urls' => wp_get_attachment_url($product->image_id) ? [wp_get_attachment_url($product->image_id)] : [],
                 'tags' => $product_tags,
                 'categories' => $product_categories,
