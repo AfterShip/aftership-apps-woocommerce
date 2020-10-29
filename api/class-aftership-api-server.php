@@ -142,18 +142,18 @@ class AfterShip_API_Server
 		}else{
 			$handler_class = apply_filters('aftership_api_default_response_handler', 'AfterShip_API_JSON_Handler', $this->path, $this);
 		}
-		if ($this->is_version_two()) {
-			$handler_class = 'AfterShip_API_V2_JSON_Handler';
+		if (!$this->is_legacy()) {
+			$handler_class = 'AfterShip_API_Common_JSON_Handler';
 		}
 		$this->handler = new $handler_class();
 	}
 
-	public function is_version_two() {
+	public function is_legacy() {
         // check path
-        if ( false !== stripos( $this->path, '/v2' ) ) {
-            return true;
+        if ( false !== stripos( $this->path, '/v3' ) ) {
+            return false;
         }
-        return false;
+        return true;
     }
 
 	/**
@@ -438,7 +438,7 @@ class AfterShip_API_Server
 			'description' => get_option('blogdescription'),
 			'URL' => get_option('siteurl'),
 			'wc_version' => WC()->version,
-			'latest_api_version' => 'v2',
+			'latest_api_version' => 'v3',
 			'routes' => array(),
 			'meta' => array(
 				'timezone' => wc_timezone_string(),

@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
-class AfterShip_API_V2_Orders extends AfterShip_API_Resource
+class AfterShip_API_V3_Orders extends AfterShip_API_Resource
 {
 
     /** @var string $base the route base */
-    protected $base = '/v2/orders';
+    protected $base = '/v3/orders';
 
     /**
      * Register the routes for this class
