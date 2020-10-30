@@ -279,7 +279,13 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                     'slug' => order_post_meta_getter($order, 'aftership_tracking_provider'),
                     'tracking_number' => $aftership_tracking_number,
                     'additional_fields' => [
+                        'account_number' => order_post_meta_getter($order, 'aftership_tracking_account'),
+                        'key' => order_post_meta_getter($order, 'aftership_tracking_key'),
                         'postal_code' => order_post_meta_getter($order, 'aftership_tracking_postal'),
+                        'ship_date' => order_post_meta_getter($order, 'aftership_tracking_shipdate'),
+                        'destination_country' => order_post_meta_getter($order, 'aftership_tracking_destination_country'),
+                        'state' => null,
+                        'origin_country' => null
                     ],
                 ];
             }
@@ -294,7 +300,13 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                             'slug' => $trackingArr['tracking_provider'],
                             'tracking_number' => $trackingVal["tracking_number"],
                             'additional_fields' => [
+                                'account_number' => null,
+                                'key' => null,
                                 'postal_code' => $trackingArr['tracking_postal_code'],
+                                'ship_date' => null,
+                                'destination_country' => null,
+                                'state' => null,
+                                'origin_country' => null
                             ],
                         ];
                     } else {
@@ -302,7 +314,13 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                             'slug' => $trackingVal["tracking_provider"],
                             'tracking_number' =>$trackingVal["tracking_number"],
                             'additional_fields'=> [
+                                'account_number' => null,
+                                'key' => null,
                                 'postal_code' => null,
+                                'ship_date' => null,
+                                'destination_country' => null,
+                                'state' => null,
+                                'origin_country' => null
                             ]
                         ];
                     }
