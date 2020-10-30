@@ -209,9 +209,17 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                 $product = $order->get_product_from_item($item);
             }
             if (empty($product)) continue;
+            $product_id   = 0;
+			$variation_id = 0;
+			$product_sku  = null;
+
+			// Check if the product exists.
+			if ( is_object( $product ) ) {
+				$product_id   = $item->get_product_id();
+				$variation_id = $item->get_variation_id();
+				$product_sku  = $product->get_sku();
+			}
             $weight = $product->get_weight();
-            $product_id = $product->get_id();
-            $variation_id = isset($product->variation_id) ? $product->variation_id : null;
             $subtotal = wc_format_decimal( $order->get_line_subtotal( $item, false, false ), $dp );
             $total = wc_format_decimal( $order->get_line_total( $item, false, false ), $dp );
             // set the response object
@@ -228,9 +236,9 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             }
             $order_data['items'][] = [
                 'id' => (string)$item_id,
-                'product_id' => (string)$product_id,
+                'product_id' => $product_id ? (string)$product_id : null,
                 'variation_id' => $variation_id ? (string)$variation_id : null,
-                'sku' => is_object($product) ? $product->get_sku() : null,
+                'sku' => $product_sku,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
                 'returnable_quantity' => (int)($item['qty'] - $order->get_qty_refunded_for_item($item_id)),
