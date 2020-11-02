@@ -77,11 +77,11 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
     public function get_orders($updated_at_min = null, $updated_at_max = null, $max_results_number = null)
     {
         $args = [
-            'updated_at_min' => $updated_at_min,
+            'updated_at_min' => $updated_at_min ? $updated_at_min : gmdate('Y-m-d H:i:s', strtotime('-3 day')),
             'updated_at_max' => $updated_at_max,
             'orderby' => 'modified',
             'order' => 'ASC',
-            'limit' => $max_results_number,
+            'limit' => $max_results_number && intval($max_results_number) > 0 ? $max_results_number : 10,
             'page' => !empty($_GET['page']) && intval($_GET['page']) > 1 ? absint($_GET['page']) : 1
         ];
 
@@ -208,18 +208,21 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             } else {
                 $product = $order->get_product_from_item($item);
             }
-            if (empty($product)) continue;
+
             $product_id   = 0;
 			$variation_id = 0;
-			$product_sku  = null;
+            $product_sku  = null;
+            $weight = 0;
+            $product_image_id = null;
 
 			// Check if the product exists.
 			if ( is_object( $product ) ) {
 				$product_id   = $item->get_product_id();
 				$variation_id = $item->get_variation_id();
-				$product_sku  = $product->get_sku();
+                $product_sku  = $product->get_sku();
+                $weight = $product->get_weight();
+                $product_image_id = $product->get_image_id();
 			}
-            $weight = $product->get_weight();
             $subtotal = wc_format_decimal( $order->get_line_subtotal( $item, false, false ), $dp );
             $total = wc_format_decimal( $order->get_line_total( $item, false, false ), $dp );
             // set the response object
@@ -237,12 +240,11 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             $order_data['items'][] = [
                 'id' => (string)$item_id,
                 'product_id' => $product_id ? (string)$product_id : null,
-                'variation_id' => $variation_id ? (string)$variation_id : null,
+                'variant_id' => $variation_id ? (string)$variation_id : null,
                 'sku' => $product_sku,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
                 'returnable_quantity' => (int)($item['qty'] - $order->get_qty_refunded_for_item($item_id)),
-
                 'unit_weight' => [
                     'unit' => $weight_unit,
                     'value' => (float)$weight,
@@ -255,28 +257,11 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                     'currency' => $order->get_currency(),
                     'amount' => (float)($subtotal - $total),
                 ],
-                'image_urls' => wp_get_attachment_url($product->image_id) ? [wp_get_attachment_url($product->image_id)] : [],
+                'image_urls' => $product_image_id && wp_get_attachment_url($product_image_id) ? [wp_get_attachment_url($product_image_id)] : [],
                 'tags' => $product_tags,
                 'categories' => $product_categories,
             ];
         }
-
-        // tracking field will be
-        /*
-        {
-			tracking_number: fulfillment.tracking_number,
-			slug: mapped_slug,
-			additional_fields: {
-				account_number: null,
-				key: null,
-				postal_code: (data.shipping_address && data.shipping_address.zip) ? data.shipping_address.zip : null,
-				ship_date: moment(fulfillment.updated_at).utcOffset('+0000').format('YYYYMMDD'),
-				state: null,
-				origin_country: null,
-				destination_country: (data.shipping_address && data.shipping_address.country_code) ? beautifyAddress({country: data.shipping_address.country_code}).country_iso3 : null,
-			},
-		}
-         */
 
         $trackings = [];
         //The function definition will be available after installing the aftership plugin.
@@ -302,36 +287,20 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             $woocommerce_tracking_arr = order_post_meta_getter($order, 'wc_shipment_tracking_items');
             if (empty($aftership_tracking_number) && !empty($woocommerce_tracking_arr)) {
                 foreach ($woocommerce_tracking_arr as $trackingKey => $trackingVal) {
-                    $trackingArr = $this->getTrackingInfoByShipmentTracking($trackingVal);
-                    if (!empty($trackingArr)) {
-                        $trackings[] = [
-                            'slug' => $trackingArr['tracking_provider'],
-                            'tracking_number' => $trackingVal["tracking_number"],
-                            'additional_fields' => [
-                                'account_number' => null,
-                                'key' => null,
-                                'postal_code' => $trackingArr['tracking_postal_code'],
-                                'ship_date' => null,
-                                'destination_country' => null,
-                                'state' => null,
-                                'origin_country' => null
-                            ],
-                        ];
-                    } else {
-                        $trackings[] = [
-                            'slug' => $trackingVal["tracking_provider"],
-                            'tracking_number' =>$trackingVal["tracking_number"],
-                            'additional_fields'=> [
-                                'account_number' => null,
-                                'key' => null,
-                                'postal_code' => null,
-                                'ship_date' => null,
-                                'destination_country' => null,
-                                'state' => null,
-                                'origin_country' => null
-                            ]
-                        ];
-                    }
+                    $trackingInfo = $this->getTrackingInfoByShipmentTracking($trackingVal);
+                    $trackings[] = [
+                        'slug' => !empty($trackingInfo) ? $trackingInfo['tracking_provider'] : $trackingVal["tracking_provider"],
+                        'tracking_number' => $trackingVal["tracking_number"],
+                        'additional_fields' => [
+                            'account_number' => null,
+                            'key' => null,
+                            'postal_code' => !empty($trackingInfo) ? $trackingInfo['tracking_postal_code'] : null,
+                            'ship_date' => null,
+                            'destination_country' => null,
+                            'state' => null,
+                            'origin_country' => null
+                        ],
+                    ];
                 }
             }
             $order_data['trackings'] = $trackings;
