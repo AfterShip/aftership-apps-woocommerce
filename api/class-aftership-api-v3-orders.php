@@ -81,7 +81,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             'updated_at_max' => $updated_at_max,
             'orderby' => 'modified',
             'order' => 'ASC',
-            'limit' => $max_results_number && intval($max_results_number) > 0 ? $max_results_number : 10,
+            'limit' => $max_results_number && intval($max_results_number) > 0 ? absint($max_results_number) : 10,
             'page' => !empty($_GET['page']) && intval($_GET['page']) > 1 ? absint($_GET['page']) : 1
         ];
 
