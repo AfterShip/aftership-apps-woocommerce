@@ -247,7 +247,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                 'returnable_quantity' => (int)($item['qty'] - $order->get_qty_refunded_for_item($item_id)),
                 'unit_weight' => [
                     'unit' => $weight_unit,
-                    'value' => (float)$weight,
+                    'value' => $weight,
                 ],
                 'unit_price' => [
                     'currency' => $order->get_currency(),
