@@ -95,7 +95,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             if (!$this->is_readable($order_id)) {
                 continue;
             }
-            $orders[] = $this->get_order($order_id, $fields);
+            $orders[] = current($this->get_order($order_id, $fields));
         }
 
         return ['orders' => $orders, 'pagination' => $pagination];
