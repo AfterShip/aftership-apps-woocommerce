@@ -208,7 +208,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             $product_id   = 0;
 			$variation_id = 0;
             $product_sku  = null;
-            $weight = null;
+            $weight = '';
             $product_image_id = 0;
 
 			// Check if the product exists.
@@ -240,10 +240,10 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                 'sku' => $product_sku,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
-                'returnable_quantity' => (int)($item['qty'] - $order->get_qty_refunded_for_item($item_id)),
+                'returnable_quantity' => (int)($item['qty'] - abs($order->get_qty_refunded_for_item($item_id))),
                 'unit_weight' => [
                     'unit' => $weight_unit,
-                    'value' => $weight,
+                    'value' => $weight === '' ? null : (float)$weight,
                 ],
                 'unit_price' => [
                     'currency' => $order->get_currency(),
