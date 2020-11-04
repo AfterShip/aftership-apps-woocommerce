@@ -76,8 +76,9 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
      */
     public function get_orders($fields = null, $filter = array(), $status = null, $page = 1)
     {
-        if (!empty($status))
-			$filter['status'] = $status;
+        if (!empty($status)) {
+            $filter['status'] = $status;
+        }
 
 		$filter['page'] = $page;
 
