@@ -74,18 +74,14 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
      * @since 2.1
      *
      */
-    public function get_orders($updated_at_min = null, $updated_at_max = null, $max_results_number = null)
+    public function get_orders($fields = null, $filter = array(), $status = null, $page = 1)
     {
-        $args = [
-            'updated_at_min' => $updated_at_min ? $updated_at_min : gmdate('Y-m-d H:i:s', strtotime('-3 day')),
-            'updated_at_max' => $updated_at_max,
-            'orderby' => 'modified',
-            'order' => 'ASC',
-            'limit' => $max_results_number && intval($max_results_number) > 0 ? absint($max_results_number) : 10,
-            'page' => !empty($_GET['page']) && intval($_GET['page']) > 1 ? absint($_GET['page']) : 1
-        ];
+        if (!empty($status))
+			$filter['status'] = $status;
 
-        $query = $this->query_orders($args);
+		$filter['page'] = $page;
+
+        $query = $this->query_orders($filter);
 
         //define pagination
         $pagination = [
@@ -99,7 +95,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             if (!$this->is_readable($order_id)) {
                 continue;
             }
-            $orders[] = $this->get_order($order_id);
+            $orders[] = $this->get_order($order_id, $fields);
         }
 
         return ['orders' => $orders, 'pagination' => $pagination];
@@ -111,7 +107,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
      * @return array|int|WP_Error
      * @throws Exception
      */
-    public function get_order($id)
+    public function get_order($id, $fields = null)
     {
         $weight_unit = get_option('woocommerce_weight_unit');
         $dp = wc_get_price_decimals();
@@ -306,7 +302,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
             $order_data['trackings'] = $trackings;
         }
 
-        return $order_data;
+        return array('order' => apply_filters('aftership_api_order_response', $order_data, $order, $fields, $this->server));
     }
 
     /**
