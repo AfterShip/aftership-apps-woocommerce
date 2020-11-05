@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
-class AfterShip_API_V2_Orders extends AfterShip_API_Resource
+class AfterShip_API_V3_Orders extends AfterShip_API_Resource
 {
 
     /** @var string $base the route base */
-    protected $base = '/v2/orders';
+    protected $base = '/v3/orders';
 
     /**
      * Register the routes for this class
@@ -74,18 +74,15 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
      * @since 2.1
      *
      */
-    public function get_orders($updated_at_min = null, $updated_at_max = null, $max_results_number = null)
+    public function get_orders($fields = null, $filter = array(), $status = null, $page = 1)
     {
-        $args = [
-            'updated_at_min' => $updated_at_min,
-            'updated_at_max' => $updated_at_max,
-            'orderby' => 'modified',
-            'order' => 'ASC',
-            'limit' => $max_results_number,
-            'page' => !empty($_GET['page']) && intval($_GET['page']) > 1 ? absint($_GET['page']) : 1
-        ];
+        if (!empty($status)) {
+            $filter['status'] = $status;
+        }
 
-        $query = $this->query_orders($args);
+		$filter['page'] = $page;
+
+        $query = $this->query_orders($filter);
 
         //define pagination
         $pagination = [
@@ -99,7 +96,7 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
             if (!$this->is_readable($order_id)) {
                 continue;
             }
-            $orders[] = $this->get_order($order_id);
+            $orders[] = current($this->get_order($order_id, $fields));
         }
 
         return ['orders' => $orders, 'pagination' => $pagination];
@@ -111,9 +108,10 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
      * @return array|int|WP_Error
      * @throws Exception
      */
-    public function get_order($id)
+    public function get_order($id, $fields = null)
     {
         $weight_unit = get_option('woocommerce_weight_unit');
+        $dp = wc_get_price_decimals();
         // ensure order ID is valid & user has permission to read
         $id = $this->validate_request($id, 'shop_order', 'read');
         if (is_wp_error($id)) {
@@ -131,8 +129,8 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
         }
         $order_data = [
             'id' => (string)$order->get_id(),
-            'order_number' => $order->get_order_number(),
-            'order_name' => $order->get_order_number(),
+            'order_number' => (string)$order->get_order_number(),
+            'order_name' => '#' . (string)$order->get_order_number(),
             'taxes_included' => ($order->get_total_tax() > 0),
             'shipping_method' => $shipping_method,
             'order_total' => [
@@ -207,9 +205,23 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
             } else {
                 $product = $order->get_product_from_item($item);
             }
-            if (empty($product)) continue;
-            $weight = $product->get_weight();
-            $product_id = (isset($product->variation_id)) ? $product->variation_id : $product->get_id();
+
+            $product_id = 0;
+            $variation_id = 0;
+            $product_sku = null;
+            $weight = '';
+            $product_image_id = 0;
+
+			// Check if the product exists.
+			if ( is_object( $product ) ) {
+				$product_id = $item->get_product_id();
+				$variation_id = $item->get_variation_id();
+                $product_sku = $product->get_sku();
+                $weight = $product->get_weight();
+                $product_image_id = $product->get_image_id();
+			}
+            $subtotal = wc_format_decimal( $order->get_line_subtotal( $item, false, false ), $dp );
+            $total = wc_format_decimal( $order->get_line_total( $item, false, false ), $dp );
             // set the response object
             $terms_tags = get_the_terms($product_id, 'product_tag');
             $product_tags = [];
@@ -224,43 +236,29 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
             }
             $order_data['items'][] = [
                 'id' => (string)$item_id,
-                'product_id' => (string)$product_id,
-                'sku' => is_object($product) ? $product->get_sku() : null,
+                'product_id' => $product_id ? (string)$product_id : null,
+                'variant_id' => $variation_id ? (string)$variation_id : null,
+                'sku' => $product_sku,
                 'title' => $item['name'],
                 'quantity' => (int)$item['qty'],
-                'returnable_quantity' => (int)($item['qty'] - $order->get_qty_refunded_for_item($item_id)),
-
+                'returnable_quantity' => (int)($item['qty'] - abs($order->get_qty_refunded_for_item($item_id))),
                 'unit_weight' => [
                     'unit' => $weight_unit,
-                    'value' => (float)$weight,
+                    'value' => $weight === '' ? null : (float)$weight,
                 ],
                 'unit_price' => [
                     'currency' => $order->get_currency(),
                     'amount' => (float)wc_format_decimal($order->get_item_total($item), 2),
                 ],
-                'discount' => null,
-                'image_urls' => wp_get_attachment_url($product->image_id) ? [wp_get_attachment_url($product->image_id)] : [],
+                'discount' => [
+                    'currency' => $order->get_currency(),
+                    'amount' => (float)($subtotal - $total),
+                ],
+                'image_urls' => $product_image_id && wp_get_attachment_url($product_image_id) ? [wp_get_attachment_url($product_image_id)] : [],
                 'tags' => $product_tags,
                 'categories' => $product_categories,
             ];
         }
-
-        // tracking field will be
-        /*
-        {
-			tracking_number: fulfillment.tracking_number,
-			slug: mapped_slug,
-			additional_fields: {
-				account_number: null,
-				key: null,
-				postal_code: (data.shipping_address && data.shipping_address.zip) ? data.shipping_address.zip : null,
-				ship_date: moment(fulfillment.updated_at).utcOffset('+0000').format('YYYYMMDD'),
-				state: null,
-				origin_country: null,
-				destination_country: (data.shipping_address && data.shipping_address.country_code) ? beautifyAddress({country: data.shipping_address.country_code}).country_iso3 : null,
-			},
-		}
-         */
 
         $trackings = [];
         //The function definition will be available after installing the aftership plugin.
@@ -271,7 +269,13 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
                     'slug' => order_post_meta_getter($order, 'aftership_tracking_provider'),
                     'tracking_number' => $aftership_tracking_number,
                     'additional_fields' => [
+                        'account_number' => order_post_meta_getter($order, 'aftership_tracking_account'),
+                        'key' => order_post_meta_getter($order, 'aftership_tracking_key'),
                         'postal_code' => order_post_meta_getter($order, 'aftership_tracking_postal'),
+                        'ship_date' => order_post_meta_getter($order, 'aftership_tracking_shipdate'),
+                        'destination_country' => order_post_meta_getter($order, 'aftership_tracking_destination_country'),
+                        'state' => null,
+                        'origin_country' => null
                     ],
                 ];
             }
@@ -280,30 +284,26 @@ class AfterShip_API_V2_Orders extends AfterShip_API_Resource
             $woocommerce_tracking_arr = order_post_meta_getter($order, 'wc_shipment_tracking_items');
             if (empty($aftership_tracking_number) && !empty($woocommerce_tracking_arr)) {
                 foreach ($woocommerce_tracking_arr as $trackingKey => $trackingVal) {
-                    $trackingArr = $this->getTrackingInfoByShipmentTracking($trackingVal);
-                    if (!empty($trackingArr)) {
-                        $trackings[] = [
-                            'slug' => $trackingArr['tracking_provider'],
-                            'tracking_number' => $trackingVal["tracking_number"],
-                            'additional_fields' => [
-                                'postal_code' => $trackingArr['tracking_postal_code'],
-                            ],
-                        ];
-                    } else {
-                        $trackings[] = [
-                            'slug' => $trackingVal["tracking_provider"],
-                            'tracking_number' =>$trackingVal["tracking_number"],
-                            'additional_fields'=> [
-                                'postal_code' => null,
-                            ]
-                        ];
-                    }
+                    $trackingInfo = $this->getTrackingInfoByShipmentTracking($trackingVal);
+                    $trackings[] = [
+                        'slug' => !empty($trackingInfo) ? $trackingInfo['tracking_provider'] : $trackingVal["tracking_provider"],
+                        'tracking_number' => $trackingVal["tracking_number"],
+                        'additional_fields' => [
+                            'account_number' => null,
+                            'key' => null,
+                            'postal_code' => !empty($trackingInfo) ? $trackingInfo['tracking_postal_code'] : null,
+                            'ship_date' => null,
+                            'destination_country' => null,
+                            'state' => null,
+                            'origin_country' => null
+                        ],
+                    ];
                 }
             }
             $order_data['trackings'] = $trackings;
         }
 
-        return $order_data;
+        return array('order' => apply_filters('aftership_api_order_response', $order_data, $order, $fields, $this->server));
     }
 
     /**

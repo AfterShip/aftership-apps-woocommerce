@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
-class AfterShip_API_V2_JSON_Handler implements AfterShip_API_Handler
+class AfterShip_API_Common_JSON_Handler implements AfterShip_API_Handler
 {
     /**
      * Get the content type for the response

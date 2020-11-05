@@ -150,7 +150,7 @@ class AfterShip_API
 		include_once('api/class-aftership-api-server.php');
 		include_once('api/interface-aftership-api-handler.php');
 		include_once('api/class-aftership-api-json-handler.php');
-		include_once('api/class-aftership-api-v2-json-handler.php');
+		include_once('api/class-aftership-api-common-json-handler.php');
 
 		// authentication
 		include_once('api/class-aftership-api-authentication.php');
@@ -160,7 +160,7 @@ class AfterShip_API
 
 		// self api
 		include_once('api/class-aftership-api-orders.php');
-		include_once('api/class-aftership-api-v2-orders.php');
+		include_once('api/class-aftership-api-v3-orders.php');
 
 	}
 
@@ -176,7 +176,7 @@ class AfterShip_API
 		$api_classes = apply_filters('aftership_api_classes',
 			array(
 				'AfterShip_API_Orders',
-				'AfterShip_API_V2_Orders',
+				'AfterShip_API_V3_Orders',
 			)
 		);
 
