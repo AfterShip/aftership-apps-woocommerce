@@ -206,17 +206,17 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                 $product = $order->get_product_from_item($item);
             }
 
-            $product_id   = 0;
-			$variation_id = 0;
-            $product_sku  = null;
+            $product_id = 0;
+            $variation_id = 0;
+            $product_sku = null;
             $weight = '';
             $product_image_id = 0;
 
 			// Check if the product exists.
 			if ( is_object( $product ) ) {
-				$product_id   = $item->get_product_id();
+				$product_id = $item->get_product_id();
 				$variation_id = $item->get_variation_id();
-                $product_sku  = $product->get_sku();
+                $product_sku = $product->get_sku();
                 $weight = $product->get_weight();
                 $product_image_id = $product->get_image_id();
 			}
