@@ -248,7 +248,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource
                 ],
                 'unit_price' => [
                     'currency' => $order->get_currency(),
-                    'amount' => (float)wc_format_decimal($order->get_item_total($item), 2),
+                    'amount' => round( floatval($subtotal) / intval($item['qty']),  $dp),
                 ],
                 'discount' => [
                     'currency' => $order->get_currency(),
