@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: shipping, tracking, ups, usps, fedex, dhl, tnt, dpd, post, shipment, woocommerce, tracking number, aftership, package tracking, fulfilment, tracking link, carrier, courier, woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 5.2.1
-Stable tag: 1.10.1
+Stable tag: 1.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ AfterShip automatically generates a tracking page for each shipment. Customize t
 ###Notify customers of delivery updates (Premium)
 Upgrade to [Premium](https://www.aftership.com/pricing) to automatically send out delivery notifications to customers or yourself. Your choice of notification triggers - In transit, Out for delivery, Delivered, Failed delivery attempt or Exceptions. Use your own email to send out notifications, and customize messages to add store logo, URL, a tracking link to get more returned customers after shipping!
 
-[youtube http://www.youtube.com/watch?v=1zCCx8Ap9ms]
+[youtube https://www.youtube.com/watch?v=1u-b5AZ5tvE&feature=youtu.be]
 
 ###Partial list of supported carriers (550+):
 **①. US, Canada & Global Tracking (35)**
