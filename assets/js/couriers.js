@@ -1,3 +1,4 @@
+// @notice australia-post-api name change to "Australia Post API" different from AfterShip couriers API
 function get_couriers() {
 	var data = [
 		{
@@ -400,7 +401,7 @@ function get_couriers() {
 		},
 		{
 		  "slug": "australia-post-api",
-		  "name": "Australia Post",
+		  "name": "Australia Post API",
 		  "other_name": "",
 		  "required_fields": []
 		},
