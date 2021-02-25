@@ -12,12 +12,6 @@
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
-/**
- * Required functions
- */
-if (!class_exists('AfterShip_Dependencies'))
-    require_once 'class-aftership-dependencies.php';
-
 class AfterShip_Settings
 {
     /**
@@ -25,24 +19,11 @@ class AfterShip_Settings
      */
     private $options;
 
-    private $plugins;
-
     /**
      * Start up
      */
     public function __construct()
     {
-        $this->plugins[] = array(
-            'value' => 'aftership',
-            'label' => 'AfterShip',
-            'path' => 'aftership-woocommerce-tracking/aftership.php'
-        );
-        $this->plugins[] = array(
-            'value' => 'wc-shipment-tracking',
-            'label' => 'WooCommerce Shipment Tracking',
-            'path' => array('woocommerce-shipment-tracking/shipment-tracking.php', 'woocommerce-shipment-tracking/woocommerce-shipment-tracking.php')
-        );
-
         add_action('admin_menu', array($this, 'add_plugin_page'));
         add_action('admin_init', array($this, 'page_init'));
         add_action('admin_print_styles', array($this, 'admin_styles'));
@@ -52,17 +33,17 @@ class AfterShip_Settings
 
     public function admin_styles()
     {
-        wp_enqueue_style('aftership_styles_chosen', plugins_url(basename(dirname(__FILE__))) . '/assets/plugin/chosen/chosen.min.css');
-        wp_enqueue_style('aftership_styles', plugins_url(basename(dirname(__FILE__))) . '/assets/css/admin.css');
+        wp_enqueue_style('aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css');
     }
 
     public function library_scripts()
     {
-        wp_enqueue_script('aftership_styles_chosen_jquery', plugins_url(basename(dirname(__FILE__))) . '/assets/plugin/chosen/chosen.jquery.min.js');
-        wp_enqueue_script('aftership_styles_chosen_proto', plugins_url(basename(dirname(__FILE__))) . '/assets/plugin/chosen/chosen.proto.min.js');
-        wp_enqueue_script('aftership_script_util', plugins_url(basename(dirname(__FILE__))) . '/assets/js/util.js');
-        wp_enqueue_script('aftership_script_couriers', plugins_url(basename(dirname(__FILE__))) . '/assets/js/couriers.js');
-        wp_enqueue_script('aftership_script_setting', plugins_url(basename(dirname(__FILE__))) . '/assets/js/setting.js');
+        $plugin_url = aftership()->plugin_url;
+        wp_enqueue_script('aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js');
+        wp_enqueue_script('aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js');
+        wp_enqueue_script('aftership_script_util', $plugin_url . '/assets/js/util.js');
+        wp_enqueue_script('aftership_script_couriers', $plugin_url . '/assets/js/couriers.js');
+        wp_enqueue_script('aftership_script_setting', $plugin_url . '/assets/js/setting.js');
     }
 
     /**
@@ -89,7 +70,6 @@ class AfterShip_Settings
         $this->options = get_option('aftership_option_name');
         ?>
         <div class="wrap">
-            <?php screen_icon(); ?>
             <h2>AfterShip Settings</h2>
 
             <form method="post" action="options.php">
@@ -120,14 +100,6 @@ class AfterShip_Settings
             '', // Title
             array($this, 'print_section_info'), // Callback
             'aftership-setting-admin' // Page
-        );
-
-        add_settings_field(
-            'plugin',
-            'Plugin',
-            array($this, 'plugin_callback'),
-            'aftership-setting-admin',
-            'aftership_setting_section_id'
         );
 
         add_settings_field(
@@ -167,6 +139,7 @@ class AfterShip_Settings
      * Sanitize each setting field as needed
      *
      * @param array $input Contains all settings fields as array keys
+     * @return array
      */
     public function sanitize($input)
     {
@@ -178,10 +151,6 @@ class AfterShip_Settings
 
         if (isset($input['custom_domain'])) {
             $new_input['custom_domain'] = sanitize_text_field($input['custom_domain']);
-        }
-
-        if (isset($input['plugin'])) {
-            $new_input['plugin'] = sanitize_text_field($input['plugin']);
         }
 
         if (isset($input['track_message_1'])) {
@@ -222,36 +191,10 @@ class AfterShip_Settings
         if (isset($this->options['couriers'])) {
             $couriers = explode(',', $this->options['couriers']);
         }
-
-//		print_r($couriers);
         echo '<select data-placeholder="Please select couriers" id="couriers_select" class="chosen-select " multiple style="width:100%">';
         echo '</select>';
-//		echo '<br><a href="https://www.aftership.com/settings/courier" target="_blank">Update carrier list</a>';
         echo '<input type="hidden" id="couriers" name="aftership_option_name[couriers]" value="' . implode(",", $couriers) . '"/>';
 
-    }
-
-    public function plugin_callback()
-    {
-
-        $options = "";
-        foreach ($this->plugins as $plugin) {
-            //print_r($plugin);
-            if (AfterShip_Dependencies::plugin_active_check($plugin['path'])) {
-                $option = '<option value="' . $plugin['value'] . '"';
-
-                if (isset($this->options['plugin']) && esc_attr($this->options['plugin']) == $plugin['value']) {
-                    $option .= ' selected="selected"';
-                }
-
-                $option .= '>' . $plugin['label'] . '</option>';
-                $options .= $option;
-            }
-        }
-
-        printf(
-            '<select id="plugin" name="aftership_option_name[plugin]" class="aftership_dropdown">' . $options . '</select>'
-        );
     }
 
     public function custom_domain_callback()

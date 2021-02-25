@@ -1,0 +1,56 @@
+#woocommerce-shipment-tracking {
+	.inside {
+		padding: 12px;
+		margin: 0;
+	}
+	.button-show-form {
+		margin: 0;
+	}
+	#shipment-tracking-form {
+		display:none;
+		p.form-field {
+			margin-top: 0;
+		}
+	}
+	input {
+		width:100%;
+	}
+	.preview_tracking_link{
+		display:none;
+		margin-bottom: 0;
+		a {
+			padding:0 16px 0 0;
+			background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVQYV2NkIBIwoqtTLJn9H13sfk8qI4ZCkCJ0xTgVoisGK0TWDRKAKQKxYXJwhTAFyIpg7gQpRlGIrBtbQICNR7cGJoasAa4QWRCnQmxWIbsbJA8AqXxEC1jaCvYAAAAASUVORK5CYII=) no-repeat right;
+		}
+	}
+	.meta{
+		font-size:11px;
+		color:#999;
+		padding: 10px;
+		margin: 0;
+		a.delete-tracking {
+			color:#a00;
+		}
+	}
+	#tracking-items {
+		margin: 0;
+	}
+	.tracking-content {
+		background:#efefef none repeat scroll 0 0;
+		padding: 10px;
+		position:relative;
+		margin: 0;
+		&:after{
+			content: "";
+			display: block;
+			position: absolute;
+			bottom: -10px;
+			left: 20px;
+			width: 0;
+			height: 0;
+			border-width: 10px 10px 0 0;
+			border-style: solid;
+			border-color: #efefef transparent;
+		}
+	}
+}

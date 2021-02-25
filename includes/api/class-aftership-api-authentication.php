@@ -51,7 +51,7 @@ class AfterShip_API_Authentication
 	{
 
 		// allow access to the index by default
-		if ('/' === getAfterShipInstance()->api->server->path)
+		if ('/' === aftership()->api->server->path)
 			return new WP_User(0);
 
 		try {
@@ -67,8 +67,6 @@ class AfterShip_API_Authentication
 
 	private function perform_authentication()
 	{
-		//$params = getAfterShipInstance()->api->server->params['GET'];
-
 		$headers = getallheaders();
 		$headers = json_decode(json_encode($headers), true);
 
