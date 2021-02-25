@@ -147,20 +147,20 @@ class AfterShip_API
 	{
 
 		// API server / response handlers
-		include_once('api/class-aftership-api-server.php');
-		include_once('api/interface-aftership-api-handler.php');
-		include_once('api/class-aftership-api-json-handler.php');
-		include_once('api/class-aftership-api-common-json-handler.php');
+		include_once('class-aftership-api-server.php');
+		include_once('interface-aftership-api-handler.php');
+		include_once('class-aftership-api-json-handler.php');
+		include_once('class-aftership-api-common-json-handler.php');
 
 		// authentication
-		include_once('api/class-aftership-api-authentication.php');
+		include_once('class-aftership-api-authentication.php');
 		$this->authentication = new AfterShip_API_Authentication();
 
-		include_once('api/class-aftership-api-resource.php');
+		include_once('class-aftership-api-resource.php');
 
 		// self api
-		include_once('api/class-aftership-api-orders.php');
-		include_once('api/class-aftership-api-v3-orders.php');
+		include_once('class-aftership-api-orders.php');
+		include_once('class-aftership-api-v3-orders.php');
 
 	}
 

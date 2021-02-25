@@ -34,32 +34,14 @@ jQuery(function () {
         jQuery('#couriers').val(value);
     });
 
-    jQuery('#plugin').change(function () {
-        if (jQuery(this).val() == 'aftership') {
-            jQuery('#couriers').parent().parent().show();
-            jQuery('#track_message_demo_1').parent().parent().show();
-        } else {
-            jQuery('#couriers').parent().parent().hide();
-            jQuery('#track_message_demo_1').parent().parent().hide();
-        }
-    });
-
     if (jQuery('#couriers')) {
         var couriers_select = jQuery('#couriers').val();
         var couriers_select_array = (couriers_select) ? couriers_select.split(',') : [];
         set_aftership_tracking_provider(couriers_select_array);
-
-        if (jQuery('#plugin').val() != 'aftership') {
-            jQuery('#couriers').parent().parent().hide();
-        }
     }
 
     if (jQuery('#track_message_demo_1')) {
         set_track_message_demo();
-
-        if (jQuery('#plugin').val() != 'aftership') {
-            jQuery('#track_message_demo_1').parent().parent().hide();
-        }
     }
 
     jQuery('#track_message_1').keyup(function () {
