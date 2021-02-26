@@ -120,8 +120,8 @@ if ( is_woocommerce_active() ) {
 				$this->options           = get_option( 'aftership_option_name' );
 				$this->couriers          = json_decode( file_get_contents( $this->plugin_url . '/assets/js/couriers.json' ), true );
 				$this->selected_couriers = $this->get_selected_couriers();
-				$this->use_track_button  = $this->options['use_track_button'];
-				$this->custom_domain     = $this->options['custom_domain'] ? $this->options['custom_domain'] : $this->custom_domain;
+				$this->use_track_button  = isset( $this->options['use_track_button'] ) ? $this->options['use_track_button'] : $this->use_track_button;
+				$this->custom_domain     = isset( $this->options['custom_domain'] ) ? $this->options['custom_domain'] : $this->custom_domain;
 
 				// Include required files.
 				$this->includes();
@@ -152,7 +152,7 @@ if ( is_woocommerce_active() ) {
 				// Check for updates.
 				add_action( 'init', array( 'AfterShip_Updates', 'check_updates' ) );
 
-				// Add api key config on user profile
+				// Add api key config on user profile.
 				add_action( 'show_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
@@ -169,7 +169,7 @@ if ( is_woocommerce_active() ) {
 				$slugs             = explode( ',', $this->options['couriers'] );
 				$selected_couriers = array();
 				foreach ( $this->couriers as $courier ) {
-					if ( in_array( $courier['slug'], $slugs ) ) {
+					if ( in_array( $courier['slug'], $slugs, true ) ) {
 						$selected_couriers[] = $courier;
 					}
 				}
@@ -283,7 +283,7 @@ if ( is_woocommerce_active() ) {
 		if ( count( $tracking_items ) > 0 ) {
 			foreach ( $tracking_items as $item ) {
 				if ( ! $slug ) {
-					if ( $item['tracking_number'] == $tracking_number ) {
+					if ( $item['tracking_number'] === $tracking_number ) {
 						$actions->delete_tracking_item( $order_id, $item['tracking_id'] );
 						return true;
 					}

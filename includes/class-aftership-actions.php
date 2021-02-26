@@ -379,7 +379,6 @@ class AfterShip_Actions {
 	 * @param bool     $sent_to_admin Whether the email is being sent to admin or not.
 	 * @param bool     $plain_text Whether email is in plain text or not.
 	 * @param WC_Email $email Email object.
-	 * @todo need write tracking page link on email display
 	 */
 	public function email_display( $order, $sent_to_admin, $plain_text = null, $email = null ) {
 		/**
@@ -544,26 +543,53 @@ class AfterShip_Actions {
 		$tracking_items         = $this->get_tracking_items( $order_id );
 		$display_tracking_items = array();
 		foreach ( $tracking_items as $item ) {
-			$display_item                  = $item;
-			$display_item['courier']       = $this->get_courier_by_slug( $item['slug'] );
-			$display_item['custom_domain'] = $custom_domain;
-			$display_item['tracking_number_with_additional_fields'] = $this->get_tracking_number_with_additional_fields( $item );
-			$display_tracking_items[]                               = $display_item;
+			$display_item                                        = $item;
+			$display_item['courier']                             = $this->get_courier_by_slug( $item['slug'] );
+			$display_item['custom_domain']                       = $custom_domain;
+			$display_item['tracking_number_for_tracking_button'] = $this->get_tracking_number_for_tracking_button( $item );
+			$display_tracking_items[]                            = $display_item;
 		}
 		return $display_tracking_items;
+	}
+
+	/**
+	 * Map courier required_fields to tracking additional_fields
+	 *
+	 * @param string $courier_required_field
+	 * @return string
+	 */
+	public function mapping_tracking_additional_fields( $courier_required_field ) {
+
+		$mapping = array(
+			'tracking_key'                 => 'key',
+			'tracking_account_number'      => 'account_number',
+			'tracking_postal_code'         => 'postal_code',
+			'tracking_ship_date'           => 'ship_date',
+			'tracking_destination_country' => 'destination_country',
+			'tracking_state'               => 'state',
+		);
+
+		return isset( $mapping[ $courier_required_field ] ) ? $mapping[ $courier_required_field ] : $courier_required_field;
 	}
 
 
 	/**
 	 * @param $item array
+	 * @param bool       $with_additional_fields
 	 * @return string
-	 * @todo 这里可能不需要对空的 additional_fields 进行过滤
+	 * @todo AfterShip tracking button not support additional_fields yet.
 	 */
-	public function get_tracking_number_with_additional_fields( $item ) {
-		$tracking_number          = $item['tracking_number'];
-		$additional_fields_string = implode( ':', array_values( array_filter( $item['additional_fields'] ) ) );
-		if ( $additional_fields_string ) {
-			return $tracking_number . ':' . $additional_fields_string;
+	public function get_tracking_number_for_tracking_button( $item, $with_additional_fields = false ) {
+		$tracking_number = $item['tracking_number'];
+		if ( $with_additional_fields ) {
+			$tracking_number_with_additional_fields = $tracking_number;
+			$courier                                = $this->get_courier_by_slug( $item['slug'] );
+			foreach ( $courier['required_fields'] as $field ) {
+				$additional_field                        = $this->mapping_tracking_additional_fields( $field );
+				$additional_field_value                  = isset( $item['additional_fields'][ $additional_field ] ) ? $item['additional_fields'][ $additional_field ] : '';
+				$tracking_number_with_additional_fields .= ':' . $additional_field_value;
+			}
+			return $tracking_number_with_additional_fields;
 		}
 		return $tracking_number;
 	}
