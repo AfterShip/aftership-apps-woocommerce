@@ -121,14 +121,6 @@ class AfterShip_Settings {
 			'aftership-setting-admin',
 			'aftership_setting_section_id'
 		);
-
-		add_settings_field(
-			'track_message',
-			'Content',
-			array( $this, 'track_message_callback' ),
-			'aftership-setting-admin',
-			'aftership_setting_section_id'
-		);
 	}
 
 	/**
@@ -146,22 +138,6 @@ class AfterShip_Settings {
 
 		if ( isset( $input['custom_domain'] ) ) {
 			$new_input['custom_domain'] = sanitize_text_field( $input['custom_domain'] );
-		}
-
-		if ( isset( $input['track_message_1'] ) ) {
-			$postfix = '';
-			if ( substr( $input['track_message_1'], -1 ) == ' ' ) {
-				$postfix = ' ';
-			}
-			$new_input['track_message_1'] = sanitize_text_field( $input['track_message_1'] ) . $postfix;
-		}
-
-		if ( isset( $input['track_message_2'] ) ) {
-			$postfix = '';
-			if ( substr( $input['track_message_2'], -1 ) == ' ' ) {
-				$postfix = ' ';
-			}
-			$new_input['track_message_2'] = sanitize_text_field( $input['track_message_2'] ) . $postfix;
 		}
 
 		if ( isset( $input['use_track_button'] ) ) {
@@ -194,24 +170,6 @@ class AfterShip_Settings {
 		printf(
 			'<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
 			isset( $this->options['custom_domain'] ) ? $this->options['custom_domain'] : 'track.aftership.com'
-		);
-	}
-
-	public function track_message_callback() {
-		printf(
-			'<input type="text" id="track_message_1" name="aftership_option_name[track_message_1]" value="%s" style="width:100%%">',
-			isset( $this->options['track_message_1'] ) ? $this->options['track_message_1'] : 'Your order was shipped via '
-		);
-		printf( '<br/>' );
-		printf(
-			'<input type="text" id="track_message_2" name="aftership_option_name[track_message_2]" value="%s" style="width:100%%">',
-			isset( $this->options['track_message_2'] ) ? $this->options['track_message_2'] : 'Tracking number is '
-		);
-		printf( '<br/>' );
-		printf( '<br/>' );
-		printf( '<b>Demo:</b>' );
-		printf(
-			'<div id="track_message_demo_1" style="width:100%%"></div>'
 		);
 	}
 
