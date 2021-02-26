@@ -1,1 +1,55 @@
-#woocommerce-shipment-tracking .inside{padding:12px;margin:0}#woocommerce-shipment-tracking .button-show-form{margin:0}#woocommerce-shipment-tracking #shipment-tracking-form{display:none}#woocommerce-shipment-tracking #shipment-tracking-form p.form-field{margin-top:0}#woocommerce-shipment-tracking input{width:100%}#woocommerce-shipment-tracking .preview_tracking_link{display:none;margin-bottom:0}#woocommerce-shipment-tracking .preview_tracking_link a{padding:0 16px 0 0;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVQYV2NkIBIwoqtTLJn9H13sfk8qI4ZCkCJ0xTgVoisGK0TWDRKAKQKxYXJwhTAFyIpg7gQpRlGIrBtbQICNR7cGJoasAa4QWRCnQmxWIbsbJA8AqXxEC1jaCvYAAAAASUVORK5CYII=) no-repeat right}#woocommerce-shipment-tracking .meta{font-size:11px;color:#999;padding:10px;margin:0}#woocommerce-shipment-tracking .meta a.delete-tracking{color:#a00}#woocommerce-shipment-tracking #tracking-items{margin:0}#woocommerce-shipment-tracking .tracking-content{background:#efefef none repeat scroll 0 0;padding:10px;position:relative;margin:0}#woocommerce-shipment-tracking .tracking-content:after{content:"";display:block;position:absolute;bottom:-10px;left:20px;width:0;height:0;border-width:10px 10px 0 0;border-style:solid;border-color:#efefef transparent}
+#woocommerce-aftership .inside {
+	padding: 12px;
+	margin: 0;
+}
+#woocommerce-aftership .button-show-form {
+	margin: 0;
+}
+#woocommerce-aftership #shipment-tracking-form {
+	display: none;
+}
+#woocommerce-aftership #shipment-tracking-form p.form-field {
+	margin-top: 0;
+}
+#woocommerce-aftership input {
+	width: 100%;
+}
+#woocommerce-aftership .preview_tracking_link {
+	display: none;
+	margin-bottom: 0;
+}
+#woocommerce-aftership .preview_tracking_link a {
+	padding: 0 16px 0 0;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVQYV2NkIBIwoqtTLJn9H13sfk8qI4ZCkCJ0xTgVoisGK0TWDRKAKQKxYXJwhTAFyIpg7gQpRlGIrBtbQICNR7cGJoasAa4QWRCnQmxWIbsbJA8AqXxEC1jaCvYAAAAASUVORK5CYII=)
+	no-repeat right;
+}
+#woocommerce-aftership .meta {
+	font-size: 11px;
+	color: #999;
+	padding: 10px;
+	margin: 0;
+}
+#woocommerce-aftership .meta a.delete-tracking {
+	color: #a00;
+}
+#woocommerce-aftership #tracking-items {
+	margin: 0;
+}
+#woocommerce-aftership .tracking-content {
+	background: #efefef none repeat scroll 0 0;
+	padding: 10px;
+	position: relative;
+	margin: 0;
+}
+#woocommerce-aftership .tracking-content:after {
+	content: "";
+	display: block;
+	position: absolute;
+	bottom: -10px;
+	left: 20px;
+	width: 0;
+	height: 0;
+	border-width: 10px 10px 0 0;
+	border-style: solid;
+	border-color: #efefef transparent;
+}
