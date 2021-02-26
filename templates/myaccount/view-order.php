@@ -8,13 +8,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Shows tracking numbers view order page
  *
- * @author  WooThemes
- * @package WooCommerce Shipment Tracking/templates/myaccount
+ * @author  AfterShip
+ * @package AfterShip Tracking/templates/myaccount
  */
 
 if ( $tracking_items ) : ?>
 	<div id="as-root"></div><script>(function(e,t,n){var r,i=e.getElementsByTagName(t)[0];if(e.getElementById(n))return;r=e.createElement(t);r.id=n;r.src="https://button.aftership.com/all.js";i.parentNode.insertBefore(r,i)})(document,"script","aftership-jssdk")</script>
-	<h2><?php echo apply_filters( 'aftership_tracking_my_orders_title', __( 'Tracking Information', 'AfterShip' ) ); ?></h2>
+	<h2><?php echo apply_filters( 'aftership_tracking_my_orders_title', __( 'Tracking Information', 'aftership' ) ); ?></h2>
 
 	<table class="shop_table shop_table_responsive my_account_tracking">
 		<thead>
@@ -40,7 +40,7 @@ if ( $tracking_items ) : ?>
 					</td>
 					<?php if ( $use_track_button ) { ?>
 						<td class="order-actions" style="text-align: center;">
-							<div class="as-track-button" data-slug="<?php echo esc_html( $tracking_item['slug'] ); ?>" data-domain="<?php echo esc_html( $tracking_item['custom_domain'] ); ?>" data-tracking-number="<?php echo esc_html( $tracking_item['tracking_number_with_additional_fields'] ); ?>" data-size="normal" data-hide-tracking-number="true"></div>
+							<div class="as-track-button" data-slug="<?php echo esc_html( $tracking_item['slug'] ); ?>" data-domain="<?php echo esc_html( $tracking_item['custom_domain'] ); ?>" data-tracking-number="<?php echo esc_html( $tracking_item['tracking_number_for_tracking_button'] ); ?>" data-size="normal" data-hide-tracking-number="true"></div>
 						</td>
 					<?php } ?>
 				</tr>
