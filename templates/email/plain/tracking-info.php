@@ -19,14 +19,14 @@ if ( $tracking_items ) :
 
 		echo  "\n";
 
-		foreach ( $tracking_items as $tracking_item ) {
-			echo esc_html( $tracking_item[ 'formatted_tracking_provider' ] ) . "\n";
-			echo esc_html( $tracking_item[ 'tracking_number' ] ) . "\n";
-			echo esc_url( $tracking_item[ 'formatted_tracking_link' ] ) . "\n\n";
-		}
+	foreach ( $tracking_items as $tracking_item ) {
+		echo esc_html( $tracking_item['formatted_tracking_provider'] ) . "\n";
+		echo esc_html( $tracking_item['tracking_number'] ) . "\n";
+		echo esc_url( $tracking_item['formatted_tracking_link'] ) . "\n\n";
+	}
 
 	echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n\n";
 
 endif;
 
-?>
+

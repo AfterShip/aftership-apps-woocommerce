@@ -27,9 +27,11 @@ if ( $tracking_items ) : ?>
 			</tr>
 		</thead>
 
-		<tbody><?php
+		<tbody>
+		<?php
 		foreach ( $tracking_items as $tracking_item ) {
-				?><tr class="tracking">
+			?>
+				<tr class="tracking">
 					<td class="tracking-provider" data-title="<?php _e( 'Provider', 'woocommerce-shipment-tracking' ); ?>" style="text-align: left; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">
 						<?php echo esc_html( $tracking_item['formatted_tracking_provider'] ); ?>
 					</td>
@@ -42,10 +44,12 @@ if ( $tracking_items ) : ?>
 					<td class="order-actions" style="text-align: center; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; color: #737373; border: 1px solid #e4e4e4; padding: 12px;">
 							<a href="<?php echo esc_url( $tracking_item['formatted_tracking_link'] ); ?>" target="_blank"><?php _e( 'Track', 'woocommerce-shipment-tracking' ); ?></a>
 					</td>
-				</tr><?php
+				</tr>
+				<?php
 		}
-		?></tbody>
+		?>
+		</tbody>
 	</table><br /><br />
 
-<?php
+	<?php
 endif;
