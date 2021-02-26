@@ -24,3 +24,6 @@ $RECYCLE.BIN/
 
 # Except the .htpassed
 !.htpasswd
+vendor
+aftership-woocommerce-tracking.zip
+lib/

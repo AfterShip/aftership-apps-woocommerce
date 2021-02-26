@@ -10,12 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class performs the update of a given version. If a particular version
  * needs update routine (e.g. DB migration) then the updater should be defined
  * in `self::get_updaters()`.
- *
  */
 class AfterShip_Updates {
 	/**
 	 * List of updaters from version-to-version.
-	 *
 	 *
 	 * @see self::get_updaters()
 	 *
@@ -49,7 +47,6 @@ class AfterShip_Updates {
 	 * version. Perform update routine if version mismatches.
 	 *
 	 * Hooked into `init` so that it's checked on every request.
-	 *
 	 */
 	public static function check_updates() {
 		$installed_version = get_option( 'aftership_version' );
@@ -61,7 +58,6 @@ class AfterShip_Updates {
 
 	/**
 	 * Update version that's stored in DB to the latest version.
-	 *
 	 */
 	protected static function update_version() {
 		delete_option( 'aftership_version' );

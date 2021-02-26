@@ -34,6 +34,7 @@ if ( is_woocommerce_active() ) {
 		 */
 		class AfterShip {
 
+
 			/**
 			 * Instance of AfterShip_Actions.
 			 *
@@ -41,12 +42,12 @@ if ( is_woocommerce_active() ) {
 			 */
 			public $actions;
 
-            /**
-             * Instance of AfterShip_API.
-             *
-             * @var AfterShip_API
-             */
-            public $api;
+			/**
+			 * Instance of AfterShip_API.
+			 *
+			 * @var AfterShip_API
+			 */
+			public $api;
 
 			/**
 			 * Plugin file.
@@ -70,43 +71,43 @@ if ( is_woocommerce_active() ) {
 			public $plugin_url;
 
 
-            /**
-             * Setting options
-             *
-             * @var array
-             */
-            public $options = [];
+			/**
+			 * Setting options
+			 *
+			 * @var array
+			 */
+			public $options = array();
 
 
-            /**
-             * Couriers
-             *
-             * @var array
-             */
-            public $couriers = [];
+			/**
+			 * Couriers
+			 *
+			 * @var array
+			 */
+			public $couriers = array();
 
-            /**
-             * Can change it on setting page
-             *
-             * @var bool
-             */
-            public $use_track_button = false;
-
-
-            /**
-             * Can change it on setting page
-             *
-             * @var bool
-             */
-            public $custom_domain = 'track.aftership.com';
+			/**
+			 * Can change it on setting page
+			 *
+			 * @var bool
+			 */
+			public $use_track_button = false;
 
 
-            /**
-             * Selected couriers
-             *
-             * @var array
-             */
-            public $selected_couriers = [];
+			/**
+			 * Can change it on setting page
+			 *
+			 * @var bool
+			 */
+			public $custom_domain = 'track.aftership.com';
+
+
+			/**
+			 * Selected couriers
+			 *
+			 * @var array
+			 */
+			public $selected_couriers = array();
 
 			/**
 			 * Constructor
@@ -116,12 +117,11 @@ if ( is_woocommerce_active() ) {
 				$this->plugin_dir  = untrailingslashit( plugin_dir_path( __FILE__ ) );
 				$this->plugin_url  = untrailingslashit( plugin_dir_url( __FILE__ ) );
 
-				$this->options = get_option('aftership_option_name');
-                $this->couriers = json_decode(file_get_contents($this->plugin_url . '/assets/js/couriers.json'), true);
-                $this->selected_couriers = $this->get_selected_couriers();
-                $this->use_track_button = $this->options['use_track_button'];
-                $this->custom_domain = $this->options['custom_domain'] ? $this->options['custom_domain'] : $this->custom_domain;
-
+				$this->options           = get_option( 'aftership_option_name' );
+				$this->couriers          = json_decode( file_get_contents( $this->plugin_url . '/assets/js/couriers.json' ), true );
+				$this->selected_couriers = $this->get_selected_couriers();
+				$this->use_track_button  = $this->options['use_track_button'];
+				$this->custom_domain     = $this->options['custom_domain'] ? $this->options['custom_domain'] : $this->custom_domain;
 
 				// Include required files.
 				$this->includes();
@@ -153,27 +153,28 @@ if ( is_woocommerce_active() ) {
 				add_action( 'init', array( 'AfterShip_Updates', 'check_updates' ) );
 
 				// Add api key config on user profile
-                add_action('show_user_profile', array($this->actions, 'add_api_key_field'));
-                add_action('edit_user_profile', array($this->actions, 'add_api_key_field'));
-                add_action('personal_options_update', array($this->actions, 'generate_api_key'));
-                add_action('edit_user_profile_update', array($this->actions, 'generate_api_key'));
+				add_action( 'show_user_profile', array( $this->actions, 'add_api_key_field' ) );
+				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
+				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
+				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 			}
 
 
-            /**
-             * Get selected couriers
-             *
-             * @return array
-             */
-            public function get_selected_couriers()
-            {
-                $slugs = explode(',', $this->options['couriers']);
-                $selected_couriers = [];
-                foreach ($this->couriers as $courier) {
-                    if (in_array($courier['slug'], $slugs)) $selected_couriers[] = $courier;
-                }
-                return $selected_couriers;
-            }
+			/**
+			 * Get selected couriers
+			 *
+			 * @return array
+			 */
+			public function get_selected_couriers() {
+				$slugs             = explode( ',', $this->options['couriers'] );
+				$selected_couriers = array();
+				foreach ( $this->couriers as $courier ) {
+					if ( in_array( $courier['slug'], $slugs ) ) {
+						$selected_couriers[] = $courier;
+					}
+				}
+				return $selected_couriers;
+			}
 
 			/**
 			 * Include required files.
@@ -183,11 +184,11 @@ if ( is_woocommerce_active() ) {
 			private function includes() {
 				require( $this->plugin_dir . '/includes/class-aftership-actions.php' );
 				$this->actions = AfterShip_Actions::get_instance();
-                require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
-                $this->api = new AfterShip_API();
+				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
+				$this->api = new AfterShip_API();
 
 				require_once( $this->plugin_dir . '/includes/class-aftership-updates.php' );
-                require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
+				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
 			}
 
 			/**
@@ -234,45 +235,45 @@ if ( is_woocommerce_active() ) {
 	/**
 	 * Adds a tracking number to an order.
 	 *
-	 * @param int         $order_id        The order id of the order you want to
-	 *                                     attach this tracking number to.
-	 * @param string      $tracking_number The tracking number.
-	 * @param string      $slug       The tracking provider. If you use one
+	 * @param int    $order_id The order id of the order you want to
+	 *                                        attach this tracking number to.
+	 * @param string $tracking_number The tracking number.
+	 * @param string $slug The tracking provider. If you use one
 	 *                                     from `AfterShip_Actions::get_providers()`,
 	 *                                     the tracking url will be taken case of.
-     * @param string      $account_number
-     * @param string      $key
-     * @param string      $postal_code
-     * @param string      $ship_date
-     * @param string      $destination_country
-     * @param string      $state
+	 * @param string $account_number
+	 * @param string $key
+	 * @param string $postal_code
+	 * @param string $ship_date
+	 * @param string $destination_country
+	 * @param string $state
 	 */
-	function aftership_add_tracking_number( $order_id, $tracking_number, $slug, $account_number = null, $key = null,$postal_code = null, $ship_date = null, $destination_country = null, $state = null) {
-		$actions            = AfterShip_Actions::get_instance();
-        $args = array(
-            'slug'        => $slug,
-            'tracking_number'          => $tracking_number,
-            'additional_fields'          => [
-                'account_number' => $account_number,
-                'key' => $key,
-                'postal_code' => $postal_code,
-                'ship_date' => $ship_date,
-                'destination_country' => $destination_country,
-                'state' => $state,
-            ],
-        );
+	function aftership_add_tracking_number( $order_id, $tracking_number, $slug, $account_number = null, $key = null, $postal_code = null, $ship_date = null, $destination_country = null, $state = null ) {
+		$actions = AfterShip_Actions::get_instance();
+		$args    = array(
+			'slug'              => $slug,
+			'tracking_number'   => $tracking_number,
+			'additional_fields' => array(
+				'account_number'      => $account_number,
+				'key'                 => $key,
+				'postal_code'         => $postal_code,
+				'ship_date'           => $ship_date,
+				'destination_country' => $destination_country,
+				'state'               => $state,
+			),
+		);
 
-        $actions->add_tracking_item( $order_id, $args );
+		$actions->add_tracking_item( $order_id, $args );
 	}
 
 	/**
 	 * Deletes tracking information based on tracking_number relating to an order.
 	 *
-	 * @param int    $order_id        Order ID.
+	 * @param int    $order_id Order ID.
 	 * @param string $tracking_number The tracking number to be deleted.
-	 * @param bool $slug        You can filter the delete by specifying a
-	 *                          slug. This is optional.
-     * @return bool
+	 * @param bool   $slug You can filter the delete by specifying a
+	 *                            slug. This is optional.
+	 * @return bool
 	 */
 	function aftership_delete_tracking_number( $order_id, $tracking_number, $slug = false ) {
 		$actions = AfterShip_Actions::get_instance();
@@ -283,12 +284,12 @@ if ( is_woocommerce_active() ) {
 			foreach ( $tracking_items as $item ) {
 				if ( ! $slug ) {
 					if ( $item['tracking_number'] == $tracking_number ) {
-                        $actions->delete_tracking_item( $order_id, $item['tracking_id'] );
+						$actions->delete_tracking_item( $order_id, $item['tracking_id'] );
 						return true;
 					}
 				} else {
-					if ( $item['tracking_number'] === $tracking_number && ( sanitize_title( $slug ) === $item['slug']) ) {
-                        $actions->delete_tracking_item( $order_id, $item['tracking_id'] );
+					if ( $item['tracking_number'] === $tracking_number && ( sanitize_title( $slug ) === $item['slug'] ) ) {
+						$actions->delete_tracking_item( $order_id, $item['tracking_id'] );
 						return true;
 					}
 				}
