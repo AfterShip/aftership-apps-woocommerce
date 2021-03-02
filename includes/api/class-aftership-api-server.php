@@ -327,13 +327,13 @@ class AfterShip_API_Server {
 			case 'PUT':
 				$method = self::METHOD_PUT;
 				break;
-			// case 'PATCH':
-			// 	$method = self::METHOD_PATCH;
-			// 	break;
-			// case 'DELETE':
-			// 	$method = self::METHOD_DELETE;
-			// 	break;
-			
+			case 'PATCH':
+				$method = self::METHOD_PATCH;
+				break;
+			case 'DELETE':
+				$method = self::METHOD_DELETE;
+				break;
+
 			default:
 				return new WP_Error( 'aftership_api_unsupported_method', __( 'Unsupported request method', 'aftership' ), array( 'status' => 400 ) );
 		}

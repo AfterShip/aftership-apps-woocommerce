@@ -1,93 +1,80 @@
 <?php
-/**
- * AfterShip API Orders Class
- *
- * Handles requests to the /orders endpoint
- *
- * @author      AfterShip
- * @category    API
- * @package     AfterShip/API
- * @since       1.0
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
-define('AFTERSHIP_OPTION_NAME', 'aftership_option_name');
-
+/**
+ * AfterShip API settings
+ */
 class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 
-
-	/** @var string $base the route base */
+	/**
+	 * Base router.
+	 *
+	 * @var string $base base router.
+	 */
 	protected $base = '/v4/settings';
 
 	/**
 	 * Register the routes for this class
 	 *
-	 * GET /settings
-	 *
-	 * @param array $routes
+	 * @param array $routes routes list.
 	 *
 	 * @return array
-	 * @since 2.1
 	 */
 	public function register_routes( $routes ) {
-		// GET /settings/ping
-		$routes[ $this->base . '/ping' ] = array(
-			array( array( $this, 'ping' ), AfterShip_API_Server::READABLE ),
+
+		$routes[ $this->base ] = array(
+			// GET list API.
+			array( array( $this, 'get_list' ), AfterShip_API_Server::READABLE ),
+			// PUT or POST API.
+			array( array( $this, 'update' ), AfterShip_API_Server::METHOD_POST | AfterShip_API_Server::METHOD_PUT | AfterShip_API_Server::ACCEPT_DATA ),
 		);
-
-        // PUT /settings
-        $routes[ $this->base] = [
-            [[$this, 'update_aftership_setting'], AfterShip_API_Server::METHOD_PUT | AfterShip_API_Server::ACCEPT_DATA]
-        ];
-
-        // POST /settings
-        $routes[ $this->base] = [
-            [[$this, 'update_aftership_setting'], AfterShip_API_Server::METHOD_POST | AfterShip_API_Server::ACCEPT_DATA]
-        ];
 
 		return $routes;
 	}
 
 	/**
-	 * heath checkendpoint for WordPress url validation
+	 * GET all settings.
 	 *
-	 * @return string
-	 * @since 2.1
+	 * @return array
 	 */
-	public function ping() {
-		return 'pong';
+	public function get_list() {
+		return array( 'settings' => get_option( 'aftership_option_name' ) );
 	}
 
-    /**
-     * Create a aftership setting record on wp_options
-     * @param WP_REST_Request $request
-     *   {
-     *      "couriers": "17postservice,360lion,dhl,ups",
-     *      "custom_domain": "tracks.aftership.com",
-     *      "use_track_button": true
-     *   }
-     * @return array|WP_Error
-     */
-    public function update_aftership_setting($data)
-    {
-        // Check if exist aftership option
-        $options = get_option(AFTERSHIP_OPTION_NAME);
-        if ( $options && !$options['custom_domain'] ) {
-            $custom_domain = $data->get_param('custom_domain');
-            if (!$custom_domain) {
-                return new WP_Error( 'woocommerce_rest_invalid_aftership_option', __( 'Aftership option invalid.', 'woocommerce' ), array( 'status' => 400 ) );
-            }
-            $options = [
-                'couriers' => $options['couriers'],
-                'custom_domain' => $custom_domain,
-                'use_track_button' => $options['use_track_button'],
-            ];
-            update_option(AFTERSHIP_OPTION_NAME, $options);
-        }
-        return array('settings' => array( AFTERSHIP_OPTION_NAME => $options));
-    }
+	/**
+	 * Update plugin settings.
+	 *
+	 * @param array $data JSON data from post request.
+	 * @return array|WP_Error
+	 */
+	public function update( $data ) {
+		$options             = get_option( 'aftership_option_name' );
+		$custom_domain       = isset( $options['custom_domain'] ) ? $options['custom_domain'] : '';
+		$couriers            = isset( $options['couriers'] ) ? $options['couriers'] : '';
+		$use_tracking_button = isset( $options['use_track_button'] ) ? $options['use_track_button'] : '';
+
+		if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
+			if ( 'track.aftership.com' === $custom_domain || '' === $custom_domain ) {
+				$options['custom_domain'] = $data['custom_domain'];
+			}
+		}
+
+		if ( isset( $data['couriers'] ) && $data['couriers'] ) {
+			if ( '' === $couriers ) {
+				$options['couriers'] = $data['couriers'];
+			}
+		}
+
+		if ( isset( $data['use_track_button'] ) && in_array( $data['use_track_button'], array( true, false ), true ) ) {
+			if ( '' === $use_tracking_button ) {
+				$options['use_track_button'] = $data['use_track_button'];
+			}
+		}
+		update_option( 'aftership_option_name', $options );
+		return array( 'settings' => $options );
+	}
 
 }
