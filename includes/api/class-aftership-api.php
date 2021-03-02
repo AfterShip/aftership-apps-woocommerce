@@ -160,6 +160,7 @@ class AfterShip_API {
 		include_once( 'class-aftership-api-orders.php' );
 		include_once( 'class-aftership-api-v3-orders.php' );
 		include_once( 'v4/class-aftership-api-orders.php' );
+		include_once( 'v4/class-aftership-api-settings.php' );
 
 	}
 
@@ -177,6 +178,7 @@ class AfterShip_API {
 				'AfterShip_API_Orders',
 				'AfterShip_API_V3_Orders',
 				'AfterShip_API_V4_Orders',
+				'AfterShip_API_V4_Settings',
 			)
 		);
 
