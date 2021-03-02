@@ -517,6 +517,15 @@ class AfterShip_Actions {
 	 * @return array List of tracking items
 	 */
 	public function get_tracking_items( $order_id ) {
+
+		// @notice
+		// Migrate tracking may change order updated time. This is not what we expected.
+		// Only run migrate when use view order on admin page.
+		// If url contains aftership-api-route ,that means it's a API request
+		if ( ! isset( $_GET['aftership-api-route'] ) ) {
+			$this->convert_old_meta_in_order( $order_id );
+		}
+
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 			$tracking_items = get_post_meta( $order_id, '_aftership_tracking_items', true );
 		} else {
@@ -529,6 +538,44 @@ class AfterShip_Actions {
 		} else {
 			return array();
 		}
+	}
+
+	/**
+	 * Convert old meta in a given order ID to new meta structure.
+	 *
+	 * @param int $order_id Order ID.
+	 */
+	private function convert_old_meta_in_order( $order_id ) {
+
+		$migrate = get_post_meta( $order_id, '_aftership_migrated', true );
+		if ( $migrate ) {
+			return;
+		}
+
+		$slug                = get_post_meta( $order_id, '_aftership_tracking_provider_name', true );
+		$tracking_number     = get_post_meta( $order_id, '_aftership_tracking_number', true );
+		$account_number      = get_post_meta( $order_id, '_aftership_tracking_account', true );
+		$key                 = get_post_meta( $order_id, '_aftership_tracking_key', true );
+		$postal_code         = get_post_meta( $order_id, '_aftership_tracking_postal', true );
+		$ship_date           = get_post_meta( $order_id, '_aftership_tracking_shipdate', true );
+		$destination_country = get_post_meta( $order_id, '_aftership_tracking_destination_country', true );
+
+		if ( ! $tracking_number ) {
+			return;
+		}
+
+		aftership_add_tracking_number(
+			$order_id,
+			$tracking_number,
+			$slug,
+			$account_number,
+			$key,
+			$postal_code,
+			$ship_date,
+			$destination_country
+		);
+
+		add_post_meta( $order_id, '_aftership_migrated', true );
 	}
 
 	/*
