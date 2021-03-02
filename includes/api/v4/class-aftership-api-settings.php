@@ -53,7 +53,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 	public function update( $data ) {
 		$options             = get_option( 'aftership_option_name' );
 		$custom_domain       = isset( $options['custom_domain'] ) ? $options['custom_domain'] : '';
-		$couriers            = $options['couriers'] ? isset( $options['couriers'] ) : '';
+		$couriers            = isset( $options['couriers'] ) ? $options['couriers'] : '';
 		$use_tracking_button = isset( $options['use_track_button'] ) ? $options['use_track_button'] : '';
 
 		if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
