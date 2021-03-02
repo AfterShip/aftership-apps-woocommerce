@@ -89,6 +89,7 @@ jQuery(function ($) {
 
 			$.post(woocommerce_admin_meta_boxes.ajax_url, data, function (response) {
 				$('#woocommerce-aftership').unblock();
+				$('#tracking-item-' + tracking_id).remove();
 				$('#woocommerce-aftership button.button-show-form').hide();
 				$('#aftership-tracking-form').show();
 				if(!response.tracking_id) return;

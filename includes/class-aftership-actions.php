@@ -476,16 +476,11 @@ class AfterShip_Actions {
 			'state'               => wc_clean( $args['additional_fields']['state'] ),
 		);
 		$tracking_items                     = $this->get_tracking_items( $order_id );
-		$exist                              = false;
-		foreach ( $tracking_items as $item ) {
+		foreach ( $tracking_items as $key => $item ) {
 			if ( $item['tracking_id'] == $tracking_item['tracking_id'] ) {
-				$exist = true;
+                $tracking_items[$key] = $tracking_item;
 			}
 		}
-		if ( ! $exist ) {
-			$tracking_items[] = $tracking_item;
-		}
-
 		$this->save_tracking_items( $order_id, $tracking_items );
 
 		return $tracking_item;
