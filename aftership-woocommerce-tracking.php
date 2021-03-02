@@ -149,9 +149,6 @@ if ( is_woocommerce_active() ) {
 					add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', array( $this->actions, 'woocommerce_subscriptions_renewal_order_meta_query' ), 10, 4 );
 				}
 
-				// Check for updates.
-				add_action( 'init', array( 'AfterShip_Updates', 'check_updates' ) );
-
 				// Add api key config on user profile.
 				add_action( 'show_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
@@ -186,8 +183,6 @@ if ( is_woocommerce_active() ) {
 				$this->actions = AfterShip_Actions::get_instance();
 				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
 				$this->api = new AfterShip_API();
-
-				require_once( $this->plugin_dir . '/includes/class-aftership-updates.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
 			}
 
