@@ -30,19 +30,18 @@ class AfterShip_API {
 	 *
 	 * @access public
 	 * @since 2.0
-	 * @return WC_API
 	 */
 	public function __construct() {
-		 // disable notice output in api json response
+		 // disable notice output in api json response.
 		error_reporting( 0 );
 
-		// add query vars
+		// add query vars.
 		add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
 
-		// register API endpoints
+		// register API endpoints.
 		add_action( 'init', array( $this, 'add_endpoint' ), 0 );
 
-		// handle REST/legacy API request
+		// handle REST/legacy API request.
 		add_action( 'parse_request', array( $this, 'handle_api_requests' ), 0 );
 	}
 
@@ -144,19 +143,19 @@ class AfterShip_API {
 	 * @since 2.1
 	 */
 	private function includes() {
-		// API server / response handlers
+		// API server / response handlers.
 		include_once( 'class-aftership-api-server.php' );
 		include_once( 'interface-aftership-api-handler.php' );
 		include_once( 'class-aftership-api-json-handler.php' );
 		include_once( 'class-aftership-api-common-json-handler.php' );
 
-		// authentication
+		// authentication.
 		include_once( 'class-aftership-api-authentication.php' );
 		$this->authentication = new AfterShip_API_Authentication();
 
 		include_once( 'class-aftership-api-resource.php' );
 
-		// self api
+		// self api.
 		include_once( 'class-aftership-api-orders.php' );
 		include_once( 'class-aftership-api-v3-orders.php' );
 		include_once( 'v4/class-aftership-api-orders.php' );
@@ -168,7 +167,7 @@ class AfterShip_API {
 	 * Register available API resources
 	 *
 	 * @since 2.1
-	 * @param object $server the REST server
+	 * @param object $server the REST server.
 	 */
 	public function register_resources( $server ) {
 
