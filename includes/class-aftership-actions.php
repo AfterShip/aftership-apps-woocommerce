@@ -85,6 +85,8 @@ class AfterShip_Actions {
 				<em><?php echo esc_html( $item['tracking_number'] ); ?></em>
 			</p>
 			<p class="meta">
+				<a href="#" class="edit-tracking"
+				   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"><?php _e( 'Edit', 'aftership' ); ?></a>
 				<a href="#" class="delete-tracking"
 				   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"><?php _e( 'Delete', 'aftership' ); ?></a>
 			</p>
@@ -111,7 +113,7 @@ class AfterShip_Actions {
 		echo '</div>';
 
 		echo '<button class="button button-show-form" type="button">' . __( 'Add Tracking Number', 'aftership' ) . '</button>';
-		echo '<div id="shipment-tracking-form">';
+		echo '<div id="aftership-tracking-form">';
 
 		echo '<p class="form-field aftership_tracking_slug_field"><label for="aftership-tracking-slug">' . __( 'Courier:', 'aftership' ) . '</label><br/><select id="aftership-tracking-slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
 
@@ -182,15 +184,14 @@ class AfterShip_Actions {
 			)
 		);
 
-		// TODO 最好不要设置默认值
 		woocommerce_wp_text_input(
 			array(
 				'id'          => 'aftership_tracking_ship_date',
 				'label'       => __( 'Date shipped:', 'aftership' ),
-				'placeholder' => date_i18n( __( 'Ymd', 'aftership' ), time() ),
+				'placeholder' => date_i18n( __( 'Y-m-d', 'aftership' ), time() ),
 				'description' => '',
 				'class'       => 'date-picker-field',
-				'value'       => date_i18n( __( 'Ymd', 'aftership' ), current_time( 'timestamp' ) ),
+				'value'       => date_i18n( __( 'Y-m-d', 'aftership' ), current_time( 'timestamp' ) ),
 			)
 		);
 
@@ -241,6 +242,7 @@ class AfterShip_Actions {
                     tracking_state: 'aftership_tracking_state',
                 };
 				var slug  = jQuery( '#aftership-tracking-slug' ).val();
+				if (!slug) return;
 				var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( aftership()->selected_couriers ) ) . "' ) );
 				var courier = couriers.find(item => item.slug === slug);
 				var required_fields = courier.required_fields;
@@ -352,6 +354,24 @@ class AfterShip_Actions {
 		$tracking_id = wc_clean( $_POST['tracking_id'] );
 
 		$this->delete_tracking_item( $order_id, $tracking_id );
+	}
+
+
+	/**
+	 * Get single tracking info
+	 *
+	 * Function to show tracking edit form
+	 */
+	public function get_meta_box_item_ajax() {
+		check_ajax_referer( 'get-tracking-item', 'security', true );
+
+		$order_id                 = wc_clean( $_POST['order_id'] );
+		$tracking_id              = wc_clean( $_POST['tracking_id'] );
+		$tracking_item            = $this->get_tracking_item( $order_id, $tracking_id );
+		$tracking_item['courier'] = $this->get_courier_by_slug( $tracking_item['slug'] );
+		header( 'Content-Type: application/json' );
+		echo json_encode( $tracking_item, true );
+		die();
 	}
 
 	/**

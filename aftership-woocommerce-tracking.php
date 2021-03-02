@@ -136,6 +136,7 @@ if ( is_woocommerce_active() ) {
 				add_action( 'woocommerce_email_before_order_table', array( $this->actions, 'email_display' ), 0, 4 );
 
 				// Order page metabox actions.
+				add_action( 'wp_ajax_aftership_get_item', array( $this->actions, 'get_meta_box_item_ajax' ) );
 				add_action( 'wp_ajax_aftership_delete_item', array( $this->actions, 'meta_box_delete_tracking' ) );
 				add_action( 'wp_ajax_aftership_save_form', array( $this->actions, 'save_meta_box_ajax' ) );
 				add_action( 'wp_ajax_aftership_get_items', array( $this->actions, 'get_meta_box_items_ajax' ) );

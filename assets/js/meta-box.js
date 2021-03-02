@@ -6,6 +6,7 @@ jQuery(function ($) {
 		init: function () {
 			$('#woocommerce-aftership')
 				.on('click', 'a.delete-tracking', this.delete_tracking)
+				.on('click', 'a.edit-tracking', this.edit_tracking)
 				.on('click', 'button.button-show-form', this.show_form)
 				.on('click', 'button.button-save-form', this.save_form);
 		},
@@ -17,7 +18,7 @@ jQuery(function ($) {
 				return false;
 			}
 
-			$('#shipment-tracking-form').block({
+			$('#aftership-tracking-form').block({
 				message: null,
 				overlayCSS: {
 					background: '#fff',
@@ -41,9 +42,9 @@ jQuery(function ($) {
 
 
 			$.post(woocommerce_admin_meta_boxes.ajax_url, data, function (response) {
-				$('#shipment-tracking-form').unblock();
+				$('#aftership-tracking-form').unblock();
 				if (response != '-1') {
-					$('#shipment-tracking-form').hide();
+					$('#aftership-tracking-form').hide();
 					$('#woocommerce-aftership #tracking-items').append(response);
 					$('#woocommerce-aftership button.button-show-form').show();
 					$('#aftership-tracking-slug').selectedIndex = 0;
@@ -62,8 +63,70 @@ jQuery(function ($) {
 
 		// Show the new tracking item form
 		show_form: function () {
-			$('#shipment-tracking-form').show();
+			$('#aftership-tracking-form').show();
 			$('#woocommerce-aftership button.button-show-form').hide();
+		},
+
+		// Delete a tracking item
+		edit_tracking: function () {
+
+			var tracking_id = $(this).attr('rel');
+
+			$('#woocommerce-aftership').block({
+				message: null,
+				overlayCSS: {
+					background: '#fff',
+					opacity: 0.6
+				}
+			});
+
+			var data = {
+				action: 'aftership_get_item',
+				order_id: woocommerce_admin_meta_boxes.post_id,
+				tracking_id: tracking_id,
+				security: $('#aftership_get_nonce').val()
+			};
+
+			$.post(woocommerce_admin_meta_boxes.ajax_url, data, function (response) {
+				$('#woocommerce-aftership').unblock();
+				$('#woocommerce-aftership button.button-show-form').hide();
+				$('#aftership-tracking-form').show();
+				if(!response.tracking_id) return;
+				$('p.aftership_tracking_key_field').hide();
+				$('p.aftership_tracking_account_number_field').hide();
+				$('p.aftership_tracking_postal_code_field').hide();
+				$('p.aftership_tracking_ship_date_field').hide();
+				$('p.aftership_tracking_destination_country_field').hide();
+				$('p.aftership_tracking_state_field').hide();
+				var required_fields_mapping = {
+					tracking_key: 'aftership_tracking_key',
+					tracking_account_number: 'aftership_tracking_account_number',
+					tracking_postal_code: 'aftership_tracking_postal_code',
+					tracking_ship_date: 'aftership_tracking_ship_date',
+					tracking_destination_country: 'aftership_tracking_destination_country',
+					tracking_state: 'aftership_tracking_state',
+				};
+				var additional_fields_mapping = {
+					tracking_key: 'key',
+					tracking_account_number: 'account_number',
+					tracking_postal_code: 'postal_code',
+					tracking_ship_date: 'ship_date',
+					tracking_destination_country: 'destination_country',
+					tracking_state: 'state',
+				};
+				$('#aftership-tracking-slug').val(response.slug).change();
+				$('input#aftership_tracking_number').val(response.tracking_number);
+				var required_fields = response.courier.required_fields;
+				for (var field of required_fields) {
+					var field_name = required_fields_mapping[field];
+					$('p.' + field_name + '_field').show();
+					var additional_field_name = additional_fields_mapping[field];
+					var field_value = response.additional_fields[additional_field_name];
+					$('input#' + field_name).val(field_value);
+				}
+			});
+
+			return false;
 		},
 
 		// Delete a tracking item

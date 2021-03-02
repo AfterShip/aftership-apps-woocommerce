@@ -5,10 +5,10 @@
 #woocommerce-aftership .button-show-form {
 	margin: 0;
 }
-#woocommerce-aftership #shipment-tracking-form {
+#woocommerce-aftership #aftership-tracking-form {
 	display: none;
 }
-#woocommerce-aftership #shipment-tracking-form p.form-field {
+#woocommerce-aftership #aftership-tracking-form p.form-field {
 	margin-top: 0;
 }
 #woocommerce-aftership input {
