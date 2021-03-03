@@ -245,7 +245,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 				}
 			}
 		}
-		$tracking_items          = aftership()->actions->get_tracking_items( $id );
+		$tracking_items          = aftership()->actions->get_tracking_items_for_api( $id );
 		$order_data['trackings'] = $this->uniquify_tracking_items( array_merge( $trackings, $tracking_items ) );
 
 		return array( 'order' => apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server ) );

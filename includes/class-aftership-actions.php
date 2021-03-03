@@ -567,13 +567,7 @@ class AfterShip_Actions {
 	 */
 	public function get_tracking_items( $order_id ) {
 
-		// @notice
-		// Migrate tracking may change order updated time. This is not what we expected.
-		// Only run migrate when use view order on admin page.
-		// If url contains aftership-api-route ,that means it's a API request
-		if ( ! isset( $_GET['aftership-api-route'] ) ) {
-			$this->convert_old_meta_in_order( $order_id );
-		}
+		$this->convert_old_meta_in_order( $order_id );
 
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 			$tracking_items = get_post_meta( $order_id, '_aftership_tracking_items', true );
@@ -587,6 +581,28 @@ class AfterShip_Actions {
 		} else {
 			return array();
 		}
+	}
+
+	/*
+	* Gets all tracking items from the post meta array for an order using by restful api
+	*
+	* @param int  $order_id  Order ID
+	*
+	* @return array List of tracking items
+	*/
+	public function get_tracking_items_for_api( $order_id ) {
+		$tracking_items = $this->get_tracking_items( $order_id );
+		$order          = new WC_Order( $order_id );
+		foreach ( $tracking_items as &$tracking_item ) {
+			$additional_fields = $tracking_item['additional_fields'];
+			if ( isset( $additional_fields['destination_country'] ) ) {
+				$tracking_item['additional_fields']['destination_country'] = convert_country_code( $order->get_shipping_country() );
+			}
+			if ( isset( $additional_fields['ship_date'] ) ) {
+				$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
+			}
+		}
+		return $tracking_items;
 	}
 
 	/**
