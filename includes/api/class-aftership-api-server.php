@@ -156,7 +156,7 @@ class AfterShip_API_Server {
 
 	public function is_legacy() {
 		// check path
-		if ( false !== stripos( $this->path, '/v3' ) ) {
+		if ( false !== stripos( $this->path, '/v' ) ) {
 			return false;
 		}
 		return true;
