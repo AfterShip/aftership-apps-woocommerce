@@ -77,12 +77,13 @@ class AfterShip_Actions {
 	 */
 	public function display_html_tracking_item_for_meta_box( $order_id, $item ) {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
+		$link    = $this->generate_tracking_page_link( $item );
 		?>
 		<div class="tracking-item" id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>">
 			<p class="tracking-content">
 				<strong><?php echo esc_html( $courier['name'] ); ?></strong>
 				<br/>
-				<em><?php echo esc_html( $item['tracking_number'] ); ?></em>
+				<em><a target="_blank" href="<?php echo esc_html( $link ); ?>"><?php echo esc_html( $item['tracking_number'] ); ?></a></em>
 			</p>
 			<p class="meta">
 				<a href="#" class="edit-tracking"
@@ -92,6 +93,22 @@ class AfterShip_Actions {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Generate tracking page links
+	 *
+	 * @param $item
+	 * @return string
+	 */
+	public function generate_tracking_page_link( $item ) {
+		$custom_domain  = aftership()->custom_domain;
+		$contains_http  = strpos( $custom_domain, 'http://' );
+		$contains_https = strpos( $custom_domain, 'https://' );
+		if ( $contains_http !== false || $contains_https !== false ) {
+			return aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
+		}
+		return 'https://' . aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
 	}
 
 	/**
@@ -115,7 +132,7 @@ class AfterShip_Actions {
 		echo '<button class="button button-show-form" type="button">' . __( 'Add Tracking Number', 'aftership' ) . '</button>';
 		echo '<div id="aftership-tracking-form">';
 
-		echo '<p class="form-field aftership_tracking_slug_field"><label for="aftership-tracking-slug">' . __( 'Courier:', 'aftership' ) . '</label><br/><select id="aftership-tracking-slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
+		echo '<p class="form-field aftership_tracking_slug_field"><label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label><br/><select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
 
 		foreach ( aftership()->selected_couriers as $courier ) {
 			echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
@@ -141,6 +158,13 @@ class AfterShip_Actions {
 			array(
 				'id'    => 'aftership_create_nonce',
 				'value' => wp_create_nonce( 'create-tracking-item' ),
+			)
+		);
+
+		woocommerce_wp_hidden_input(
+			array(
+				'id'    => 'aftership_tracking_id',
+				'value' => '',
 			)
 		);
 
@@ -226,7 +250,7 @@ class AfterShip_Actions {
             $('p.aftership_tracking_ship_date_field').hide();
             $('p.aftership_tracking_destination_country_field').hide();
             $('p.aftership_tracking_state_field').hide();
-			jQuery( '#aftership-tracking-slug').change( function() {
+			jQuery( '#aftership_tracking_slug').change( function() {
 			    $('p.aftership_tracking_key_field').hide();
                 $('p.aftership_tracking_account_number_field').hide();
                 $('p.aftership_tracking_postal_code_field').hide();
@@ -241,7 +265,7 @@ class AfterShip_Actions {
                     tracking_destination_country: 'aftership_tracking_destination_country',
                     tracking_state: 'aftership_tracking_state',
                 };
-				var slug  = jQuery( '#aftership-tracking-slug' ).val();
+				var slug  = jQuery( '#aftership_tracking_slug' ).val();
 				if (!slug) return;
 				var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( aftership()->selected_couriers ) ) . "' ) );
 				var courier = couriers.find(item => item.slug === slug);
@@ -334,6 +358,11 @@ class AfterShip_Actions {
 				),
 			);
 
+			$post_tracking_id = wc_clean( $_POST['aftership_tracking_id'] );
+			$tracking_id      = md5( "{$args['slug']}-{$args['tracking_number']}" );
+			if ( $post_tracking_id && $tracking_id !== $post_tracking_id ) {
+				$this->delete_tracking_item( $order_id, $post_tracking_id );
+			}
 			$tracking_item = $this->add_tracking_item( $order_id, $args );
 
 			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
@@ -476,10 +505,15 @@ class AfterShip_Actions {
 			'state'               => wc_clean( $args['additional_fields']['state'] ),
 		);
 		$tracking_items                     = $this->get_tracking_items( $order_id );
+		$exist                              = false;
 		foreach ( $tracking_items as $key => $item ) {
 			if ( $item['tracking_id'] == $tracking_item['tracking_id'] ) {
-                $tracking_items[$key] = $tracking_item;
+				$exist                  = true;
+				$tracking_items[ $key ] = $tracking_item;
 			}
+		}
+		if ( ! $exist ) {
+			$tracking_items[] = $tracking_item;
 		}
 		$this->save_tracking_items( $order_id, $tracking_items );
 
