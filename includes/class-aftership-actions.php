@@ -607,7 +607,9 @@ class AfterShip_Actions {
 				}
 			}
 			if ( isset( $additional_fields['ship_date'] ) ) {
-				$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
+				if ( $additional_fields['ship_date'] ) {
+					$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
+				}
 			}
 			$tracking_items[ $key ] = $tracking_item;
 		}
