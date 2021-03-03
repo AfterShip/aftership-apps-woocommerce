@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+define( 'AFTERSHIP_LATEST_API_VERSION', 'v4' );
+
 class AfterShip_API {
 
 
