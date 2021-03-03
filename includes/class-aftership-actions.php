@@ -38,7 +38,7 @@ class AfterShip_Actions {
 	 */
 	public function get_courier_by_slug( $slug ) {
 		$courier = array();
-		foreach ( aftership()->couriers as $item ) {
+		foreach ( $GLOBALS['AfterShip']->couriers as $item ) {
 			if ( $item['slug'] == $slug ) {
 				$courier = $item;
 			}
@@ -50,7 +50,7 @@ class AfterShip_Actions {
 	 * Localisation.
 	 */
 	public function load_plugin_textdomain() {
-		$plugin_file = aftership()->plugin_file;
+		$plugin_file = $GLOBALS['AfterShip']->plugin_file;
 		load_plugin_textdomain( 'aftership', false, dirname( plugin_basename( $plugin_file ) ) . '/languages/' );
 	}
 
@@ -58,7 +58,7 @@ class AfterShip_Actions {
 	 * Load admin styles.
 	 */
 	public function admin_styles() {
-		$plugin_url = aftership()->plugin_url;
+		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
 		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css' );
 	}
 
@@ -102,13 +102,13 @@ class AfterShip_Actions {
 	 * @return string
 	 */
 	public function generate_tracking_page_link( $item ) {
-		$custom_domain  = aftership()->custom_domain;
+		$custom_domain  = $GLOBALS['AfterShip']->custom_domain;
 		$contains_http  = strpos( $custom_domain, 'http://' );
 		$contains_https = strpos( $custom_domain, 'https://' );
 		if ( $contains_http !== false || $contains_https !== false ) {
-			return aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
+			return $custom_domain . "/${item['slug']}/${item['tracking_number']}";
 		}
-		return 'https://' . aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
+		return 'https://' . $custom_domain . "/${item['slug']}/${item['tracking_number']}";
 	}
 
 	/**
@@ -134,7 +134,7 @@ class AfterShip_Actions {
 
 		echo '<p class="form-field aftership_tracking_slug_field"><label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label><br/><select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
 
-		foreach ( aftership()->selected_couriers as $courier ) {
+		foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
 			echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
 		}
 
@@ -267,7 +267,7 @@ class AfterShip_Actions {
                 };
 				var slug  = jQuery( '#aftership_tracking_slug' ).val();
 				if (!slug) return;
-				var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( aftership()->selected_couriers ) ) . "' ) );
+				var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
 				var courier = couriers.find(item => item.slug === slug);
 				var required_fields = courier.required_fields;
 		        for (var field of required_fields) {
@@ -283,7 +283,7 @@ class AfterShip_Actions {
 			WC()->add_inline_js( $js );
 		}
 
-		wp_enqueue_script( 'aftership-js', aftership()->plugin_url . '/assets/js/meta-box.js' );
+		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/js/meta-box.js' );
 
 	}
 
@@ -322,7 +322,9 @@ class AfterShip_Actions {
 	public function get_meta_box_items_ajax() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$order_id       = wc_clean( $_POST['order_id'] );
+		$order_id = wc_clean( $_POST['order_id'] );
+		// migrate old tracking data
+		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
 
 		foreach ( $tracking_items as $tracking_item ) {
@@ -413,11 +415,11 @@ class AfterShip_Actions {
 			'myaccount/view-order.php',
 			array(
 				'tracking_items'   => $this->get_tracking_items_for_display( $order_id ),
-				'use_track_button' => aftership()->use_track_button,
-				'domain'           => aftership()->custom_domain,
+				'use_track_button' => $GLOBALS['AfterShip']->use_track_button,
+				'domain'           => $GLOBALS['AfterShip']->custom_domain,
 			),
 			'aftership-woocommerce-tracking/',
-			aftership()->get_plugin_path() . '/templates/'
+			$GLOBALS['AfterShip']->get_plugin_path() . '/templates/'
 		);
 	}
 
@@ -442,9 +444,9 @@ class AfterShip_Actions {
 
 		$order_id = is_callable( array( $order, 'get_id' ) ) ? $order->get_id() : $order->id;
 		if ( true === $plain_text ) {
-			wc_get_template( 'email/plain/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', aftership()->get_plugin_path() . '/templates/' );
+			wc_get_template( 'email/plain/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
 		} else {
-			wc_get_template( 'email/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', aftership()->get_plugin_path() . '/templates/' );
+			wc_get_template( 'email/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
 		}
 	}
 
@@ -567,8 +569,6 @@ class AfterShip_Actions {
 	 */
 	public function get_tracking_items( $order_id ) {
 
-		$this->convert_old_meta_in_order( $order_id );
-
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 			$tracking_items = get_post_meta( $order_id, '_aftership_tracking_items', true );
 		} else {
@@ -591,6 +591,8 @@ class AfterShip_Actions {
 	* @return array List of tracking items
 	*/
 	public function get_tracking_items_for_api( $order_id ) {
+		// migrate old tracking meta
+		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
 		$order          = new WC_Order( $order_id );
 		foreach ( $tracking_items as $key => $tracking_item ) {
@@ -617,12 +619,13 @@ class AfterShip_Actions {
 	 *
 	 * @param int $order_id Order ID.
 	 */
-	private function convert_old_meta_in_order( $order_id ) {
+	public function convert_old_meta_in_order( $order_id ) {
 
 		$migrate = get_post_meta( $order_id, '_aftership_migrated', true );
-		if ( $migrate ) {
+		if ( $migrate === 'ok' ) {
 			return;
 		}
+		update_post_meta( $order_id, '_aftership_migrated', 'ok' );
 
 		$slug                = get_post_meta( $order_id, '_aftership_tracking_provider_name', true );
 		$tracking_number     = get_post_meta( $order_id, '_aftership_tracking_number', true );
@@ -636,18 +639,21 @@ class AfterShip_Actions {
 			return;
 		}
 
-		aftership_add_tracking_number(
-			$order_id,
-			$tracking_number,
-			$slug,
-			$account_number,
-			$key,
-			$postal_code,
-			$ship_date,
-			$destination_country
+		$args = array(
+			'slug'              => $slug,
+			'tracking_number'   => $tracking_number,
+			'additional_fields' => array(
+				'account_number'      => $account_number,
+				'key'                 => $key,
+				'postal_code'         => $postal_code,
+				'ship_date'           => $ship_date,
+				'destination_country' => $destination_country,
+				'state'               => '',
+			),
 		);
 
-		add_post_meta( $order_id, '_aftership_migrated', true );
+		$this->add_tracking_item( $order_id, $args );
+
 	}
 
 	/*
@@ -658,7 +664,7 @@ class AfterShip_Actions {
 	* @return array List of tracking items
 	*/
 	public function get_tracking_items_for_display( $order_id ) {
-		$custom_domain          = aftership()->custom_domain;
+		$custom_domain          = $GLOBALS['AfterShip']->custom_domain;
 		$tracking_items         = $this->get_tracking_items( $order_id );
 		$display_tracking_items = array();
 		foreach ( $tracking_items as $item ) {
