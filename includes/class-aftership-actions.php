@@ -222,7 +222,7 @@ class AfterShip_Actions {
 		woocommerce_wp_text_input(
 			array(
 				'id'          => 'aftership_tracking_destination_country',
-				'label'       => __( 'Ship Destination Country:', 'aftership' ),
+				'label'       => __( 'Ship Destination Country (ISO3):', 'aftership' ),
 				'placeholder' => '',
 				'description' => '',
 				'value'       => '',
@@ -593,14 +593,21 @@ class AfterShip_Actions {
 	public function get_tracking_items_for_api( $order_id ) {
 		$tracking_items = $this->get_tracking_items( $order_id );
 		$order          = new WC_Order( $order_id );
-		foreach ( $tracking_items as &$tracking_item ) {
+		foreach ( $tracking_items as $key => $tracking_item ) {
 			$additional_fields = $tracking_item['additional_fields'];
 			if ( isset( $additional_fields['destination_country'] ) ) {
-				$tracking_item['additional_fields']['destination_country'] = convert_country_code( $order->get_shipping_country() );
+				// Use customer's input first
+				if ( $additional_fields['destination_country'] ) {
+					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $additional_fields['destination_country'] );
+				} else {
+					// Use destination_country from shipping address
+					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $order->get_shipping_country() );
+				}
 			}
 			if ( isset( $additional_fields['ship_date'] ) ) {
 				$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
 			}
+			$tracking_items[ $key ] = $tracking_item;
 		}
 		return $tracking_items;
 	}
