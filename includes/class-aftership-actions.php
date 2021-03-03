@@ -603,7 +603,11 @@ class AfterShip_Actions {
 					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $additional_fields['destination_country'] );
 				} else {
 					// Use destination_country from shipping address
-					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $order->get_shipping_country() );
+					$destination_country = $order->get_shipping_country();
+					if ( ! $destination_country ) {
+						$destination_country = $order->get_billing_country();
+					}
+					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $destination_country );
 				}
 			}
 			if ( isset( $additional_fields['ship_date'] ) ) {
