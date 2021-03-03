@@ -77,12 +77,13 @@ class AfterShip_Actions {
 	 */
 	public function display_html_tracking_item_for_meta_box( $order_id, $item ) {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
+		$link    = $this->generate_tracking_page_link( $item );
 		?>
 		<div class="tracking-item" id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>">
 			<p class="tracking-content">
 				<strong><?php echo esc_html( $courier['name'] ); ?></strong>
 				<br/>
-				<em><?php echo esc_html( $item['tracking_number'] ); ?></em>
+				<em><a target="_blank" href="<?php echo esc_html( $link ); ?>"><?php echo esc_html( $item['tracking_number'] ); ?></a></em>
 			</p>
 			<p class="meta">
 				<a href="#" class="edit-tracking"
@@ -92,6 +93,22 @@ class AfterShip_Actions {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Generate tracking page links
+	 *
+	 * @param $item
+	 * @return string
+	 */
+	public function generate_tracking_page_link( $item ) {
+		$custom_domain  = aftership()->custom_domain;
+		$contains_http  = strpos( $custom_domain, 'http://' );
+		$contains_https = strpos( $custom_domain, 'https://' );
+		if ( $contains_http !== false || $contains_https !== false ) {
+			return aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
+		}
+		return 'https://' . aftership()->custom_domain . "/${item['slug']}/${item['tracking_number']}";
 	}
 
 	/**
