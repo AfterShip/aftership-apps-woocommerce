@@ -447,7 +447,7 @@ class AfterShip_API_Server {
 				'description'        => get_option( 'blogdescription' ),
 				'URL'                => get_option( 'siteurl' ),
 				'wc_version'         => WC()->version,
-				'latest_api_version' => 'v3',
+				'latest_api_version' => AFTERSHIP_LATEST_API_VERSION,
 				'routes'             => array(),
 				'meta'               => array(
 					'timezone'           => wc_timezone_string(),

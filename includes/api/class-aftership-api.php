@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+define( 'AFTERSHIP_LATEST_API_VERSION', 'v4' );
+
 class AfterShip_API {
 
 
@@ -157,7 +159,7 @@ class AfterShip_API {
 
 		// self api.
 		include_once( 'class-aftership-api-orders.php' );
-		include_once( 'class-aftership-api-v3-orders.php' );
+		include_once( 'v3/class-aftership-api-orders.php' );
 		include_once( 'v4/class-aftership-api-orders.php' );
 		include_once( 'v4/class-aftership-api-settings.php' );
 
