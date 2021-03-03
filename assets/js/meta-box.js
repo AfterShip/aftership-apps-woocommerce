@@ -29,8 +29,9 @@ jQuery(function ($) {
 			var data = {
 				action: 'aftership_save_form',
 				order_id: woocommerce_admin_meta_boxes.post_id,
-				aftership_tracking_slug: $('#aftership-tracking-slug').val(),
+				aftership_tracking_slug: $('#aftership_tracking_slug').val(),
 				aftership_tracking_number: $('input#aftership_tracking_number').val(),
+				aftership_tracking_id: $('input#aftership_tracking_id').val(),
 				aftership_tracking_account_number: $('input#aftership_tracking_account_number').val(),
 				aftership_tracking_key: $('input#aftership_tracking_key').val(),
 				aftership_tracking_postal_code: $('input#aftership_tracking_postal_code').val(),
@@ -47,8 +48,9 @@ jQuery(function ($) {
 					$('#aftership-tracking-form').hide();
 					$('#woocommerce-aftership #tracking-items').append(response);
 					$('#woocommerce-aftership button.button-show-form').show();
-					$('#aftership-tracking-slug').selectedIndex = 0;
+					$('#aftership_tracking_slug').selectedIndex = 0;
 					$('input#aftership_tracking_number').val('');
+					$('input#aftership_tracking_id').val('');
 					$('input#aftership_tracking_account_number').val('');
 					$('input#aftership_tracking_key').val('');
 					$('input#aftership_tracking_postal_code').val('');
@@ -115,8 +117,9 @@ jQuery(function ($) {
 					tracking_destination_country: 'destination_country',
 					tracking_state: 'state',
 				};
-				$('#aftership-tracking-slug').val(response.slug).change();
+				$('#aftership_tracking_slug').val(response.slug).change();
 				$('input#aftership_tracking_number').val(response.tracking_number);
+				$('input#aftership_tracking_id').val(tracking_id);
 				var required_fields = response.courier.required_fields;
 				for (var field of required_fields) {
 					var field_name = required_fields_mapping[field];
