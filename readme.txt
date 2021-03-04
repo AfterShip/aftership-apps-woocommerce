@@ -95,6 +95,9 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
+= 1.11.0 =
+* Support Multiple Tracking Number
+
 = 1.10.3 =
 * Update readme
 

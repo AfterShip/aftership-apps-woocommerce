@@ -366,6 +366,9 @@ class AfterShip_Actions {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
 			}
 			$tracking_item = $this->add_tracking_item( $order_id, $args );
+			if ( $tracking_item === -1 ) {
+				wp_die( '-1' );
+			}
 
 			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
 		}
@@ -516,6 +519,8 @@ class AfterShip_Actions {
 		}
 		if ( ! $exist ) {
 			$tracking_items[] = $tracking_item;
+		} else {
+			return -1;
 		}
 		$this->save_tracking_items( $order_id, $tracking_items );
 

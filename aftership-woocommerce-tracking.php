@@ -3,7 +3,7 @@
 	Plugin Name: Ecommerce Order Tracking and Shipment Notifications - AfterShip
 	Plugin URI: http://aftership.com/
 	Description: Effortless order tracking synced from all shipping providers for your ecommerce customers. Include a branded tracking page and automated delivery notifications.
-	Version: 1.10.5
+	Version: 1.11.0
 	Author: AfterShip
 	Author URI: http://aftership.com
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.10.5' );
+define( 'AFTERSHIP_VERSION', '1.11.0' );
 
 if ( is_woocommerce_active() ) {
 
