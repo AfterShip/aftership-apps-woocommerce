@@ -261,9 +261,9 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 	private function uniquify_tracking_items( $tracking_items ) {
 		$uniq_tracking_items = array();
 		// Add tracking id for all tracking item.
-		foreach ( $tracking_items as $tracking_item ) {
+		foreach ( $tracking_items as $t => $tracking_item ) {
 			if ( ! isset( $tracking_item['tracking_id'] ) ) {
-				$tracking_item['tracking_id'] = md5( "{$tracking_item['slug']}-{$tracking_item['tracking_number']}" );
+				$tracking_items[$t]['tracking_id'] = md5( "{$tracking_item['slug']}-{$tracking_item['tracking_number']}" );
 			}
 		}
 		$tracking_ids = array_unique( array_column( $tracking_items, 'tracking_id' ) );
