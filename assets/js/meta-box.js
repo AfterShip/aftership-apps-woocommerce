@@ -18,7 +18,36 @@ jQuery(function ($) {
 				return false;
 			}
 
-			if ($('.tracking-item').length > 999) {
+			if ($('#woocommerce-aftership div.tracking-item').length > 999) {
+				$('#aftership-tracking-form').block({
+					message: "Tracking items more than 999 !",
+					overlayCSS: {
+						background: '#fff',
+						opacity: 0.6,
+					}
+				});
+				setTimeout($('#aftership-tracking-form').unblock(), 2000);
+				return false;
+			}
+			var exist = false;
+
+			$('#woocommerce-aftership div.tracking-item').each(function () {
+				var slug = $('#aftership_tracking_slug').val();
+				var tracking_number = $('input#aftership_tracking_number').val();
+				if ($(this).data('tracking') === tracking_number && $(this).data('slug') === slug ) {
+					exist = true;
+				}
+			});
+
+			if (exist) {
+				$('#aftership-tracking-form').block({
+					message: "Tracking already added !",
+					overlayCSS: {
+						background: '#fff',
+						opacity: 0.6,
+					}
+				});
+				setTimeout($('#aftership-tracking-form').unblock(), 2000);
 				return false;
 			}
 

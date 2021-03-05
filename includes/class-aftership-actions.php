@@ -79,7 +79,7 @@ class AfterShip_Actions {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
 		$link    = $this->generate_tracking_page_link( $item );
 		?>
-		<div class="tracking-item" id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>">
+		<div class="tracking-item" data-tracking="<?php echo esc_html( $item['tracking_number'] ); ?>" data-slug="<?php echo esc_html( $item['slug'] ); ?>" id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>">
 			<p class="tracking-content">
 				<strong><?php echo esc_html( $courier['name'] ); ?></strong>
 				<br/>
