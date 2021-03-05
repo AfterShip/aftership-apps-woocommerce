@@ -526,6 +526,7 @@ class AfterShip_Actions {
 		if ( ! $exist ) {
 			$tracking_items[] = $tracking_item;
 		}
+
 		$this->save_tracking_items( $order_id, $tracking_items );
 
 		return $tracking_item;
