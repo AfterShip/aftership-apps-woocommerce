@@ -18,6 +18,10 @@ jQuery(function ($) {
 				return false;
 			}
 
+			if ($('.tracking-item').length > 999) {
+				return false;
+			}
+
 			$('#aftership-tracking-form').block({
 				message: null,
 				overlayCSS: {
