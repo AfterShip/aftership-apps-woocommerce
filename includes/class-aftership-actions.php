@@ -339,7 +339,7 @@ class AfterShip_Actions {
 	 *
 	 * Function for saving tracking items via AJAX
 	 *
-	 * @todo 需要检测是否有必须字段没有填写
+	 * @throws WC_Data_Exception
 	 */
 	public function save_meta_box_ajax() {
 		check_ajax_referer( 'create-tracking-item', 'security', true );
@@ -366,6 +366,9 @@ class AfterShip_Actions {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
 			}
 			$tracking_item = $this->add_tracking_item( $order_id, $args );
+			$order         = new WC_Order( $order_id );
+			$order->set_date_modified( current_time( 'mysql' ) );
+			$order->save();
 
 			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
 		}
@@ -377,6 +380,8 @@ class AfterShip_Actions {
 	 * Order Tracking Delete
 	 *
 	 * Function to delete a tracking item
+	 *
+	 * @throws WC_Data_Exception
 	 */
 	public function meta_box_delete_tracking() {
 		check_ajax_referer( 'delete-tracking-item', 'security', true );
@@ -385,6 +390,10 @@ class AfterShip_Actions {
 		$tracking_id = wc_clean( $_POST['tracking_id'] );
 
 		$this->delete_tracking_item( $order_id, $tracking_id );
+
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
 	}
 
 
