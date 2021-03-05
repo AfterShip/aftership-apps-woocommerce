@@ -58,7 +58,7 @@ jQuery(function ($) {
 					$('input#aftership_tracking_destination_country').val('');
 					$('input#aftership_tracking_state').val('');
 				} else {
-					alert('Repeat Courier And Tracking number, Please Try Again.');
+					alert('Same Carrier and Tracking number already exist, Please re-enter.');
 				}
 			});
 

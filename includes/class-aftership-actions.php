@@ -346,10 +346,12 @@ class AfterShip_Actions {
 
 		if ( isset( $_POST['aftership_tracking_number'] ) && strlen( $_POST['aftership_tracking_number'] ) > 0 ) {
 
-			$order_id = wc_clean( $_POST['order_id'] );
-			$args     = array(
+			$order_id         = wc_clean( $_POST['order_id'] );
+			$post_tracking_id = wc_clean( $_POST['aftership_tracking_id'] );
+			$args             = array(
 				'slug'              => wc_clean( $_POST['aftership_tracking_slug'] ),
 				'tracking_number'   => wc_clean( $_POST['aftership_tracking_number'] ),
+				'tracking_id'       => $post_tracking_id || '',
 				'additional_fields' => array(
 					'account_number'      => wc_clean( $_POST['aftership_tracking_account_number'] ),
 					'key'                 => wc_clean( $_POST['aftership_tracking_key'] ),
@@ -360,8 +362,7 @@ class AfterShip_Actions {
 				),
 			);
 
-			$post_tracking_id = wc_clean( $_POST['aftership_tracking_id'] );
-			$tracking_id      = md5( "{$args['slug']}-{$args['tracking_number']}" );
+			$tracking_id = md5( "{$args['slug']}-{$args['tracking_number']}" );
 			if ( $post_tracking_id && $tracking_id !== $post_tracking_id ) {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
 			}
@@ -519,9 +520,11 @@ class AfterShip_Actions {
 		}
 		if ( ! $exist ) {
 			$tracking_items[] = $tracking_item;
-		} else {
+		}
+		if ( ! $args['tracking_id'] && $exist ) {
 			return -1;
 		}
+
 		$this->save_tracking_items( $order_id, $tracking_items );
 
 		return $tracking_item;
