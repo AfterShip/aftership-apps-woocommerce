@@ -74,23 +74,47 @@ class AfterShip_Actions {
 	 *
 	 * @param $order_id string
 	 * @param $item array
+	 * @param $index number
 	 */
-	public function display_html_tracking_item_for_meta_box( $order_id, $item ) {
+	public function display_html_tracking_item_for_meta_box( $order_id, $item, $index ) {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
 		$link    = $this->generate_tracking_page_link( $item );
 		?>
-		<div class="tracking-item" data-tracking="<?php echo esc_html( $item['tracking_number'] ); ?>" data-slug="<?php echo esc_html( $item['slug'] ); ?>" id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>">
-			<p class="tracking-content">
-				<strong><?php echo esc_html( $courier['name'] ); ?></strong>
-				<br/>
-				<em><a target="_blank" href="<?php echo esc_html( $link ); ?>"><?php echo esc_html( $item['tracking_number'] ); ?></a></em>
-			</p>
-			<p class="meta">
-				<a href="#" class="edit-tracking"
-				   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"><?php _e( 'Edit', 'aftership' ); ?></a>
-				<a href="#" class="delete-tracking"
-				   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"><?php _e( 'Delete', 'aftership' ); ?></a>
-			</p>
+		<div 
+			class="tracking-item" 
+			data-tracking="<?php echo esc_html( $item['tracking_number'] ); ?>" 
+			data-slug="<?php echo esc_html( $item['slug'] ); ?>" 
+			id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>"
+		>
+			<div class="tracking-item-title">
+				<div>Shipment <?php echo esc_html($index); ?></div>
+				<div>
+					<a 
+						href="#" 
+						class="edit-tracking"
+				    rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+					>
+						<?php _e( 'Edit', 'aftership' ); ?>
+					</a>
+					<a 
+						href="#" class="delete-tracking"
+				   	rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+					>
+						<?php _e( 'Delete', 'aftership' ); ?>
+					</a>
+				</div>
+			</div>
+			<div class="tracking-item-content">
+				<div>
+					<strong><?php echo esc_html( $courier['name'] ); ?></strong>
+				</div>
+				<div>
+					<a target="_blank" href="<?php echo esc_html( $link ); ?>">
+						<?php echo esc_html( $item['tracking_number'] ); ?>
+					</a>
+				</div>
+			</div>
+
 		</div>
 		<?php
 	}
@@ -120,25 +144,33 @@ class AfterShip_Actions {
 		$tracking_items = $this->get_tracking_items( $post->ID );
 
 		echo '<div id="tracking-items">';
-
+		$count = 1;
 		if ( count( $tracking_items ) > 0 ) {
-			foreach ( $tracking_items as $tracking_item ) {
-				$this->display_html_tracking_item_for_meta_box( $post->ID, $tracking_item );
+			foreach ( $tracking_items as $index => $tracking_item ) {
+				$this->display_html_tracking_item_for_meta_box( $post->ID, $tracking_item, $count );
+				$count++;
 			}
 		}
 
 		echo '</div>';
-
+		echo '<div class="show-form-btn-container" style="padding: 12px;">';
 		echo '<button class="button button-show-form" type="button">' . __( 'Add Tracking Number', 'aftership' ) . '</button>';
+		echo '</div>';
 		echo '<div id="aftership-tracking-form">';
-
-		echo '<p class="form-field aftership_tracking_slug_field"><label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label><br/><select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
-
+		echo '<p class="form-field aftership_tracking_slug_field">';
+		echo '<label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label>';
+		echo '<select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
 		foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
 			echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
 		}
+		echo '</select>';
+		echo '<a class="link-to-setting" href="options-general.php?page=aftership-setting-admin">Update carrier list</a>';
+		echo '</p>';
 
-		echo '</select></p>';
+		$options = array();
+		foreach($GLOBALS['AfterShip']->selected_couriers as $courier) {
+			$options[sanitize_title( $courier['slug'])] = $courier['name'];
+		}
 
 		woocommerce_wp_hidden_input(
 			array(
@@ -240,6 +272,7 @@ class AfterShip_Actions {
 		);
 
 		echo '<button class="button button-primary button-save-form">' . __( 'Save Tracking', 'aftership' ) . '</button>';
+		echo '<button class="button button-cancel">' . __( 'Cancel', 'aftership' ) . '</button>';
 
 		echo '</div>';
 
@@ -250,40 +283,42 @@ class AfterShip_Actions {
             $('p.aftership_tracking_ship_date_field').hide();
             $('p.aftership_tracking_destination_country_field').hide();
             $('p.aftership_tracking_state_field').hide();
-			jQuery( '#aftership_tracking_slug').change( function() {
-			    $('p.aftership_tracking_key_field').hide();
-                $('p.aftership_tracking_account_number_field').hide();
-                $('p.aftership_tracking_postal_code_field').hide();
-                $('p.aftership_tracking_ship_date_field').hide();
-                $('p.aftership_tracking_destination_country_field').hide();
-                $('p.aftership_tracking_state_field').hide();
-                var required_fields_mapping = {
-                    tracking_key: 'aftership_tracking_key',
-                    tracking_account_number: 'aftership_tracking_account_number',
-                    tracking_postal_code: 'aftership_tracking_postal_code',
-                    tracking_ship_date: 'aftership_tracking_ship_date',
-                    tracking_destination_country: 'aftership_tracking_destination_country',
-                    tracking_state: 'aftership_tracking_state',
-                };
-				var slug  = jQuery( '#aftership_tracking_slug' ).val();
-				if (!slug) return;
-				var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
-				var courier = couriers.find(item => item.slug === slug);
-				var required_fields = courier.required_fields;
-		        for (var field of required_fields) {
-                    var field_name = required_fields_mapping[field];
-                    $('p.' + field_name + '_field').show();
-		        }
-
-			} ).change();";
+						jQuery('#aftership_tracking_slug').change( function() {
+			    		$('p.aftership_tracking_key_field').hide();
+							$('p.aftership_tracking_account_number_field').hide();
+							$('p.aftership_tracking_postal_code_field').hide();
+							$('p.aftership_tracking_ship_date_field').hide();
+							$('p.aftership_tracking_destination_country_field').hide();
+							$('p.aftership_tracking_state_field').hide();
+							var required_fields_mapping = {
+								tracking_key: 'aftership_tracking_key',
+								tracking_account_number: 'aftership_tracking_account_number',
+								tracking_postal_code: 'aftership_tracking_postal_code',
+								tracking_ship_date: 'aftership_tracking_ship_date',
+								tracking_destination_country: 'aftership_tracking_destination_country',
+								tracking_state: 'aftership_tracking_state',
+							};
+							var slug  = jQuery( '#aftership_tracking_slug' ).val();
+							if (!slug) return;
+							var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
+							var courier = couriers.find(item => item.slug === slug);
+							var required_fields = courier.required_fields;
+							for (var field of required_fields) {
+								var field_name = required_fields_mapping[field];
+								$('p.' + field_name + '_field').show();
+							}
+						} ).change();";
 
 		if ( function_exists( 'wc_enqueue_js' ) ) {
 			wc_enqueue_js( $js );
 		} else {
 			WC()->add_inline_js( $js );
 		}
-
+		
+		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
 		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/js/meta-box.js' );
+		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
+		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.proto.min.js' );
 
 	}
 
@@ -327,8 +362,10 @@ class AfterShip_Actions {
 		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
 
-		foreach ( $tracking_items as $tracking_item ) {
-			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
+		$count = 1;
+		foreach ( $tracking_items as $index => $tracking_item ) {
+			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item, $count );
+			$count++;
 		}
 
 		die();
@@ -369,8 +406,6 @@ class AfterShip_Actions {
 			$order         = new WC_Order( $order_id );
 			$order->set_date_modified( current_time( 'mysql' ) );
 			$order->save();
-
-			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
 		}
 
 		die();

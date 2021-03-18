@@ -160,7 +160,7 @@ class AfterShip_Settings {
 		if ( isset( $this->options['couriers'] ) ) {
 			$couriers = explode( ',', $this->options['couriers'] );
 		}
-		echo '<select data-placeholder="Please select couriers" id="couriers_select" class="chosen-select " multiple style="width:100%">';
+		echo '<select data-placeholder="Please select couriers" id="couriers_select" multiple style="width:100%">';
 		echo '</select>';
 		echo '<input type="hidden" id="couriers" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
 

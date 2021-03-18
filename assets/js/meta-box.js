@@ -8,7 +8,10 @@ jQuery(function ($) {
 				.on('click', 'a.delete-tracking', this.delete_tracking)
 				.on('click', 'a.edit-tracking', this.edit_tracking)
 				.on('click', 'button.button-show-form', this.show_form)
-				.on('click', 'button.button-save-form', this.save_form);
+				.on('click', 'button.button-save-form', this.save_form)
+				.on('click', 'button.button-cancel', this.cancel_form)
+				.on('input','p input:visible', this.update_save_btn_status)
+				.on('change', 'select', this.update_save_btn_status)
 		},
 
 		// When a user enters a new tracking item
@@ -79,17 +82,9 @@ jQuery(function ($) {
 				$('#aftership-tracking-form').unblock();
 				if (response != '-1') {
 					$('#aftership-tracking-form').hide();
-					$('#woocommerce-aftership #tracking-items').append(response);
-					$('#woocommerce-aftership button.button-show-form').show();
-					$('#aftership_tracking_slug').selectedIndex = 0;
-					$('input#aftership_tracking_number').val('');
-					$('input#aftership_tracking_id').val('');
-					$('input#aftership_tracking_account_number').val('');
-					$('input#aftership_tracking_key').val('');
-					$('input#aftership_tracking_postal_code').val('');
-					$('input#aftership_tracking_ship_date').val('');
-					$('input#aftership_tracking_destination_country').val('');
-					$('input#aftership_tracking_state').val('');
+					$('#woocommerce-aftership .show-form-btn-container').show();
+					aftership_items.reset_form();
+					aftership_items.refresh_items();
 				}
 			});
 
@@ -99,7 +94,16 @@ jQuery(function ($) {
 		// Show the new tracking item form
 		show_form: function () {
 			$('#aftership-tracking-form').show();
-			$('#woocommerce-aftership button.button-show-form').hide();
+			$('#woocommerce-aftership .show-form-btn-container').hide();
+			aftership_items.update_save_btn_status();
+		},
+
+		cancel_form: function(e) {
+			e.preventDefault();
+			$('#aftership-tracking-form').hide();
+			$('#woocommerce-aftership .show-form-btn-container').show();
+			aftership_items.reset_form();
+			aftership_items.refresh_items();
 		},
 
 		// Delete a tracking item
@@ -125,7 +129,7 @@ jQuery(function ($) {
 			$.post(woocommerce_admin_meta_boxes.ajax_url, data, function (response) {
 				$('#woocommerce-aftership').unblock();
 				$('#tracking-item-' + tracking_id).remove();
-				$('#woocommerce-aftership button.button-show-form').hide();
+				$('#woocommerce-aftership .show-form-btn-container').hide();
 				$('#aftership-tracking-form').show();
 				if(!response.tracking_id) return;
 				$('p.aftership_tracking_key_field').hide();
@@ -161,7 +165,9 @@ jQuery(function ($) {
 					var field_value = response.additional_fields[additional_field_name];
 					$('input#' + field_name).val(field_value);
 				}
+				aftership_items.update_save_btn_status();
 			});
+
 
 			return false;
 		},
@@ -218,6 +224,37 @@ jQuery(function ($) {
 				}
 			});
 		},
+
+		reset_form: function() {
+			$('#aftership_tracking_slug').prop('selectedIndex', 0).change();
+			$('input#aftership_tracking_number').val('');
+			$('input#aftership_tracking_id').val('');
+			$('input#aftership_tracking_account_number').val('');
+			$('input#aftership_tracking_key').val('');
+			$('input#aftership_tracking_postal_code').val('');
+			$('input#aftership_tracking_ship_date').val('');
+			$('input#aftership_tracking_destination_country').val('');
+			$('input#aftership_tracking_state').val('');
+			$("#aftership_tracking_slug").trigger("chosen:updated");
+			return false;
+		},
+
+		update_save_btn_status() {
+			let disable_btn = false;
+			if(!$('#woocommerce-aftership select').val()) {
+				disable_btn = true;
+			}
+			$('#woocommerce-aftership input:visible').each((index,item) => {
+				if(!$(item).val()) {
+					disable_btn = true;
+				}
+			})
+			if(disable_btn) {
+				$('#woocommerce-aftership button.button-save-form').attr('disabled','disabled')
+			} else {
+				$('#woocommerce-aftership button.button-save-form').removeAttr('disabled')
+			}
+		}
 	}
 
 	aftership_items.init();
