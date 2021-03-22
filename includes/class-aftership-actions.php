@@ -271,7 +271,7 @@ class AfterShip_Actions {
 			)
 		);
 
-		echo '<button class="button button-primary button-save-form">' . __( 'Save Tracking', 'aftership' ) . '</button>';
+		echo '<button class="button button-primary button-save-form">' . __( 'Save', 'aftership' ) . '</button>';
 		echo '<button class="button button-cancel">' . __( 'Cancel', 'aftership' ) . '</button>';
 
 		echo '</div>';
