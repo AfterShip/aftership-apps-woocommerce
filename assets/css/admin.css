@@ -110,6 +110,7 @@
 	padding: 12px;
 	font-size: 14px;
 	line-height: 1.43;
+	word-break: break-all;
 }
 #woocommerce-aftership .tracking-item-content:first-child {
 	margin-bottom: 4px;
