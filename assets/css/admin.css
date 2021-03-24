@@ -1,19 +1,51 @@
 #woocommerce-aftership .inside {
-	padding: 12px;
+	padding: 0px;
 	margin: 0;
 }
 #woocommerce-aftership .button-show-form {
-	margin: 0;
+	width: 100%;
+	text-align: center;
+	border: solid 1px #cccccc;
+	background-color: #f7f7f7;
+	border-radius: 3px;
+	color: #555;
+	font-size: 13px;
+	line-height: 15px;
 }
+
+#woocommerce-aftership .button-cancel {
+  border-radius: 3px;
+  border: solid 1px #cccccc;
+  background-color: #f7f7f7;
+	color: #555;
+	font-size: 13px;
+	line-height: 15px;
+	margin-left: 12px;
+}
+
+#woocommerce-aftership a.link-to-setting {
+	display: block;
+	margin-top: 4px;
+	font-size: 12px;
+	line-height: 1.67;
+}
+
 #woocommerce-aftership #aftership-tracking-form {
+	padding: 12px;
 	display: none;
 }
 #woocommerce-aftership #aftership-tracking-form p.form-field {
 	margin-top: 0;
 }
+#woocommerce-aftership #aftership_tracking_slug  {
+	width: 100%;
+	max-width: 100%;
+}
+
 #woocommerce-aftership input {
 	width: 100%;
 }
+
 #woocommerce-aftership .preview_tracking_link {
 	display: none;
 	margin-bottom: 0;
@@ -28,9 +60,6 @@
 	color: #999;
 	padding: 10px;
 	margin: 0;
-}
-#woocommerce-aftership .meta a.delete-tracking {
-	color: #a00;
 }
 #woocommerce-aftership #tracking-items {
 	margin: 0;
@@ -52,4 +81,37 @@
 	border-width: 10px 10px 0 0;
 	border-style: solid;
 	border-color: #efefef transparent;
+}
+
+/* tracking item */
+
+#woocommerce-aftership .tracking-item {
+	padding: 16px 12px;
+	border-bottom: 1px solid #eeeeee;
+}
+.tracking-item a {
+	text-decoration: none;
+}
+#woocommerce-aftership .tracking-item-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 12px;
+	line-height: normal;
+	color: #5f5f5f;
+	margin-bottom: 8px;
+}
+#woocommerce-aftership .tracking-item-title a.delete-tracking {
+	color: #a00;
+	margin-left: 12px;
+}
+#woocommerce-aftership .tracking-item-content {
+	background-color: #f6f6f6;
+	padding: 12px;
+	font-size: 14px;
+	line-height: 1.43;
+	word-break: break-all;
+}
+#woocommerce-aftership .tracking-item-content:first-child {
+	margin-bottom: 4px;
 }

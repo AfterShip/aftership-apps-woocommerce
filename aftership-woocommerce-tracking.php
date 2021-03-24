@@ -118,7 +118,7 @@ if ( is_woocommerce_active() ) {
 				$this->plugin_url  = untrailingslashit( plugin_dir_url( __FILE__ ) );
 
 				$this->options           = get_option( 'aftership_option_name' );
-				$this->couriers          = json_decode( file_get_contents( $this->plugin_url . '/assets/js/couriers.json' ), true );
+				$this->couriers          = json_decode( file_get_contents( $this->plugin_dir . '/assets/js/couriers.json' ), true );
 				$this->selected_couriers = $this->get_selected_couriers();
 				$this->use_track_button  = isset( $this->options['use_track_button'] ) ? $this->options['use_track_button'] : $this->use_track_button;
 				$this->custom_domain     = isset( $this->options['custom_domain'] ) ? $this->options['custom_domain'] : $this->custom_domain;
