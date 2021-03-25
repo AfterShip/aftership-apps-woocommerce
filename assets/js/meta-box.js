@@ -10,8 +10,8 @@ jQuery(function ($) {
 				.on('click', 'button.button-show-form', this.show_form)
 				.on('click', 'button.button-save-form', this.save_form)
 				.on('click', 'button.button-cancel', this.cancel_form)
-				.on('input','p input:visible', this.update_save_btn_status)
-				.on('change', 'select', this.update_save_btn_status)
+				.on('input','p input:visible', this.handle_input_change)
+				.on('change', 'select', this.handle_input_change)
 		},
 
 		// When a user enters a new tracking item
@@ -37,30 +37,18 @@ jQuery(function ($) {
 			$('#woocommerce-aftership div.tracking-item').each(function () {
 				var slug = $('#aftership_tracking_slug').val();
 				var tracking_number = $('input#aftership_tracking_number').val();
-				if ($(this).data('tracking') === tracking_number && $(this).data('slug') === slug ) {
+				// convert to string
+				// unexpected： data-tracking="123" => typeof data('tracking') output number
+				if ($(this).data('tracking')+'' === tracking_number && $(this).data('slug')+'' === slug ) {
 					exist = true;
+					return false;
 				}
 			});
 
 			if (exist) {
-				$('#aftership-tracking-form').block({
-					message: "Tracking already added !",
-					overlayCSS: {
-						background: '#fff',
-						opacity: 0.6,
-					}
-				});
-				setTimeout($('#aftership-tracking-form').unblock(), 2000);
+				aftership_items.show_error()
 				return false;
 			}
-
-			$('#aftership-tracking-form').block({
-				message: null,
-				overlayCSS: {
-					background: '#fff',
-					opacity: 0.6
-				}
-			});
 
 			var data = {
 				action: 'aftership_save_form',
@@ -95,7 +83,6 @@ jQuery(function ($) {
 		show_form: function () {
 			$('#aftership-tracking-form').show();
 			$('#woocommerce-aftership .show-form-btn-container').hide();
-			aftership_items.update_save_btn_status();
 		},
 
 		cancel_form: function(e) {
@@ -104,10 +91,21 @@ jQuery(function ($) {
 			$('#woocommerce-aftership .show-form-btn-container').show();
 			aftership_items.reset_form();
 			aftership_items.refresh_items();
+			aftership_items.reset_error();
 		},
 
 		// Delete a tracking item
 		edit_tracking: function () {
+
+			// if form is open, alert user will reset current form
+			if($("#aftership-tracking-form").is(':visible')) {
+				if(window.confirm('If you edit this shipment, all unsaved changes will be lost. Are you sure you want to continue?')) {
+					aftership_items.refresh_items();
+					aftership_items.reset_form();
+				} else {
+					return false;
+				}
+			}
 
 			var tracking_id = $(this).attr('rel');
 
@@ -165,7 +163,7 @@ jQuery(function ($) {
 					var field_value = response.additional_fields[additional_field_name];
 					$('input#' + field_name).val(field_value);
 				}
-				aftership_items.update_save_btn_status();
+				aftership_items.handle_input_change();
 			});
 
 
@@ -239,7 +237,7 @@ jQuery(function ($) {
 			return false;
 		},
 
-		update_save_btn_status() {
+		handle_input_change() {
 			let disable_btn = false;
 			if(!$('#woocommerce-aftership select').val()) {
 				disable_btn = true;
@@ -253,6 +251,24 @@ jQuery(function ($) {
 				$('#woocommerce-aftership button.button-save-form').attr('disabled','disabled')
 			} else {
 				$('#woocommerce-aftership button.button-save-form').removeAttr('disabled')
+			}
+			aftership_items.reset_error();
+		},
+
+		show_error() {
+			let input = $('input#aftership_tracking_number').get(0);
+			if(input.checkValidity() === true) {
+				input.setCustomValidity('This shipment has already been added.');
+				$(input).after($('<div>This shipment has already been added.</div>'));
+			}
+			// input.reportValidity();
+		},
+
+		reset_error() {
+			let input = $('input#aftership_tracking_number').get(0);
+			if(input.checkValidity() === false) {
+				input.setCustomValidity('');
+				$(input).next().remove();
 			}
 		}
 	}
