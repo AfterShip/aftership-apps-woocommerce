@@ -14,7 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+/***
+ * Class AfterShip_API_V4_Orders
+ */
 class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
+
 
 	/**
 	 * Base router path.
@@ -46,13 +50,54 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 		return $routes;
 	}
 
+
+	/**
+	 * Get orders
+	 *
+	 * @param string $fields fields need for return.
+	 * @param array  $filter filter for query.
+	 * @param string $status order status filter.
+	 * @param int    $page query pages.
+	 *
+	 * @return array
+	 * @throws Exception  May throw a exception.
+	 */
+	public function get_orders( $fields = null, $filter = array(), $status = null, $page = 1 ) {
+		if ( ! empty( $status ) ) {
+			$filter['status'] = $status;
+		}
+
+		$filter['page'] = $page;
+
+		$query = $this->query_orders( $filter );
+
+		$pagination = array(
+			'page'  => $query->query['paged'],
+			'limit' => intval( $query->query['posts_per_page'] ),
+			'total' => intval( $query->found_posts ),
+		);
+
+		$orders = array();
+		foreach ( $query->posts as $order_id ) {
+			if ( ! $this->is_readable( $order_id ) ) {
+				continue;
+			}
+			$orders[] = $this->get_order( $order_id, $fields );
+		}
+
+		return array(
+			'orders'     => $orders,
+			'pagination' => $pagination,
+		);
+	}
+
 	/**
 	 * Get single order by id.
 	 *
 	 * @param int    $id order id.
 	 * @param string $fields order fields.
 	 * @return array|int|WP_Error
-	 * @throws Exception
+	 * @throws Exception   May throw a exception.
 	 */
 	public function get_order( $id, $fields = null ) {
 		$weight_unit = get_option( 'woocommerce_weight_unit' );
@@ -224,7 +269,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 				);
 			}
 
-			// 兼容 woocommerce 官方的 tracking 插件
+			// 兼容 wooCommerce 官方的 tracking 插件.
 			$woocommerce_tracking_arr = order_post_meta_getter( $order, 'wc_shipment_tracking_items' );
 			if ( empty( $aftership_tracking_number ) && ! empty( $woocommerce_tracking_arr ) ) {
 				foreach ( $woocommerce_tracking_arr as $trackingKey => $trackingVal ) {
@@ -248,7 +293,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 		$tracking_items          = aftership()->actions->get_tracking_items_for_api( $id );
 		$order_data['trackings'] = $this->uniquify_tracking_items( array_merge( $trackings, $tracking_items ) );
 
-		return array( 'order' => apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server ) );
+		return apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server );
 	}
 
 
@@ -278,7 +323,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 	/**
 	 * 从wc ShipmentTracking 插件获取 Postalcode  - postnl
 	 *
-	 * @param $tracking_items
+	 * @param array $tracking_items Shipment tracking's tracking items.
 	 * @return array
 	 */
 	private function getTrackingInfoByShipmentTracking( $tracking_items ) {
@@ -286,7 +331,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 			return array();
 		}
 
-		// 获取 postnl  Postalcode
+		// 获取 postnl  Postalcode.
 		$urlArr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
 
 		if ( $urlArr === false ) {
@@ -321,29 +366,34 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 	/**
 	 * Helper method to get order post objects
 	 *
-	 * @param array $args request arguments for filtering query
+	 * @param array $args request arguments for filtering query.
 	 *
 	 * @return WP_Query
 	 * @since 2.1
 	 */
 	private function query_orders( $args ) {
 
+		/**
+		 * Get wooCommerce version number.
+		 *
+		 * @return string|null
+		 */
 		function aftership_wpbo_get_woo_version_number() {
-			// If get_plugins() isn't available, require it
+			// If get_plugins() isn't available, require it.
 			if ( ! function_exists( 'get_plugins' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 			}
 
-			// Create the plugins folder and file variables
+			// Create the plugins folder and file variables.
 			$plugin_folder = get_plugins( '/' . 'woocommerce' );
 			$plugin_file   = 'woocommerce.php';
 
-			// If the plugin version number is set, return it
+			// If the plugin version number is set, return it.
 			if ( isset( $plugin_folder[ $plugin_file ]['Version'] ) ) {
 				return $plugin_folder[ $plugin_file ]['Version'];
 
 			} else {
-				// Otherwise return null
+				// Otherwise return null.
 				return null;
 			}
 		}
@@ -351,7 +401,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 		$woo_version = aftership_wpbo_get_woo_version_number();
 
 		if ( $woo_version >= 2.2 ) {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -359,7 +409,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 				'post_status' => array_keys( wc_get_order_statuses() ),
 			);
 		} else {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -367,7 +417,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 			);
 		}
 
-		// add status argument
+		// add status argument.
 		if ( ! empty( $args['status'] ) ) {
 
 			$statuses = explode( ',', $args['status'] );
