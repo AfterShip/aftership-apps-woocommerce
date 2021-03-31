@@ -45,6 +45,15 @@
 #woocommerce-aftership input {
 	width: 100%;
 }
+#woocommerce-aftership input:invalid {
+	border-color: #aa0000;
+	color: #aa0000;
+}
+#woocommerce-aftership input:invalid~div {
+	float: left;
+	color: #aa0000;
+}
+
 
 #woocommerce-aftership .preview_tracking_link {
 	display: none;
