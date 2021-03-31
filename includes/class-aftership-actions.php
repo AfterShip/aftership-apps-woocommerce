@@ -87,18 +87,18 @@ class AfterShip_Actions {
 			id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>"
 		>
 			<div class="tracking-item-title">
-				<div>Shipment <?php echo esc_html($index); ?></div>
+				<div>Shipment <?php echo esc_html( $index ); ?></div>
 				<div>
 					<a 
 						href="#" 
 						class="edit-tracking"
-				    rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+					rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
 						<?php _e( 'Edit', 'aftership' ); ?>
 					</a>
 					<a 
 						href="#" class="delete-tracking"
-				   	rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+					   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
 						<?php _e( 'Delete', 'aftership' ); ?>
 					</a>
@@ -168,8 +168,8 @@ class AfterShip_Actions {
 		echo '</p>';
 
 		$options = array();
-		foreach($GLOBALS['AfterShip']->selected_couriers as $courier) {
-			$options[sanitize_title( $courier['slug'])] = $courier['name'];
+		foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
+			$options[ sanitize_title( $courier['slug'] ) ] = $courier['name'];
 		}
 
 		woocommerce_wp_hidden_input(
@@ -316,7 +316,7 @@ class AfterShip_Actions {
 		} else {
 			WC()->add_inline_js( $js );
 		}
-		
+
 		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
 		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/js/meta-box.js' );
 		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
