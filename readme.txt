@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: ecommerce, shipping, shipment, order, ups, usps, fedex, dhl, tnt, dpd, post, carrier, courier, woocommerce, tracking number, aftership, package tracking,  woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 5.6
-Stable tag: 1.10.4
+Stable tag: 1.11.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
