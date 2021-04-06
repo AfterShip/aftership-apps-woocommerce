@@ -155,6 +155,26 @@ if ( is_woocommerce_active() ) {
 				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
+
+				register_activation_hook( __FILE__, array( $this, 'install' ) );
+			}
+
+			/**
+			 * Add manage_aftership cap for administrator
+			 * Add this to allow customers to more finely configure the permissions of the aftership plugin.
+			 */
+			public function install() {
+				global $wp_roles;
+
+				if ( class_exists( 'WP_Roles' ) ) {
+					if ( ! isset( $wp_roles ) ) {
+						$wp_roles = new WP_Roles();
+					}
+				}
+
+				if ( is_object( $wp_roles ) ) {
+					$wp_roles->add_cap( 'administrator', 'manage_aftership' );
+				}
 			}
 
 
