@@ -80,23 +80,23 @@ class AfterShip_Actions {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
 		$link    = $this->generate_tracking_page_link( $item );
 		?>
-		<div 
-			class="tracking-item" 
-			data-tracking="<?php echo esc_html( $item['tracking_number'] ); ?>" 
-			data-slug="<?php echo esc_html( $item['slug'] ); ?>" 
+		<div
+			class="tracking-item"
+			data-tracking="<?php echo esc_html( $item['tracking_number'] ); ?>"
+			data-slug="<?php echo esc_html( $item['slug'] ); ?>"
 			id="tracking-item-<?php echo esc_attr( $item['tracking_id'] ); ?>"
 		>
 			<div class="tracking-item-title">
 				<div>Shipment <?php echo esc_html( $index ); ?></div>
 				<div>
-					<a 
-						href="#" 
+					<a
+						href="#"
 						class="edit-tracking"
 					rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
 						<?php _e( 'Edit', 'aftership' ); ?>
 					</a>
-					<a 
+					<a
 						href="#" class="delete-tracking"
 					   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
@@ -773,11 +773,32 @@ class AfterShip_Actions {
 	}
 
 	/**
+	 * Add manage_aftership cap for administrator
+	 * Add this to allow customers to more finely configure the permissions of the aftership plugin.
+	 */
+	public function add_permission_cap() {
+		global $wp_roles;
+
+		if ( class_exists( 'WP_Roles' ) ) {
+			if ( ! isset( $wp_roles ) ) {
+				$wp_roles = new WP_Roles();
+			}
+		}
+
+		if ( is_object( $wp_roles ) ) {
+			$wp_roles->add_cap( 'administrator', 'manage_aftership' );
+		}
+	}
+
+	/**
 	 * Display the API key info for a user
 	 *
 	 * @param WP_User $user
 	 */
 	public function add_api_key_field( $user ) {
+
+		$this->add_permission_cap();
+
 		if ( ! current_user_can( 'manage_aftership' ) ) {
 			return;
 		}
