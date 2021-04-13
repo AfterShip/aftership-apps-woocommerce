@@ -1,11 +1,5 @@
 [
 	{
-		"slug": "007ex",
-		"name": "007EX",
-		"other_name": "",
-		"required_fields": []
-	},
-	{
 		"slug": "17postservice",
 		"name": "17 Post Service",
 		"other_name": "17PostService",
@@ -134,12 +128,6 @@
 		"required_fields": []
 	},
 	{
-		"slug": "aersure",
-		"name": "Aersure",
-		"other_name": "",
-		"required_fields": []
-	},
-	{
 		"slug": "agility",
 		"name": "Agility",
 		"other_name": null,
@@ -147,7 +135,7 @@
 	},
 	{
 		"slug": "air-canada",
-		"name": "Air Canada",
+		"name": "Rivo",
 		"other_name": null,
 		"required_fields": []
 	},
@@ -220,8 +208,14 @@
 		"required_fields": []
 	},
 	{
+		"slug": "amazon-email-push",
+		"name": "Amazon",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "amazon-fba-swiship",
-		"name": "Amazon FBA Swiship",
+		"name": "Swiship UK",
 		"other_name": null,
 		"required_fields": []
 	},
@@ -234,8 +228,22 @@
 		]
 	},
 	{
+		"slug": "amazon-order",
+		"name": "Amazon order",
+		"other_name": null,
+		"required_fields": [
+			"tracking_key"
+		]
+	},
+	{
 		"slug": "amazon-uk-api",
 		"name": "Amazon Shipping",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
+		"slug": "amstan",
+		"name": "Amstan Logistics",
 		"other_name": null,
 		"required_fields": []
 	},
@@ -264,21 +272,15 @@
 		"required_fields": []
 	},
 	{
-		"slug": "anserx-logistics",
-		"name": "ANSERX Logistics",
-		"other_name": null,
-		"required_fields": []
-	},
-	{
-		"slug": "antron",
-		"name": "Antron Express",
-		"other_name": "",
-		"required_fields": []
-	},
-	{
 		"slug": "ao-courier",
 		"name": "AO Logistics",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "ao-deutschland",
+		"name": "AO Deutschland Ltd.",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -379,7 +381,7 @@
 	},
 	{
 		"slug": "asm",
-		"name": "ASM",
+		"name": "ASM(GLS Spain)",
 		"other_name": "Asm-Red",
 		"required_fields": [
 			"tracking_postal_code"
@@ -402,14 +404,6 @@
 		"name": "Australia Post API",
 		"other_name": "",
 		"required_fields": []
-	},
-	{
-		"slug": "australia-post-sftp",
-		"name": "Australia Post Sftp",
-		"other_name": "AusPostSftp",
-		"required_fields": [
-			"tracking_account_number"
-		]
 	},
 	{
 		"slug": "austrian-post",
@@ -437,6 +431,12 @@
 			"tracking_postal_code",
 			"tracking_destination_country"
 		]
+	},
+	{
+		"slug": "barqexp",
+		"name": "Barq",
+		"other_name": "",
+		"required_fields": []
 	},
 	{
 		"slug": "belpost",
@@ -489,6 +489,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "blinklastmile",
+		"name": "Blink",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "bluecare",
 		"name": "Bluecare Express Ltd",
 		"other_name": "",
@@ -509,9 +515,21 @@
 		]
 	},
 	{
+		"slug": "bluex",
+		"name": "Blue Express",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "bneed",
 		"name": "Bneed",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "bombinoexp",
+		"name": "Bombino Express Pvt Ltd",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -586,6 +604,12 @@
 		"slug": "brt-it",
 		"name": "BRT Bartolini",
 		"other_name": "BRT Corriere Espresso, DPD Italy",
+		"required_fields": []
+	},
+	{
+		"slug": "brt-it-api",
+		"name": "BRT Bartolini API",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -972,9 +996,7 @@
 		"slug": "courant-plus",
 		"name": "Courant Plus",
 		"other_name": null,
-		"required_fields": [
-			"tracking_account_number"
-		]
+		"required_fields": []
 	},
 	{
 		"slug": "courex",
@@ -1013,9 +1035,21 @@
 		"required_fields": []
 	},
 	{
+		"slug": "cpex",
+		"name": "Captain Express International",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "croshot",
 		"name": "Croshot",
 		"other_name": null,
+		"required_fields": []
+	},
+	{
+		"slug": "cse",
+		"name": "CSE",
+		"other_name": "",
 		"required_fields": []
 	},
 	{
@@ -1219,9 +1253,9 @@
 		"required_fields": []
 	},
 	{
-		"slug": "dhl-global-forwarding",
-		"name": "DHL Global Forwarding",
-		"other_name": "DHL Logistics",
+		"slug": "dhl-global-forwarding-api",
+		"name": "DHL Global Forwarding API",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -1394,6 +1428,12 @@
 		"slug": "dpd-hk",
 		"name": "DPD HK",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "dpd-hungary",
+		"name": "DPD Hungary",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -1625,6 +1665,14 @@
 		"required_fields": []
 	},
 	{
+		"slug": "envialia-reference",
+		"name": "Envialia Reference",
+		"other_name": null,
+		"required_fields": [
+			"tracking_postal_code"
+		]
+	},
+	{
 		"slug": "ep-box",
 		"name": "EP-Box",
 		"other_name": "",
@@ -1849,6 +1897,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "flashexpress",
+		"name": "Flash Express",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "flytexpress",
 		"name": "Flyt Express",
 		"other_name": "飞特物流",
@@ -1873,9 +1927,35 @@
 		"required_fields": []
 	},
 	{
+		"slug": "freightquote",
+		"name": "Freightquote by C.H. Robinson",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "freterapido",
 		"name": "Frete Rápido",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "furdeco",
+		"name": "Furdeco",
+		"other_name": null,
+		"required_fields": [
+			"tracking_postal_code"
+		]
+	},
+	{
+		"slug": "fxtran",
+		"name": "Falcon Express",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
+		"slug": "gangbao",
+		"name": "GANGBAO Supplychain",
+		"other_name": "港宝供应链",
 		"required_fields": []
 	},
 	{
@@ -1903,6 +1983,14 @@
 		"required_fields": []
 	},
 	{
+		"slug": "gel-express",
+		"name": "Gel Express Logistik",
+		"other_name": "",
+		"required_fields": [
+			"tracking_postal_code"
+		]
+	},
+	{
 		"slug": "gemworldwide",
 		"name": "GEM Worldwide",
 		"other_name": "",
@@ -1927,6 +2015,12 @@
 		"required_fields": [
 			"tracking_key"
 		]
+	},
+	{
+		"slug": "geswl",
+		"name": "GESWL Express",
+		"other_name": "上海翼速国际物流",
+		"required_fields": []
 	},
 	{
 		"slug": "ghn",
@@ -2053,6 +2147,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "hanjin",
+		"name": "HanJin",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "hct-logistics",
 		"name": "HCT LOGISTICS CO.LTD.",
 		"other_name": "",
@@ -2071,8 +2171,20 @@
 		"required_fields": []
 	},
 	{
+		"slug": "hellmann",
+		"name": "Hellmann Worldwide Logistics, Inc",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "helthjem",
 		"name": "Helthjem",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
+		"slug": "heppner",
+		"name": "Heppner Internationale Spedition GmbH & Co.",
 		"other_name": null,
 		"required_fields": []
 	},
@@ -2083,6 +2195,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "hermes-2mann-handling",
+		"name": "Hermes Einrichtungs Service GmbH & Co. KG",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "hermes-de",
 		"name": "Hermes Germany",
 		"other_name": "myhermes.de, Hermes Logistik Gruppe Deutschland",
@@ -2090,7 +2208,7 @@
 	},
 	{
 		"slug": "hermes-it",
-		"name": "Hermes Italy",
+		"name": "HR Parcel",
 		"other_name": "",
 		"required_fields": []
 	},
@@ -2104,6 +2222,12 @@
 		"slug": "hipshipper",
 		"name": "Hipshipper",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "hkd",
+		"name": "Qingdao HKD International Logistics",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -2215,6 +2339,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "indopaket",
+		"name": "INDOPAKET",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "inexpost",
 		"name": "Inexpost",
 		"other_name": "",
@@ -2224,6 +2354,12 @@
 		"slug": "inpost-paczkomaty",
 		"name": "InPost Paczkomaty",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "instabox-webhook",
+		"name": "Instabox",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -2396,6 +2532,12 @@
 		"slug": "jocom",
 		"name": "Jocom",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "js-express",
+		"name": "JS EXPRESS",
+		"other_name": "急速物流",
 		"required_fields": []
 	},
 	{
@@ -2585,6 +2727,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "liccardi-express",
+		"name": "LICCARDI EXPRESS COURIER",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "liefery",
 		"name": "liefery",
 		"other_name": "",
@@ -2759,6 +2907,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "mbw",
+		"name": "MBW Courier Inc.",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "megasave",
 		"name": "Megasave",
 		"other_name": "",
@@ -2837,6 +2991,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "morning-express",
+		"name": "Morning Express",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "mrw-spain",
 		"name": "MRW",
 		"other_name": "MRW Spain",
@@ -2907,6 +3067,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "nationex",
+		"name": "Nationex",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "nationwide-my",
 		"name": "Nationwide Express",
 		"other_name": "nationwide2u",
@@ -2922,6 +3088,12 @@
 		"slug": "neway",
 		"name": "Neway Transport",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "neweggexpress",
+		"name": "Newegg Express",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -2978,12 +3150,6 @@
 		"slug": "ninjavan-my",
 		"name": "Ninja Van Malaysia",
 		"other_name": "NinjaVan MY",
-		"required_fields": []
-	},
-	{
-		"slug": "ninjavan-philippines",
-		"name": "Ninja Van Philippines",
-		"other_name": "",
 		"required_fields": []
 	},
 	{
@@ -3257,6 +3423,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "pcfcorp",
+		"name": "PCF Final Mile",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "pfcexpress",
 		"name": "PFC Express",
 		"other_name": "PFCu7687u5bb6u7269u6d41",
@@ -3334,6 +3506,12 @@
 		"slug": "poczta-polska",
 		"name": "Poczta Polska",
 		"other_name": "Poland Post",
+		"required_fields": []
+	},
+	{
+		"slug": "polarspeed",
+		"name": "PolarSpeed Inc",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -3444,6 +3622,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "ppl",
+		"name": "Professional Parcel Logistics",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "primamulticipta",
 		"name": "PT Prima Multi Cipta",
 		"other_name": "",
@@ -3453,6 +3637,12 @@
 		"slug": "professional-couriers",
 		"name": "Professional Couriers",
 		"other_name": "TPC India",
+		"required_fields": []
+	},
+	{
+		"slug": "promeddelivery",
+		"name": "ProMed Delivery, Inc.",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -3534,6 +3724,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "reimaginedelivery",
+		"name": "X",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "relaiscolis",
 		"name": "Relais Colis",
 		"other_name": "",
@@ -3572,9 +3768,9 @@
 		"required_fields": []
 	},
 	{
-		"slug": "royal-mail",
-		"name": "Royal Mail",
-		"other_name": "Royal Mail United Kingdom",
+		"slug": "royalshipments",
+		"name": "RoyalShipments",
+		"other_name": "",
 		"required_fields": []
 	},
 	{
@@ -3587,6 +3783,12 @@
 		"slug": "rpx",
 		"name": "RPX Indonesia",
 		"other_name": "Repex Perdana International",
+		"required_fields": []
+	},
+	{
+		"slug": "rpxlogistics",
+		"name": "RPX Logistics",
+		"other_name": "",
 		"required_fields": []
 	},
 	{
@@ -3617,6 +3819,12 @@
 		"slug": "rzyexpress",
 		"name": "RZY Express",
 		"other_name": "RZYExpress",
+		"required_fields": []
+	},
+	{
+		"slug": "saee",
+		"name": "One Saar for IT",
+		"other_name": "",
 		"required_fields": []
 	},
 	{
@@ -3665,6 +3873,12 @@
 		"slug": "scudex-express",
 		"name": "Scudex Express",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "sdh-scm",
+		"name": "闪电猴",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -3723,7 +3937,7 @@
 	},
 	{
 		"slug": "sfb2c",
-		"name": "S.F International",
+		"name": "SF International",
 		"other_name": "順豐國際",
 		"required_fields": []
 	},
@@ -3741,13 +3955,19 @@
 	},
 	{
 		"slug": "sfplus-webhook",
-		"name": "SF Plus",
+		"name": "Zeek",
 		"other_name": "Kin Shun Information Technology Limited",
 		"required_fields": []
 	},
 	{
 		"slug": "ship-it-asia",
 		"name": "Ship It Asia",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "shipa",
+		"name": "SHIPA",
 		"other_name": "",
 		"required_fields": []
 	},
@@ -3761,6 +3981,12 @@
 		"slug": "shippit",
 		"name": "Shippit",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "shipter",
+		"name": "SHIPTER",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -3809,6 +4035,12 @@
 		"slug": "singapore-speedpost",
 		"name": "Singapore Speedpost",
 		"other_name": "Singapore EMS",
+		"required_fields": []
+	},
+	{
+		"slug": "sinotrans",
+		"name": "Sinotrans",
+		"other_name": "中外运跨境电商物流有限公司",
 		"required_fields": []
 	},
 	{
@@ -3866,12 +4098,6 @@
 		"required_fields": []
 	},
 	{
-		"slug": "skypostal",
-		"name": "Asendia HK – Premium Service (LATAM)",
-		"other_name": "SkyPostal (Postrac)",
-		"required_fields": []
-	},
-	{
 		"slug": "smg-express",
 		"name": "SMG Direct",
 		"other_name": "",
@@ -3914,6 +4140,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "spanish-seur-ftp",
+		"name": "Spanish Seur",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "specialisedfreight-za",
 		"name": "Specialised Freight",
 		"other_name": "SFS",
@@ -3935,6 +4167,12 @@
 		"slug": "speedee",
 		"name": "Spee-Dee Delivery",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "speedex",
+		"name": "SPEEDEX",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4000,9 +4238,21 @@
 		"required_fields": []
 	},
 	{
+		"slug": "star-track-next-flight",
+		"name": "Star Track Next Flight",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "starken",
 		"name": "STARKEN",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "stepforwardfs",
+		"name": "STEP FORWARD FREIGHT SERVICE CO LTD",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4120,6 +4370,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "tecor",
+		"name": "Tecor Transport",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "tfm",
 		"name": "TFM Xpress",
 		"other_name": "",
@@ -4137,6 +4393,12 @@
 		"slug": "tgx",
 		"name": "Kerry Express Hong Kong",
 		"other_name": "Top Gun Express, 精英速運, TGX",
+		"required_fields": []
+	},
+	{
+		"slug": "thabit-logistics",
+		"name": "Thabit Logistics",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4175,6 +4437,18 @@
 		"slug": "tipsa",
 		"name": "TIPSA",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "tipsa-api",
+		"name": "Tipsa API",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
+		"slug": "tipsa-ref",
+		"name": "Tipsa Reference",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4272,8 +4546,7 @@
 		"name": "Total Express",
 		"other_name": "",
 		"required_fields": [
-			"tracking_account_number",
-			"tracking_key"
+			"tracking_account_number"
 		]
 	},
 	{
@@ -4289,8 +4562,14 @@
 		"required_fields": []
 	},
 	{
+		"slug": "trackon",
+		"name": "Trackon Couriers Pvt. Ltd",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "trakpak",
-		"name": "TrakPak",
+		"name": "P2P TrakPak",
 		"other_name": "bpost international P2P Mailing Trak Pak",
 		"required_fields": []
 	},
@@ -4307,6 +4586,12 @@
 		"required_fields": [
 			"tracking_postal_code"
 		]
+	},
+	{
+		"slug": "trumpcard",
+		"name": "TRUMPCARD LLC",
+		"other_name": null,
+		"required_fields": []
 	},
 	{
 		"slug": "trunkrs-webhook",
@@ -4368,6 +4653,15 @@
 		"required_fields": []
 	},
 	{
+		"slug": "ups-api",
+		"name": "UPS API",
+		"other_name": "United Parcel Service",
+		"required_fields": [
+			"tracking_origin_country",
+			"tracking_postal_code"
+		]
+	},
+	{
 		"slug": "ups-freight",
 		"name": "UPS Freight",
 		"other_name": "UPS LTL and Truckload",
@@ -4377,6 +4671,12 @@
 		"slug": "ups-mi",
 		"name": "UPS Mail Innovations",
 		"other_name": "UPS MI",
+		"required_fields": []
+	},
+	{
+		"slug": "ups-reference",
+		"name": "UPS Reference",
+		"other_name": "United Parcel Service",
 		"required_fields": []
 	},
 	{
@@ -4404,6 +4704,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "usps-api",
+		"name": "USPS API",
+		"other_name": null,
+		"required_fields": []
+	},
+	{
 		"slug": "usps-webhook",
 		"name": "USPS Informed Visibility - Webhook",
 		"other_name": "USPS IV",
@@ -4413,6 +4719,12 @@
 		"slug": "via-express",
 		"name": "Viaxpress",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "viaeurope",
+		"name": "ViaEurope",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4448,6 +4760,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "vox",
+		"name": "VOX SOLUCION EMPRESARIAL SRL",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "wahana",
 		"name": "Wahana",
 		"other_name": "Wahana Indonesia",
@@ -4479,7 +4797,7 @@
 	},
 	{
 		"slug": "wepost",
-		"name": "WePost Logistics",
+		"name": "WePost Sdn Bhd",
 		"other_name": "",
 		"required_fields": []
 	},
@@ -4529,6 +4847,12 @@
 		"slug": "wndirect",
 		"name": "wnDirect",
 		"other_name": "",
+		"required_fields": []
+	},
+	{
+		"slug": "xde-webhook",
+		"name": "Ximex Delivery Express",
+		"other_name": null,
 		"required_fields": []
 	},
 	{
@@ -4620,6 +4944,12 @@
 		"required_fields": []
 	},
 	{
+		"slug": "yingnuo-logistics",
+		"name": "英诺供应链",
+		"other_name": "",
+		"required_fields": []
+	},
+	{
 		"slug": "yodel",
 		"name": "Yodel Domestic",
 		"other_name": "Home Delivery Network Limited (HDNL)",
@@ -4651,7 +4981,7 @@
 	},
 	{
 		"slug": "yunexpress",
-		"name": "Yun Express",
+		"name": "YunExpress",
 		"other_name": "云途物流",
 		"required_fields": []
 	},
