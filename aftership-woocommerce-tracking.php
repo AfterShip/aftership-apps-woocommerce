@@ -3,7 +3,7 @@
 	Plugin Name: Ecommerce Order Tracking and Shipment Notifications - AfterShip
 	Plugin URI: http://aftership.com/
 	Description: Effortless order tracking synced from all shipping providers for your ecommerce customers. Include a branded tracking page and automated delivery notifications.
-	Version: 1.11.1
+	Version: 1.11.2
 	Author: AfterShip
 	Author URI: http://aftership.com
 
