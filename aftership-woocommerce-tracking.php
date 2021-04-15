@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.11.1' );
+define( 'AFTERSHIP_VERSION', '1.11.2' );
 
 if ( is_woocommerce_active() ) {
 
