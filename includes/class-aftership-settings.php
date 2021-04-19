@@ -1,25 +1,32 @@
 <?php
-/**
- * AfterShip Admin
- *
- * Handles AfterShip-Admin endpoint requests
- *
- * @author      AfterShip
- * @category    Admin
- * @package     AfterShip
- * @since       1.0
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit;
 }
 
+/**
+ * AfterShip Settings
+ */
 class AfterShip_Settings {
 
 	/**
 	 * Holds the values to be used in the fields callbacks
+	 *
+	 * @var array $options aftership options.
 	 */
 	private $options;
+
+	/**
+	 * DOM id for courier select element.
+	 *
+	 * @var string $dom_id_courier_select
+	 */
+	private $dom_id_courier_select = 'aftership_couriers_select';
+	/**
+	 * DOM id for hidden input couriers.
+	 *
+	 * @var string $dom_id_couriers
+	 */
+	private $dom_id_couriers = 'aftership_couriers';
 
 	/**
 	 * Start up
@@ -32,10 +39,16 @@ class AfterShip_Settings {
 	}
 
 
+	/**
+	 * Inject css
+	 */
 	public function admin_styles() {
 		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
 	}
 
+	/**
+	 * Inject javascripts
+	 */
 	public function library_scripts() {
 		$plugin_url = aftership()->plugin_url;
 		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
@@ -49,7 +62,7 @@ class AfterShip_Settings {
 	 * Add options page
 	 */
 	public function add_plugin_page() {
-		// This page will be under "Settings"
+		// This page will be under "Settings".
 		add_options_page(
 			'AfterShip Settings Admin',
 			'AfterShip',
@@ -63,7 +76,7 @@ class AfterShip_Settings {
 	 * Options page callback
 	 */
 	public function create_admin_page() {
-		// Set class property
+		// Set class property.
 		$this->options = get_option( 'aftership_option_name' );
 		?>
 		<div class="wrap">
@@ -71,7 +84,7 @@ class AfterShip_Settings {
 
 			<form method="post" action="options.php">
 				<?php
-				// This prints out all hidden setting fields
+				// This prints out all hidden setting fields.
 				settings_fields( 'aftership_option_group' );
 				do_settings_sections( 'aftership-setting-admin' );
 				submit_button();
@@ -86,20 +99,20 @@ class AfterShip_Settings {
 	 */
 	public function page_init() {
 		register_setting(
-			'aftership_option_group', // Option group
-			'aftership_option_name', // Option name
-			array( $this, 'sanitize' ) // Sanitize
+			'aftership_option_group',
+			'aftership_option_name',
+			array( $this, 'sanitize' )
 		);
 
 		add_settings_section(
-			'aftership_setting_section_id', // ID
-			'', // Title
-			array( $this, 'print_section_info' ), // Callback
-			'aftership-setting-admin' // Page
+			'aftership_setting_section_id',
+			'',
+			array( $this, 'print_section_info' ),
+			'aftership-setting-admin'
 		);
 
 		add_settings_field(
-			'couriers',
+			$this->dom_id_couriers,
 			'Couriers',
 			array( $this, 'couriers_callback' ),
 			'aftership-setting-admin',
@@ -126,7 +139,7 @@ class AfterShip_Settings {
 	/**
 	 * Sanitize each setting field as needed
 	 *
-	 * @param array $input Contains all settings fields as array keys
+	 * @param array $input Contains all settings fields as array keys.
 	 * @return array
 	 */
 	public function sanitize( $input ) {
@@ -151,21 +164,27 @@ class AfterShip_Settings {
 	 * Print the Section text
 	 */
 	public function print_section_info() {
-		// print 'Enter your settings below:';
+		// print 'Enter your settings below:';.
 	}
 
+	/**
+	 * Call this func before shown on pages.
+	 */
 	public function couriers_callback() {
 
 		$couriers = array();
 		if ( isset( $this->options['couriers'] ) ) {
 			$couriers = explode( ',', $this->options['couriers'] );
 		}
-		echo '<select data-placeholder="Please select couriers" id="couriers_select" multiple style="width:100%">';
+		echo '<select data-placeholder="Please select couriers" id="' . $this->dom_id_courier_select . '" multiple style="width:100%">';
 		echo '</select>';
-		echo '<input type="hidden" id="couriers" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
+		echo '<input type="hidden" id="' . $this->dom_id_couriers . '" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
 
 	}
 
+	/**
+	 * Call this func before shown on pages.
+	 */
 	public function custom_domain_callback() {
 		printf(
 			'<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
@@ -173,10 +192,13 @@ class AfterShip_Settings {
 		);
 	}
 
+	/**
+	 * Call this func before shown on pages.
+	 */
 	public function track_button_callback() {
 		printf(
 			'<label><input type="checkbox" id="use_track_button" name="aftership_option_name[use_track_button]" %s>Use Track Button</label>',
-			( isset( $this->options['use_track_button'] ) && $this->options['use_track_button'] === true ) ? 'checked="checked"' : ''
+			( isset( $this->options['use_track_button'] ) && true === $this->options['use_track_button'] ) ? 'checked="checked"' : ''
 		);
 	}
 }

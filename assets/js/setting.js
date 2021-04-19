@@ -1,4 +1,6 @@
 jQuery(function () {
+	var aftership_couriers_select = jQuery('#aftership_couriers_select');
+	var aftership_couriers = jQuery('#aftership_couriers');
     function set_aftership_tracking_provider(selected_couriers) {
         var couriers = sort_couriers(get_couriers());
         jQuery.each(couriers, function (key, courier) {
@@ -8,22 +10,22 @@ jQuery(function () {
                 str += 'selected="selected"';
             }
             str += '>' + courier['name'] + '</option>';
-            jQuery('#couriers_select').append(str);
+			aftership_couriers_select.append(str);
         });
 
-        jQuery('#couriers_select').val(selected_couriers);
-        jQuery('#couriers_select').chosen();
-	    jQuery('#couriers_select').trigger('chosen:updated');
+		aftership_couriers_select.val(selected_couriers);
+		aftership_couriers_select.chosen();
+		aftership_couriers_select.trigger('chosen:updated');
     }
 
-    jQuery('#couriers_select').change(function () {
-        var couriers_select = jQuery('#couriers_select').val();
+	aftership_couriers_select.change(function () {
+        var couriers_select = aftership_couriers_select.val();
         var value = (couriers_select) ? couriers_select.join(',') : '';
-        jQuery('#couriers').val(value);
+		aftership_couriers.val(value);
     });
 
-    if (jQuery('#couriers')) {
-        var couriers_select = jQuery('#couriers').val();
+    if (aftership_couriers) {
+        var couriers_select = aftership_couriers.val();
         var couriers_select_array = (couriers_select) ? couriers_select.split(',') : [];
         set_aftership_tracking_provider(couriers_select_array);
     }
