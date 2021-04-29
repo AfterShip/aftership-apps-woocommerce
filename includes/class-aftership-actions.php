@@ -141,6 +141,8 @@ class AfterShip_Actions {
 	public function meta_box() {
 		global $post;
 
+		$this->convert_old_meta_in_order( $post->ID );
+
 		$tracking_items = $this->get_tracking_items( $post->ID );
 
 		echo '<div id="tracking-items">';
