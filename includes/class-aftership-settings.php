@@ -168,6 +168,21 @@ class AfterShip_Settings {
 	}
 
 	/**
+	 * Normalize custom domain.
+	 *
+	 * @param string $url input url.
+	 * @return string
+	 */
+	public function normalize_custom_domain( $url ) {
+		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+			return $url;
+
+		}
+		$domain = parse_url( $url, PHP_URL_HOST );
+		return $domain;
+	}
+
+	/**
 	 * Call this func before shown on pages.
 	 */
 	public function couriers_callback() {
@@ -188,7 +203,7 @@ class AfterShip_Settings {
 	public function custom_domain_callback() {
 		printf(
 			'<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
-			isset( $this->options['custom_domain'] ) ? parse_url( $this->options['custom_domain'], PHP_URL_HOST ) : 'track.aftership.com'
+			isset( $this->options['custom_domain'] ) ? $this->normalize_custom_domain( $this->options['custom_domain'] ) : 'track.aftership.com'
 		);
 	}
 

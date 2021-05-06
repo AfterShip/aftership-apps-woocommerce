@@ -44,6 +44,22 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 		return array( 'settings' => get_option( 'aftership_option_name' ) );
 	}
 
+
+	/**
+	 * Normalize custom domain.
+	 *
+	 * @param string $url input url.
+	 * @return string
+	 */
+	public function normalize_custom_domain( $url ) {
+		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+			return $url;
+
+		}
+		$domain = parse_url( $url, PHP_URL_HOST );
+		return $domain;
+	}
+
 	/**
 	 * Update plugin settings.
 	 *
@@ -58,7 +74,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 
 		if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
 			if ( 'track.aftership.com' === $custom_domain || '' === $custom_domain ) {
-				$options['custom_domain'] = parse_url( $data['custom_domain'], PHP_URL_HOST );
+				$options['custom_domain'] = $this->normalize_custom_domain( $data['custom_domain'] );
 			}
 		}
 
