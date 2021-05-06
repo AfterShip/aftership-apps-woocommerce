@@ -188,7 +188,7 @@ class AfterShip_Settings {
 	public function custom_domain_callback() {
 		printf(
 			'<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
-			isset( $this->options['custom_domain'] ) ? $this->options['custom_domain'] : 'track.aftership.com'
+			isset( $this->options['custom_domain'] ) ? parse_url( $this->options['custom_domain'], PHP_URL_HOST ) : 'track.aftership.com'
 		);
 	}
 
