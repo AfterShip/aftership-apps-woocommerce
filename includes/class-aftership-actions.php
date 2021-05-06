@@ -136,12 +136,39 @@ class AfterShip_Actions {
 	}
 
 	/**
+	 * Normalize custom domain.
+	 *
+	 * @param string $url input url.
+	 * @return string
+	 */
+	public function normalize_custom_domain( $url ) {
+		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+			return $url;
+
+		}
+		$domain = parse_url( $url, PHP_URL_HOST );
+		return $domain;
+	}
+
+	/**
+	 * Do some migrate staff
+	 */
+	public function migrate() {
+		// CNT-7928
+		$options                  = get_option( 'aftership_option_name' );
+		$options['custom_domain'] = $this->normalize_custom_domain( $options['custom_domain'] );
+		update_option( 'aftership_option_name', $options );
+	}
+
+	/**
 	 * Show the meta box for shipment info on the order page
 	 */
 	public function meta_box() {
 		global $post;
 
 		$this->convert_old_meta_in_order( $post->ID );
+
+		$this->migrate();
 
 		$tracking_items = $this->get_tracking_items( $post->ID );
 
