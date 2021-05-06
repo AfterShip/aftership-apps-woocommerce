@@ -155,9 +155,12 @@ class AfterShip_Actions {
 	 */
 	public function migrate() {
 		// CNT-7928
-		$options                  = get_option( 'aftership_option_name' );
-		$options['custom_domain'] = $this->normalize_custom_domain( $options['custom_domain'] );
-		update_option( 'aftership_option_name', $options );
+		$options = get_option( 'aftership_option_name' );
+		$domain  = $this->normalize_custom_domain( $options['custom_domain'] );
+		if ( $domain != $options['custom_domain'] ) {
+			$options['custom_domain'] = $domain;
+			update_option( 'aftership_option_name', $options );
+		}
 	}
 
 	/**
