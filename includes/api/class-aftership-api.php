@@ -163,6 +163,7 @@ class AfterShip_API {
 		include_once( 'v4/class-aftership-api-orders.php' );
 		include_once( 'v4/class-aftership-api-settings.php' );
 		include_once( 'v5/class-aftership-api-orders.php' );
+		include_once( 'v5/class-rest-orders-helper.php' );
 
 	}
 
