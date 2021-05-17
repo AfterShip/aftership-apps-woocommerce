@@ -22,7 +22,7 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 	 * @var string $base base router path
 	 */
 	protected $base = '/v5/orders';
-	protected $dp = 2;
+	protected $dp   = 2;
 
 	/**
 	 * Register the routes for this class
@@ -56,11 +56,11 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 	 * @throws Exception
 	 */
 	public function get_order( $id, $fields = null ) {
-		$tracking_order = parent::get_order($id, $fields);
-		
+		$tracking_order = parent::get_order( $id, $fields );
+
 		$object = new WC_Order( $id );
 		// get order detial like rest v3 api
-		$rest_raw_order = $this->get_rest_order_detail($object);
+		$rest_raw_order             = $this->get_rest_order_detail( $object );
 		$tracking_order['raw_data'] = $rest_raw_order;
 
 		return $tracking_order;
@@ -88,7 +88,7 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 		if ( array_key_exists( $meta_item->id, $formatted_meta_data ) ) {
 			$formatted_meta_item = $formatted_meta_data[ $meta_item->id ];
 
-			$result['display_key'] = wc_clean( $formatted_meta_item->display_key );
+			$result['display_key']   = wc_clean( $formatted_meta_item->display_key );
 			$result['display_value'] = wc_clean( $formatted_meta_item->display_value );
 		}
 
@@ -156,7 +156,7 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 
 		// Expand meta_data to include user-friendly values.
 		$formatted_meta_data = $item->get_formatted_meta_data( null, true );
-		$data['meta_data'] = array_map(
+		$data['meta_data']   = array_map(
 			array( $this, 'merge_meta_item_with_formatted_meta_display_attributes' ),
 			$data['meta_data'],
 			array_fill( 0, count( $data['meta_data'] ), $formatted_meta_data )
@@ -170,15 +170,15 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 	 *
 	 * @deprecated 3.0
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param WP_Post         $post Post object.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response $data
 	 */
 	public function get_rest_order_detail( $order ) {
-		$data                = $order->get_data();
-		$format_decimal      = array( 'discount_total', 'discount_tax', 'shipping_total', 'shipping_tax', 'shipping_total', 'shipping_tax', 'cart_tax', 'total', 'total_tax' );
-		$format_date       = array( 'date_created', 'date_modified', 'date_completed', 'date_paid');
-		$format_line_items   = array( 'line_items', 'tax_lines', 'shipping_lines', 'fee_lines', 'coupon_lines' );
+		$data              = $order->get_data();
+		$format_decimal    = array( 'discount_total', 'discount_tax', 'shipping_total', 'shipping_tax', 'shipping_total', 'shipping_tax', 'cart_tax', 'total', 'total_tax' );
+		$format_date       = array( 'date_created', 'date_modified', 'date_completed', 'date_paid' );
+		$format_line_items = array( 'line_items', 'tax_lines', 'shipping_lines', 'fee_lines', 'coupon_lines' );
 
 		// Format decimal values.
 		foreach ( $format_decimal as $key ) {
