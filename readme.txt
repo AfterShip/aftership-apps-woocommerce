@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: ecommerce, shipping, shipment, order, ups, usps, fedex, dhl, tnt, dpd, post, carrier, courier, woocommerce, tracking number, aftership, package tracking,  woo commerce, woocommerce shipment tracking, shipping details plugin, widget, shipstation, track, package
 Requires at least: 2.9
 Tested up to: 5.6
-Stable tag: 1.11.5
+Stable tag: 1.12.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,8 +95,8 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
-= 1.11.5 =
-* Fix tracking button url issue.
+= 1.12.0 =
+* Add v5/orders API endpoint
 
 = 1.11.4 =
 * Fix tracking missing when update plugin.
