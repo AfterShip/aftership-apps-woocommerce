@@ -54,8 +54,8 @@ class AfterShip_Settings {
 		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
 		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js' );
 		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js' );
-		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js' );
-		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js' );
+		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js', array(), AFTERSHIP_VERSION );
 	}
 
 	/**
