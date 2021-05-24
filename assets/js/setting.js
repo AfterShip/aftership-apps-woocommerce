@@ -2,7 +2,7 @@ jQuery(function () {
 	var aftership_couriers_select = jQuery('#aftership_couriers_select');
 	var aftership_couriers = jQuery('#aftership_couriers');
     function set_aftership_tracking_provider(selected_couriers) {
-        var couriers = sort_couriers(get_couriers());
+        var couriers = sort_couriers(get_aftership_couriers());
         jQuery.each(couriers, function (key, courier) {
             var str = '<option ';
             str += 'value="' + courier['slug'] + '" ';
