@@ -4,13 +4,15 @@ Donate link: https://www.aftership.com/
 Tags: tracking, shipping, order tracking, delivery, shipment tracking
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.3
+Stable tag: 1.12.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 All-in-one Shipment Tracking for WooCommerce, Branded tracking pages, notifications, order lookup page. FedEx,USPS,UPS,DHL,Canada Post 800+ couriers.
 
 == Description ==
+
+All-in-one Shipment Tracking for WooCommerce, Branded tracking pages, notifications, order lookup page. FedEx,USPS,UPS,DHL,Canada Post 800+ couriers.
 
 ###Top Ecommerce Order Tracking Plugin for Wordpress (Free)
 Install the AfterShip plugin to automatically add Tracking Number and Courier fields to your admin panel. AfterShip supports over 760+ carriers worldwide (including USPS, FedEx, UPS, DHL, etc.). You can select couriers by [signing up a free AfterShip account](https://secure.aftership.com/signup).
@@ -95,7 +97,7 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
-= 1.12.3 =
+= 1.12.4 =
 * Update readme
 
 = 1.12.1 =
