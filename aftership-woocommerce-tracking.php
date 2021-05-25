@@ -3,7 +3,7 @@
 	Plugin Name: AfterShip Order Tracking and Shipment Notifications for WooCommerce
 	Plugin URI: http://aftership.com/
 	Description: All-in-one Shipment Tracking for WooCommerce, Branded tracking pages, notifications, order lookup page. FedEx,USPS,UPS,DHL,Canada Post 800+ couriers.
-	Version: 1.12.3
+	Version: 1.12.4
 	Author: AfterShip
 	Author URI: http://aftership.com
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.12.3' );
+define( 'AFTERSHIP_VERSION', '1.12.4' );
 
 if ( is_woocommerce_active() ) {
 
