@@ -4,11 +4,11 @@ Donate link: https://www.aftership.com/
 Tags: tracking, shipping, order tracking, delivery, shipment tracking
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.2
+Stable tag: 1.12.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Effortless order tracking synced from all shipping providers for your ecommerce customers. Include a branded tracking page and automated delivery notifications.
+All-in-one Shipment Tracking for WooCommerce, Branded tracking pages, notifications, order lookup page. FedEx,USPS,UPS,DHL,Canada Post 800+ couriers.
 
 == Description ==
 
@@ -95,7 +95,7 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 
 == Changelog ==
 
-= 1.12.2 =
+= 1.12.3 =
 * Update readme
 
 = 1.12.1 =
