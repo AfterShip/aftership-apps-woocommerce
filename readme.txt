@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: shipment tracking, order tracking, shipping, fedex, usps, ups, dhl, canada post, order status, delivery, carrier, courier
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.5
+Stable tag: 1.12.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,11 +66,13 @@ ADSOne • Australia Post • Bonds Couriers • CourierPost • Couriers Please
 == Installation ==
 
 1. [Sign up AfterShip account for FREE](https://secure.aftership.com/signup)
-2. [Download AfterShip plugin](http://downloads.wordpress.org/plugin/aftership-woocommerce-tracking.zip), then install and activate at wordpress.
-3. Select AfterShip Plugin or [WooCommerce Shipment Tracking Plugin](http://www.woothemes.com/products/shipment-tracking/) for entering tracking number
-4. Check `Use Track Button` for displaying tracking info at order history page
-5. Generate [AfterShip's WordPress API Key](http://aftership.uservoice.com/knowledgebase/articles/405909) under `Users` > `Your Profile`
-6. Input `Store URL` and `AfterShip's WordPress API Key` at [AfterShip WooCommerce page](https://www.aftership.com/apps/woocommerce)
+2. Under the `Apps` tab, select WooCommerce.
+3. To get the `API Key` go to your WordPress admin and [Download AfterShip plugin](http://downloads.wordpress.org/plugin/aftership-woocommerce-tracking.zip), then install and activate it.
+4. In the Wordpress admin, go to `Settings` and select the `AfterShip` plugin. Check `Use Track Button` (for displaying tracking info on the order history page) and add your custom branded tracking page domain.
+5. Check `Use Track Button` (for displaying tracking info on the order history page) and add your custom branded tracking page domain.
+6. Now go to the `User Profile` settings to generate AfterShip’s Wordpress API Key.
+7. Copy the API Key generated and head back to your AfterShip account.
+8. Input `Store URL` and `API Key` and click on `Connect`.
 
 *** This plugin requires at least PHP 5.2.4
 *** This plugin requires at least WooCommerce 2.1
@@ -101,6 +103,9 @@ You'll find the FAQ on [AfterShip.com](https://aftership.uservoice.com/knowledge
 7. Automatically send out delivery notifications
 
 == Changelog ==
+
+= 1.12.6 =
+* Update courier list
 
 = 1.12.5 =
 * Update courier list

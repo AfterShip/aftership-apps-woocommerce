@@ -1172,6 +1172,20 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dbschenker-b2b",
+			"name": "DB Schenker B2B",
+			"other_name": null,
+			"required_fields": [
+				"tracking_origin_country"
+			]
+		},
+		{
+			"slug": "dbschenker-iceland",
+			"name": "DB Schenker Iceland",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "dbschenker-se",
 			"name": "DB Schenker",
 			"other_name": "Deutsche Bahn",
@@ -1424,6 +1438,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "diamondcouriers",
+			"name": "Diamond Eurogistics Limited",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "dicom",
 			"name": "GLS Logistic Systems Canada Ltd./Dicom",
 			"other_name": null,
@@ -1673,6 +1693,12 @@ function get_aftership_couriers() {
 			"slug": "ecargo-asia",
 			"name": "Ecargo",
 			"other_name": "Ecargo Pte. Ltd",
+			"required_fields": []
+		},
+		{
+			"slug": "ecexpress",
+			"name": "上海东擎速递有限公司深圳分公司 ECexpress (Shanghai）Co.,Ltd Shenzhen Branch",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -2920,6 +2946,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "lbcexpress-ftp",
+			"name": "LBC EXPRESS INC.",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "leader",
 			"name": "leader",
 			"other_name": "立德国际物流",
@@ -3162,12 +3194,6 @@ function get_aftership_couriers() {
 		{
 			"slug": "mglobal",
 			"name": "PT MGLOBAL LOGISTICS INDONESIA",
-			"other_name": "",
-			"required_fields": []
-		},
-		{
-			"slug": "midland",
-			"name": "Midland",
 			"other_name": "",
 			"required_fields": []
 		},
@@ -4608,6 +4634,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "swiss-post-ftp",
+			"name": "Swiss Post FTP",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "sypost",
 			"name": "Sunyou Post",
 			"other_name": "",
@@ -5275,12 +5307,6 @@ function get_aftership_couriers() {
 			"slug": "yakit",
 			"name": "Yakit",
 			"other_name": "",
-			"required_fields": []
-		},
-		{
-			"slug": "yamato-hk",
-			"name": "Yamato Hong Kong Shipments",
-			"other_name": null,
 			"required_fields": []
 		},
 		{
