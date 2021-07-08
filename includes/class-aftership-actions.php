@@ -819,6 +819,7 @@ class AfterShip_Actions {
 
 		if ( is_object( $wp_roles ) ) {
 			$wp_roles->add_cap( 'administrator', 'manage_aftership' );
+			$wp_roles->add_cap( 'administrator', 'aam_manage_same_user_level' );
 		}
 	}
 
