@@ -97,15 +97,21 @@ class AfterShip_API_Authentication {
 	 * Return the user for the given consumer key
 	 *
 	 * @since 2.1
-	 * @param string $consumer_key
+	 * @param string $api_key 'aftership_wp_api_key'.
 	 * @return WP_User
-	 * @throws Exception
+	 * @throws Exception 'will send an 401 error'.
 	 */
 	private function get_user_by_api_key( $api_key ) {
-
+		// @see https:// github.com/AfterShip/aftership-apps-woocommerce/pull/115
+		add_action(
+			'pre_get_users',
+			function( $query ) {
+				$query->query_vars['role__not_in'] = array();
+			},
+			999
+		);
 		$user_query = new WP_User_Query(
 			array(
-				// 'meta_key' => 'woocommerce_api_consumer_key',
 				'meta_key'   => 'aftership_wp_api_key',
 				'meta_value' => $api_key,
 			)
