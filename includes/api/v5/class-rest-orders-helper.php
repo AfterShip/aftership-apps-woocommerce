@@ -137,46 +137,10 @@ class Rest_Orders_Helper {
 	 * @return array
 	 */
 	public function get_formatted_item_data( $order ) {
-		$extra_fields      = array( 'meta_data', 'line_items', 'tax_lines', 'shipping_lines', 'fee_lines', 'coupon_lines', 'refunds' );
+		$data              = $order->get_data();
 		$format_decimal    = array( 'discount_total', 'discount_tax', 'shipping_total', 'shipping_tax', 'shipping_total', 'shipping_tax', 'cart_tax', 'total', 'total_tax' );
 		$format_date       = array( 'date_created', 'date_modified', 'date_completed', 'date_paid' );
 		$format_line_items = array( 'line_items', 'tax_lines', 'shipping_lines', 'fee_lines', 'coupon_lines' );
-
-		$data = $order->get_base_data();
-
-		// Add extra data as necessary.
-		foreach ( $extra_fields as $field ) {
-			switch ( $field ) {
-				case 'meta_data':
-					$data['meta_data'] = $order->get_meta_data();
-					break;
-				case 'line_items':
-					$data['line_items'] = $order->get_items( 'line_item' );
-					break;
-				case 'tax_lines':
-					$data['tax_lines'] = $order->get_items( 'tax' );
-					break;
-				case 'shipping_lines':
-					$data['shipping_lines'] = $order->get_items( 'shipping' );
-					break;
-				case 'fee_lines':
-					$data['fee_lines'] = $order->get_items( 'fee' );
-					break;
-				case 'coupon_lines':
-					$data['coupon_lines'] = $order->get_items( 'coupon' );
-					break;
-				case 'refunds':
-					$data['refunds'] = array();
-					foreach ( $order->get_refunds() as $refund ) {
-						$data['refunds'][] = array(
-							'id'     => $refund->get_id(),
-							'reason' => $refund->get_reason() ? $refund->get_reason() : '',
-							'total'  => '-' . wc_format_decimal( $refund->get_amount(), $this->dp ),
-						);
-					}
-					break;
-			}
-		}
 
 		// Format decimal values.
 		foreach ( $format_decimal as $key ) {
@@ -196,6 +160,16 @@ class Rest_Orders_Helper {
 		// Format line items.
 		foreach ( $format_line_items as $key ) {
 			$data[ $key ] = array_values( array_map( array( $this, 'get_order_item_data' ), $data[ $key ] ) );
+		}
+
+		// Refunds.
+		$data['refunds'] = array();
+		foreach ( $order->get_refunds() as $refund ) {
+			$data['refunds'][] = array(
+				'id'     => $refund->get_id(),
+				'reason' => $refund->get_reason() ? $refund->get_reason() : '',
+				'total'  => '-' . wc_format_decimal( $refund->get_amount(), $this->dp ),
+			);
 		}
 
 		$allowed_fields = array(
