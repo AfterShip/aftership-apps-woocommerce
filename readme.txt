@@ -132,6 +132,14 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 = 1.12.10 =
 * Update Readme.
     
+= 1.12.9 =
+* Compatible for get order data
+
+= 1.12.8 =
+* Update readme
+
+= 1.12.7 =
+* Compatible with `Advanced Access Manager`
 
 = 1.12.6 =
 * Update courier list
