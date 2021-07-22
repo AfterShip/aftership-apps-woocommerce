@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking,woocommerce,dhl,ups,usps,fedex,shipping,tracking,order status,carrier,courier,delivery
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.6
+Stable tag: 1.12.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
