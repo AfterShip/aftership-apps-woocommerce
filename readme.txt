@@ -1,18 +1,18 @@
-AfterShip Order Tracking – WooCommerce Tracking Pages, Shipment Tracking, Automated Emails (Free Plan Available)
+AfterShip – WooCommerce Shipment Tracking, Order Tracking Made Easy (Free plan available)
 Contributors: aftership
 Donate link: https://www.aftership.com/
-Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking,woocommerce,dhl,ups,usps,fedex,shipping,tracking,order status,carrier,courier,delivery
+Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking,track order,dhl,ups,usps,fedex,shipping,tracking,order status,carrier,courier,delivery, woocommerce
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.10
+Stable tag: 1.12.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-All-in-one Woocommerce Tracking, automatically add Tracking Number and Courier fields to your admin panel. Integrates with 800+ Shipping Providers
+All-in-one Woocommerce tracking, integrates with over 800 shipping providers, including FedEx,USPS,UPS,DHL,Canada Post. Track order status. Free plan
 
 == Description ==
 
-###FREE INSTALLATION - ORDER TRACKING MADE EASY
+###FREE INSTALLATION
 AfterShip provides the best shipping experience for Woocommerce to drive customer loyalty and additional sales.
 
 Install the AfterShip plugin to automatically add Tracking Number and Courier fields to your admin panel.
@@ -129,17 +129,9 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 
 == Changelog ==
       
-= 1.12.10 =
+= 1.12.11 =
 * Update Readme.
     
-= 1.12.9 =
-* Compatible for get order data
-
-= 1.12.8 =
-* Update readme
-
-= 1.12.7 =
-* Compatible with `Advanced Access Manager`
 
 = 1.12.6 =
 * Update courier list
@@ -358,4 +350,3 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Upgrade Notice ==
 
 No Upgrade Yet
-
