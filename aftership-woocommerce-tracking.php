@@ -1,8 +1,8 @@
 <?php
 /*
-	Plugin Name: AfterShip - WooCommerce Shipment Tracking (Order Tracking Made Easy)
+	Plugin Name: AfterShip – WooCommerce Shipment Tracking, Order Tracking Made Easy (Free plan available)
 	Plugin URI: http://aftership.com/
-	Description: All-in-one Woocommerce shipment tracking, branded order tracking pages, Email & SMS notifications. FedEx,USPS,UPS,DHL,Canada Post 800+ couriers.
+	Description: All-in-one Woocommerce tracking, integrates with over 800 shipping providers, including FedEx,USPS,UPS,DHL,Canada Post. Track order status. Free plan.
 	Version: 1.12.11
 	Author: AfterShip
 	Author URI: http://aftership.com
