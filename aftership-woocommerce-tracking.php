@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: A
+	Plugin Name: A
 	Plugin URI: http://aftership.com/
-Description: C
+	Description: C
 	Version: 1.12.13
 	Author: AfterShip
 	Author URI: http://aftership.com
