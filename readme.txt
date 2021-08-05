@@ -1,14 +1,14 @@
-AfterShip – WooCommerce Shipment Tracking, Order Tracking Made Easy (Free plan available)
+AfterShip Order Tracking, WooCommerce Shipment Tracking Made Easy (Free plan available)
 Contributors: aftership
 Donate link: https://www.aftership.com/
-Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking,track order,dhl,ups,usps,fedex,shipping,tracking,order status,carrier,courier,delivery, woocommerce
+Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.11
+Stable tag: 1.12.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-All-in-one Woocommerce tracking, integrates with over 800 shipping providers, including FedEx,USPS,UPS,DHL,Canada Post. Track order status. Free plan
+All-in-one Woocommerce tracking, Track order status. integrates with over 800 shipping providers, including FedEx,USPS,UPS,DHL,Canada Post. Install Free
 
 == Description ==
 
@@ -36,12 +36,12 @@ Automatically import your tracking numbers to AfterShip, so you can get current 
 - Send shipping & delivery notifications to customers through Email & SMS
 - Send internal notifications to yourself through Email & SMS
 - Configure notifications for: Info Received, In Transit, Out for Delivery, Available for Pickup, Delivered, Failed Attempt, and Exceptions
-- Send multilingual email notifications. Add, remove, or set a default language for your email updates for different delivery checkpoints without a hassle. 
+- Send multilingual email notifications. Add, remove, or set a default language for your email updates for different delivery checkpoints without a hassle.
 - Auto-send email updates based on the order language for a delightful post-purchase experience.
 Shipping status notifications will be sent from your email address, and you can customize messages to include your logo and URL, to increase brand recognition and the probability of repeat purchases on your Woocommerce store
 
 ###BRANDED ORDER TRACKING PAGE
-- Automatically generate a tracking page at Woocommerce for each shipment and customize the look & feel 
+- Automatically generate a tracking page at Woocommerce for each shipment and customize the look & feel
 - Customize your tracking page by adding your logo, Woocommerce URL and impact SEO to generate more sales
 - Set up a custom domain to display the tracking information and improve the searchability of your Woocommerce website
 - SSL certificate for users with a verified custom domain
@@ -101,12 +101,12 @@ Each tracking number is represented by status at every step of the shipment’s 
 = Destination Country Tracking =
 AfterShip automatically gets tracking information for both origin and destination country for international shipments of postal service (e.g. China Post, USPS). All the tracking checkpoints from both the couriers or locations are clubbed together under a single tracking number for a better understanding.
 
-= Updating pending statuses =  
+= Updating pending statuses =
 All recently added or imported shipments within your AfterShip account are tagged with "Pending" status, and queued up for tracking in batches. AfterShip automatically gets the latest tracking information from couriers every 3-12 hours.
 If "Pending" status still shows for long, it usually means that the courier does not have any delivery information for the tracking number yet. Also, please check if the tracking number is correct, and contact the courier if need be. AfterShip will continue tracking until the courier updates on it’s server.
 The “Pending” status changes to “Expired” if the courier does not provide any tracking information updates for over 30 days.  AfterShip will stop tracking the shipment.
 
-= Add Track Button to WooCommerce store = 
+= Add Track Button to WooCommerce store =
 WooCommerce is an open-source eCommerce plugin for WordPress. It can easily add eCommerce functionality to the WordPress website. With just a few clicks the plugin can be installed on the WordPress dashboard and set up to get the store up and running.
 
 = Email notifications via AfterShip =
@@ -114,7 +114,7 @@ AfterShip allows its users to send email notifications for different delivery st
 You also get access to both HTML and drag-and-drop editors to customize your email notifications. It helps you leave a long-lasting impression on customers and builds brand equity.
 
 = Customize the branded tracking page =
-Tailor a dynamic branded tracking page. Upload promotional banner, logo, and favicon to make the tracking page more engaging. Also, connect your Facebook and Twitter profiles to build your brand and generate traffic. 
+Tailor a dynamic branded tracking page. Upload promotional banner, logo, and favicon to make the tracking page more engaging. Also, connect your Facebook and Twitter profiles to build your brand and generate traffic.
 
 
 == Screenshots ==
@@ -128,8 +128,8 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 7. Automatically send out delivery notifications
 
 == Changelog ==
-      
-= 1.12.11 =
+
+= 1.12.12 =
 * Update Readme.
 
 = 1.12.10 =
@@ -142,7 +142,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 * Update readme
 
 = 1.12.7 =
-* Compatible with `Advanced Access Manager`    
+* Compatible with Advanced Access Manager
 
 = 1.12.6 =
 * Update courier list

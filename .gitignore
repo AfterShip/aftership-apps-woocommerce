@@ -27,3 +27,7 @@ $RECYCLE.BIN/
 vendor
 aftership-woocommerce-tracking.zip
 lib/
+node_modules
+deploy.js
+package.json
+yarn.lock
