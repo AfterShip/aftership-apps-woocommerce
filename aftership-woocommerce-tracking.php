@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once( 'woo-includes/woo-functions.php' );
 
 define( 'AFTERSHIP_VERSION', '1.12.12' );
+define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 
 if ( is_woocommerce_active() ) {
 
@@ -117,7 +118,7 @@ if ( is_woocommerce_active() ) {
 				$this->plugin_dir  = untrailingslashit( plugin_dir_path( __FILE__ ) );
 				$this->plugin_url  = untrailingslashit( plugin_dir_url( __FILE__ ) );
 
-				$this->options           = get_option( 'aftership_option_name' );
+				$this->options           = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 				$this->couriers          = json_decode( file_get_contents( $this->plugin_dir . '/assets/js/couriers.json' ), true );
 				$this->selected_couriers = $this->get_selected_couriers();
 				$this->use_track_button  = isset( $this->options['use_track_button'] ) ? $this->options['use_track_button'] : $this->use_track_button;
@@ -125,6 +126,11 @@ if ( is_woocommerce_active() ) {
 
 				// Include required files.
 				$this->includes();
+
+				// Check if woocommerce active.
+				if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+					add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'add_rest_api' ) );
+				}
 
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
@@ -157,6 +163,27 @@ if ( is_woocommerce_active() ) {
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 
 				register_activation_hook( __FILE__, array( $this, 'install' ) );
+				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
+				register_uninstall_hook( __FILE__, array( $this, 'deactivation' ) );
+			}
+
+			/**
+			 * Remove settings when plugin deactivation.
+			 **/
+			function deactivation() {
+				$this->options['connected'] = false;
+				update_option( 'aftership_option_name', $this->options );
+			}
+
+			/**
+			 * Register REST API endpoints
+			 *
+			 * @param array $controllers REST Controllers.
+			 * @return array
+			 */
+			function add_rest_api( $controllers ) {
+				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
+				return $controllers;
 			}
 
 			/**
@@ -184,7 +211,7 @@ if ( is_woocommerce_active() ) {
 			 * @return array
 			 */
 			public function get_selected_couriers() {
-				$slugs             = explode( ',', $this->options['couriers'] );
+				$slugs             = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
 				$selected_couriers = array();
 				foreach ( $this->couriers as $courier ) {
 					if ( in_array( $courier['slug'], $slugs, true ) ) {
@@ -205,6 +232,7 @@ if ( is_woocommerce_active() ) {
 				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
+				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
 			}
 
 			/**
