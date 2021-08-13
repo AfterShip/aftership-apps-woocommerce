@@ -610,9 +610,13 @@ class AfterShip_Actions {
 	public function save_tracking_items( $order_id, $tracking_items ) {
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 			update_post_meta( $order_id, '_aftership_tracking_items', $tracking_items );
+			update_post_meta( $order_id, '_aftership_tracking_number', $tracking_items[0]['tracking_number'] );
+			update_post_meta( $order_id, '_aftership_tracking_provider_name', $tracking_items[0]['slug'] );
 		} else {
 			$order = new WC_Order( $order_id );
 			$order->update_meta_data( '_aftership_tracking_items', $tracking_items );
+			$order->update_meta_data( '_aftership_tracking_number', $tracking_items[0]['tracking_number'] );
+			$order->update_meta_data( '_aftership_tracking_provider_name', $tracking_items[0]['slug'] );
 			$order->save_meta_data();
 		}
 	}
@@ -882,5 +886,38 @@ class AfterShip_Actions {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Add 'modified_after' and 'modified_before' for data query
+	 *
+	 * @param array           $args
+	 * @param WP_REST_Request $request
+	 */
+	function add_query( array $args, $request ) {
+		$modified_after  = $request->get_param( 'modified_after' );
+		$modified_before = $request->get_param( 'modified_before' );
+
+		if ( ! $modified_after || ! $modified_before ) {
+			return $args;
+		}
+
+		$args['date_query'][0]['column'] = 'post_modified';
+		$args['date_query'][0]['before'] = $modified_before;
+		$args['date_query'][0]['after']  = $modified_after;
+		return $args;
+	}
+
+	/**
+	 * Add 'modified' to orderby enum
+	 *
+	 * @param array $params
+	 */
+	public function add_collection_params( $params ) {
+		$enums = $params['orderby']['enum'];
+		if ( isset( $enums['modified'] ) ) {
+			$params['orderby']['enum'][] = 'modified';
+		}
+		return $params;
 	}
 }

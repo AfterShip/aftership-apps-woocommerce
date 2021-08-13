@@ -162,6 +162,11 @@ if ( is_woocommerce_active() ) {
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 
+				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
+				add_filter( 'rest_product_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
+				add_filter( 'woocommerce_rest_orders_prepare_object_query', array( $this->actions, 'add_query' ), 10, 2 );
+				add_filter( 'woocommerce_rest_product_object_query', array( $this->actions, 'add_query' ), 10, 2 );
+
 				register_activation_hook( __FILE__, array( $this, 'install' ) );
 				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( $this, 'deactivation' ) );

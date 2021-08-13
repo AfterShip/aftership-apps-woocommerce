@@ -42,7 +42,9 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		 * @return array
 		 */
 		public function get_settings( WP_REST_Request $request ) {
-			return array( 'settings' => get_option( $this->option_name ) );
+			$settings            = get_option( $this->option_name );
+			$settings['version'] = AFTERSHIP_VERSION;
+			return array( 'settings' => $settings );
 		}
 
 		/**
@@ -78,7 +80,8 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		 * @return array
 		 */
 		public function create_or_update_settings( WP_REST_Request $data ) {
-			$options = get_option( $this->option_name );
+			$options            = get_option( $this->option_name );
+			$options['version'] = AFTERSHIP_VERSION;
 
 			if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
 				if ( 'track.aftership.com' === $this->seek_option_value( $options, 'custom_domain' ) || '' === $this->seek_option_value( $options, 'custom_domain' ) ) {
