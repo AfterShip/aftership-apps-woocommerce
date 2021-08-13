@@ -1,14 +1,14 @@
-AfterShip Order Tracking, WooCommerce Shipment Tracking Made Easy (Free plan available)
+=== AfterShip Order Tracking, WooCommerce Tracking Made Easy (Free plan available) ===
 Contributors: aftership
 Donate link: https://www.aftership.com/
-Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
+Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order status,carrier,courier,delivery
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.12
+Stable tag: 1.12.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-All-in-one Woocommerce tracking, Track order status. integrates with over 800 shipping providers, including FedEx,USPS,UPS,DHL,Canada Post. Install Free
+All-in-one Woocommerce Shipment Tracking, Track parcel order status. integrates with 800+ shipping providers including FedEx,USPS,UPS,DHL,Canada Post. Install Free
 
 == Description ==
 
@@ -129,7 +129,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 
 == Changelog ==
 
-= 1.12.12 =
+= 1.12.13 =
 * Update Readme.
 
 = 1.12.10 =
