@@ -610,9 +610,13 @@ class AfterShip_Actions {
 	public function save_tracking_items( $order_id, $tracking_items ) {
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 			update_post_meta( $order_id, '_aftership_tracking_items', $tracking_items );
+            update_post_meta( $order_id, '_aftership_tracking_number', $tracking_items[0]['tracking_number'] );
+            update_post_meta( $order_id, '_aftership_tracking_provider_name', $tracking_items[0]['slug'] );
 		} else {
 			$order = new WC_Order( $order_id );
 			$order->update_meta_data( '_aftership_tracking_items', $tracking_items );
+            $order->update_meta_data( '_aftership_tracking_number', $tracking_items[0]['tracking_number'] );
+            $order->update_meta_data( '_aftership_tracking_provider_name', $tracking_items[0]['slug'] );
 			$order->save_meta_data();
 		}
 	}
