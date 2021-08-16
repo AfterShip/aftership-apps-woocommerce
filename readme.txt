@@ -131,6 +131,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 
 = 1.12.14 =
 * Update Courier list.
+* Add _aftership_tracking_number for Compatible
 
 = 1.12.13 =
 * Update Readme.
