@@ -893,18 +893,19 @@ class AfterShip_Actions {
 	 *
 	 * @param array           $args
 	 * @param WP_REST_Request $request
+	 * @return array
 	 */
 	function add_query( array $args, $request ) {
 		$modified_after  = $request->get_param( 'modified_after' );
 		$modified_before = $request->get_param( 'modified_before' );
-
 		if ( ! $modified_after || ! $modified_before ) {
 			return $args;
-		}
-
-		$args['date_query'][0]['column'] = 'post_modified';
-		$args['date_query'][0]['before'] = $modified_before;
-		$args['date_query'][0]['after']  = $modified_after;
+		};
+		$args['date_query'][] = array(
+			'column' => 'post_modified',
+			'after'  => $modified_after,
+			'before' => $modified_before,
+		);
 		return $args;
 	}
 
@@ -915,7 +916,7 @@ class AfterShip_Actions {
 	 */
 	public function add_collection_params( $params ) {
 		$enums = $params['orderby']['enum'];
-		if ( isset( $enums['modified'] ) ) {
+		if ( ! in_array( 'modified', $enums ) ) {
 			$params['orderby']['enum'][] = 'modified';
 		}
 		return $params;

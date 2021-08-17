@@ -164,12 +164,10 @@ if ( is_woocommerce_active() ) {
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'rest_shop_coupon_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
-				add_filter( 'rest_shop_order_refund_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'rest_product_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'woocommerce_rest_orders_prepare_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_product_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
-				add_filter( 'woocommerce_rest_shop_order_refund_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 
 				register_activation_hook( __FILE__, array( $this, 'install' ) );
 				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
