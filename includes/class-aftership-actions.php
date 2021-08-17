@@ -887,4 +887,38 @@ class AfterShip_Actions {
 			}
 		}
 	}
+
+	/**
+	 * Add 'modified_after' and 'modified_before' for data query
+	 *
+	 * @param array           $args
+	 * @param WP_REST_Request $request
+	 * @return array
+	 */
+	function add_query( array $args, $request ) {
+		$modified_after  = $request->get_param( 'modified_after' );
+		$modified_before = $request->get_param( 'modified_before' );
+		if ( ! $modified_after || ! $modified_before ) {
+			return $args;
+		};
+		$args['date_query'][] = array(
+			'column' => 'post_modified',
+			'after'  => $modified_after,
+			'before' => $modified_before,
+		);
+		return $args;
+	}
+
+	/**
+	 * Add 'modified' to orderby enum
+	 *
+	 * @param array $params
+	 */
+	public function add_collection_params( $params ) {
+		$enums = $params['orderby']['enum'];
+		if ( ! in_array( 'modified', $enums ) ) {
+			$params['orderby']['enum'][] = 'modified';
+		}
+		return $params;
+	}
 }
