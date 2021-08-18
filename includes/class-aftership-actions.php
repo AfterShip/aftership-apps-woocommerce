@@ -921,4 +921,58 @@ class AfterShip_Actions {
 		}
 		return $params;
 	}
+
+	/**
+	 * Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
+	 */
+	public function revoke_aftership_key() {
+		try {
+			global $wpdb;
+			// AfterShip Oauth key
+			$key_permission         = 'read_write';
+			$key_description_prefix = 'AfterShip - API Read/Write';
+
+			$key = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT key_id, user_id, description, permissions, truncated_key, last_access 
+					FROM {$wpdb->prefix}woocommerce_api_keys
+					WHERE permissions = %s
+					AND INSTR(description, %s) > 0 
+					ORDER BY key_id DESC LIMIT 1",
+					$key_permission,
+					$key_description_prefix
+				),
+				ARRAY_A
+			);
+
+			if ( ! is_null( $key ) && $key['key_id'] ) {
+				$wpdb->delete( $wpdb->prefix . 'woocommerce_api_keys', array( 'key_id' => $key['key_id'] ), array( '%d' ) );
+			}
+		} catch ( e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Add connection notice if customer not connected
+	 */
+	public function show_notices() {
+		$options             = $GLOBALS['AfterShip']->options;
+		$server_protocol     = (int) $_SERVER['SERVER_PORT'] == 80 ? 'http://' : 'https://';
+		$store_url           = $server_protocol . $_SERVER['HTTP_HOST'];
+		$query               = array(
+			'shop'       => $store_url,
+			'utm_source' => 'wordpress_plugin',
+			'utm_medium' => 'notices',
+		);
+		$go_to_dashboard_url = 'https://accounts.aftership.com/oauth-session?callbackUrl=' . urlencode( 'https://accounts.aftership.com/oauth/woocommerce-automizely-aftership?signature=' . base64_encode( json_encode( $query ) ) );
+		?>
+		<?php if ( ! isset( $options['connected'] ) || ! $options['connected'] ) : ?>
+			<div class="notice notice-info">
+				<p>Connect to AfterShip <a href="<?php echo $go_to_dashboard_url; ?>"> Go</a></p>
+			</div>
+		<?php endif; ?>
+
+		<?php
+	}
 }

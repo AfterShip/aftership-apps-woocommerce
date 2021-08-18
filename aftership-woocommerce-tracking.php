@@ -161,6 +161,7 @@ if ( is_woocommerce_active() ) {
 				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
+				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'rest_shop_coupon_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
@@ -172,6 +173,7 @@ if ( is_woocommerce_active() ) {
 				register_activation_hook( __FILE__, array( $this, 'install' ) );
 				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( $this, 'deactivation' ) );
+				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
 			}
 
 			/**
@@ -180,6 +182,9 @@ if ( is_woocommerce_active() ) {
 			function deactivation() {
 				$this->options['connected'] = false;
 				update_option( 'aftership_option_name', $this->options );
+
+				// Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
+				call_user_func( array( $this->actions, 'revoke_aftership_key' ) );
 			}
 
 			/**
