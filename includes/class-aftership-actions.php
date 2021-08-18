@@ -948,7 +948,7 @@ class AfterShip_Actions {
 			if ( ! is_null( $key ) && $key['key_id'] ) {
 				$wpdb->delete( $wpdb->prefix . 'woocommerce_api_keys', array( 'key_id' => $key['key_id'] ), array( '%d' ) );
 			}
-		} catch ( e ) {
+		} catch ( Exception $e ) {
 			return false;
 		}
 	}
