@@ -157,6 +157,10 @@ class AfterShip_Settings {
 			$new_input['use_track_button'] = true;
 		}
 
+		if ( isset( $input['connected'] ) ) {
+			$new_input['connected'] = $input['connected'];
+		}
+
 		return $new_input;
 	}
 
