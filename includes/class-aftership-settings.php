@@ -29,6 +29,13 @@ class AfterShip_Settings {
 	private $dom_id_couriers = 'aftership_couriers';
 
 	/**
+	 * DOM id for hidden aftership connected.
+	 *
+	 * @var string $dom_aftership_connected
+	 */
+	private $dom_aftership_connected = 'aftership_connected';
+
+	/**
 	 * Start up
 	 */
 	public function __construct() {
@@ -158,7 +165,7 @@ class AfterShip_Settings {
 		}
 
 		if ( isset( $input['connected'] ) ) {
-			$new_input['connected'] = $input['connected'];
+			$new_input['connected'] = boolval( $input['connected'] );
 		}
 
 		return $new_input;
@@ -198,7 +205,9 @@ class AfterShip_Settings {
 		echo '<select data-placeholder="Please select couriers" id="' . $this->dom_id_courier_select . '" multiple style="width:100%">';
 		echo '</select>';
 		echo '<input type="hidden" id="' . $this->dom_id_couriers . '" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
-
+		if ( isset( $this->options['connected'] ) ) {
+			echo '<input type="hidden" id="' . $this->dom_aftership_connected . '" name="aftership_option_name[connected]" value="' . $this->options['connected'] . '" />';
+		}
 	}
 
 	/**
