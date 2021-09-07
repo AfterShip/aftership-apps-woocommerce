@@ -249,7 +249,10 @@ if ( is_woocommerce_active() ) {
 				wp_register_style('automizely-aftership-admin', plugins_url('assets/css/normalize.css', __FILE__), array(), '1.0');
 				wp_enqueue_style('automizely-aftership-admin');
 			}
-
+			
+			/**
+             * Remove other notice message for setting and landing page
+             */
             public function as_admin_remove_notice_style() {
                 $page_screen = get_current_screen()->id;
                 $screen_remove_notice = [
