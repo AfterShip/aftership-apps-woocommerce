@@ -33,7 +33,7 @@ if ($debug === 'yes') {
 	<div class="auto-as-index-header">
 	<div class="auto-as-index-logo">
 		<img
-		src="<?php echo AUTOMIZELY_AFTERSHIP_URL . '/assets/images/wordpress-aftership-logo.svg' ?>"
+		src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg' ?>"
 		alt=""
 		/>
 	</div>
@@ -54,7 +54,7 @@ if ($debug === 'yes') {
 		display: block;
 		margin: 80px auto 0px;
 		"
-		src="<?php echo AUTOMIZELY_AFTERSHIP_URL . '/assets/images/tracking-page.png' ?>"
+		src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/tracking-page.png' ?>"
 		alt=""
 	/>
 	</div>

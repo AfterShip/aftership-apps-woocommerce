@@ -22,8 +22,7 @@ require_once( 'woo-includes/woo-functions.php' );
 
 define( 'AFTERSHIP_VERSION', '1.13.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
-define('AUTOMIZELY_AFTERSHIP_FOLDER', basename(AFTERSHIP_PATH));
-define('AUTOMIZELY_AFTERSHIP_URL', plugins_url() . '/' . AUTOMIZELY_AFTERSHIP_FOLDER);
+define('AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename(AFTERSHIP_PATH));
 
 if ( is_woocommerce_active() ) {
 
@@ -136,7 +135,7 @@ if ( is_woocommerce_active() ) {
 
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
 				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css'));
-				// rid of the WordPress admin notice in the Dashboard
+				// Remove other plugins notice message for setting and landing page
                 add_action('admin_enqueue_scripts', array($this, 'as_admin_remove_notice_style'));
 
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
@@ -203,7 +202,7 @@ if ( is_woocommerce_active() ) {
                     'manage_options',
                     'aftership-setting-admin',
                     array( $this, 'aftership_setting_page' ),
-                    AUTOMIZELY_AFTERSHIP_URL . '/assets/images/favicon-aftership.svg',
+                    AFTERSHIP_ASSETS_URL . '/assets/images/favicon-aftership.svg',
                     56.5
                 );
 			}
@@ -226,8 +225,7 @@ if ( is_woocommerce_active() ) {
 
             /**
              * Description: Called via admin_init action in Constructor
-             *              Will redirect to the plugin page if the automizely_marketing_plugin_redirection is setup.
-             *              Once redirection isDisplay Track Button at Order History Page pushed, the key is removed.
+             *              Will redirect to the plugin page if the automizely_aftership_plugin_actived is setup.
              * Return:      void
              **/
             function automizely_aftership_plugin_active()
@@ -251,7 +249,7 @@ if ( is_woocommerce_active() ) {
 			}
 			
 			/**
-             * Remove other notice message for setting and landing page
+             * Remove other plugins notice message for setting and landing page
              */
             public function as_admin_remove_notice_style() {
                 $page_screen = get_current_screen()->id;
@@ -274,7 +272,7 @@ if ( is_woocommerce_active() ) {
 				if (isset($this->options['connected']) && $this->options['connected'] === true) {
 					exit(wp_redirect("admin.php?page=aftership-setting-admin"));
 				}
-				include_once AFTERSHIP_PATH . '/views/automizely_aftership_connect_view.php';
+				include_once AFTERSHIP_PATH . '/views/automizely_aftership_on_boarding_view.php';
 			}
 
             /**
