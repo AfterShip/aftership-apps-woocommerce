@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.12.15
+ * Version: 1.13.0
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.12.15' );
+define( 'AFTERSHIP_VERSION', '1.13.0' );
+define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
+define('AUTOMIZELY_AFTERSHIP_FOLDER', basename(AFTERSHIP_PATH));
+define('AUTOMIZELY_AFTERSHIP_URL', plugins_url() . '/' . AUTOMIZELY_AFTERSHIP_FOLDER);
 
 if ( is_woocommerce_active() ) {
 
@@ -117,7 +120,7 @@ if ( is_woocommerce_active() ) {
 				$this->plugin_dir  = untrailingslashit( plugin_dir_path( __FILE__ ) );
 				$this->plugin_url  = untrailingslashit( plugin_dir_url( __FILE__ ) );
 
-				$this->options           = get_option( 'aftership_option_name' );
+				$this->options           = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 				$this->couriers          = json_decode( file_get_contents( $this->plugin_dir . '/assets/js/couriers.json' ), true );
 				$this->selected_couriers = $this->get_selected_couriers();
 				$this->use_track_button  = isset( $this->options['use_track_button'] ) ? $this->options['use_track_button'] : $this->use_track_button;
@@ -126,10 +129,28 @@ if ( is_woocommerce_active() ) {
 				// Include required files.
 				$this->includes();
 
+				// Check if woocommerce active.
+				if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+					add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'add_rest_api' ) );
+				}
+
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
+				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css'));
+				// rid of the WordPress admin notice in the Dashboard
+                add_action('admin_enqueue_scripts', array($this, 'as_admin_remove_notice_style'));
+
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
+				// register admin pages for the plugin
+				add_action('admin_menu', array($this, 'automizely_aftership_admin_menu'));
+                add_action('admin_menu', array($this, 'automizely_aftership_connect_page'));
 				add_action( 'plugins_loaded', array( $this->actions, 'load_plugin_textdomain' ) );
+				/**
+				 * Admin Initialization calls registration
+				 * We need this to send user to plugin's Admin page on activation
+				 */
+				add_action('admin_init', array($this, 'automizely_aftership_plugin_active'));
+				add_action('admin_footer', array($this, 'deactivate_modal'));
 
 				// View Order Page.
 				add_action( 'woocommerce_view_order', array( $this->actions, 'display_tracking_info' ) );
@@ -155,8 +176,144 @@ if ( is_woocommerce_active() ) {
 				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
+				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
 
-				register_activation_hook( __FILE__, array( $this, 'install' ) );
+				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
+				add_filter( 'rest_shop_coupon_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
+				add_filter( 'rest_product_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
+				add_filter( 'woocommerce_rest_orders_prepare_object_query', array( $this->actions, 'add_query' ), 10, 2 );
+				add_filter( 'woocommerce_rest_product_object_query', array( $this->actions, 'add_query' ), 10, 2 );
+				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
+
+                register_activation_hook( __FILE__, array( $this, 'install' ) );
+                register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
+                register_uninstall_hook( __FILE__, array( $this, 'deactivation' ) );
+				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
+			}
+
+			/**
+			 * Description: Will add the landing page into the Menu System of Wordpress
+			 * Parameters:  None
+			 */
+			public function automizely_aftership_admin_menu()
+			{
+				add_menu_page(
+				    "AfterShip",
+                    "AfterShip",
+                    'manage_options',
+                    'aftership-setting-admin',
+                    array( $this, 'aftership_setting_page' ),
+                    AUTOMIZELY_AFTERSHIP_URL . '/assets/images/favicon-aftership.svg',
+                    56.5
+                );
+			}
+
+            /**
+             * Description: Will add the landing page into the Menu System of Wordpress
+             * Parameters:  None
+             */
+            public function automizely_aftership_connect_page()
+            {
+                add_menu_page(
+                    "AfterShip Connect",
+                    "AfterShip Connect",
+                    'manage_options',
+                    'automizely-aftership-index',
+                    array($this, 'automizely_aftership_index')
+                );
+                remove_menu_page('automizely-aftership-index');
+            }
+
+            /**
+             * Description: Called via admin_init action in Constructor
+             *              Will redirect to the plugin page if the automizely_marketing_plugin_redirection is setup.
+             *              Once redirection isDisplay Track Button at Order History Page pushed, the key is removed.
+             * Return:      void
+             **/
+            function automizely_aftership_plugin_active()
+            {
+				if (get_option('automizely_aftership_plugin_actived', false)) {
+                    delete_option('automizely_aftership_plugin_actived');
+                    exit(wp_redirect("admin.php?page=automizely-aftership-index"));
+				}
+            }
+
+			/**
+			 * Description: Will add the backend CSS required for the display of automizely-marketing settings page.
+			 * Parameters:  hook | Not used.
+			 */
+			public function automizely_aftership_add_admin_css()
+			{
+				wp_register_style('automizely-aftership-admin', plugins_url('assets/css/index.css', __FILE__), array(), '1.1');
+				wp_enqueue_style('automizely-aftership-admin');
+				wp_register_style('automizely-aftership-admin', plugins_url('assets/css/normalize.css', __FILE__), array(), '1.0');
+				wp_enqueue_style('automizely-aftership-admin');
+			}
+
+            public function as_admin_remove_notice_style() {
+                $page_screen = get_current_screen()->id;
+                $screen_remove_notice = [
+                    'toplevel_page_automizely-aftership-index',
+                    'toplevel_page_aftership-setting-admin'
+                ];
+
+                if (current_user_can( 'manage_options' ) && in_array($page_screen, $screen_remove_notice)) {
+                    echo '<style>.update-nag, .updated, .notice, #wpfooter, .error, .is-dismissible { display: none; }</style>';
+                }
+            }
+
+			/**
+			 * Description:
+			 * Parameters:  None
+			 */
+			public function automizely_aftership_index()
+			{
+				if (isset($this->options['connected']) && $this->options['connected'] === true) {
+					exit(wp_redirect("admin.php?page=aftership-setting-admin"));
+				}
+				include_once AFTERSHIP_PATH . '/views/automizely_aftership_connect_view.php';
+			}
+
+            /**
+             * Options page callback
+             */
+            public function aftership_setting_page() {
+                include AFTERSHIP_PATH . '/views/automizely_aftership_setting_view.php';
+            }
+
+			public function deactivate_modal()
+			{
+				if (current_user_can('manage_options')) {
+					global $pagenow;
+
+					if ('plugins.php' !== $pagenow) {
+						return;
+					}
+				}
+			}
+
+			/**
+			 * Remove settings when plugin deactivation.
+			 **/
+			function deactivation() {
+				$this->options['connected'] = false;
+				update_option( 'aftership_option_name', $this->options );
+
+				// Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
+				call_user_func( array( $this->actions, 'revoke_aftership_key' ) );
+
+				delete_option('automizely_aftership_plugin_actived');
+			}
+
+			/**
+			 * Register REST API endpoints
+			 *
+			 * @param array $controllers REST Controllers.
+			 * @return array
+			 */
+			function add_rest_api( $controllers ) {
+				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
+				return $controllers;
 			}
 
 			/**
@@ -175,6 +332,8 @@ if ( is_woocommerce_active() ) {
 				if ( is_object( $wp_roles ) ) {
 					$wp_roles->add_cap( 'administrator', 'manage_aftership' );
 				}
+
+				add_option('automizely_aftership_plugin_actived', true);
 			}
 
 
@@ -184,7 +343,7 @@ if ( is_woocommerce_active() ) {
 			 * @return array
 			 */
 			public function get_selected_couriers() {
-				$slugs             = explode( ',', $this->options['couriers'] );
+				$slugs             = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
 				$selected_couriers = array();
 				foreach ( $this->couriers as $courier ) {
 					if ( in_array( $courier['slug'], $slugs, true ) ) {
@@ -205,6 +364,7 @@ if ( is_woocommerce_active() ) {
 				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
+				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
 			}
 
 			/**
