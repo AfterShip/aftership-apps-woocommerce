@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.12.15
+Stable tag: 1.13.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,17 +71,24 @@ ADSOne • Australia Post • Bonds Couriers • CourierPost • Couriers Please
 
 == Installation ==
 
-1. [Sign up AfterShip account for FREE](https://secure.aftership.com/signup)
-2. Under the `Apps` tab, select WooCommerce.
-3. To get the `API Key` go to your WordPress admin and [Download AfterShip plugin](http://downloads.wordpress.org/plugin/aftership-woocommerce-tracking.zip), then install and activate it.
-4. In the Wordpress admin, go to `Settings` and select the `AfterShip` plugin. Check `Use Track Button` (for displaying tracking info on the order history page) and add your custom branded tracking page domain.
-5. Check `Use Track Button` (for displaying tracking info on the order history page) and add your custom branded tracking page domain.
-6. Now go to the `User Profile` settings to generate AfterShip’s Wordpress API Key.
-7. Copy the API Key generated and head back to your AfterShip account.
-8. Input `Store URL` and `API Key` and click on `Connect`.
+We get two methods on how to connect WooCommerce to AfterShip
+Install from WordPress Admin:
+1. Log in to your WooCommerce store
+2. Install the AfterShip plugin from your WordPress Admin
+3. Activate the plugin
+4. Click the "Connection Now" button on the plugin landing page
+5. [Log in to your AfterShip account](https://secure.aftership.com/signup), follow the WooCommerce OAuth flow, then click "Approve" button
+6. To check if your WordPress store is properly connected to AfterShip, go to Organization settings > Store connections > Search for your WordPress store
+7. In the WordPress admin, go to Settings and select the AfterShip plugin.
+8. Check Use Track Button (for displaying tracking info on the order history page) and add your custom branded tracking page domain.
 
-*** This plugin requires at least PHP 5.2.4
-*** This plugin requires at least WooCommerce 2.1
+Install from Aftership Organization Admin:
+1. Log in to your AfterShip account
+2. From the Organization admin > Go to Apps > AfterShip > WooCommerce
+3. Enter your Store URL > Click on Install app, then follow setups in "Install from WordPress Admin Section"
+
+*** This plugin requires at least WooCommerce version 3.0.0 or above
+*** This plugin requires at least WordPress version 4.4 or above
 
 ###Further Reading
 
@@ -128,6 +135,11 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 7. Automatically send out delivery notifications
 
 == Changelog ==
+
+= 1.13.0 =
+* Enhancement - Added New Admin Menu
+* Enhancement - Enhancement - Updated Settings Page Design
+* Enhancement - Compatible with WooCommerce OAuth Authentication
 
 = 1.12.15 =
 * Update Courier list.

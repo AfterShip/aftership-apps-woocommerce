@@ -29,10 +29,16 @@ class AfterShip_Settings {
 	private $dom_id_couriers = 'aftership_couriers';
 
 	/**
+	 * DOM id for hidden aftership connected.
+	 *
+	 * @var string $dom_aftership_connected
+	 */
+	private $dom_aftership_connected = 'aftership_connected';
+
+	/**
 	 * Start up
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'page_init' ) );
 		add_action( 'admin_print_styles', array( $this, 'admin_styles' ) );
 		add_action( 'admin_print_scripts', array( &$this, 'library_scripts' ) );
@@ -59,45 +65,11 @@ class AfterShip_Settings {
 	}
 
 	/**
-	 * Add options page
-	 */
-	public function add_plugin_page() {
-		// This page will be under "Settings".
-		add_options_page(
-			'AfterShip Settings Admin',
-			'AfterShip',
-			'manage_options',
-			'aftership-setting-admin',
-			array( $this, 'create_admin_page' )
-		);
-	}
-
-	/**
-	 * Options page callback
-	 */
-	public function create_admin_page() {
-		// Set class property.
-		$this->options = get_option( 'aftership_option_name' );
-		?>
-		<div class="wrap">
-			<h2>AfterShip Settings</h2>
-
-			<form method="post" action="options.php">
-				<?php
-				// This prints out all hidden setting fields.
-				settings_fields( 'aftership_option_group' );
-				do_settings_sections( 'aftership-setting-admin' );
-				submit_button();
-				?>
-			</form>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Register and add settings
 	 */
 	public function page_init() {
+		$this->options = get_option( 'aftership_option_name' );
+
 		register_setting(
 			'aftership_option_group',
 			'aftership_option_name',
@@ -113,7 +85,7 @@ class AfterShip_Settings {
 
 		add_settings_field(
 			$this->dom_id_couriers,
-			'Couriers',
+			'',
 			array( $this, 'couriers_callback' ),
 			'aftership-setting-admin',
 			'aftership_setting_section_id'
@@ -121,7 +93,7 @@ class AfterShip_Settings {
 
 		add_settings_field(
 			'use_track_button',
-			'Display Track Button at Order History Page',
+			'',
 			array( $this, 'track_button_callback' ),
 			'aftership-setting-admin',
 			'aftership_setting_section_id'
@@ -129,7 +101,7 @@ class AfterShip_Settings {
 
 		add_settings_field(
 			'custom_domain',
-			'Display Tracking Information at Custom Domain',
+			'',
 			array( $this, 'custom_domain_callback' ),
 			'aftership-setting-admin',
 			'aftership_setting_section_id'
@@ -155,6 +127,10 @@ class AfterShip_Settings {
 
 		if ( isset( $input['use_track_button'] ) ) {
 			$new_input['use_track_button'] = true;
+		}
+
+		if ( isset( $input['connected'] ) ) {
+			$new_input['connected'] = boolval( $input['connected'] );
 		}
 
 		return $new_input;
@@ -191,10 +167,13 @@ class AfterShip_Settings {
 		if ( isset( $this->options['couriers'] ) ) {
 			$couriers = explode( ',', $this->options['couriers'] );
 		}
+		echo '<div class="auto-as-admin-select-title">Courier</div>';
 		echo '<select data-placeholder="Please select couriers" id="' . $this->dom_id_courier_select . '" multiple style="width:100%">';
 		echo '</select>';
 		echo '<input type="hidden" id="' . $this->dom_id_couriers . '" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
-
+		if ( isset( $this->options['connected'] ) ) {
+			echo '<input type="hidden" id="' . $this->dom_aftership_connected . '" name="aftership_option_name[connected]" value="' . $this->options['connected'] . '" />';
+		}
 	}
 
 	/**
@@ -202,7 +181,7 @@ class AfterShip_Settings {
 	 */
 	public function custom_domain_callback() {
 		printf(
-			'<input type="text" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
+			'<div class="auto-as-admin-input-title">Display Tracking Information at Custom Domain</div><input type="text" class="auto-as-admin-input-content" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
 			isset( $this->options['custom_domain'] ) ? $this->normalize_custom_domain( $this->options['custom_domain'] ) : 'track.aftership.com'
 		);
 	}
@@ -212,7 +191,7 @@ class AfterShip_Settings {
 	 */
 	public function track_button_callback() {
 		printf(
-			'<label><input type="checkbox" id="use_track_button" name="aftership_option_name[use_track_button]" %s>Use Track Button</label>',
+			'<div class="auto-as-admin-checkbox-title">Display Track Button at Order History Page</div><label><input type="checkbox" id="use_track_button" name="aftership_option_name[use_track_button]" %s>Use Track Button</label>',
 			( isset( $this->options['use_track_button'] ) && true === $this->options['use_track_button'] ) ? 'checked="checked"' : ''
 		);
 	}

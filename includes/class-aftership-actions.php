@@ -196,7 +196,7 @@ class AfterShip_Actions {
 			echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
 		}
 		echo '</select>';
-		echo '<a class="link-to-setting" href="options-general.php?page=aftership-setting-admin">Update carrier list</a>';
+		echo '<a class="link-to-setting" href="admin.php?page=aftership-setting-admin">Update carrier list</a>';
 		echo '</p>';
 
 		$options = array();
@@ -886,5 +886,101 @@ class AfterShip_Actions {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Add 'modified_after' and 'modified_before' for data query
+	 *
+	 * @param array           $args
+	 * @param WP_REST_Request $request
+	 * @return array
+	 */
+	function add_query( array $args, $request ) {
+		$modified_after  = $request->get_param( 'modified_after' );
+		$modified_before = $request->get_param( 'modified_before' );
+		if ( ! $modified_after || ! $modified_before ) {
+			return $args;
+		};
+		$args['date_query'][] = array(
+			'column' => 'post_modified',
+			'after'  => $modified_after,
+			'before' => $modified_before,
+		);
+		return $args;
+	}
+
+	/**
+	 * Add 'modified' to orderby enum
+	 *
+	 * @param array $params
+	 */
+	public function add_collection_params( $params ) {
+		$enums = $params['orderby']['enum'];
+		if ( ! in_array( 'modified', $enums ) ) {
+			$params['orderby']['enum'][] = 'modified';
+		}
+		return $params;
+	}
+
+	/**
+	 * Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
+	 */
+	public function revoke_aftership_key() {
+		try {
+			global $wpdb;
+			// AfterShip Oauth key
+			$key_permission         = 'read_write';
+			$key_description_prefix = 'AfterShip - API Read/Write';
+
+			$key = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT key_id, user_id, description, permissions, truncated_key, last_access
+					FROM {$wpdb->prefix}woocommerce_api_keys
+					WHERE permissions = %s
+					AND INSTR(description, %s) > 0
+					ORDER BY key_id DESC LIMIT 1",
+					$key_permission,
+					$key_description_prefix
+				),
+				ARRAY_A
+			);
+
+			if ( ! is_null( $key ) && $key['key_id'] ) {
+				$wpdb->delete( $wpdb->prefix . 'woocommerce_api_keys', array( 'key_id' => $key['key_id'] ), array( '%d' ) );
+			}
+		} catch ( Exception $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Add connection notice if customer not connected
+	 */
+	public function show_notices() {
+		$screen            = get_current_screen()->id;
+		$aftership_options = $GLOBALS['AfterShip']->options;
+
+		$pages_with_tip = array(
+			'dashboard',
+			'update-core',
+			'plugins',
+			'plugin-install',
+			'shop_order',
+			'edit-shop_order',
+		);
+		if ( ! in_array( $screen, $pages_with_tip ) ) {
+			return;
+		}
+
+		$aftership_plugin_is_actived = is_plugin_active( 'aftership-woocommerce-tracking/aftership-woocommerce-tracking.php' );
+		$unconnect_aftership         = ! ( isset( $aftership_options['connected'] ) && $aftership_options['connected'] === true );
+		?>
+		<?php if ( $aftership_plugin_is_actived && $unconnect_aftership ) : ?>
+			<div class="updated notice is-dismissible">
+				<p>[AfterShip] Connect your Woocommerce store to provide the best post-purchase experience to drive customer loyalty and additional sales. <a href="admin.php?page=automizely-aftership-index"> Let's get started >> </a></p>
+			</div>
+		<?php endif; ?>
+
+		<?php
 	}
 }
