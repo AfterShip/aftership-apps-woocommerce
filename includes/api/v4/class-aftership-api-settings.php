@@ -85,9 +85,9 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 		}
 
 		// Notice: true -> '1', false -> ''
-		if ( isset( $data['connected'] ) && in_array($data['connected'], array('1','')) && in_array( boolval($data['connected']), array( true, false ), true ) ) {
-            $options['connected'] = boolval($data['connected']);
-        }
+		if ( isset( $data['connected'] ) && in_array( $data['connected'], array( '1', '' ) ) && in_array( boolval( $data['connected'] ), array( true, false ), true ) ) {
+			$options['connected'] = boolval( $data['connected'] );
+		}
 
 		if ( isset( $data['use_track_button'] ) && in_array( $data['use_track_button'], array( true, false ), true ) ) {
 			if ( '' === $use_tracking_button ) {

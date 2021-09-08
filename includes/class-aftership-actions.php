@@ -957,25 +957,25 @@ class AfterShip_Actions {
 	 * Add connection notice if customer not connected
 	 */
 	public function show_notices() {
-        $screen = get_current_screen()->id;
-        $aftership_options = $GLOBALS['AfterShip']->options;
+		$screen            = get_current_screen()->id;
+		$aftership_options = $GLOBALS['AfterShip']->options;
 
-        $pages_with_tip = [
-                'dashboard',
-            'update-core',
-            'plugins',
-            'plugin-install',
-            'shop_order',
-            'edit-shop_order'
-        ];
-        if ( !in_array($screen, $pages_with_tip)) {
-            return;
-        }
+		$pages_with_tip = array(
+			'dashboard',
+			'update-core',
+			'plugins',
+			'plugin-install',
+			'shop_order',
+			'edit-shop_order',
+		);
+		if ( ! in_array( $screen, $pages_with_tip ) ) {
+			return;
+		}
 
-		$aftership_plugin_is_actived = is_plugin_active('aftership-woocommerce-tracking/aftership-woocommerce-tracking.php');
-        $unconnect_aftership = !(isset($aftership_options['connected']) && $aftership_options['connected'] === true);
+		$aftership_plugin_is_actived = is_plugin_active( 'aftership-woocommerce-tracking/aftership-woocommerce-tracking.php' );
+		$unconnect_aftership         = ! ( isset( $aftership_options['connected'] ) && $aftership_options['connected'] === true );
 		?>
-		<?php if ( $aftership_plugin_is_actived && $unconnect_aftership) : ?>
+		<?php if ( $aftership_plugin_is_actived && $unconnect_aftership ) : ?>
 			<div class="updated notice is-dismissible">
 				<p>[AfterShip] Connect your Woocommerce store to provide the best post-purchase experience to drive customer loyalty and additional sales. <a href="admin.php?page=automizely-aftership-index"> Let's get started >> </a></p>
 			</div>
