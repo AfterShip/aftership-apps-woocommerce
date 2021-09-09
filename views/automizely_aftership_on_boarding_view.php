@@ -8,9 +8,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 }
 
-$server_protocol = (int) $_SERVER['SERVER_PORT'] == 80 ? 'http://' : 'https://';
-
-$store_url = $server_protocol . $_SERVER['HTTP_HOST'];
+$store_url = get_site_url();
 
 $query = array(
 	'shop'       => $store_url,
