@@ -11,9 +11,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $this->options      = get_option( 'aftership_option_name' );
 $is_display_connect = $this->options['connected'] && $this->options['connected'] === true;
 
-$server_protocol = (int) $_SERVER['SERVER_PORT'] == 80 ? 'http://' : 'https://';
-
-$store_url = $server_protocol . $_SERVER['HTTP_HOST'];
+$store_url = get_site_url();
 
 $query = array(
 	'shop'       => $store_url,
