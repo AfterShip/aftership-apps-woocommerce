@@ -41,7 +41,9 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 	 * @return array
 	 */
 	public function get_list() {
-		return array( 'settings' => get_option( 'aftership_option_name' ) );
+		$settings            = get_option( 'aftership_option_name' );
+		$settings['version'] = AFTERSHIP_VERSION;
+		return array( 'settings' => $settings );
 	}
 
 
