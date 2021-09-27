@@ -137,7 +137,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 1.13.3 =
-* Fix known issue
+* Update courier list
 
 = 1.13.2 =
 * GET v5/settings API add field: version
