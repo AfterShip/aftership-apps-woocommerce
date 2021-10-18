@@ -584,6 +584,10 @@ class AfterShip_Actions {
 			'destination_country' => wc_clean( $args['additional_fields']['destination_country'] ),
 			'state'               => wc_clean( $args['additional_fields']['state'] ),
 		);
+		$tracking_item['metrics']           = array(
+			'created_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+			'updated_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+		);
 		$tracking_items                     = $this->get_tracking_items( $order_id );
 		$exist                              = false;
 		foreach ( $tracking_items as $key => $item ) {

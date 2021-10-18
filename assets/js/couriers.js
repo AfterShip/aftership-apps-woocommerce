@@ -1232,6 +1232,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dbschenker-api",
+			"name": "DB Schenker",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "dbschenker-b2b",
 			"name": "DB Schenker B2B",
 			"other_name": null,
@@ -1260,12 +1266,6 @@ function get_aftership_couriers() {
 		{
 			"slug": "ddexpress",
 			"name": "DD Express Courier",
-			"other_name": "",
-			"required_fields": []
-		},
-		{
-			"slug": "delcart-in",
-			"name": "Delcart",
 			"other_name": "",
 			"required_fields": []
 		},
@@ -2023,6 +2023,12 @@ function get_aftership_couriers() {
 			"slug": "fastway-za",
 			"name": "Fastway South Africa",
 			"other_name": "Fastway Couriers",
+			"required_fields": []
+		},
+		{
+			"slug": "fdsexpress",
+			"name": "FDSEXPRESS",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -3328,6 +3334,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "mnx",
+			"name": "MNX",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "mondialrelay",
 			"name": "Mondial Relay",
 			"other_name": "Mondial Relay France",
@@ -3721,6 +3733,12 @@ function get_aftership_couriers() {
 			]
 		},
 		{
+			"slug": "padtf",
+			"name": "平安达腾飞快递",
+			"other_name": "PAD",
+			"required_fields": []
+		},
+		{
 			"slug": "pago",
 			"name": "Pago Logistics",
 			"other_name": null,
@@ -3865,6 +3883,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "passportshipping",
 			"name": "Passport Shipping",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "patheon",
+			"name": "Patheon Logistics",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -4158,6 +4182,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "qintl-api",
+			"name": "Quickstat Courier LLC",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "quantium",
 			"name": "Quantium",
 			"other_name": "u51a0u5eadu7269u6d41",
@@ -4328,12 +4358,6 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
-			"slug": "saee",
-			"name": "One Saar for IT",
-			"other_name": "",
-			"required_fields": []
-		},
-		{
 			"slug": "safexpress",
 			"name": "Safexpress",
 			"other_name": "Safexpress",
@@ -4433,6 +4457,12 @@ function get_aftership_couriers() {
 			"slug": "sf-express",
 			"name": "SF Express",
 			"other_name": "順豊快遞, SF",
+			"required_fields": []
+		},
+		{
+			"slug": "sf-express-cn",
+			"name": "SF Express China",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5098,6 +5128,12 @@ function get_aftership_couriers() {
 			]
 		},
 		{
+			"slug": "total-express-api",
+			"name": "Total Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "tourline",
 			"name": "tourline",
 			"other_name": "ctt",
@@ -5125,6 +5161,12 @@ function get_aftership_couriers() {
 			"slug": "trans-kargo",
 			"name": "Trans Kargo Internasional",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "transaher",
+			"name": "Transaher",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5168,6 +5210,12 @@ function get_aftership_couriers() {
 			"slug": "ubi-logistics",
 			"name": "UBI Smart Parcel",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "uc56",
+			"name": "ucexpress",
+			"other_name": "优速快递",
 			"required_fields": []
 		},
 		{
