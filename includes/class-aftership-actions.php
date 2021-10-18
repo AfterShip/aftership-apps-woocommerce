@@ -592,7 +592,10 @@ class AfterShip_Actions {
 		$exist                              = false;
 		foreach ( $tracking_items as $key => $item ) {
 			if ( $item['tracking_id'] == $tracking_item['tracking_id'] ) {
-				$exist                  = true;
+				$exist = true;
+				if ( isset( $item['metrics'] ) && isset( $item['metrics']['created_at'] ) ) {
+					$tracking_item['metrics']['created_at'] = $item['metrics']['created_at'];
+				}
 				$tracking_items[ $key ] = $tracking_item;
 			}
 		}
