@@ -603,9 +603,9 @@ class AfterShip_Actions {
 			$tracking_items[] = $tracking_item;
 		}
 
-		$this->save_tracking_items( $order_id, $tracking_items );
+		$this->save_tracking_items( $order_id, array_values( $tracking_items ) );
 
-		return $tracking_item;
+		return array_values( $tracking_item );
 	}
 
 	/**
