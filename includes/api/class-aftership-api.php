@@ -34,8 +34,9 @@ class AfterShip_API {
 	 * @since 2.0
 	 */
 	public function __construct() {
-		 // disable notice output in api json response.
-		error_reporting( 0 );
+		if ( ! WP_DEBUG ) {
+			error_reporting( 0 );
+		}
 
 		// add query vars.
 		add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
