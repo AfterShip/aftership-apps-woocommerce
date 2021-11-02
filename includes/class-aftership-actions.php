@@ -917,6 +917,36 @@ class AfterShip_Actions {
 	}
 
 	/**
+	 * Add 'modified_after' and 'modified_before' for data query
+	 *
+	 * @param array           $args
+	 * @param WP_REST_Request $request
+	 * @return array
+	 */
+	function add_customer_query( array $args, $request ) {
+		$order           = $request->get_param( 'order' );
+		$modified_after  = $request->get_param( 'modified_after' );
+		$modified_before = $request->get_param( 'modified_before' );
+		if ( ! $modified_after || ! $modified_before ) {
+			return $args;
+		};
+		// @notice may overwrite other service's query
+		// @notice currently only AfterShip use modified_after & modified_before
+		$args['meta_query'] = array(
+			'modified' => array(
+				'key'     => 'last_update',
+				'value'   => array( strtotime( $modified_after ), strtotime( $modified_before ) ),
+				'type'    => 'numeric',
+				'compare' => 'BETWEEN',
+			),
+		);
+		$args['orderby']    = array(
+			'modified' => $order ? $order : 'DESC',
+		);
+		return $args;
+	}
+
+	/**
 	 * Add 'modified' to orderby enum
 	 *
 	 * @param array $params
