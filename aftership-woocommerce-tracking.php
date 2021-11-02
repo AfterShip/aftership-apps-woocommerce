@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.13.6
+ * Version: 1.13.7
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.13.6' );
+define( 'AFTERSHIP_VERSION', '1.13.7' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
@@ -184,9 +184,9 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_product_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 
-				register_activation_hook( __FILE__, array( $this, 'install' ) );
-				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
-				register_uninstall_hook( __FILE__, array( $this, 'deactivation' ) );
+				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
+				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
+				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
 			}
 
@@ -289,12 +289,13 @@ if ( is_woocommerce_active() ) {
 			/**
 			 * Remove settings when plugin deactivation.
 			 **/
-			function deactivation() {
-				$this->options['connected'] = false;
-				update_option( 'aftership_option_name', $this->options );
+			public static function deactivation() {
+				$legacy_options              = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+				$legacy_options['connected'] = false;
+				update_option( 'aftership_option_name', $legacy_options );
 
 				// Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
-				call_user_func( array( $this->actions, 'revoke_aftership_key' ) );
+				call_user_func( array( 'AfterShip_Actions', 'revoke_aftership_key' ) );
 
 				delete_option( 'automizely_aftership_plugin_actived' );
 			}
@@ -314,7 +315,7 @@ if ( is_woocommerce_active() ) {
 			 * Add manage_aftership cap for administrator
 			 * Add this to allow customers to more finely configure the permissions of the aftership plugin.
 			 */
-			public function install() {
+			public static function install() {
 				global $wp_roles;
 
 				if ( class_exists( 'WP_Roles' ) ) {
