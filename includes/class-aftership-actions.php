@@ -962,7 +962,7 @@ class AfterShip_Actions {
 	/**
 	 * Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
 	 */
-	public function revoke_aftership_key() {
+	public static function revoke_aftership_key() {
 		try {
 			global $wpdb;
 			// AfterShip Oauth key
