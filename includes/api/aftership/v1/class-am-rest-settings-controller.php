@@ -43,7 +43,11 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		 */
 		public function get_settings( WP_REST_Request $request ) {
 			$settings            = get_option( $this->option_name );
-			$settings['version'] = AFTERSHIP_VERSION;
+			$settings['version'] = array(
+				'wordpress'   => get_bloginfo( 'version' ),
+				'woocommerce' => WC()->version,
+				'aftership'   => AFTERSHIP_VERSION,
+			);
 			return array( 'settings' => $settings );
 		}
 
