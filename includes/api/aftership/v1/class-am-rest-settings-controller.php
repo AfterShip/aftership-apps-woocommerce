@@ -38,12 +38,14 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		/**
 		 * GET AfterShip Settings
 		 *
-		 * @param  WP_REST_Request $request Request object.
 		 * @return array
 		 */
-		public function get_settings( WP_REST_Request $request ) {
-			$settings            = get_option( $this->option_name );
-			$settings['version'] = array(
+		public function get_settings() {
+			$settings                = get_option( $this->option_name );
+			$settings['currency']    = get_woocommerce_currency();
+			$settings['weight_unit'] = get_option( 'woocommerce_weight_unit' );
+			$settings['locale']      = get_locale();
+			$settings['version']     = array(
 				'wordpress'   => get_bloginfo( 'version' ),
 				'woocommerce' => WC()->version,
 				'aftership'   => AFTERSHIP_VERSION,
@@ -84,8 +86,7 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		 * @return array
 		 */
 		public function create_or_update_settings( WP_REST_Request $data ) {
-			$options            = get_option( $this->option_name );
-			$options['version'] = AFTERSHIP_VERSION;
+			$options = get_option( $this->option_name );
 
 			if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
 				if ( 'track.aftership.com' === $this->seek_option_value( $options, 'custom_domain' ) || '' === $this->seek_option_value( $options, 'custom_domain' ) ) {
@@ -108,7 +109,7 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 				}
 			}
 			update_option( $this->option_name, $options );
-			return array( 'settings' => $options );
+			return $this->get_settings();
 		}
 
 		/**
