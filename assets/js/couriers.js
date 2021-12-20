@@ -165,6 +165,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "aftership-mobile-push-amazon",
+			"name": "AfterShip-Mobile-Push-Amazon",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "agility",
 			"name": "Agility",
 			"other_name": null,
@@ -321,6 +327,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "anserx",
 			"name": "ANSERX",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "anteraja",
+			"name": "Anteraja",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -626,6 +638,14 @@ function get_aftership_couriers() {
 			"name": "Bombino Express Pvt Ltd",
 			"other_name": null,
 			"required_fields": []
+		},
+		{
+			"slug": "bomi",
+			"name": "Bomi Group",
+			"other_name": null,
+			"required_fields": [
+				"tracking_account_number"
+			]
 		},
 		{
 			"slug": "bond",
@@ -1166,6 +1186,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "crlexpress",
+			"name": "CRL Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "croshot",
 			"name": "Croshot",
 			"other_name": null,
@@ -1214,6 +1240,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "daeshin",
+			"name": "Daeshin",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "daiglobaltrack",
 			"name": "DAI Post",
 			"other_name": null,
@@ -1229,6 +1261,12 @@ function get_aftership_couriers() {
 			"slug": "danmark-post",
 			"name": "PostNord Denmark",
 			"other_name": "Danmark Post",
+			"required_fields": []
+		},
+		{
+			"slug": "danniao",
+			"name": "Danniao",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -1363,9 +1401,7 @@ function get_aftership_couriers() {
 			"slug": "deutsch-post",
 			"name": "Deutsche Post Mail",
 			"other_name": "dpdhl",
-			"required_fields": [
-				"tracking_ship_date"
-			]
+			"required_fields": []
 		},
 		{
 			"slug": "dex-i",
@@ -1852,6 +1888,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "elite-co",
+			"name": "Elite Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "elta-courier",
 			"name": "ELTA Hellenic Post",
 			"other_name": "Greece Post, Ελληνικά Ταχυδρομεία, ELTA Courier, Ταχυμεταφορές ΕΛΤΑ",
@@ -2201,7 +2243,7 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "fulfillmen",
-			"name": "Fulfillme",
+			"name": "Fulfillmen",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -2424,6 +2466,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "gorush",
+			"name": "Go Rush",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "grab-webhook",
 			"name": "Grab",
 			"other_name": null,
@@ -2546,6 +2594,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "heroexpress",
+			"name": "Hero Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "hh-exp",
 			"name": "Hua Han Logistics",
 			"other_name": "u534eu7ff0u56fdu9645u7269u6d41",
@@ -2594,6 +2648,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "hotsin-cargo",
+			"name": "SHENZHEN HOTSIN CARGO INT'L FORWARDING CO.,LTD",
+			"other_name": "深圳市和兴国际货运代理有限公司",
+			"required_fields": []
+		},
+		{
 			"slug": "houndexpress",
 			"name": "Hound Express",
 			"other_name": null,
@@ -2615,6 +2675,12 @@ function get_aftership_couriers() {
 			"slug": "hsm-global",
 			"name": "HSM Global",
 			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "huantong",
+			"name": "HuanTong",
+			"other_name": "环通跨境物流",
 			"required_fields": []
 		},
 		{
@@ -2663,6 +2729,12 @@ function get_aftership_couriers() {
 			"slug": "idexpress",
 			"name": "IDEX",
 			"other_name": "上海宏杉国际物流",
+			"required_fields": []
+		},
+		{
+			"slug": "idexpress-id",
+			"name": "iDexpress Indonesia",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -3033,6 +3105,12 @@ function get_aftership_couriers() {
 			"slug": "kn",
 			"name": "Kuehne + Nagel",
 			"other_name": "KN",
+			"required_fields": []
+		},
+		{
+			"slug": "komon-express",
+			"name": "Komon Express",
+			"other_name": "深圳市可蒙国际物流有限公司",
 			"required_fields": []
 		},
 		{
@@ -3977,6 +4055,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "parcll",
+			"name": "PARCLL",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "parknparcel",
 			"name": "Park N Parcel",
 			"other_name": "",
@@ -4500,6 +4584,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "sberlogistics-ru",
+			"name": "Sber Logistics",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "scudex-express",
 			"name": "Scudex Express",
 			"other_name": "",
@@ -4616,6 +4706,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "shipgate",
 			"name": "ShipGate",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "shippie",
+			"name": "Shippie",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -4943,6 +5039,12 @@ function get_aftership_couriers() {
 			"slug": "sweden-posten",
 			"name": "PostNord Sweden",
 			"other_name": "Sweden Post, Posten, Sweden Posten",
+			"required_fields": []
+		},
+		{
+			"slug": "swiship",
+			"name": "Swiship",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
