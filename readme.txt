@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 5.7
-Stable tag: 1.13.9
+Stable tag: 1.13.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,49 +13,51 @@ Track orders in one place. shipment tracking, automated notifications, order loo
 == Description ==
 
 ###FREE INSTALLATION
-AfterShip provides the best shipping experience for Woocommerce to drive customer loyalty and additional sales.
-
+AfterShip provides the best shipping experience for WooCommerce to drive customer loyalty and additional sales.
 Install the AfterShip plugin to automatically add Tracking Number and Courier fields to your admin panel.
-
-By installing AfterShip for Woocommerce, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill a shipping order, simply add the tracking number and select a shipping provider at Woocommerce.
+By installing AfterShip for WooCommerce, you can automatically add Tracking Number and Courier fields to your admin panel. After you fulfill a shipping order, simply add the tracking number and select a shipping provider at WooCommerce.
 
 [youtube https://www.youtube.com/watch?v=1u-b5AZ5tvE]
 
-###ALL-IN-ONE WOOCOMERCE ORDER TRACKING
-Automatically import your tracking numbers to AfterShip, so you can get current tracking info for all your shipments from shipping providers at your Woocommerce store in one place
+###ALL-IN-ONE WooCommerce ORDER TRACKING
+Automatically import your tracking numbers to AfterShip, so you can get current tracking info for all your shipments from shipping providers at your WooCommerce store in one place
 
 ###SMART DASHBOARD
-- Filter shipments by dates, statuses, shipping providers, and destination
+- Filter shipments by dates, statuses, carriers, shipping providers, and destination
+- Sort shipments by "Order Title", "Last Event", "Created”, “Order Date”, and “Pickup Date”.
 - Trace whether all your shipments are being delivered on time and identify any delays/exceptions.
-- 7 Standardized shipment tracking statuses
+- 7 standardized shipment tracking statuses
+- Set up a promised delivery date for different delivery methods to set clear delivery expectations
 
 ###AUTOMATED EMAIL & SMS NOTIFICATIONS
-- Embed the AfterShip Track Button to allow effortless order tracking for your Woocommerce store.
+- Embed the AfterShip Track Button to allow effortless order tracking for your WooCommerce store.
 - Automatically insert AfterShip’s tracking link to your WooCommerce store so that customers can track shipments effortlessly at the order confirmation and order history pages
 - Add your tracking link to either your store’s header or footer or both and make it easy to track orders
 - Send shipping & delivery notifications to customers through Email & SMS
 - Send internal notifications to yourself through Email & SMS
-- Configure notifications for: Info Received, In Transit, Out for Delivery, Available for Pickup, Delivered, Failed Attempt, and Exceptions
+- Configure notifications for Info Received, In Transit, Out for Delivery, Available for Pickup, Delivered, Failed Attempt, and Exceptions
+- Build custom email workflows to keep customers engaged
+- Schedule SMS updates to reach customers at the right time
 - Send multilingual email notifications. Add, remove, or set a default language for your email updates for different delivery checkpoints without a hassle.
 - Auto-send email updates based on the order language for a delightful post-purchase experience.
-Shipping status notifications will be sent from your email address, and you can customize messages to include your logo and URL, to increase brand recognition and the probability of repeat purchases on your Woocommerce store
+- Shipping status notifications will be sent from your email address, and you can customize messages to include your logo and URL, to increase brand recognition and the probability of repeat purchases on your WooCommerce store
 
 ###BRANDED ORDER TRACKING PAGE
-- Automatically generate a tracking page at Woocommerce for each shipment and customize the look & feel
-- Customize your tracking page by adding your logo, Woocommerce URL and impact SEO to generate more sales
-- Set up a custom domain to display the tracking information and improve the searchability of your Woocommerce website
+- Automatically generate a tracking page at WooCommerce for each shipment and customize the look & feel
+- Customize your tracking page by adding your logo, WooCommerce URL, and impact SEO to generate more sales
+- Set up a custom domain to display the tracking information and improve the searchability of your WooCommerce website
 - SSL certificate for users with a verified custom domain
-- Drive traffic to your Woocommerce site instead of the carrier’s site and increase the organic search
+- Drive traffic to your WooCommerce site instead of the carrier’s site and increase the organic search
 
 ###SHIPPING PROVIDERS
-- AfterShip connects you with 800+ shipping providers worldwide, Including UPS, DHL, USPS, China Post (ePacket), and China EMS
-- Standardized layout of tracking results received from different carriers
+- AfterShip connects you with 900+ shipping providers worldwide, including UPS, DHL, USPS, China Post (ePacket), and China EMS
+- The standardized layout of tracking results received from different carriers
 
-###Analyze & take action
-- Get powerful insight on shippings, notifications, tracking pages, and customer feedback
-- Filter data by shipping date, shipment type, devices, location, visits, and more
+###ANALYZE & TAKE ACTION
+- Get powerful insight on shipping performance, notifications, tracking pages, and customer feedback
+- Filter Data by shipping date, shipment type, devices, location, visits, and more
 
-###PARTIAL LIST OF SUPPORTED SHIPPING PROVIDERS (800+):
+###PARTIAL LIST OF SUPPORTED SHIPPING PROVIDERS (900+):
 **①. US, Canada & Global Tracking (35)**
 ABF Freight • APC Postal Logistics • Aramex • Asendia USA • Canada Post • Canpar Courier • Con-way Freight • DACHSER • DHL Express • DHL eCommerce • DHL Express (Piece ID) • DPD • DSV • Echo • Ensenda • Estes • FedEx • FedEx Freight • Globegistics Inc. • Greyhound • i-parcel • LaserShip • Newgistics • Old Dominion Freight Line • OnTrac • Purolator • RL Carriers • RR Donnelley • TNT • TNT Reference • UPS • UPS Freight • UPS Mail Innovations • USPS • YRC
 **②. UK & Ireland Tracking (30)**
@@ -126,15 +128,18 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 
 == Screenshots ==
 
-1. Woocommerce tracking page
-2. Woocommerce order status notification
-3. Manage Woocommerce shippings via a smart dashboard
-4. Order tracking and Woocommerce shipments dashboard
-5. Track all shipments in one place
-6. View exception, and filter by status
-7. Automatically send out delivery notifications
+1. Branded tracking page
+2. Shipment notifications
+3. Delivery date prediction
+4. Shipments dashboard
+5. Insightful analytics
+6. Order lookup widget
+7. On-time delivery report
 
 == Changelog ==
+
+= 1.13.10 =
+* Update courier list
 
 = 1.13.9 =
 * Add some fields for settings API
