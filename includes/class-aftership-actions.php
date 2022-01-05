@@ -1034,15 +1034,11 @@ class AfterShip_Actions {
 				// migrate old tracking data
 				$this->convert_old_meta_in_order( $order_id );
 
-				require_once( AFTERSHIP_PATH . '/includes/api/v5/class-rest-orders-helper.php' );
-				// get order detail
-				$order_object   = new WC_Order( $order_id );
-				$restOrders     = new Rest_Orders_Helper();
-				$rest_raw_order = $restOrders->get_formatted_item_data( $order_object );
+				// get order line items
+				$order_line_items = $this->get_order_item_data( $order_id );
+				// get exist order trackings
+				$order_tracking_items = $this->get_tracking_items( $order_id );
 
-				// get meta_data _aftership_tracking_items
-				$order_meta_data      = array_column( $rest_raw_order['meta_data'], null, 'key' );
-				$order_tracking_items = array_key_exists( '_aftership_tracking_items', $order_meta_data ) ? $order_meta_data['_aftership_tracking_items']->value : array();
 				// supply tracking link url
 		foreach ( $order_tracking_items as $i => $tracking_item ) {
 			$order_tracking_items[ $i ]['tracking_link'] = $this->generate_tracking_page_link( $tracking_item );
@@ -1050,20 +1046,18 @@ class AfterShip_Actions {
 
 				$order_trackings = array(
 					'selected_couriers' => $GLOBALS['AfterShip']->selected_couriers,
-					'line_items'        => $rest_raw_order['line_items'],
+					'line_items'        => $order_line_items,
 					'trackings'         => $order_tracking_items,
 				);
 
 				$this->format_aftership_tracking_output( 200, 'success', $order_trackings );
 	}
 
-			/**
-			 * Order Tracking Save AJAX
-			 *
-			 * Function for saving tracking items via AJAX
-			 *
-			 * @throws WC_Data_Exception
-			 */
+	/**
+	 * Order Tracking Save AJAX
+	 *
+	 * Function for saving tracking items via AJAX
+	 */
 	public function save_order_tracking() {
 		// check_ajax_referer( 'create-tracking-item', 'security', true );
 
@@ -1073,8 +1067,8 @@ class AfterShip_Actions {
 		// check order trackings fields from front
 		$this->check_aftership_tracking_fields( $order_id, $order_trackings_front );
 		// TODO 需要line_items intval
-		// TODO 需要校验tracking line_items
-		// $tracking_item_quantity = array_sum(array_column(array_column($order_trackings_front, 'line_items'), 'quantity'));
+		// check fulfill item quantity
+		$this->check_order_fulfill_items( $order_id, $order_trackings_front );
 
 		// exist order trackings
 		$tracking_items = array_column( $this->get_tracking_items( $order_id ), null, 'tracking_id' );
@@ -1108,13 +1102,11 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
-			/**
-			 * Order Tracking Delete
-			 *
-			 * Function to delete a tracking item
-			 *
-			 * @throws WC_Data_Exception
-			 */
+	/**
+	 * Order Tracking Delete
+	 *
+	 * Function to delete a tracking item
+	 */
 	public function delete_order_tracking() {
 		// check_ajax_referer( 'delete-tracking-item', 'security', true );
 
@@ -1126,9 +1118,9 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
-			/**
-			 *
-			 */
+	/**
+	 * Validate required fields
+	 */
 	private function check_aftership_tracking_fields( $order_id, $trackings ) {
 		// check order trackings from front
 		if ( empty( $order_id ) || empty( $trackings ) || ! is_array( $trackings ) ) {
@@ -1136,10 +1128,71 @@ class AfterShip_Actions {
 		}
 
 		foreach ( $trackings as $tracking_one ) {
-			if ( empty( $tracking_one['tracking_number'] ) || empty( $tracking_one['line_items'] ) ) {
+			if ( empty( $tracking_one['tracking_number'] ) ) {
 				$this->format_aftership_tracking_output( 422, 'missing required field' );
 			}
 		}
+	}
+
+	/**
+	 * Check fulfill item quantity
+	 */
+	private function check_order_fulfill_items( $order_id, $trackings ) {
+		// get order line items
+		$order_line_items   = $this->get_order_item_data( $order_id );
+		$line_item_quantity = absint( array_sum( array_column( $order_line_items, 'quantity' ) ) );
+		$tracking_items     = array_column( $trackings, 'line_items' );
+
+		// line_items 降为二维数组
+		$tmp = array();
+		foreach ( $tracking_items as $one ) {
+			$result = array_merge( $tmp, $one );
+			$tmp    = $result;
+		}
+		$fulfill_items_quantity = absint( array_sum( array_column( $tmp, 'quantity' ) ) );
+
+		if ( $fulfill_items_quantity > $line_item_quantity ) {
+			$this->format_aftership_tracking_output( 422, 'fulfill item quantity gte order item qiantity' );
+		}
+	}
+
+	/**
+	 * Get order item detail
+	 */
+	private function get_order_item_data( $order_id ) {
+		$order      = wc_get_order( $order_id );
+		$line_items = array();
+		foreach ( $order->get_items() as  $item_key => $item ) {
+			$data           = $item->get_data();
+			$format_decimal = array( 'subtotal', 'subtotal_tax', 'total', 'total_tax', 'tax_total', 'shipping_tax_total' );
+
+			// Format decimal values.
+			foreach ( $format_decimal as $key ) {
+				if ( isset( $data[ $key ] ) ) {
+					$data[ $key ] = wc_format_decimal( $data[ $key ], wc_get_price_decimals() );
+				}
+			}
+
+			// Add SKU and PRICE to products.
+			if ( is_callable( array( $item, 'get_product' ) ) ) {
+				$data['sku']   = $item->get_product() ? $item->get_product()->get_sku() : null;
+				$data['price'] = $item->get_quantity() ? $item->get_total() / $item->get_quantity() : 0;
+			}
+
+			// Add parent_name if the product is a variation.
+			if ( is_callable( array( $item, 'get_product' ) ) ) {
+				$product = $item->get_product();
+
+				if ( is_callable( array( $product, 'get_parent_data' ) ) ) {
+					$data['parent_name'] = $product->get_title();
+				} else {
+					$data['parent_name'] = null;
+				}
+			}
+			$line_items[] = $data;
+		}
+
+		return $line_items;
 	}
 
 	/**
