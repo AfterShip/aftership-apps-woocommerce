@@ -1064,6 +1064,8 @@ class AfterShip_Actions {
 		$params                = json_decode( file_get_contents( 'php://input' ), true );
 		$order_id              = wc_clean( $params['order_id'] );
 		$order_trackings_front = wc_clean( $params['trackings'] );
+		// modified tracking id
+		$modified_tracking_ids = ! empty( $params['modified_tracking_ids'] ) ? wc_clean( $params['modified_tracking_ids'] ) : array();
 		// check order trackings fields from front
 		$this->check_aftership_tracking_fields( $order_id, $order_trackings_front );
 		// TODO 需要line_items intval
@@ -1086,17 +1088,21 @@ class AfterShip_Actions {
 				$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
 			} else {
 				// update others,tracking_id won't change
-				if ( array_key_exists( $order_tracking_id, $tracking_items ) && $tracking_items[ $order_tracking_id ] ) {
-					if ( ! empty( $tracking_items[ $order_tracking_id ]['metrics']['created_at'] ) ) {
+				if ( array_key_exists( $order_tracking_id, $tracking_items ) &&
+					$tracking_items[ $order_tracking_id ] &&
+					! empty( $tracking_items[ $order_tracking_id ]['metrics'] )
+				) {
+					if ( in_array( $order_tracking_id, $modified_tracking_ids ) ) {
 						$order_trackings_front[ $key ]['metrics']['created_at'] = $tracking_items[ $order_tracking_id ]['metrics']['created_at'];
+					} else {
+						$order_trackings_front[ $key ]['metrics'] = $tracking_items[ $order_tracking_id ]['metrics'];
 					}
 				} else {
-					// update slug | tracking_number，tracking_id changed
+					// update slug | tracking_number，tracking_id changed -> new add
 					$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
 				}
 			}
 		}
-		// error_log(json_encode($order_trackings_front));
 
 		$this->save_tracking_items( $order_id, $order_trackings_front );
 		$this->format_aftership_tracking_output( 200, 'success' );
