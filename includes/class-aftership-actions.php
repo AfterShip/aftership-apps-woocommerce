@@ -1020,4 +1020,127 @@ class AfterShip_Actions {
 
 		<?php
 	}
+
+	/**
+	 * Order Tracking Get All Order Items AJAX
+	 *
+	 * Function for getting all tracking items associated with the order
+	 */
+	public function get_order_trackings() {
+		check_ajax_referer( 'get-tracking-item', 'security', true );
+
+		$order_id = wc_clean( $_POST['order_id'] );
+		// migrate old tracking data
+		$this->convert_old_meta_in_order( $order_id );
+
+		require_once( AFTERSHIP_PATH . '/includes/api/v5/class-rest-orders-helper.php' );
+		// get order detail
+		$order_object   = new WC_Order( $order_id );
+		$restOrders     = new Rest_Orders_Helper();
+		$rest_raw_order = $restOrders->get_formatted_item_data( $order_object );
+
+		// get meta_data _aftership_tracking_items
+		$order_meta_data      = array_column( $rest_raw_order['meta_data'], null, 'key' );
+		$order_tracking_items = array_key_exists( '_aftership_tracking_items', $order_meta_data ) ? $order_meta_data['_aftership_tracking_items']->value : array();
+		// supply tracking link url
+		foreach ( $order_tracking_items as $i => $tracking_item ) {
+			$order_tracking_items[ $i ]['tracking_link'] = $this->generate_tracking_page_link( $tracking_item );
+		}
+
+		$order_trackings = array(
+			'selected_couriers' => $GLOBALS['AfterShip']->selected_couriers,
+			'line_items'        => $rest_raw_order['line_items'],
+			'trackings'         => $order_tracking_items,
+		);
+
+		$this->format_aftership_tracking_output( 200, 'success', $order_trackings );
+	}
+
+	/**
+	 * Order Tracking Save AJAX
+	 *
+	 * Function for saving tracking items via AJAX
+	 *
+	 * @throws WC_Data_Exception
+	 */
+	public function save_order_tracking() {
+		check_ajax_referer( 'create-tracking-item', 'security', true );
+
+		// check order trackings from front
+		$order_id              = wc_clean( $_POST['order_id'] );
+		$order_trackings_front = wc_clean( $_POST['trackings'] );
+
+		if ( empty( $order_id ) || empty( $order_trackings_front ) || ! is_array( $order_trackings_front ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing required field' );
+		}
+
+		// TODO 需要校验具体字段
+
+		// TODO 需要校验tracking line_items
+
+		// exist order trackings
+		$tracking_items = array_column( $this->get_tracking_items( $order_id ), null, 'tracking_id' );
+		foreach ( $order_trackings_front as $key => $tracking_front ) {
+			$order_tracking_id = md5( "{$tracking_front['slug']}-{$tracking_front['tracking_number']}" );
+			$tracking_metrics  = array(
+				'created_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+				'updated_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+			);
+			// new add
+			if ( empty( $tracking_front['tracking_id'] ) ) {
+				// add tracking_id, metrics
+				$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
+				$order_trackings_front[ $key ]['metrics']     = $tracking_metrics;
+			}
+
+			// update
+			if ( array_key_exists( $order_tracking_id, $tracking_items ) && $tracking_items[ $order_tracking_id ] ) {
+				if ( ! empty( $tracking_items[ $order_tracking_id ]->metrics ) ) {
+					$order_trackings_front[ $key ]['metrics']['created_at'] = $tracking_items[ $order_tracking_id ]->metrics->created_at;
+				}
+			}
+		}
+
+		$this->save_tracking_items( $order_id, $order_trackings_front );
+	}
+
+	/**
+	 * Order Tracking Delete
+	 *
+	 * Function to delete a tracking item
+	 *
+	 * @throws WC_Data_Exception
+	 */
+	public function delete_order_tracking() {
+		check_ajax_referer( 'delete-tracking-item', 'security', true );
+
+		// check order trackings from front
+		$order_id              = wc_clean( $_POST['order_id'] );
+		$order_trackings_front = wc_clean( $_POST['trackings'] );
+
+		if ( empty( $order_id ) || empty( $order_trackings_front ) || ! is_array( $order_trackings_front ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing required field' );
+		}
+
+		// TODO 需要校验具体字段
+
+		$this->save_tracking_items( $order_id, $order_trackings_front );
+	}
+
+	/**
+	 * Format output
+	 */
+	private function format_aftership_tracking_output( $code, $message, $data = array() ) {
+		$response = array(
+			'meta' => array(
+				'code'    => $code,
+				'type'    => $code === 200 ? 'OK' : 'ERROR',
+				'message' => $message,
+			),
+			'data' => $data,
+		);
+		header( 'Content-Type: application/json' );
+		wp_send_json( $response );
+		wp_die();
+	}
 }
