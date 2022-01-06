@@ -178,10 +178,10 @@ class AfterShip_Actions {
 		// echo '<div id="tracking-items">';
 		// $count = 1;
 		// if ( count( $tracking_items ) > 0 ) {
-		// 	foreach ( $tracking_items as $index => $tracking_item ) {
-		// 		$this->display_html_tracking_item_for_meta_box( $post->ID, $tracking_item, $count );
-		// 		$count++;
-		// 	}
+		// foreach ( $tracking_items as $index => $tracking_item ) {
+		// $this->display_html_tracking_item_for_meta_box( $post->ID, $tracking_item, $count );
+		// $count++;
+		// }
 		// }
 
 		// echo '</div>';
@@ -193,7 +193,7 @@ class AfterShip_Actions {
 		// echo '<label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label>';
 		// echo '<select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
 		// foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
-		// 	echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
+		// echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
 		// }
 		// echo '</select>';
 		// echo '<a class="link-to-setting" href="admin.php?page=aftership-setting-admin">Update carrier list</a>';
@@ -201,7 +201,7 @@ class AfterShip_Actions {
 
 		// $options = array();
 		// foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
-		// 	$options[ sanitize_title( $courier['slug'] ) ] = $courier['name'];
+		// $options[ sanitize_title( $courier['slug'] ) ] = $courier['name'];
 		// }
 
 		woocommerce_wp_hidden_input(
@@ -226,81 +226,81 @@ class AfterShip_Actions {
 		);
 
 		// woocommerce_wp_hidden_input(
-		// 	array(
-		// 		'id'    => 'aftership_tracking_id',
-		// 		'value' => '',
-		// 	)
+		// array(
+		// 'id'    => 'aftership_tracking_id',
+		// 'value' => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_number',
-		// 		'label'       => __( 'Tracking number:', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_number',
+		// 'label'       => __( 'Tracking number:', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_account_number',
-		// 		'label'       => __( 'Account number:', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_account_number',
+		// 'label'       => __( 'Account number:', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_key',
-		// 		'label'       => __( 'Account key:', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_key',
+		// 'label'       => __( 'Account key:', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_postal_code',
-		// 		'label'       => __( 'Postal code:', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_postal_code',
+		// 'label'       => __( 'Postal code:', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_ship_date',
-		// 		'label'       => __( 'Date shipped:', 'aftership' ),
-		// 		'placeholder' => date_i18n( __( 'Y-m-d', 'aftership' ), time() ),
-		// 		'description' => '',
-		// 		'class'       => 'date-picker-field',
-		// 		'value'       => date_i18n( __( 'Y-m-d', 'aftership' ), current_time( 'timestamp' ) ),
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_ship_date',
+		// 'label'       => __( 'Date shipped:', 'aftership' ),
+		// 'placeholder' => date_i18n( __( 'Y-m-d', 'aftership' ), time() ),
+		// 'description' => '',
+		// 'class'       => 'date-picker-field',
+		// 'value'       => date_i18n( __( 'Y-m-d', 'aftership' ), current_time( 'timestamp' ) ),
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_destination_country',
-		// 		'label'       => __( 'Ship Destination Country (ISO3):', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_destination_country',
+		// 'label'       => __( 'Ship Destination Country (ISO3):', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// woocommerce_wp_text_input(
-		// 	array(
-		// 		'id'          => 'aftership_tracking_state',
-		// 		'label'       => __( 'Ship State:', 'aftership' ),
-		// 		'placeholder' => '',
-		// 		'description' => '',
-		// 		'value'       => '',
-		// 	)
+		// array(
+		// 'id'          => 'aftership_tracking_state',
+		// 'label'       => __( 'Ship State:', 'aftership' ),
+		// 'placeholder' => '',
+		// 'description' => '',
+		// 'value'       => '',
+		// )
 		// );
 
 		// echo '<div style="padding: 9px 0px 4px 0px;">';
@@ -311,42 +311,42 @@ class AfterShip_Actions {
 		// echo '</div>';
 
 		// $js = "
-        //     $('p.aftership_tracking_key_field').hide();
-        //     $('p.aftership_tracking_account_number_field').hide();
-        //     $('p.aftership_tracking_postal_code_field').hide();
-        //     $('p.aftership_tracking_ship_date_field').hide();
-        //     $('p.aftership_tracking_destination_country_field').hide();
-        //     $('p.aftership_tracking_state_field').hide();
-		// 				jQuery('#aftership_tracking_slug').change( function() {
-		// 	    		$('p.aftership_tracking_key_field').hide();
-		// 					$('p.aftership_tracking_account_number_field').hide();
-		// 					$('p.aftership_tracking_postal_code_field').hide();
-		// 					$('p.aftership_tracking_ship_date_field').hide();
-		// 					$('p.aftership_tracking_destination_country_field').hide();
-		// 					$('p.aftership_tracking_state_field').hide();
-		// 					var required_fields_mapping = {
-		// 						tracking_key: 'aftership_tracking_key',
-		// 						tracking_account_number: 'aftership_tracking_account_number',
-		// 						tracking_postal_code: 'aftership_tracking_postal_code',
-		// 						tracking_ship_date: 'aftership_tracking_ship_date',
-		// 						tracking_destination_country: 'aftership_tracking_destination_country',
-		// 						tracking_state: 'aftership_tracking_state',
-		// 					};
-		// 					var slug  = jQuery( '#aftership_tracking_slug' ).val();
-		// 					if (!slug) return;
-		// 					var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
-		// 					var courier = couriers.find(item => item.slug === slug);
-		// 					var required_fields = courier.required_fields;
-		// 					for (var field of required_fields) {
-		// 						var field_name = required_fields_mapping[field];
-		// 						$('p.' + field_name + '_field').show();
-		// 					}
-		// 				} ).change();";
+		// $('p.aftership_tracking_key_field').hide();
+		// $('p.aftership_tracking_account_number_field').hide();
+		// $('p.aftership_tracking_postal_code_field').hide();
+		// $('p.aftership_tracking_ship_date_field').hide();
+		// $('p.aftership_tracking_destination_country_field').hide();
+		// $('p.aftership_tracking_state_field').hide();
+		// jQuery('#aftership_tracking_slug').change( function() {
+		// $('p.aftership_tracking_key_field').hide();
+		// $('p.aftership_tracking_account_number_field').hide();
+		// $('p.aftership_tracking_postal_code_field').hide();
+		// $('p.aftership_tracking_ship_date_field').hide();
+		// $('p.aftership_tracking_destination_country_field').hide();
+		// $('p.aftership_tracking_state_field').hide();
+		// var required_fields_mapping = {
+		// tracking_key: 'aftership_tracking_key',
+		// tracking_account_number: 'aftership_tracking_account_number',
+		// tracking_postal_code: 'aftership_tracking_postal_code',
+		// tracking_ship_date: 'aftership_tracking_ship_date',
+		// tracking_destination_country: 'aftership_tracking_destination_country',
+		// tracking_state: 'aftership_tracking_state',
+		// };
+		// var slug  = jQuery( '#aftership_tracking_slug' ).val();
+		// if (!slug) return;
+		// var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
+		// var courier = couriers.find(item => item.slug === slug);
+		// var required_fields = courier.required_fields;
+		// for (var field of required_fields) {
+		// var field_name = required_fields_mapping[field];
+		// $('p.' + field_name + '_field').show();
+		// }
+		// } ).change();";
 
 		// if ( function_exists( 'wc_enqueue_js' ) ) {
-		// 	wc_enqueue_js( $js );
+		// wc_enqueue_js( $js );
 		// } else {
-		// 	WC()->add_inline_js( $js );
+		// WC()->add_inline_js( $js );
 		// }
 
 		// wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
@@ -355,7 +355,7 @@ class AfterShip_Actions {
 		// wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.proto.min.js' );
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-        wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js' );
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js' );
 	}
 
 	/**
@@ -1137,8 +1137,8 @@ class AfterShip_Actions {
 
 		foreach ( $trackings as $tracking_one ) {
 			if ( empty( $tracking_one['tracking_number'] ) || empty( $tracking_one['slug'] ) ) {
-                $this->format_aftership_tracking_output( 422, 'missing required field' );
-            }
+				$this->format_aftership_tracking_output( 422, 'missing required field' );
+			}
 		}
 	}
 
