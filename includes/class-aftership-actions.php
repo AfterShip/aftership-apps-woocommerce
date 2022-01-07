@@ -1107,6 +1107,11 @@ class AfterShip_Actions {
 		}
 
 		$this->save_tracking_items( $order_id, $order_trackings_front );
+		// date_modified update
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
@@ -1123,6 +1128,11 @@ class AfterShip_Actions {
 		$order_trackings_front = wc_clean( $params['trackings'] );
 
 		$this->save_tracking_items( $order_id, $order_trackings_front );
+		// date_modified update
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
