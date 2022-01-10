@@ -6,6 +6,7 @@ console.log('src/index.js');
 customElements.define(
   'aftership-meta-box',
   class Tracking extends HTMLElement {
+    private initialized = false;
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
@@ -13,6 +14,8 @@ customElements.define(
 
     connectedCallback() {
       if (!this.shadowRoot) return;
+      if(this.initialized) return;
+      this.initialized = true;
       if (import.meta.env.MODE === 'production') {
         const linkElm = document.createElement('link');
         linkElm.rel = 'stylesheet';
