@@ -1028,11 +1028,28 @@ class AfterShip_Actions {
 	 *
 	 * Function for getting all tracking items associated with the order
 	 */
+	public function get_selected_couriers() {
+		$this->format_aftership_tracking_output(
+			200,
+			'success',
+			array(
+				'couriers' => $GLOBALS['AfterShip']->selected_couriers,
+			)
+		);
+	}
+
+	/**
+	 * Order Tracking Get All Order Items AJAX
+	 *
+	 * Function for getting all tracking items associated with the order
+	 */
 	public function get_order_trackings() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$params   = json_decode( file_get_contents( 'php://input' ) );
-		$order_id = wc_clean( $params->order_id );
+		if ( empty( $_REQUEST['order_id'] ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing order_id field' );
+		}
+		$order_id = wc_clean( $_REQUEST['order_id'] );
 
 		// migrate old tracking data
 		$this->convert_old_meta_in_order( $order_id );
@@ -1048,9 +1065,8 @@ class AfterShip_Actions {
 		}
 
 		$order_trackings = array(
-			'selected_couriers' => $GLOBALS['AfterShip']->selected_couriers,
-			'line_items'        => $order_line_items,
-			'trackings'         => $order_tracking_items,
+			'line_items' => $order_line_items,
+			'trackings'  => $order_tracking_items,
 		);
 
 		$this->format_aftership_tracking_output( 200, 'success', $order_trackings );
@@ -1077,29 +1093,14 @@ class AfterShip_Actions {
 		// exist order trackings
 		$tracking_items = array_column( $this->get_tracking_items( $order_id ), null, 'tracking_id' );
 		foreach ( $order_trackings_front as $key => $tracking_front ) {
-			// var_dump($tracking_front['line_items']);
-			$order_tracking_id                        = md5( "{$tracking_front['slug']}-{$tracking_front['tracking_number']}" );
-			$tracking_metrics                         = array(
-				'created_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
-				'updated_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
-			);
-			$order_trackings_front[ $key ]['metrics'] = $tracking_metrics;
+			$order_tracking_id = md5( "{$tracking_front['slug']}-{$tracking_front['tracking_number']}" );
 			// new add
 			if ( empty( $tracking_front['tracking_id'] ) ) {
 				// add tracking_id, metrics
 				$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
 			} else {
-				// update others,tracking_id won't change
-				if ( array_key_exists( $order_tracking_id, $tracking_items ) &&
-					$tracking_items[ $order_tracking_id ] &&
-					! empty( $tracking_items[ $order_tracking_id ]['metrics'] )
-				) {
-					if ( in_array( $order_tracking_id, $modified_tracking_ids ) ) {
-						$order_trackings_front[ $key ]['metrics']['created_at'] = $tracking_items[ $order_tracking_id ]['metrics']['created_at'];
-					} else {
-						$order_trackings_front[ $key ]['metrics'] = $tracking_items[ $order_tracking_id ]['metrics'];
-					}
-				} else {
+				// update slug | tracking_number，tracking_id changed -> new add
+				if ( ! array_key_exists( $order_tracking_id, $tracking_items ) ) {
 					// update slug | tracking_number，tracking_id changed -> new add
 					$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
 				}
@@ -1123,11 +1124,16 @@ class AfterShip_Actions {
 	public function delete_order_tracking() {
 		check_ajax_referer( 'delete-tracking-item', 'security', true );
 
-		$params                = json_decode( file_get_contents( 'php://input' ), true );
-		$order_id              = wc_clean( $params['order_id'] );
-		$order_trackings_front = $params['trackings'];
+		$params      = json_decode( file_get_contents( 'php://input' ), true );
+		$order_id    = wc_clean( $params['order_id'] );
+		$tracking_id = wc_clean( $params['tracking_id'] );
 
-		$this->save_tracking_items( $order_id, $order_trackings_front );
+		if ( empty( $order_id ) || empty( $tracking_id ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing required field' );
+		}
+
+		$this->delete_tracking_item( $order_id, $tracking_id );
+
 		// date_modified update
 		$order = new WC_Order( $order_id );
 		$order->set_date_modified( current_time( 'mysql' ) );
