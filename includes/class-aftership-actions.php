@@ -1071,7 +1071,6 @@ class AfterShip_Actions {
 		$modified_tracking_ids = ! empty( $params['modified_tracking_ids'] ) ? wc_clean( $params['modified_tracking_ids'] ) : array();
 		// check order trackings fields from front
 		$this->check_aftership_tracking_fields( $order_id, $order_trackings_front );
-		// TODO 需要line_items intval
 		// check fulfill item quantity
 		$this->check_order_fulfill_items( $order_id, $order_trackings_front );
 
