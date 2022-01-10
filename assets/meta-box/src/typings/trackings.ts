@@ -11,7 +11,6 @@ export interface Tracking {
   tracking_id: string;
   slug: string;
   tracking_number: string;
-  tracking_link: string;
   additional_fields: AdditionalFields;
   line_items?: Pick<LineItem, 'id' | 'quantity'>[];
   metrics: {

@@ -7,6 +7,8 @@ import {
   fetchTrackings,
   deleteTracking,
   editTracking,
+  getSelectedCouriers,
+  customDomain,
 } from './storages/metaBox';
 import EditTrackingModal, { FormValue } from './components/EditTrackingModal';
 import { Tracking } from './typings/trackings';
@@ -22,6 +24,7 @@ const App: Component = () => {
 
   onMount(() => {
     fetchTrackings();
+    getSelectedCouriers();
   });
 
   const handleOk = async (values: FormValue) => {
@@ -43,6 +46,12 @@ const App: Component = () => {
     setEditingTracking(undefined);
   };
 
+  const formatTackingLink = (tracking: Tracking) => {
+    return /^https?:\/\//.test(customDomain())
+      ? `${customDomain()}/${tracking.slug}/${tracking.tracking_number}`
+      : `https://${customDomain()}/${tracking.slug}/${tracking.tracking_number}`;
+  };
+
   return (
     <div className={styles.root}>
       {/* trackings */}
@@ -54,7 +63,9 @@ const App: Component = () => {
                 <div>Shipment {index() + 1}</div>
                 <div>
                   <a
-                    onClick={() => {
+                    onClick={async () => {
+                      // 💩 update data first, user maybe modify line_items
+                      await fetchTrackings();
                       setEditingTracking(item);
                       setShowModal(true);
                     }}>
@@ -68,7 +79,7 @@ const App: Component = () => {
                   <strong>{courierMap().get(item.slug)?.name || item.slug}</strong>
                 </div>
                 <div>
-                  <a href={item.tracking_link} target="_blank">
+                  <a href={formatTackingLink(item)} target="_blank">
                     {item.tracking_number}
                   </a>
                 </div>

@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/crypto-js": "^4.1.0",
     "@types/lodash-es": "^4.17.5",
     "@types/node": "^17.0.7",
     "lint-staged": "^12.1.2",
@@ -19,6 +20,7 @@
     "vite-plugin-solid": "2.1.4"
   },
   "dependencies": {
+    "crypto-js": "^4.1.1",
     "lodash-es": "^4.17.21",
     "normalize.css": "^8.0.1",
     "solid-js": "1.2.6"

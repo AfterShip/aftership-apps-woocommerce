@@ -96,8 +96,8 @@ export default function EditTrackingModal(props: Props) {
             slug: props.value.slug,
             tracking_number: props.value.tracking_number,
             additional_fields: {
-              ...defaultValue.additional_fields,
-              ship_date: today,
+              ...props.value.additional_fields,
+              ship_date: props.value.additional_fields.ship_date || today,
             },
             line_items: Object.fromEntries(remainLineItems().map((item) => [Number(item.id), 0])),
           });
@@ -107,8 +107,8 @@ export default function EditTrackingModal(props: Props) {
             slug: props.value.slug,
             tracking_number: props.value.tracking_number,
             additional_fields: {
-              ...defaultValue.additional_fields,
-              ship_date: today,
+              ...props.value.additional_fields,
+              ship_date: props.value.additional_fields.ship_date || today,
             },
             line_items: Object.fromEntries(
               remainLineItems().map((item) => [Number(item.id), Number(item.quantity)])
@@ -131,21 +131,18 @@ export default function EditTrackingModal(props: Props) {
     }
   });
 
-  // reset additional_fields value when slug change
-  createEffect(() => {
-    if (additionalFields()) {
-      _setVal((prev) => {
-        const today = new Date().toISOString().split('T')[0];
-        return {
-          ...prev,
-          additional_fields: {
-            ...defaultValue.additional_fields,
-            ship_date: today,
-          },
-        };
-      });
-    }
-  });
+  const resetAdditionalFields = () => {
+    _setVal((prev) => {
+      const today = new Date().toISOString().split('T')[0];
+      return {
+        ...prev,
+        additional_fields: {
+          ...defaultValue.additional_fields,
+          ship_date: today,
+        },
+      };
+    });
+  };
 
   const validator = createMemo(() => {
     let isValid = true;
@@ -183,6 +180,7 @@ export default function EditTrackingModal(props: Props) {
   });
 
   const handleLineItemChange = (id: number, value: number) => {
+    console.log('handleLineItemChange');
     _setVal((prev) => ({
       ...prev,
       line_items: {
@@ -191,11 +189,12 @@ export default function EditTrackingModal(props: Props) {
       },
     }));
   };
-  const handleChange = (key: string, value: string) =>
+  const handleChange = (key: string, value: string) => {
     _setVal((prev) => ({
       ...prev,
       [key]: value.trim(),
     }));
+  };
   const handleAdditionalFieldChange = (key: string, value: string) => {
     _setVal((prev) => ({
       ...prev,
@@ -211,7 +210,7 @@ export default function EditTrackingModal(props: Props) {
     <Modal
       title={props.value?.tracking_id ? 'Edit tracking' : 'Add tracking'}
       visible={props.visible}
-      okText={props.value?.tracking_id ? 'Add' : 'Save'}
+      okText={props.value?.tracking_id ? 'Save' : 'Add'}
       onOk={handleOk}
       onCancel={props.onCancel}
       disabled={!validator().isValid}>
@@ -249,7 +248,10 @@ export default function EditTrackingModal(props: Props) {
               Courier:
               <select
                 value={_val()?.slug}
-                onChange={(e) => handleChange('slug', e.currentTarget.value)}>
+                onChange={(e) => {
+                  resetAdditionalFields();
+                  handleChange('slug', e.currentTarget.value);
+                }}>
                 <For each={selectedCouriers()}>
                   {(item) => <option value={item.slug}>{item.name || item.other_name}</option>}
                 </For>
