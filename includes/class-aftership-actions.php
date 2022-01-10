@@ -1029,7 +1029,8 @@ class AfterShip_Actions {
 	 * Function for getting all tracking items associated with the order
 	 */
 	public function get_order_trackings() {
-		// check_ajax_referer( 'get-tracking-item', 'security', true );
+		check_ajax_referer( 'get-tracking-item', 'security', true );
+
 		$params   = json_decode( file_get_contents( 'php://input' ) );
 		$order_id = wc_clean( $params->order_id );
 
@@ -1061,11 +1062,11 @@ class AfterShip_Actions {
 	 * Function for saving tracking items via AJAX
 	 */
 	public function save_order_tracking() {
-		// check_ajax_referer( 'create-tracking-item', 'security', true );
+		check_ajax_referer( 'create-tracking-item', 'security', true );
 
 		$params                = json_decode( file_get_contents( 'php://input' ), true );
 		$order_id              = wc_clean( $params['order_id'] );
-		$order_trackings_front = wc_clean( $params['trackings'] );
+		$order_trackings_front = $params['trackings'];
 		// modified tracking id
 		$modified_tracking_ids = ! empty( $params['modified_tracking_ids'] ) ? wc_clean( $params['modified_tracking_ids'] ) : array();
 		// check order trackings fields from front
@@ -1121,11 +1122,11 @@ class AfterShip_Actions {
 	 * Function to delete a tracking item
 	 */
 	public function delete_order_tracking() {
-		// check_ajax_referer( 'delete-tracking-item', 'security', true );
+		check_ajax_referer( 'delete-tracking-item', 'security', true );
 
 		$params                = json_decode( file_get_contents( 'php://input' ), true );
 		$order_id              = wc_clean( $params['order_id'] );
-		$order_trackings_front = wc_clean( $params['trackings'] );
+		$order_trackings_front = $params['trackings'];
 
 		$this->save_tracking_items( $order_id, $order_trackings_front );
 		// date_modified update
