@@ -1060,11 +1060,6 @@ class AfterShip_Actions {
 		// get exist order trackings
 		$order_tracking_items = $this->get_tracking_items( $order_id );
 
-		// supply tracking link url
-		foreach ( $order_tracking_items as $i => $tracking_item ) {
-			$order_tracking_items[ $i ]['tracking_link'] = $this->generate_tracking_page_link( $tracking_item );
-		}
-
 		$order_trackings = array(
 			'line_items' => $order_line_items,
 			'trackings'  => $order_tracking_items,
@@ -1081,31 +1076,15 @@ class AfterShip_Actions {
 	public function save_order_tracking() {
 		check_ajax_referer( 'create-tracking-item', 'security', true );
 
-		$params                = json_decode( file_get_contents( 'php://input' ), true );
-		$order_id              = wc_clean( $params['order_id'] );
-		$order_trackings_front = $params['trackings'];
+		$params          = json_decode( file_get_contents( 'php://input' ), true );
+		$order_id        = wc_clean( $params['order_id'] );
+		$order_trackings = $params['trackings'];
 		// check order trackings fields from front
-		$this->check_aftership_tracking_fields( $order_id, $order_trackings_front );
+		$this->check_aftership_tracking_fields( $order_id, $order_trackings );
 		// check fulfill item quantity
-		$this->check_order_fulfill_items( $order_id, $order_trackings_front );
+		$this->check_order_fulfill_items( $order_id, $order_trackings );
 
-		// exist order trackings
-		$tracking_items = array_column( $this->get_tracking_items( $order_id ), null, 'tracking_id' );
-		foreach ( $order_trackings_front as $key => $tracking_front ) {
-			$order_tracking_id = md5( "{$tracking_front['slug']}-{$tracking_front['tracking_number']}" );
-			// new add
-			if ( empty( $tracking_front['tracking_id'] ) ) {
-				// add tracking_id, metrics
-				$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
-			} else {
-				// update slug | tracking_number，tracking_id changed -> new add
-				if ( ! array_key_exists( $order_tracking_id, $tracking_items ) ) {
-					$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
-				}
-			}
-		}
-
-		$this->save_tracking_items( $order_id, $order_trackings_front );
+		$this->save_tracking_items( $order_id, $order_trackings );
 		// date_modified update
 		$order = new WC_Order( $order_id );
 		$order->set_date_modified( current_time( 'mysql' ) );
