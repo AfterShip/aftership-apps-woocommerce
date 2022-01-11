@@ -218,7 +218,7 @@ export default function EditTrackingModal(props: Props) {
         <table className={styles.items}>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Items</th>
               <th>Qty.</th>
             </tr>
           </thead>
