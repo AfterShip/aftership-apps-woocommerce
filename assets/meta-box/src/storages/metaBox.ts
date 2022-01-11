@@ -52,29 +52,32 @@ interface SubmitData extends Omit<Tracking, 'tracking_id' | 'line_items' | 'metr
 
 export async function editTracking(data: SubmitData) {
   const oldTracking = trackings().find((t) => t.tracking_id === data.tracking_id);
+  const oldTrackingIndex = trackings().findIndex((t) => t.tracking_id === data.tracking_id);
   const nowISOString = new Date().toISOString().replace(/\.\d+(?=Z$)/, '');
   const isSlugOrNumberChanged =
     data.slug !== oldTracking?.slug || data.tracking_number !== oldTracking?.tracking_number;
-  let newData: SubmitData;
+  let result: SubmitData[] = [...trackings()];
   if (oldTracking && !isSlugOrNumberChanged) {
-    newData = {
+    result.splice(oldTrackingIndex, 1, {
       ...data,
       metrics: {
         created_at: oldTracking.metrics.created_at || nowISOString,
         updated_at: nowISOString,
       },
-    };
+    });
   } else {
-    newData = {
-      ...data,
-      tracking_id: md5(`${data.slug}-${data.tracking_number}`).toString(),
-      metrics: {
-        created_at: nowISOString,
-        updated_at: nowISOString,
+    result = [
+      ...result.filter((t) => t.tracking_id !== data.tracking_id),
+      {
+        ...data,
+        tracking_id: md5(`${data.slug}-${data.tracking_number}`).toString(),
+        metrics: {
+          created_at: nowISOString,
+          updated_at: nowISOString,
+        },
       },
-    };
+    ];
   }
-  const allTrackings = [...trackings().filter((t) => t.tracking_id !== data.tracking_id), newData];
   const security = document.querySelector<HTMLInputElement>('#aftership_create_nonce')?.value || '';
 
   await fetch(
@@ -86,7 +89,7 @@ export async function editTracking(data: SubmitData) {
       },
       body: JSON.stringify({
         order_id: window.woocommerce_admin_meta_boxes.post_id,
-        trackings: allTrackings,
+        trackings: result,
       }),
     }
   );
