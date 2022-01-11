@@ -1,6 +1,6 @@
-import { selectedCouriers, lineItems, trackings, courierMap } from '@src/storages/metaBox';
+import { selectedCouriers, trackings, courierMap } from '@src/storages/metaBox';
 import { Tracking, AdditionalFields } from '@src/typings/trackings';
-import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, Switch, Match } from 'solid-js';
 import { capitalize } from 'lodash-es';
 
 import Modal from '../Modal';
@@ -215,32 +215,36 @@ export default function EditTrackingModal(props: Props) {
       onCancel={props.onCancel}
       disabled={!validator().isValid}>
       <div className={styles.modal}>
-        <table className={styles.items}>
-          <thead>
-            <tr>
-              <th>Items</th>
-              <th>Qty.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <For each={remainLineItems()}>
-              {(item) => (
+        <Switch fallback={<div className={styles.empty}>All items have been fulfilled</div>}>
+          <Match when={remainLineItems().length > 0}>
+            <table className={styles.items}>
+              <thead>
                 <tr>
-                  <td>{item.name}</td>
-                  <td>
-                    <NumberInput
-                      min={0}
-                      max={item.quantity}
-                      step={1}
-                      value={_val().line_items?.[item.id] || 0}
-                      onChange={(val) => handleLineItemChange(item.id, val || 0)}
-                    />
-                  </td>
+                  <th>Items</th>
+                  <th>Qty.</th>
                 </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                <For each={remainLineItems()}>
+                  {(item) => (
+                    <tr>
+                      <td>{item.name}</td>
+                      <td>
+                        <NumberInput
+                          min={0}
+                          max={item.quantity}
+                          step={1}
+                          value={_val().line_items?.[item.id] || 0}
+                          onChange={(val) => handleLineItemChange(item.id, val || 0)}
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </For>
+              </tbody>
+            </table>
+          </Match>
+        </Switch>
         <hr style={{ margin: '20px 0' }} />
         <div className={styles.input}>
           <div>

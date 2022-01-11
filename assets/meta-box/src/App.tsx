@@ -17,10 +17,6 @@ import { calcUnfulfilledItems } from './utils/common';
 const App: Component = () => {
   const [showModal, setShowModal] = createSignal(false);
   const [editingTracking, setEditingTracking] = createSignal<Tracking>();
-  const remainLineItems = createMemo(() => calcUnfulfilledItems(trackings()));
-  const hasUnfulfilledItems = createMemo(() => {
-    return remainLineItems().length > 0;
-  });
 
   onMount(() => {
     fetchTrackings();
@@ -89,13 +85,16 @@ const App: Component = () => {
         </For>
       </div>
       {/* add button */}
-      <Show when={hasUnfulfilledItems()}>
-        <div style={{ padding: '12px' }}>
-          <Button onClick={() => setShowModal(true)} style={{ width: '100%' }}>
-            Add Tracking Number
-          </Button>
-        </div>
-      </Show>
+      <div style={{ padding: '12px' }}>
+        <Button
+          onClick={async () => {
+            await fetchTrackings();
+            setShowModal(true);
+          }}
+          style={{ width: '100%' }}>
+          Add Tracking Number
+        </Button>
+      </div>
       <EditTrackingModal
         visible={showModal()}
         value={editingTracking()}
