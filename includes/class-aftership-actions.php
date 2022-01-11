@@ -1083,8 +1083,6 @@ class AfterShip_Actions {
 		$params                = json_decode( file_get_contents( 'php://input' ), true );
 		$order_id              = wc_clean( $params['order_id'] );
 		$order_trackings_front = $params['trackings'];
-		// modified tracking id
-		$modified_tracking_ids = ! empty( $params['modified_tracking_ids'] ) ? wc_clean( $params['modified_tracking_ids'] ) : array();
 		// check order trackings fields from front
 		$this->check_aftership_tracking_fields( $order_id, $order_trackings_front );
 		// check fulfill item quantity
