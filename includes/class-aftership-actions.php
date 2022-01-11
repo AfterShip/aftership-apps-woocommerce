@@ -559,7 +559,7 @@ class AfterShip_Actions {
 					break;
 				}
 			}
-			$this->save_tracking_items( $order_id, $tracking_items );
+			$this->save_tracking_items( $order_id, array_values( $tracking_items ) );
 		}
 
 		return $is_deleted;
@@ -1028,12 +1028,13 @@ class AfterShip_Actions {
 	 *
 	 * Function for getting all tracking items associated with the order
 	 */
-	public function get_selected_couriers() {
+	public function get_settings() {
 		$this->format_aftership_tracking_output(
 			200,
 			'success',
 			array(
-				'couriers' => $GLOBALS['AfterShip']->selected_couriers,
+				'couriers'      => $GLOBALS['AfterShip']->selected_couriers,
+				'custom_domain' => $GLOBALS['AfterShip']->custom_domain,
 			)
 		);
 	}
@@ -1043,7 +1044,7 @@ class AfterShip_Actions {
 	 *
 	 * Function for getting all tracking items associated with the order
 	 */
-	public function get_order_trackings() {
+	public function get_order_detail() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
 		if ( empty( $_REQUEST['order_id'] ) ) {
@@ -1099,7 +1100,6 @@ class AfterShip_Actions {
 			} else {
 				// update slug | tracking_number，tracking_id changed -> new add
 				if ( ! array_key_exists( $order_tracking_id, $tracking_items ) ) {
-					// update slug | tracking_number，tracking_id changed -> new add
 					$order_trackings_front[ $key ]['tracking_id'] = $order_tracking_id;
 				}
 			}

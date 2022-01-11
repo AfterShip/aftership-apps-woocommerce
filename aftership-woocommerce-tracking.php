@@ -163,8 +163,8 @@ if ( is_woocommerce_active() ) {
 
 				add_action( 'wp_ajax_aftership_delete_order_tracking', array( $this->actions, 'delete_order_tracking' ) );
 				add_action( 'wp_ajax_aftership_save_order_tracking', array( $this->actions, 'save_order_tracking' ) );
-				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_trackings' ) );
-				add_action( 'wp_ajax_aftership_get_selected_couriers', array( $this->actions, 'get_selected_couriers' ) );
+				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
+				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
 
 				$subs_version = class_exists( 'WC_Subscriptions' ) && ! empty( WC_Subscriptions::$version ) ? WC_Subscriptions::$version : null;
 
