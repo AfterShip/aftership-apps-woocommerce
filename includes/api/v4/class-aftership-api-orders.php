@@ -250,28 +250,14 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 		}
 
 		$trackings = array();
+		// 获取 AfterShip 插件新、旧 tracking 数据
+		$tracking_items = aftership()->actions->get_tracking_items_for_api( $id );
 		// The function definition will be available after installing the aftership plugin.
-		if ( function_exists( 'order_post_meta_getter' ) ) {
-			$aftership_tracking_number = order_post_meta_getter( $order, 'aftership_tracking_number' );
-			if ( ! empty( $aftership_tracking_number ) ) {
-				$trackings[] = array(
-					'slug'              => order_post_meta_getter( $order, 'aftership_tracking_provider' ),
-					'tracking_number'   => $aftership_tracking_number,
-					'additional_fields' => array(
-						'account_number'      => order_post_meta_getter( $order, 'aftership_tracking_account' ),
-						'key'                 => order_post_meta_getter( $order, 'aftership_tracking_key' ),
-						'postal_code'         => order_post_meta_getter( $order, 'aftership_tracking_postal' ),
-						'ship_date'           => order_post_meta_getter( $order, 'aftership_tracking_shipdate' ),
-						'destination_country' => order_post_meta_getter( $order, 'aftership_tracking_destination_country' ),
-						'state'               => null,
-						'origin_country'      => null,
-					),
-				);
-			}
-
+		if ( empty( $tracking_items ) && function_exists( 'order_post_meta_getter' ) ) {
+			// 此处删除了获取老插件获取tracking的方式, 重复逻辑，已废弃 [CNT-12278]
 			// 兼容 wooCommerce 官方的 tracking 插件.
 			$woocommerce_tracking_arr = order_post_meta_getter( $order, 'wc_shipment_tracking_items' );
-			if ( empty( $aftership_tracking_number ) && ! empty( $woocommerce_tracking_arr ) ) {
+			if ( ! empty( $woocommerce_tracking_arr ) ) {
 				foreach ( $woocommerce_tracking_arr as $trackingKey => $trackingVal ) {
 					$trackingInfo = $this->getTrackingInfoByShipmentTracking( $trackingVal );
 					$trackings[]  = array(
@@ -290,7 +276,6 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 				}
 			}
 		}
-		$tracking_items          = aftership()->actions->get_tracking_items_for_api( $id );
 		$order_data['trackings'] = $this->uniquify_tracking_items( array_merge( $trackings, $tracking_items ) );
 
 		return apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server );
