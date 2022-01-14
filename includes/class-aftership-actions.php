@@ -173,37 +173,6 @@ class AfterShip_Actions {
 
 		$this->migrate();
 
-		$tracking_items = $this->get_tracking_items( $post->ID );
-
-		echo '<div id="tracking-items">';
-		$count = 1;
-		if ( count( $tracking_items ) > 0 ) {
-			foreach ( $tracking_items as $index => $tracking_item ) {
-				$this->display_html_tracking_item_for_meta_box( $post->ID, $tracking_item, $count );
-				$count++;
-			}
-		}
-
-		echo '</div>';
-		echo '<div class="show-form-btn-container" style="padding: 12px;">';
-		echo '<button class="button button-show-form" type="button">' . __( 'Add Tracking Number', 'aftership' ) . '</button>';
-		echo '</div>';
-		echo '<div id="aftership-tracking-form">';
-		echo '<p class="form-field aftership_tracking_slug_field">';
-		echo '<label for="aftership_tracking_slug">' . __( 'Courier:', 'aftership' ) . '</label>';
-		echo '<select id="aftership_tracking_slug" name="aftership_tracking_slug" class="chosen_select" style="width:100%;">';
-		foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
-			echo '<option value="' . esc_attr( sanitize_title( $courier['slug'] ) ) . '">' . esc_html( $courier['name'] ) . '</option>';
-		}
-		echo '</select>';
-		echo '<a class="link-to-setting" href="admin.php?page=aftership-setting-admin">Update carrier list</a>';
-		echo '</p>';
-
-		$options = array();
-		foreach ( $GLOBALS['AfterShip']->selected_couriers as $courier ) {
-			$options[ sanitize_title( $courier['slug'] ) ] = $courier['name'];
-		}
-
 		woocommerce_wp_hidden_input(
 			array(
 				'id'    => 'aftership_get_nonce',
@@ -225,135 +194,8 @@ class AfterShip_Actions {
 			)
 		);
 
-		woocommerce_wp_hidden_input(
-			array(
-				'id'    => 'aftership_tracking_id',
-				'value' => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_number',
-				'label'       => __( 'Tracking number:', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_account_number',
-				'label'       => __( 'Account number:', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_key',
-				'label'       => __( 'Account key:', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_postal_code',
-				'label'       => __( 'Postal code:', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_ship_date',
-				'label'       => __( 'Date shipped:', 'aftership' ),
-				'placeholder' => date_i18n( __( 'Y-m-d', 'aftership' ), time() ),
-				'description' => '',
-				'class'       => 'date-picker-field',
-				'value'       => date_i18n( __( 'Y-m-d', 'aftership' ), current_time( 'timestamp' ) ),
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_destination_country',
-				'label'       => __( 'Ship Destination Country (ISO3):', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		woocommerce_wp_text_input(
-			array(
-				'id'          => 'aftership_tracking_state',
-				'label'       => __( 'Ship State:', 'aftership' ),
-				'placeholder' => '',
-				'description' => '',
-				'value'       => '',
-			)
-		);
-
-		echo '<div style="padding: 9px 0px 4px 0px;">';
-		echo '<button class="button button-primary button-save-form">' . __( 'Save', 'aftership' ) . '</button>';
-		echo '<button class="button button-cancel">' . __( 'Cancel', 'aftership' ) . '</button>';
-		echo '</div>';
-
-		echo '</div>';
-
-		$js = "
-            $('p.aftership_tracking_key_field').hide();
-            $('p.aftership_tracking_account_number_field').hide();
-            $('p.aftership_tracking_postal_code_field').hide();
-            $('p.aftership_tracking_ship_date_field').hide();
-            $('p.aftership_tracking_destination_country_field').hide();
-            $('p.aftership_tracking_state_field').hide();
-						jQuery('#aftership_tracking_slug').change( function() {
-			    		$('p.aftership_tracking_key_field').hide();
-							$('p.aftership_tracking_account_number_field').hide();
-							$('p.aftership_tracking_postal_code_field').hide();
-							$('p.aftership_tracking_ship_date_field').hide();
-							$('p.aftership_tracking_destination_country_field').hide();
-							$('p.aftership_tracking_state_field').hide();
-							var required_fields_mapping = {
-								tracking_key: 'aftership_tracking_key',
-								tracking_account_number: 'aftership_tracking_account_number',
-								tracking_postal_code: 'aftership_tracking_postal_code',
-								tracking_ship_date: 'aftership_tracking_ship_date',
-								tracking_destination_country: 'aftership_tracking_destination_country',
-								tracking_state: 'aftership_tracking_state',
-							};
-							var slug  = jQuery( '#aftership_tracking_slug' ).val();
-							if (!slug) return;
-							var couriers = JSON.parse( decodeURIComponent( '" . rawurlencode( wp_json_encode( $GLOBALS['AfterShip']->selected_couriers ) ) . "' ) );
-							var courier = couriers.find(item => item.slug === slug);
-							var required_fields = courier.required_fields;
-							for (var field of required_fields) {
-								var field_name = required_fields_mapping[field];
-								$('p.' + field_name + '_field').show();
-							}
-						} ).change();";
-
-		if ( function_exists( 'wc_enqueue_js' ) ) {
-			wc_enqueue_js( $js );
-		} else {
-			WC()->add_inline_js( $js );
-		}
-
-		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
-		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/js/meta-box.js' );
-		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
-		wp_enqueue_script( 'aftership-js', $GLOBALS['AfterShip']->plugin_url . '/assets/plugin/chosen/chosen.proto.min.js' );
-
+		echo '<aftership-meta-box></aftership-meta-box>';
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js' );
 	}
 
 	/**
@@ -557,7 +399,7 @@ class AfterShip_Actions {
 					break;
 				}
 			}
-			$this->save_tracking_items( $order_id, $tracking_items );
+			$this->save_tracking_items( $order_id, array_values( $tracking_items ) );
 		}
 
 		return $is_deleted;
@@ -1019,5 +861,195 @@ class AfterShip_Actions {
 		<?php endif; ?>
 
 		<?php
+	}
+
+	/**
+	 * Order Tracking Get All Order Items AJAX
+	 *
+	 * Function for getting all tracking items associated with the order
+	 */
+	public function get_settings() {
+		$this->format_aftership_tracking_output(
+			200,
+			'success',
+			array(
+				'couriers'      => $GLOBALS['AfterShip']->selected_couriers,
+				'custom_domain' => $GLOBALS['AfterShip']->custom_domain,
+			)
+		);
+	}
+
+	/**
+	 * Order Tracking Get All Order Items AJAX
+	 *
+	 * Function for getting all tracking items associated with the order
+	 */
+	public function get_order_detail() {
+		check_ajax_referer( 'get-tracking-item', 'security', true );
+
+		if ( empty( $_REQUEST['order_id'] ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing order_id field' );
+		}
+		$order_id = wc_clean( $_REQUEST['order_id'] );
+
+		// migrate old tracking data
+		$this->convert_old_meta_in_order( $order_id );
+
+		// get order line items
+		$order_line_items = $this->get_order_item_data( $order_id );
+		// get exist order trackings
+		$order_tracking_items = $this->get_tracking_items( $order_id );
+
+		$order_trackings = array(
+			'line_items' => $order_line_items,
+			'trackings'  => $order_tracking_items,
+		);
+
+		$this->format_aftership_tracking_output( 200, 'success', $order_trackings );
+	}
+
+	/**
+	 * Order Tracking Save AJAX
+	 *
+	 * Function for saving tracking items via AJAX
+	 */
+	public function save_order_tracking() {
+		check_ajax_referer( 'create-tracking-item', 'security', true );
+
+		$params          = json_decode( file_get_contents( 'php://input' ), true );
+		$order_id        = wc_clean( $params['order_id'] );
+		$order_trackings = $params['trackings'];
+		// check order trackings fields from front
+		$this->check_aftership_tracking_fields( $order_id, $order_trackings );
+		// check fulfill item quantity
+		$this->check_order_fulfill_items( $order_id, $order_trackings );
+
+		$this->save_tracking_items( $order_id, $order_trackings );
+		// date_modified update
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+
+		$this->format_aftership_tracking_output( 200, 'success' );
+	}
+
+	/**
+	 * Order Tracking Delete
+	 *
+	 * Function to delete a tracking item
+	 */
+	public function delete_order_tracking() {
+		check_ajax_referer( 'delete-tracking-item', 'security', true );
+
+		$params      = json_decode( file_get_contents( 'php://input' ), true );
+		$order_id    = wc_clean( $params['order_id'] );
+		$tracking_id = wc_clean( $params['tracking_id'] );
+
+		if ( empty( $order_id ) || empty( $tracking_id ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing required field' );
+		}
+
+		$this->delete_tracking_item( $order_id, $tracking_id );
+
+		// date_modified update
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+
+		$this->format_aftership_tracking_output( 200, 'success' );
+	}
+
+	/**
+	 * Validate required fields
+	 */
+	private function check_aftership_tracking_fields( $order_id, $trackings ) {
+		// check order trackings from front
+		if ( empty( $order_id ) || empty( $trackings ) || ! is_array( $trackings ) ) {
+			$this->format_aftership_tracking_output( 422, 'missing required field' );
+		}
+
+		foreach ( $trackings as $tracking_one ) {
+			if ( empty( $tracking_one['tracking_number'] ) || empty( $tracking_one['slug'] ) ) {
+				$this->format_aftership_tracking_output( 422, 'missing required field' );
+			}
+		}
+	}
+
+	/**
+	 * Check fulfill item quantity
+	 */
+	private function check_order_fulfill_items( $order_id, $trackings ) {
+		// get order line items
+		$order_line_items   = $this->get_order_item_data( $order_id );
+		$line_item_quantity = absint( array_sum( array_column( $order_line_items, 'quantity' ) ) );
+		$tracking_items     = array_column( $trackings, 'line_items' );
+
+		// line_items 降为二维数组
+		$tmp = array();
+		foreach ( $tracking_items as $one ) {
+			$result = array_merge( $tmp, $one );
+			$tmp    = $result;
+		}
+		$fulfill_items_quantity = absint( array_sum( array_column( $tmp, 'quantity' ) ) );
+
+		if ( $fulfill_items_quantity > $line_item_quantity ) {
+			$this->format_aftership_tracking_output( 422, 'fulfill item quantity gte order item qiantity' );
+		}
+	}
+
+	/**
+	 * Get order item detail
+	 */
+	private function get_order_item_data( $order_id ) {
+		$order      = wc_get_order( $order_id );
+		$line_items = array();
+		foreach ( $order->get_items() as  $item_key => $item ) {
+			$data           = $item->get_data();
+			$format_decimal = array( 'subtotal', 'subtotal_tax', 'total', 'total_tax', 'tax_total', 'shipping_tax_total' );
+
+			// Format decimal values.
+			foreach ( $format_decimal as $key ) {
+				if ( isset( $data[ $key ] ) ) {
+					$data[ $key ] = wc_format_decimal( $data[ $key ], wc_get_price_decimals() );
+				}
+			}
+
+			// Add SKU and PRICE to products.
+			if ( is_callable( array( $item, 'get_product' ) ) ) {
+				$data['sku']   = $item->get_product() ? $item->get_product()->get_sku() : null;
+				$data['price'] = $item->get_quantity() ? $item->get_total() / $item->get_quantity() : 0;
+			}
+
+			// Add parent_name if the product is a variation.
+			if ( is_callable( array( $item, 'get_product' ) ) ) {
+				$product = $item->get_product();
+
+				if ( is_callable( array( $product, 'get_parent_data' ) ) ) {
+					$data['parent_name'] = $product->get_title();
+				} else {
+					$data['parent_name'] = null;
+				}
+			}
+			$line_items[] = $data;
+		}
+
+		return $line_items;
+	}
+
+	/**
+	 * Format output
+	 */
+	private function format_aftership_tracking_output( $code, $message, $data = array() ) {
+		$response = array(
+			'meta' => array(
+				'code'    => $code,
+				'type'    => $code === 200 ? 'OK' : 'ERROR',
+				'message' => $message,
+			),
+			'data' => $data,
+		);
+		header( 'Content-Type: application/json' );
+		wp_send_json( $response );
+		wp_die();
 	}
 }
