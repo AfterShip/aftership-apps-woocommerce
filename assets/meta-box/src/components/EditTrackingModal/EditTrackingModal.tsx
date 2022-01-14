@@ -180,7 +180,6 @@ export default function EditTrackingModal(props: Props) {
   });
 
   const handleLineItemChange = (id: number, value: number) => {
-    console.log('handleLineItemChange');
     _setVal((prev) => ({
       ...prev,
       line_items: {
