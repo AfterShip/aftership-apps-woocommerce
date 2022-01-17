@@ -49,7 +49,7 @@ class AfterShip_Settings {
 	 * Inject css
 	 */
 	public function admin_styles() {
-		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css' );
+		wp_enqueue_style( 'aftership_styles_chosen', aftership()->plugin_url . '/assets/plugin/chosen/chosen.min.css', array(), AFTERSHIP_VERSION );
 	}
 
 	/**
@@ -57,9 +57,9 @@ class AfterShip_Settings {
 	 */
 	public function library_scripts() {
 		$plugin_url = aftership()->plugin_url;
-		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js' );
-		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js' );
-		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js' );
+		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js', array(), AFTERSHIP_VERSION );
 		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js', array(), AFTERSHIP_VERSION );
 		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js', array(), AFTERSHIP_VERSION );
 	}

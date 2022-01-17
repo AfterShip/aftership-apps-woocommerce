@@ -59,7 +59,7 @@ class AfterShip_Actions {
 	 */
 	public function admin_styles() {
 		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
-		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css' );
+		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css', array(), AFTERSHIP_VERSION );
 	}
 
 	/**
@@ -195,7 +195,7 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js' );
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js', array(), AFTERSHIP_VERSION );
 	}
 
 	/**
