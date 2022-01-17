@@ -243,9 +243,9 @@ if ( is_woocommerce_active() ) {
 			 * Parameters:  hook | Not used.
 			 */
 			public function automizely_aftership_add_admin_css() {
-				wp_register_style( 'automizely-aftership-admin', plugins_url( 'assets/css/index.css', __FILE__ ), array(), '1.1' );
+				wp_register_style( 'automizely-aftership-admin', plugins_url( 'assets/css/index.css', __FILE__ ), array(), AFTERSHIP_VERSION );
 				wp_enqueue_style( 'automizely-aftership-admin' );
-				wp_register_style( 'automizely-aftership-admin', plugins_url( 'assets/css/normalize.css', __FILE__ ), array(), '1.0' );
+				wp_register_style( 'automizely-aftership-admin', plugins_url( 'assets/css/normalize.css', __FILE__ ), array(), AFTERSHIP_VERSION );
 				wp_enqueue_style( 'automizely-aftership-admin' );
 			}
 
