@@ -1,0 +1,70 @@
+.modal {
+  padding: 20px;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.empty {
+  text-align: center;
+  font-size: 16px;
+  color: #999c9f;
+}
+.items {
+  thead,
+  tbody,
+  tr {
+    display: contents;
+  }
+  th,
+  td {
+    &:last-child {
+      text-align: right;
+    }
+  }
+  th {
+    margin-bottom: 8px;
+  }
+  display: grid;
+  text-align: left;
+  grid-template-columns: 1fr auto;
+  column-gap: 10px;
+  row-gap: 6px;
+  align-items: center;
+}
+
+.input {
+  color: #3c434a;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  row-gap: 10px;
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    font-size: 12px;
+    text-decoration-line: underline;
+    margin-left: 2px;
+    width: fit-content;
+  }
+  label {
+    margin-left: 2px;
+  }
+
+  select {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    min-height: 30px;
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0 8px;
+  }
+  input {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0 8px;
+  }
+}
