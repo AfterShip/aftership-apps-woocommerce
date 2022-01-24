@@ -23,6 +23,7 @@
     "crypto-js": "^4.1.1",
     "lodash-es": "^4.17.21",
     "normalize.css": "^8.0.1",
+    "query-string": "^7.1.0",
     "solid-js": "1.2.6"
   }
 }

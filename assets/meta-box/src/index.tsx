@@ -17,9 +17,10 @@ customElements.define(
       if(this.initialized) return;
       this.initialized = true;
       if (import.meta.env.MODE === 'production') {
+        const currentScript = document.currentScript as HTMLScriptElement;
         const linkElm = document.createElement('link');
         linkElm.rel = 'stylesheet';
-        linkElm.href = `${import.meta.env.BASE_URL}dist/style.css`;
+        linkElm.href = currentScript.src.replace(/\/index\.js\?/, '/style.css?');
         this.shadowRoot.appendChild(linkElm);
       }
       render(() => <App />, this.shadowRoot);
