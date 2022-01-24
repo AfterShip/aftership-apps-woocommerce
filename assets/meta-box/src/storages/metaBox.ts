@@ -1,5 +1,6 @@
 import { createSignal } from 'solid-js';
 import md5 from 'crypto-js/md5';
+import {stringifyUrl} from 'query-string';
 
 import { Tracking, Courier, LineItem } from '@src/typings/trackings';
 
@@ -22,11 +23,19 @@ export const [selectedCouriers, setSelectedCouriers] = createSignal<Courier[]>([
 export const [courierMap, setCourierMap] = createSignal<Map<string, Courier>>(new Map());
 export const [lineItems, setLineItems] = createSignal<LineItem[]>([]);
 export const [customDomain, setCustomDomain] = createSignal<string>('');
+export const [path, setPath] = createSignal('');
 
 export async function fetchTrackings() {
   const security = document.querySelector<HTMLInputElement>('#aftership_get_nonce')?.value || '';
   await fetch(
-    `/wp-admin/admin-ajax.php?action=aftership_get_order_trackings&security=${security}&order_id=${window.woocommerce_admin_meta_boxes.post_id}`
+    stringifyUrl({
+      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      query: {
+        action: 'aftership_get_order_trackings',
+        security: security,
+        order_id: window.woocommerce_admin_meta_boxes.post_id,
+      },
+    })
   )
     .then((res): Promise<GetTrackingsResponse> => res.json())
     .then((res) => {
@@ -81,7 +90,13 @@ export async function editTracking(data: SubmitData) {
   const security = document.querySelector<HTMLInputElement>('#aftership_create_nonce')?.value || '';
 
   await fetch(
-    `/wp-admin/admin-ajax.php?action=aftership_save_order_tracking&security=${security}`,
+    stringifyUrl({
+      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      query: {
+        action: 'aftership_save_order_tracking',
+        security: security,
+      },
+    }),
     {
       method: 'POST',
       headers: {
@@ -99,7 +114,13 @@ export async function editTracking(data: SubmitData) {
 export async function deleteTracking(id: string) {
   const security = document.querySelector<HTMLInputElement>('#aftership_delete_nonce')?.value || '';
   await fetch(
-    `/wp-admin/admin-ajax.php?action=aftership_delete_order_tracking&security=${security}`,
+    stringifyUrl({
+      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      query: {
+        action: 'aftership_delete_order_tracking',
+        security: security,
+      },
+    }),
     {
       method: 'POST',
       headers: {
@@ -115,7 +136,14 @@ export async function deleteTracking(id: string) {
 }
 
 export async function getSelectedCouriers() {
-  await fetch(`/wp-admin/admin-ajax.php?action=aftership_get_settings`)
+  await fetch(
+    stringifyUrl({
+      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      query: {
+        action: 'aftership_get_settings',
+      },
+    })
+  )
     .then((res): Promise<GetSelectedCouriersResponse> => res.json())
     .then((res) => {
       const selected_couriers = res.data.couriers;
