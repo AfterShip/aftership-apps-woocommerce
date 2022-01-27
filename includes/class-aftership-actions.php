@@ -578,7 +578,7 @@ class AfterShip_Actions {
 		}
 
 		// 需要判断 _aftership_tracking_provider_name 是否正确，否则 slug 为 空
-		$slug = '';
+		$slug = null;
 		// 值是正确的slug，直接使用
 		if ( in_array( $aftership_tracking_provider_name, array_column( $GLOBALS['AfterShip']->selected_couriers, 'slug' ) ) ) {
 			$slug = $aftership_tracking_provider_name;
