@@ -565,16 +565,36 @@ class AfterShip_Actions {
 		}
 		update_post_meta( $order_id, '_aftership_migrated', 'ok' );
 
-		$slug                = get_post_meta( $order_id, '_aftership_tracking_provider_name', true );
-		$tracking_number     = get_post_meta( $order_id, '_aftership_tracking_number', true );
-		$account_number      = get_post_meta( $order_id, '_aftership_tracking_account', true );
-		$key                 = get_post_meta( $order_id, '_aftership_tracking_key', true );
-		$postal_code         = get_post_meta( $order_id, '_aftership_tracking_postal', true );
-		$ship_date           = get_post_meta( $order_id, '_aftership_tracking_shipdate', true );
-		$destination_country = get_post_meta( $order_id, '_aftership_tracking_destination_country', true );
+		$aftership_tracking_provider_name = get_post_meta( $order_id, '_aftership_tracking_provider_name', true );
+		$tracking_number                  = get_post_meta( $order_id, '_aftership_tracking_number', true );
+		$account_number                   = get_post_meta( $order_id, '_aftership_tracking_account', true );
+		$key                              = get_post_meta( $order_id, '_aftership_tracking_key', true );
+		$postal_code                      = get_post_meta( $order_id, '_aftership_tracking_postal', true );
+		$ship_date                        = get_post_meta( $order_id, '_aftership_tracking_shipdate', true );
+		$destination_country              = get_post_meta( $order_id, '_aftership_tracking_destination_country', true );
 
 		if ( ! $tracking_number ) {
 			return;
+		}
+
+		// 需要判断 _aftership_tracking_provider_name 是否正确，否则 slug 为 空
+		$slug = null;
+		// 值是正确的slug，直接使用
+		if ( in_array( $aftership_tracking_provider_name, array_column( $GLOBALS['AfterShip']->selected_couriers, 'slug' ) ) ) {
+			$slug = $aftership_tracking_provider_name;
+		}
+		// 由于历史版本原因，值可能为courier name，则匹配 name 对应的 slug
+		if ( ! $slug ) {
+			$couriers_by_name = array();
+			foreach ( $GLOBALS['AfterShip']->selected_couriers as $i => $courier ) {
+				if ( $courier['name'] === $aftership_tracking_provider_name ) {
+					array_push( $couriers_by_name, $courier );
+				}
+			}
+			// 有可能 name 相同的有多条，只有1条时匹配
+			if ( count( $couriers_by_name ) === 1 ) {
+				$slug = $couriers_by_name[0]['slug'];
+			}
 		}
 
 		$args = array(
