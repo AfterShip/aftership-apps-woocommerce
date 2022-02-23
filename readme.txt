@@ -1,14 +1,14 @@
-=== 123123 ===
+=== AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available) ===
 Contributors: aftership
 Donate link: https://www.aftership.com/
-Tags: 123123123
+Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 5.7
 Stable tag: 1.14.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-123123123
+Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
 
 == Description ==
 

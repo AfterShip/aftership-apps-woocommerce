@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: 123123
+ * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
- * Description: 123123123
+ * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
  * Version: 1.14.4
  * Author: AfterShip
  * Author URI: http://aftership.com
