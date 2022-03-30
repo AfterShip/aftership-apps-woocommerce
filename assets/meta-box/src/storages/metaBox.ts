@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 import md5 from 'crypto-js/md5';
-import {stringifyUrl} from 'query-string';
+import { stringifyUrl } from 'query-string';
 
 import { Tracking, Courier, LineItem } from '@src/typings/trackings';
 
@@ -34,6 +34,7 @@ export async function fetchTrackings() {
         action: 'aftership_get_order_trackings',
         security: security,
         order_id: window.woocommerce_admin_meta_boxes.post_id,
+        t: Date.now(),
       },
     })
   )
@@ -141,6 +142,7 @@ export async function getSelectedCouriers() {
       url: window.woocommerce_admin_meta_boxes.ajax_url,
       query: {
         action: 'aftership_get_settings',
+        t: Date.now(),
       },
     })
   )
