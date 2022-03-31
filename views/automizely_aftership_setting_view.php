@@ -11,7 +11,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $this->options      = get_option( 'aftership_option_name' );
 $is_display_connect = $this->options['connected'] && $this->options['connected'] === true;
 
-$store_url = get_site_url();
+$store_url = get_home_url();
 
 $query = array(
 	'shop'       => $store_url,
