@@ -8,7 +8,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 }
 
-$store_url = get_site_url();
+$store_url = get_home_url();
 
 $query = array(
 	'shop'       => $store_url,
