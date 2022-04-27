@@ -103,23 +103,6 @@ if ( $debug === 'yes' ) {
 					</div>
 				</div>
 			</a>
-
-			<!-- dropshipping -->
-			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=automizely-dropshipping" target="_blank">
-				<div class="auto-as-admin-recommand-list-item">
-					<img
-							style="width: 64px; height: 64px"
-							src="https://assets.aftership.com/img/dropshipping-product.svg"
-							alt=""
-					/>
-					<div class="auto-as-admin-recommand-list-item-detail">
-					<span>
-					<strong>Dropshipping</strong>
-					</span>
-						<span>Easy, Fast, and Reliable Dropshipping</span>
-					</div>
-				</div>
-			</a>
 		</div>
 	</div>
 </div>
