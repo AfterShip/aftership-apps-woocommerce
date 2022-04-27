@@ -34,7 +34,7 @@ if ( $debug === 'yes' ) {
 	<div class="auto-as-admin-header" style="<?php echo $is_display_connect ? 'display:none;' : ''; ?>">
 		<div class="auto-as-admin-logo">
 			<img
-				src="https://assets.aftership.com/img/wordpress-aftership-logo.svg"
+				src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg'; ?>"
 				alt=""
 			/>
 		</div>
@@ -73,13 +73,13 @@ if ( $debug === 'yes' ) {
 			<!-- postmen -->
 			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=postmen-woo-shipping" target="_blank">
 				<div class="auto-as-admin-recommand-list-item">
-					<img style="width: 64px; height: 64px" src="https://assets.aftership.com/img/postmen-product.svg" alt="" />
+					<img style="width: 64px; height: 64px" src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_postmen.svg'; ?>" alt="" />
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
 					<strong>Postmen </strong>
 					</span>
 					<span>
-					Delight customers with the best returns experience
+					The ultimate multi-carrier shipping software
 					</span>
 					</div>
 				</div>
@@ -90,12 +90,31 @@ if ( $debug === 'yes' ) {
 				<div class="auto-as-admin-recommand-list-item">
 					<img
 							style="width: 64px; height: 64px"
-							src="https://assets.aftership.com/img/marketing-product.svg"
+							src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_marketing.svg'; ?>"
 							alt=""
 					/>
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
 					<strong>Marketing</strong>
+					</span>
+					<span>
+					30-in-1 marketing app for Woocommerce
+					</span>
+					</div>
+				</div>
+			</a>
+
+			<!-- returnscenter -->
+			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=automizely-returnscenter" target="_blank">
+				<div class="auto-as-admin-recommand-list-item">
+					<img
+							style="width: 64px; height: 64px"
+							src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_returns-center.svg'; ?>"
+							alt=""
+					/>
+					<div class="auto-as-admin-recommand-list-item-detail">
+					<span>
+					<strong>Returns Center</strong>
 					</span>
 					<span>
 					Delight customers with the best returns experience
