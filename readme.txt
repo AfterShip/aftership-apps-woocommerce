@@ -3,8 +3,8 @@ Contributors: aftership
 Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
-Tested up to: 5.9
-Stable tag: 1.14.7
+Tested up to: 6.0
+Stable tag: 1.14.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,7 +138,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 
 == Changelog ==
 
-= 1.14.7 =
+= 1.14.8 =
 * Fix known issue
 
 = 1.14.6 =
