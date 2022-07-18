@@ -883,6 +883,97 @@ class AfterShip_Actions {
 		<?php
 	}
 
+	/*
+	* Add action button in order list to change order status from completed to delivered
+	*/
+	public function add_aftership_tracking_actions_button( $actions, $order ) {
+		$saved_options = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+		$order_array   = array();
+
+		if ( isset( $saved_options['show_orders_actions'] ) && $saved_options['show_orders_actions'] ) {
+			$as_show_orders_actions = explode( ',', $saved_options['show_orders_actions'] );
+			foreach ( $as_show_orders_actions as $order_status ) {
+				array_push( $order_array, $order_status );
+			}
+		}
+
+		if ( $order->get_shipping_method() != 'Local pickup' && $order->get_shipping_method() != 'Local Pickup' ) {
+			if ( $order->has_status( $order_array ) ) {
+				$actions['add_tracking_by_aftership'] = array(
+					'url'    => '#' . $order->get_id(),
+					'name'   => 'Add Tracking By AfterShip',
+					'icon'   => '<i class="fa fa-map-marker">&nbsp;</i>',
+					'action' => 'aftership_add_inline_tracking', // keep "view" class for a clean button CSS
+				);
+			}
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * Define shipment tracking column in admin orders list.
+	 *
+	 * @param array $columns Existing columns
+	 *
+	 * @return array Altered columns
+	 */
+	public function shop_order_columns( $columns ) {
+		$columns['woocommerce-automizely-aftership-tracking'] = 'AfterShip Tracking';
+		return $columns;
+	}
+
+	/**
+	 * Render shipment tracking in custom column.
+	 *
+	 * @param string $column Current column
+	 */
+	public function render_shop_order_columns( $column ) {
+		global $post;
+		if ( 'woocommerce-automizely-aftership-tracking' === $column ) {
+			echo wp_kses_post( $this->get_automizely_aftership_tracking_column( $post->ID ) );
+		}
+	}
+
+	/**
+	 * Get content for shipment tracking column.
+	 *
+	 * @param int $order_id Order ID
+	 *
+	 * @return string Column content to render
+	 */
+	public function get_automizely_aftership_tracking_column( $order_id ) {
+		ob_start();
+
+		$tracking_items = $this->get_tracking_items( $order_id );
+
+		if ( count( $tracking_items ) > 0 ) {
+			echo '<ul class="wcas-tracking-number-list">';
+
+			foreach ( $tracking_items as $tracking_item ) {
+				// 根据 slug，匹配显示的 courier name
+				$provider_courier = $this->get_courier_by_slug( $tracking_item['slug'] );
+				// 根据规则，生成 tracking link
+				$aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
+
+				printf(
+					'<li id="tracking-item-%s" class="tracking-item-%s"><div><b>%s</b></div><a href="%s" target="_blank" class=ft11>%s</a><a href="#" class="aftership_inline_tracking_delete" rel="%s" data-order="%s" data-nonce="' . esc_html( wp_create_nonce( 'delete-tracking-item' ) ) . '"><span class="dashicons dashicons-trash"></span></a></li>',
+					esc_attr( $tracking_item['tracking_id'] ),
+					esc_attr( $tracking_item['tracking_id'] ),
+					esc_html( $provider_courier['name'] ),
+					esc_url( $aftership_tracking_link ),
+					esc_html( $tracking_item['tracking_number'] ),
+					esc_attr( $tracking_item['tracking_id'] ),
+					esc_attr( $order_id )
+				);
+			}
+			echo '</ul>';
+		} else {
+			echo '–';
+		}
+		return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
+	}
+
 	/**
 	 * Order Tracking Get All Order Items AJAX
 	 *
@@ -920,9 +1011,13 @@ class AfterShip_Actions {
 		// get exist order trackings
 		$order_tracking_items = $this->get_tracking_items( $order_id );
 
+		// get some fields form order
+		$order = new WC_Order( $order_id );
+
 		$order_trackings = array(
 			'line_items' => $order_line_items,
 			'trackings'  => $order_tracking_items,
+			'number'     => (string) $order->get_order_number(),
 		);
 
 		$this->format_aftership_tracking_output( 200, 'success', $order_trackings );

@@ -166,6 +166,12 @@ if ( is_woocommerce_active() ) {
 				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
 				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
 
+				// Register Add Tracking Action for AfterShip
+				add_filter( 'woocommerce_admin_order_actions', array( $this->actions, 'add_aftership_tracking_actions_button' ), 100, 2 );
+				// Custom AfterShip Tracking column in admin orders list.
+				add_filter( 'manage_shop_order_posts_columns', array( $this->actions, 'shop_order_columns' ), 99 );
+				add_action( 'manage_shop_order_posts_custom_column', array( $this->actions, 'render_shop_order_columns' ) );
+
 				$subs_version = class_exists( 'WC_Subscriptions' ) && ! empty( WC_Subscriptions::$version ) ? WC_Subscriptions::$version : null;
 
 				// Prevent data being copied to subscriptions.
@@ -335,6 +341,11 @@ if ( is_woocommerce_active() ) {
 				}
 
 				add_option( 'automizely_aftership_plugin_actived', true );
+
+				// Set default value for show_orders_actions
+				$init_aftership_options                        = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+				$init_aftership_options['show_orders_actions'] = array( 'processing', 'completed', 'partial-shipped' );
+				update_option( 'aftership_option_name', $init_aftership_options );
 			}
 
 

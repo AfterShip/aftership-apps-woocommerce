@@ -36,6 +36,20 @@ class AfterShip_Settings {
 	private $dom_aftership_connected = 'aftership_connected';
 
 	/**
+	 * show order actions when selected order status.
+	 *
+	 * @var string $dom_aftership_show_order_actions
+	 */
+	private $dom_id_show_order_actions_select = 'aftership_show_order_actions_select';
+
+	/**
+	 * show order actions when selected order status.
+	 *
+	 * @var string $dom_aftership_show_order_actions
+	 */
+	private $dom_id_show_order_actions = 'aftership_show_order_actions';
+
+	/**
 	 * Start up
 	 */
 	public function __construct() {
@@ -61,6 +75,7 @@ class AfterShip_Settings {
 		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js', array(), AFTERSHIP_VERSION );
 		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js', array(), AFTERSHIP_VERSION );
 		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership_script_show_order_actions', $plugin_url . '/assets/js/order-status.js', array(), AFTERSHIP_VERSION );
 		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js', array(), AFTERSHIP_VERSION );
 	}
 
@@ -106,6 +121,14 @@ class AfterShip_Settings {
 			'aftership-setting-admin',
 			'aftership_setting_section_id'
 		);
+
+		add_settings_field(
+			$this->dom_id_show_order_actions,
+			'',
+			array( $this, 'show_order_actions_callback' ),
+			'aftership-setting-admin',
+			'aftership_setting_section_id'
+		);
 	}
 
 	/**
@@ -131,6 +154,10 @@ class AfterShip_Settings {
 
 		if ( isset( $input['connected'] ) ) {
 			$new_input['connected'] = boolval( $input['connected'] );
+		}
+
+		if ( isset( $input['show_orders_actions'] ) ) {
+			$new_input['show_orders_actions'] = sanitize_text_field( $input['show_orders_actions'] );
 		}
 
 		return $new_input;
@@ -194,6 +221,21 @@ class AfterShip_Settings {
 			'<div class="auto-as-admin-checkbox-title">Display Track Button at Order History Page</div><label><input type="checkbox" id="use_track_button" name="aftership_option_name[use_track_button]" %s>Use Track Button</label>',
 			( isset( $this->options['use_track_button'] ) && true === $this->options['use_track_button'] ) ? 'checked="checked"' : ''
 		);
+	}
+
+	/**
+	 * Call this func before shown on pages.
+	 */
+	public function show_order_actions_callback() {
+
+		$show_orders_actions = array();
+		if ( isset( $this->options['show_orders_actions'] ) ) {
+			$show_orders_actions = explode( ',', $this->options['show_orders_actions'] );
+		}
+		echo '<div class="auto-as-admin-select-title">Add Tracking Order action</div>';
+		echo '<select data-placeholder="Please select order status" id="' . $this->dom_id_show_order_actions_select . '" multiple style="width:100%">';
+		echo '</select>';
+		echo '<input type="hidden" id="' . $this->dom_id_show_order_actions . '" name="aftership_option_name[show_orders_actions]" value="' . implode( ',', $show_orders_actions ) . '"/>';
 	}
 }
 
