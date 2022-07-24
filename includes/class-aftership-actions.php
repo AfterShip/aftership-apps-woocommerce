@@ -195,7 +195,7 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/meta-box/dist/index.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontend/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
 	}
 
 	/**

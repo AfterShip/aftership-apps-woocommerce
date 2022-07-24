@@ -1,6 +1,6 @@
-import { Component, createSignal, For, onMount, createMemo, Show } from 'solid-js';
-import Button from './components/Button';
-import styles from './App.module.scss';
+import { Component, createSignal, For, onMount } from 'solid-js';
+import Button from '@src/components/Button';
+import styles from './Metabox.module.scss';
 import {
   trackings,
   courierMap,
@@ -9,12 +9,11 @@ import {
   editTracking,
   getSelectedCouriers,
   customDomain,
-} from './storages/metaBox';
-import EditTrackingModal, { FormValue } from './components/EditTrackingModal';
-import { Tracking } from './typings/trackings';
-import { calcUnfulfilledItems } from './utils/common';
+} from '@src/storages/metaBox';
+import EditTrackingModal, { FormValue } from '@src/components/EditTrackingModal';
+import { Tracking } from '@src/typings/trackings';
 
-const App: Component = () => {
+const Metabox: Component = () => {
   const [showModal, setShowModal] = createSignal(false);
   const [editingTracking, setEditingTracking] = createSignal<Tracking>();
 
@@ -105,4 +104,4 @@ const App: Component = () => {
   );
 };
 
-export default App;
+export default Metabox;
