@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "dev:metabox": "vite -c vite.config.metabox.ts",
+    "dev:orders": "vite -c vite.config.orders.ts",
     "build:metabox": "vite build -c vite.config.metabox.ts",
+    "build:orders": "vite build -c vite.config.orders.ts",
     "serve": "vite preview"
   },
   "license": "MIT",

@@ -14,6 +14,7 @@ interface Props {
   value?: Tracking;
   onOk(v: FormValue): void;
   onCancel(): void;
+  orderId: string;
 }
 
 export interface FormValue {
@@ -205,9 +206,13 @@ export default function EditTrackingModal(props: Props) {
   };
 
   const handleOk = () => props.onOk(_val());
+
+  const title = `${props.value?.tracking_id ? 'Edit tracking' : 'Add tracking'} - order - #${
+    props.orderId
+  }`;
   return (
     <Modal
-      title={props.value?.tracking_id ? 'Edit tracking' : 'Add tracking'}
+      title={title}
       visible={props.visible}
       okText={props.value?.tracking_id ? 'Save' : 'Add'}
       onOk={handleOk}

@@ -1,4 +1,4 @@
-import { Component, createSignal, For, onMount } from 'solid-js';
+import { Component, createMemo, createSignal, For, onMount } from 'solid-js';
 import Button from '@src/components/Button';
 import styles from './Metabox.module.scss';
 import {
@@ -9,6 +9,7 @@ import {
   editTracking,
   getSelectedCouriers,
   customDomain,
+  lineItems,
 } from '@src/storages/metaBox';
 import EditTrackingModal, { FormValue } from '@src/components/EditTrackingModal';
 import { Tracking } from '@src/typings/trackings';
@@ -41,6 +42,21 @@ const Metabox: Component = () => {
     setEditingTracking(undefined);
   };
 
+  const lineItemsMap = createMemo(() => {
+    const lineItemsMap = new Map<string, { name: string; quantity: number }[]>();
+    trackings().forEach((tracking) => {
+      const arr = (tracking.line_items || [])?.map((tl) => {
+        const match = lineItems().find((l) => tl.id === l.id);
+        return {
+          name: match?.name || String(tl.id),
+          quantity: tl.quantity,
+        };
+      });
+      lineItemsMap.set(tracking.tracking_id, arr);
+    });
+    return lineItemsMap;
+  });
+
   const formatTackingLink = (tracking: Tracking) => {
     return /^https?:\/\//.test(customDomain())
       ? `${customDomain()}/${tracking.slug}/${tracking.tracking_number}`
@@ -52,7 +68,7 @@ const Metabox: Component = () => {
       {/* trackings */}
       <div>
         <For each={trackings()}>
-          {(item, index) => (
+          {(tracking, index) => (
             <div className={styles.tracking}>
               <div className={styles.title}>
                 <div>Shipment {index() + 1}</div>
@@ -61,23 +77,36 @@ const Metabox: Component = () => {
                     onClick={async () => {
                       // 💩 update data first, user maybe modify line_items
                       await fetchTrackings();
-                      setEditingTracking(item);
+                      setEditingTracking(tracking);
                       setShowModal(true);
                     }}>
                     Edit
                   </a>
-                  <a onClick={() => deleteTracking(item.tracking_id)}>Delete</a>
+                  <a onClick={() => deleteTracking(tracking.tracking_id)}>Delete</a>
                 </div>
               </div>
               <div className={styles.content}>
-                <div>
-                  <strong>{courierMap().get(item.slug)?.name || item.slug}</strong>
+                <div className={styles.number}>
+                  <div>
+                    <strong>{courierMap().get(tracking.slug)?.name || tracking.slug}&nbsp;</strong>
+                  </div>
+                  <div>
+                    <a
+                      title={tracking.tracking_number}
+                      href={formatTackingLink(tracking)}
+                      target="_blank">
+                      {tracking.tracking_number}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <a href={formatTackingLink(item)} target="_blank">
-                    {item.tracking_number}
-                  </a>
-                </div>
+                <For each={lineItemsMap().get(tracking.tracking_id) || []}>
+                  {(item) => (
+                    <div className={styles.item}>
+                      <div title={item.name}>{item.name}</div>
+                      <div>&nbsp;x {item.quantity}</div>
+                    </div>
+                  )}
+                </For>
               </div>
             </div>
           )}
@@ -99,6 +128,7 @@ const Metabox: Component = () => {
         value={editingTracking()}
         onCancel={handleCancel}
         onOk={handleOk}
+        orderId={window.woocommerce_admin_meta_boxes.post_id}
       />
     </div>
   );
