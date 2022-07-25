@@ -4,13 +4,13 @@ import styles from './Metabox.module.scss';
 import {
   trackings,
   courierMap,
-  fetchTrackings,
-  deleteTracking,
-  editTracking,
-  getSelectedCouriers,
+  fetchOrderTrackings,
+  deleteOrderTracking,
+  editOrderTracking,
+  fetchSelectedCouriers,
   customDomain,
   lineItems,
-} from '@src/storages/metaBox';
+} from '@src/storages/tracking';
 import EditTrackingModal, { FormValue } from '@src/components/EditTrackingModal';
 import { Tracking } from '@src/typings/trackings';
 
@@ -18,14 +18,16 @@ const Metabox: Component = () => {
   const [showModal, setShowModal] = createSignal(false);
   const [editingTracking, setEditingTracking] = createSignal<Tracking>();
 
+  const orderId = window.woocommerce_admin_meta_boxes.post_id;
+
   onMount(() => {
-    fetchTrackings();
-    getSelectedCouriers();
+    fetchOrderTrackings(orderId);
+    fetchSelectedCouriers();
   });
 
   const handleOk = async (values: FormValue) => {
     const selectedItems = values.line_items || {};
-    await editTracking({
+    await editOrderTracking(orderId, {
       ...values,
       line_items: Object.entries(selectedItems)
         .map(([id, quantity]) => ({
@@ -36,10 +38,15 @@ const Metabox: Component = () => {
     });
     setShowModal(false);
     setEditingTracking(undefined);
+    await fetchOrderTrackings(orderId);
   };
   const handleCancel = () => {
     setShowModal(false);
     setEditingTracking(undefined);
+  };
+  const handleDelete = async (trackingId: string) => {
+    await deleteOrderTracking(orderId, trackingId);
+    await fetchOrderTrackings(orderId);
   };
 
   const lineItemsMap = createMemo(() => {
@@ -76,13 +83,13 @@ const Metabox: Component = () => {
                   <a
                     onClick={async () => {
                       // 💩 update data first, user maybe modify line_items
-                      await fetchTrackings();
+                      await fetchOrderTrackings(orderId);
                       setEditingTracking(tracking);
                       setShowModal(true);
                     }}>
                     Edit
                   </a>
-                  <a onClick={() => deleteTracking(tracking.tracking_id)}>Delete</a>
+                  <a onClick={() => handleDelete(tracking.tracking_id)}>Delete</a>
                 </div>
               </div>
               <div className={styles.content}>
@@ -116,7 +123,7 @@ const Metabox: Component = () => {
       <div style={{ padding: '12px' }}>
         <Button
           onClick={async () => {
-            await fetchTrackings();
+            await fetchOrderTrackings(orderId);
             setShowModal(true);
           }}
           style={{ width: '100%' }}>

@@ -23,17 +23,21 @@ export const [selectedCouriers, setSelectedCouriers] = createSignal<Courier[]>([
 export const [courierMap, setCourierMap] = createSignal<Map<string, Courier>>(new Map());
 export const [lineItems, setLineItems] = createSignal<LineItem[]>([]);
 export const [customDomain, setCustomDomain] = createSignal<string>('');
-export const [path, setPath] = createSignal('');
 
-export async function fetchTrackings() {
+// FIXME temp usage
+const AJAX_URL = window.location.origin + '/wp-admin/admin-ajax.php';
+// window.woocommerce_admin_meta_boxes.ajax_url
+
+export async function fetchOrderTrackings(orderId: string) {
+  console.log(AJAX_URL);
   const security = document.querySelector<HTMLInputElement>('#aftership_get_nonce')?.value || '';
   await fetch(
     stringifyUrl({
-      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      url: AJAX_URL,
       query: {
         action: 'aftership_get_order_trackings',
         security: security,
-        order_id: window.woocommerce_admin_meta_boxes.post_id,
+        order_id: orderId,
         t: Date.now(),
       },
     })
@@ -60,7 +64,7 @@ interface SubmitData extends Omit<Tracking, 'tracking_id' | 'line_items' | 'metr
   metrics?: Tracking['metrics'];
 }
 
-export async function editTracking(data: SubmitData) {
+export async function editOrderTracking(orderId: string, data: SubmitData) {
   const oldTracking = trackings().find((t) => t.tracking_id === data.tracking_id);
   const oldTrackingIndex = trackings().findIndex((t) => t.tracking_id === data.tracking_id);
   const nowISOString = new Date().toISOString().replace(/\.\d+(?=Z$)/, '');
@@ -92,7 +96,7 @@ export async function editTracking(data: SubmitData) {
 
   await fetch(
     stringifyUrl({
-      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      url: AJAX_URL,
       query: {
         action: 'aftership_save_order_tracking',
         security: security,
@@ -104,19 +108,18 @@ export async function editTracking(data: SubmitData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        order_id: window.woocommerce_admin_meta_boxes.post_id,
+        order_id: orderId,
         trackings: result,
       }),
     }
   );
-  await fetchTrackings();
 }
 
-export async function deleteTracking(id: string) {
+export async function deleteOrderTracking(orderId: string, trackingId: string) {
   const security = document.querySelector<HTMLInputElement>('#aftership_delete_nonce')?.value || '';
   await fetch(
     stringifyUrl({
-      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      url: AJAX_URL,
       query: {
         action: 'aftership_delete_order_tracking',
         security: security,
@@ -128,18 +131,17 @@ export async function deleteTracking(id: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        order_id: window.woocommerce_admin_meta_boxes.post_id,
-        tracking_id: id,
+        order_id: orderId,
+        tracking_id: trackingId,
       }),
     }
   );
-  await fetchTrackings();
 }
 
-export async function getSelectedCouriers() {
+export async function fetchSelectedCouriers() {
   await fetch(
     stringifyUrl({
-      url: window.woocommerce_admin_meta_boxes.ajax_url,
+      url: AJAX_URL,
       query: {
         action: 'aftership_get_settings',
         t: Date.now(),
