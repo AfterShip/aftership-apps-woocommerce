@@ -134,6 +134,7 @@ if ( is_woocommerce_active() ) {
 				}
 
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
+				add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
 				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );

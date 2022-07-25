@@ -57,10 +57,41 @@ class AfterShip_Actions {
 	/**
 	 * Load admin styles.
 	 */
-	public function admin_styles() {
+	public function admin_styles() {		
 		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
 		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css', array(), AFTERSHIP_VERSION );
 	}
+
+	/**
+	 * Load aftership orders page script.
+	 */
+	public function load_orders_page_script($hook) {
+		if ('edit.php' !== $hook) {
+			return;
+		}
+		woocommerce_wp_hidden_input(
+			array(
+				'id'    => 'aftership_get_nonce',
+				'value' => wp_create_nonce( 'get-tracking-item' ),
+			)
+		);
+		woocommerce_wp_hidden_input(
+			array(
+				'id'    => 'aftership_delete_nonce',
+				'value' => wp_create_nonce( 'delete-tracking-item' ),
+			)
+		);
+		woocommerce_wp_hidden_input(
+			array(
+				'id'    => 'aftership_create_nonce',
+				'value' => wp_create_nonce( 'create-tracking-item' ),
+			)
+		);
+		echo '<aftership-orders-modal></aftership-orders-modal>';
+		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
+		wp_enqueue_script( 'aftership-orders-script', $plugin_url . '/assets/frontend/dist/orders/index.js', array(), AFTERSHIP_VERSION );
+	}
+
 
 	/**
 	 * Add the meta box for shipment info on the order page
@@ -900,7 +931,7 @@ class AfterShip_Actions {
 		if ( $order->get_shipping_method() != 'Local pickup' && $order->get_shipping_method() != 'Local Pickup' ) {
 			if ( $order->has_status( $order_array ) ) {
 				$actions['add_tracking_by_aftership'] = array(
-					'url'    => '#' . $order->get_id(),
+					'url'    => '#order-id-' . $order->get_id(),
 					'name'   => 'Add Tracking By AfterShip',
 					'icon'   => '<i class="fa fa-map-marker">&nbsp;</i>',
 					'action' => 'aftership_add_inline_tracking', // keep "view" class for a clean button CSS
@@ -957,11 +988,18 @@ class AfterShip_Actions {
 				$aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
 
 				printf(
-					'<li id="tracking-item-%s" class="tracking-item-%s"><div><b>%s</b></div><a href="%s" target="_blank" class=ft11>%s</a><a href="#" class="aftership_inline_tracking_delete" rel="%s" data-order="%s" data-nonce="' . esc_html( wp_create_nonce( 'delete-tracking-item' ) ) . '"><span class="dashicons dashicons-trash"></span></a></li>',
-					esc_attr( $tracking_item['tracking_id'] ),
-					esc_attr( $tracking_item['tracking_id'] ),
+					'<li>
+						<div>
+							<b>%s</b>
+						</div>
+						<a href="%s" title="%s" target="_blank" class=ft11>%s</a>
+						<a href="#" class="aftership_inline_tracking_delete" data-tracking-id="%s" data-order-id="%s">
+							<span class="dashicons dashicons-trash"></span>
+						</a>
+					</li>',
 					esc_html( $provider_courier['name'] ),
 					esc_url( $aftership_tracking_link ),
+					esc_html( $tracking_item['tracking_number'] ),
 					esc_html( $tracking_item['tracking_number'] ),
 					esc_attr( $tracking_item['tracking_id'] ),
 					esc_attr( $order_id )

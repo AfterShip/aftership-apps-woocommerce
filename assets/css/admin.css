@@ -134,6 +134,12 @@
 	box-sizing: border-box;
 	margin-bottom: 0;
 }
+.wcas-tracking-number-list li a:nth-child(2) {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 a.aftership_inline_tracking_delete{
 	display:none;
 	position: absolute;
