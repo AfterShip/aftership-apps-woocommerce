@@ -24,12 +24,9 @@ export const [courierMap, setCourierMap] = createSignal<Map<string, Courier>>(ne
 export const [lineItems, setLineItems] = createSignal<LineItem[]>([]);
 export const [customDomain, setCustomDomain] = createSignal<string>('');
 
-// FIXME temp usage
-const AJAX_URL = window.location.origin + '/wp-admin/admin-ajax.php';
-// window.woocommerce_admin_meta_boxes.ajax_url
+const AJAX_URL = window.woocommerce_admin_meta_boxes.ajax_url;
 
 export async function fetchOrderTrackings(orderId: string) {
-  console.log(AJAX_URL);
   const security = document.querySelector<HTMLInputElement>('#aftership_get_nonce')?.value || '';
   await fetch(
     stringifyUrl({

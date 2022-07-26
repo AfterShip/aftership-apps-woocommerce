@@ -88,8 +88,14 @@ class AfterShip_Actions {
 			)
 		);
 		echo '<aftership-orders-modal></aftership-orders-modal>';
+
 		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
-		wp_enqueue_script( 'aftership-orders-script', $plugin_url . '/assets/frontend/dist/orders/index.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 
+			'aftership-orders-page-script', 
+			$plugin_url . '/assets/frontend/dist/orders/index.js', 
+			array('wc-admin-order-meta-boxes'), 
+			AFTERSHIP_VERSION 
+		);
 	}
 
 
