@@ -344,7 +344,7 @@ if ( is_woocommerce_active() ) {
 
 				// Set default value for show_orders_actions
 				$init_aftership_options                        = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
-				$init_aftership_options['show_orders_actions'] = array( 'processing', 'completed', 'partial-shipped' );
+				$init_aftership_options['show_orders_actions'] = 'processing,completed,partial-shipped';
 				update_option( 'aftership_option_name', $init_aftership_options );
 			}
 
