@@ -73,6 +73,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 		$custom_domain       = isset( $options['custom_domain'] ) ? $options['custom_domain'] : '';
 		$couriers            = isset( $options['couriers'] ) ? $options['couriers'] : '';
 		$use_tracking_button = isset( $options['use_track_button'] ) ? $options['use_track_button'] : '';
+		$show_orders_actions = isset( $options['show_orders_actions'] ) ? $options['show_orders_actions'] : '';
 
 		if ( isset( $data['custom_domain'] ) && $data['custom_domain'] ) {
 			if ( 'track.aftership.com' === $custom_domain || '' === $custom_domain ) {
@@ -83,6 +84,12 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 		if ( isset( $data['couriers'] ) && $data['couriers'] ) {
 			if ( '' === $couriers ) {
 				$options['couriers'] = $data['couriers'];
+			}
+		}
+
+		if ( isset( $data['show_orders_actions'] ) && $data['show_orders_actions'] ) {
+			if ( '' === $show_orders_actions ) {
+				$options['show_orders_actions'] = $data['show_orders_actions'];
 			}
 		}
 

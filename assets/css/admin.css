@@ -124,3 +124,32 @@
 #woocommerce-aftership .tracking-item-content:first-child {
 	margin-bottom: 4px;
 }
+.widefat .column-wc_actions a.aftership_add_inline_tracking.button::after {
+	content: "\f230";
+}
+.wcas-tracking-number-list li {
+	position: relative;
+	padding: 5px;
+	min-height: 50px;
+	box-sizing: border-box;
+	margin-bottom: 0;
+}
+a.aftership_inline_tracking_delete{
+	display:none;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 11px;
+	color: #a00;
+}
+a.aftership_inline_tracking_delete span.dashicons{
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+}
+.wcas-tracking-number-list li:hover a.aftership_inline_tracking_delete{
+	display:block;
+}
+ul.wcas-tracking-number-list {
+	margin: 0;
+}
