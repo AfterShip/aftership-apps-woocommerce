@@ -939,7 +939,6 @@ class AfterShip_Actions {
 				$actions['add_tracking_by_aftership'] = array(
 					'url'    => '#order-id-' . $order->get_id(),
 					'name'   => 'Add Tracking By AfterShip',
-					'icon'   => '<i class="fa fa-map-marker">&nbsp;</i>',
 					'action' => 'aftership_add_inline_tracking', // keep "view" class for a clean button CSS
 				);
 			}
