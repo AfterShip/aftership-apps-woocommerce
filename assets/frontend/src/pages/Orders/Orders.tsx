@@ -5,13 +5,14 @@ import {
   fetchSelectedCouriers,
   editOrderTracking,
   deleteOrderTracking,
+  editingOrderNumber,
 } from '@src/storages/tracking';
 import { Tracking } from '@src/typings/trackings';
 
 const Orders: Component = () => {
   const [showModal, setShowModal] = createSignal(false);
   const [orderId, setOrderId] = createSignal('');
-  const [editingTracking, setEditingTracking] = createSignal<Tracking>();
+  const [editingTracking] = createSignal<Tracking>();
 
   const handleAddTrackingClick = async (e: MouseEvent) => {
     const target = e.target as HTMLAnchorElement | null;
@@ -79,7 +80,7 @@ const Orders: Component = () => {
       visible={showModal()}
       onCancel={handleCancel}
       onOk={handleOk}
-      orderId={orderId()}
+      orderId={editingOrderNumber()}
     />
   );
 };

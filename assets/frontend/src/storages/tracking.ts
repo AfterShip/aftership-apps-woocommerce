@@ -8,6 +8,7 @@ interface GetTrackingsResponse {
   data: {
     line_items: LineItem[];
     trackings: Tracking[];
+    number: string;
   };
 }
 
@@ -23,6 +24,7 @@ export const [selectedCouriers, setSelectedCouriers] = createSignal<Courier[]>([
 export const [courierMap, setCourierMap] = createSignal<Map<string, Courier>>(new Map());
 export const [lineItems, setLineItems] = createSignal<LineItem[]>([]);
 export const [customDomain, setCustomDomain] = createSignal<string>('');
+export const [editingOrderNumber, setEditingOrderNumber] = createSignal<string>('');
 
 const AJAX_URL = window.woocommerce_admin_meta_boxes.ajax_url;
 
@@ -52,6 +54,7 @@ export async function fetchOrderTrackings(orderId: string) {
       setCourierMap((prev) => new Map([...prev, ...nextCourierMap]));
       setTrackings(data.trackings);
       setLineItems(data.line_items);
+      setEditingOrderNumber(data.number);
     });
 }
 

@@ -10,6 +10,7 @@ import {
   fetchSelectedCouriers,
   customDomain,
   lineItems,
+  editingOrderNumber,
 } from '@src/storages/tracking';
 import EditTrackingModal, { FormValue } from '@src/components/EditTrackingModal';
 import { Tracking } from '@src/typings/trackings';
@@ -135,7 +136,7 @@ const Metabox: Component = () => {
         value={editingTracking()}
         onCancel={handleCancel}
         onOk={handleOk}
-        orderId={window.woocommerce_admin_meta_boxes.post_id}
+        orderId={editingOrderNumber()}
       />
     </div>
   );
