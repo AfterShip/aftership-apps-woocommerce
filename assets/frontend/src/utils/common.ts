@@ -1,4 +1,4 @@
-import { lineItems } from '@src/storages/metaBox';
+import { lineItems } from '@src/storages/tracking';
 import { Tracking } from '@src/typings/trackings';
 
 export function calcUnfulfilledItems(trackings: Tracking[]) {
