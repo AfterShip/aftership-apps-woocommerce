@@ -14,6 +14,9 @@ const Orders: Component = () => {
   const [orderId, setOrderId] = createSignal('');
   const [editingTracking] = createSignal<Tracking>();
 
+  interface ClickMouseEvent extends MouseEvent {
+    path: HTMLElement[];
+  }
   const handleAddTrackingClick = async (e: MouseEvent) => {
     const target = e.target as HTMLAnchorElement | null;
     if (!target) return;
@@ -41,8 +44,18 @@ const Orders: Component = () => {
     const result = window.confirm('Do you really want to delete this tracking?');
     if (result) {
       const dataSet = parentElement.dataset as { orderId: string; trackingId: string };
+      const elPath = e.composedPath();
       await deleteOrderTracking(dataSet.orderId, dataSet.trackingId);
-      window.location.reload();
+      for (let el of elPath) {
+        if (
+          el instanceof HTMLElement &&
+          el.tagName === 'LI' &&
+          el.parentElement?.className.includes('wcas-tracking-number-list')
+        ) {
+          el.remove();
+          return;
+        }
+      }
     }
   };
 
