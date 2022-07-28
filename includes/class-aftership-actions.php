@@ -57,7 +57,7 @@ class AfterShip_Actions {
 	/**
 	 * Load admin styles.
 	 */
-	public function admin_styles() {		
+	public function admin_styles() {
 		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
 		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css', array(), AFTERSHIP_VERSION );
 	}
@@ -65,8 +65,8 @@ class AfterShip_Actions {
 	/**
 	 * Load aftership orders page script.
 	 */
-	public function load_orders_page_script($hook) {
-		if ('edit.php' !== $hook) {
+	public function load_orders_page_script( $hook ) {
+		if ( 'edit.php' !== $hook ) {
 			return;
 		}
 		woocommerce_wp_hidden_input(
@@ -90,11 +90,11 @@ class AfterShip_Actions {
 		echo '<aftership-orders-modal></aftership-orders-modal>';
 
 		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
-		wp_enqueue_script( 
-			'aftership-orders-page-script', 
-			$plugin_url . '/assets/frontend/dist/orders/index.js', 
-			array('wc-admin-order-meta-boxes'), 
-			AFTERSHIP_VERSION 
+		wp_enqueue_script(
+			'aftership-orders-page-script',
+			$plugin_url . '/assets/frontend/dist/orders/index.js',
+			array( 'wc-admin-order-meta-boxes' ),
+			AFTERSHIP_VERSION
 		);
 	}
 
