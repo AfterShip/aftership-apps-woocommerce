@@ -38,7 +38,7 @@ const Orders: Component = () => {
       return;
     }
     e.preventDefault();
-    const result = window.confirm('Do you really want to delete this tracking?');
+    const result = window.confirm('Do you really want to delete tracking number?');
     if (result) {
       const dataSet = parentElement.dataset as { orderId: string; trackingId: string };
       await deleteOrderTracking(dataSet.orderId, dataSet.trackingId);
