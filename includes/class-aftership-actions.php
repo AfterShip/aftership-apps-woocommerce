@@ -55,6 +55,17 @@ class AfterShip_Actions {
 	}
 
 	/**
+	 * Initial order actions for Add Tracking button
+	 */
+	public static function init_aftership_show_orders_actions() {
+		$init_aftership_options = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+		if ( empty( $init_aftership_options['show_orders_actions'] ) ) {
+			$init_aftership_options['show_orders_actions'] = 'processing,completed,partial-shipped';
+			update_option( 'aftership_option_name', $init_aftership_options );
+		}
+	}
+
+	/**
 	 * Load admin styles.
 	 */
 	public function admin_styles() {
