@@ -243,6 +243,9 @@ if ( is_woocommerce_active() ) {
 					delete_option( 'automizely_aftership_plugin_actived' );
 					exit( wp_redirect( 'admin.php?page=automizely-aftership-index' ) );
 				}
+
+				// Set default value for show_orders_actions when upgrade aftership plugin
+				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
 			/**
@@ -343,12 +346,8 @@ if ( is_woocommerce_active() ) {
 
 				add_option( 'automizely_aftership_plugin_actived', true );
 
-				// Set default value for show_orders_actions
-				$init_aftership_options = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
-				if ( empty( $init_aftership_options['show_orders_actions'] ) ) {
-					$init_aftership_options['show_orders_actions'] = 'processing,completed,partial-shipped';
-					update_option( 'aftership_option_name', $init_aftership_options );
-				}
+				// Set default value for show_orders_actions when active aftership plugin
+				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
 
