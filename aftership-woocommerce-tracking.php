@@ -344,9 +344,11 @@ if ( is_woocommerce_active() ) {
 				add_option( 'automizely_aftership_plugin_actived', true );
 
 				// Set default value for show_orders_actions
-				$init_aftership_options                        = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
-				$init_aftership_options['show_orders_actions'] = 'processing,completed,partial-shipped';
-				update_option( 'aftership_option_name', $init_aftership_options );
+				$init_aftership_options = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+				if ( empty( $init_aftership_options['show_orders_actions'] ) ) {
+					$init_aftership_options['show_orders_actions'] = 'processing,completed,partial-shipped';
+					update_option( 'aftership_option_name', $init_aftership_options );
+				}
 			}
 
 
