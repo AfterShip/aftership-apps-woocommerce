@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.14.8
+ * Version: 1.15.0
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.14.8' );
+define( 'AFTERSHIP_VERSION', '1.15.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
@@ -134,6 +134,7 @@ if ( is_woocommerce_active() ) {
 				}
 
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
+				add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
 				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
@@ -165,6 +166,12 @@ if ( is_woocommerce_active() ) {
 				add_action( 'wp_ajax_aftership_save_order_tracking', array( $this->actions, 'save_order_tracking' ) );
 				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
 				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
+
+				// Register Add Tracking Action for AfterShip
+				add_filter( 'woocommerce_admin_order_actions', array( $this->actions, 'add_aftership_tracking_actions_button' ), 100, 2 );
+				// Custom AfterShip Tracking column in admin orders list.
+				add_filter( 'manage_shop_order_posts_columns', array( $this->actions, 'shop_order_columns' ), 99 );
+				add_action( 'manage_shop_order_posts_custom_column', array( $this->actions, 'render_shop_order_columns' ) );
 
 				$subs_version = class_exists( 'WC_Subscriptions' ) && ! empty( WC_Subscriptions::$version ) ? WC_Subscriptions::$version : null;
 
@@ -236,6 +243,9 @@ if ( is_woocommerce_active() ) {
 					delete_option( 'automizely_aftership_plugin_actived' );
 					exit( wp_redirect( 'admin.php?page=automizely-aftership-index' ) );
 				}
+
+				// Set default value for show_orders_actions when upgrade aftership plugin
+				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
 			/**
@@ -335,6 +345,9 @@ if ( is_woocommerce_active() ) {
 				}
 
 				add_option( 'automizely_aftership_plugin_actived', true );
+
+				// Set default value for show_orders_actions when active aftership plugin
+				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
 

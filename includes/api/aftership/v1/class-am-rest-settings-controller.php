@@ -99,6 +99,13 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 					$options['couriers'] = $data['couriers'];
 				}
 			}
+
+			if ( isset( $data['show_orders_actions'] ) && $data['show_orders_actions'] ) {
+				if ( '' === $this->seek_option_value( $options, 'show_orders_actions' ) ) {
+					$options['show_orders_actions'] = $data['show_orders_actions'];
+				}
+			}
+
 			if ( isset( $data['connected'] ) && in_array( $data['connected'], array( true, false ), true ) ) {
 				$options['connected'] = $data['connected'];
 			}

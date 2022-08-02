@@ -124,3 +124,42 @@
 #woocommerce-aftership .tracking-item-content:first-child {
 	margin-bottom: 4px;
 }
+.widefat .column-wc_actions a.aftership_add_inline_tracking.button::after {
+	content: ' ';
+	background-position: center;
+	background-repeat: no-repeat;
+	margin: 0;
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48cGF0aCBmaWxsPSIjMjI3MWIxIiBkPSJNMTEyIDBDODUuNDkgMCA2NCAyMS40OSA2NCA0OFY5NkgxNkM3LjE2MyA5NiAwIDEwMy4yIDAgMTEyQzAgMTIwLjggNy4xNjMgMTI4IDE2IDEyOEgyNzJDMjgwLjggMTI4IDI4OCAxMzUuMiAyODggMTQ0QzI4OCAxNTIuOCAyODAuOCAxNjAgMjcyIDE2MEg0OEMzOS4xNiAxNjAgMzIgMTY3LjIgMzIgMTc2QzMyIDE4NC44IDM5LjE2IDE5MiA0OCAxOTJIMjQwQzI0OC44IDE5MiAyNTYgMTk5LjIgMjU2IDIwOEMyNTYgMjE2LjggMjQ4LjggMjI0IDI0MCAyMjRIMTZDNy4xNjMgMjI0IDAgMjMxLjIgMCAyNDBDMCAyNDguOCA3LjE2MyAyNTYgMTYgMjU2SDIwOEMyMTYuOCAyNTYgMjI0IDI2My4yIDIyNCAyNzJDMjI0IDI4MC44IDIxNi44IDI4OCAyMDggMjg4SDY0VjQxNkM2NCA0NjkgMTA2LjEgNTEyIDE2MCA1MTJDMjEzIDUxMiAyNTYgNDY5IDI1NiA0MTZIMzg0QzM4NCA0NjkgNDI2LjEgNTEyIDQ4MCA1MTJDNTMzIDUxMiA1NzYgNDY5IDU3NiA0MTZINjA4QzYyNS43IDQxNiA2NDAgNDAxLjcgNjQwIDM4NEM2NDAgMzY2LjMgNjI1LjcgMzUyIDYwOCAzNTJWMjM3LjNDNjA4IDIyMC4zIDYwMS4zIDIwNCA1ODkuMyAxOTJMNTEyIDExNC43QzQ5OS4xIDEwMi43IDQ4My43IDk2IDQ2Ni43IDk2SDQxNlY0OEM0MTYgMjEuNDkgMzk0LjUgMCAzNjggMEgxMTJ6TTU0NCAyMzcuM1YyNTZINDE2VjE2MEg0NjYuN0w1NDQgMjM3LjN6TTE2MCA0NjRDMTMzLjUgNDY0IDExMiA0NDIuNSAxMTIgNDE2QzExMiAzODkuNSAxMzMuNSAzNjggMTYwIDM2OEMxODYuNSAzNjggMjA4IDM4OS41IDIwOCA0MTZDMjA4IDQ0Mi41IDE4Ni41IDQ2NCAxNjAgNDY0ek01MjggNDE2QzUyOCA0NDIuNSA1MDYuNSA0NjQgNDgwIDQ2NEM0NTMuNSA0NjQgNDMyIDQ0Mi41IDQzMiA0MTZDNDMyIDM4OS41IDQ1My41IDM2OCA0ODAgMzY4QzUwNi41IDM2OCA1MjggMzg5LjUgNTI4IDQxNnoiLz48L3N2Zz4K');
+}
+.wcas-tracking-number-list li {
+	position: relative;
+	padding: 5px;
+	min-height: 50px;
+	box-sizing: border-box;
+	margin-bottom: 0;
+}
+.wcas-tracking-number-list li a:nth-child(2) {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+a.aftership_inline_tracking_delete{
+	display:none;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 11px;
+	color: #a00;
+}
+a.aftership_inline_tracking_delete span.dashicons{
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+}
+.wcas-tracking-number-list li:hover a.aftership_inline_tracking_delete{
+	display:block;
+}
+ul.wcas-tracking-number-list {
+	margin: 0;
+}
