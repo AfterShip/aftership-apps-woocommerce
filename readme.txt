@@ -139,7 +139,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 1.15.0 =
-* Add Tracking form the orders list
+* New Feature: (Tracking) Ability to add tracking number on orders list
 
 = 1.14.8 =
 * Fix known issue
