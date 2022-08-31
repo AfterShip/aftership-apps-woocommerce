@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 6.0
-Stable tag: 1.15.0
+Stable tag: 1.15.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ By installing AfterShip for WooCommerce, you can automatically add Tracking Numb
 
 ###ALL-IN-ONE WooCommerce ORDER TRACKING
 Automatically import your tracking numbers to AfterShip, so you can get current tracking info for all your shipments from shipping providers at your WooCommerce store in one place
+**The AfterShip admin portal is now available in German, French, Italian, and Spanish.**
 
 ###SMART DASHBOARD
 - Filter shipments by dates, statuses, carriers, shipping providers, and destination
@@ -137,6 +138,9 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 7. On-time delivery report
 
 == Changelog ==
+
+= 1.15.1 =
+* Update Readme.
 
 = 1.15.0 =
 * New Feature: (Tracking) Ability to add tracking number on orders list
