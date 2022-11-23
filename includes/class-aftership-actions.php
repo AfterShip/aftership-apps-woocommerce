@@ -75,11 +75,25 @@ class AfterShip_Actions {
 
 	/**
 	 * Load aftership orders page script.
+	 * Comment：
+	 *   1. This function is applied on 2 pages
+	 *      orders list page: page id = "edit-shop_order"
+	 *      order edit page: page id = "shop_order"
 	 */
 	public function load_orders_page_script( $hook ) {
 		if ( 'edit.php' !== $hook ) {
 			return;
 		}
+		// The following code will be executed only when the detect page which the function belongs to
+		$page_screen          = get_current_screen()->id;
+		$screen_handle_tracking = array(
+			'edit-shop_order',
+			'shop_order',
+		);
+		if ( !in_array( $page_screen, $screen_handle_tracking ) ) {
+			return;
+		}
+
 		woocommerce_wp_hidden_input(
 			array(
 				'id'    => 'aftership_get_nonce',
