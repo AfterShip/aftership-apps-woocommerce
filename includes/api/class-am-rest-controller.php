@@ -1,9 +1,25 @@
 <?php
+/**
+ * AfterShip Rest Controller
+ *
+ * Used to setup reset api endpoint.
+ *
+ * @package AfterShip
+ */
 
 if ( ! class_exists( 'AM_REST_Controller' ) ) {
 
+	/**
+	 * Class AM_REST_Controller
+	 */
 	class AM_REST_Controller extends WP_REST_Controller {
 
+		/**
+		 * Filter consumer key
+		 *
+		 * @param array $option option.
+		 * @return mixed
+		 */
 		public function filter_consumer_key( $option ) {
 			$script_tag = $option;
 			if ( isset( $script_tag['consumer_key'] ) ) {
@@ -12,6 +28,11 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 			return $script_tag;
 		}
 
+		/**
+		 * Get consume key.
+		 *
+		 * @return mixed|string|null
+		 */
 		public function get_consumer_key() {
 			$consumer_key = $this->get_consumer_key_from_basic_authentication();
 
@@ -22,20 +43,25 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 			return $this->get_consumer_key_from_oauth_authentication();
 		}
 
+		/**
+		 * Get consumer ke
+		 *
+		 * @return false|mixed|string
+		 */
 		private function get_consumer_key_from_basic_authentication() {
 			$consumer_key    = '';
 			$consumer_secret = '';
 
 			// If the $_GET parameters are present, use those first.
-			if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) { // WPCS: CSRF ok.
-				$consumer_key    = $_GET['consumer_key']; // WPCS: CSRF ok, sanitization ok.
-				$consumer_secret = $_GET['consumer_secret']; // WPCS: CSRF ok, sanitization ok.
+			if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) {
+				$consumer_key    = $_GET['consumer_key'];
+				$consumer_secret = $_GET['consumer_secret'];
 			}
 
 			// If the above is not present, we will do full basic auth.
 			if ( ! $consumer_key && ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) {
-				$consumer_key    = $_SERVER['PHP_AUTH_USER']; // WPCS: CSRF ok, sanitization ok.
-				$consumer_secret = $_SERVER['PHP_AUTH_PW']; // WPCS: CSRF ok, sanitization ok.
+				$consumer_key    = $_SERVER['PHP_AUTH_USER'];
+				$consumer_secret = $_SERVER['PHP_AUTH_PW'];
 			}
 
 			// Stop if don't have any key.
@@ -46,8 +72,13 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 			return $consumer_key;
 		}
 
+		/**
+		 * Get consume key
+		 *
+		 * @return mixed|string|null
+		 */
 		private function get_consumer_key_from_oauth_authentication() {
-			$params = array_merge( $_GET, $_POST ); // WPCS: CSRF ok.
+			$params = array_merge( $_GET, $_POST );
 			$params = wp_unslash( $params );
 			$header = $this->get_authorization_header();
 
@@ -64,9 +95,14 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 			return isset( $params['oauth_consumer_key'] ) ? $params['oauth_consumer_key'] : null;
 		}
 
+		/**
+		 * Get auth header
+		 *
+		 * @return array|mixed|string
+		 */
 		private function get_authorization_header() {
 			if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-				return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ); // WPCS: sanitization ok.
+				return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] );
 			}
 
 			if ( function_exists( 'getallheaders' ) ) {
@@ -82,6 +118,12 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 			return '';
 		}
 
+		/**
+		 * Parse auth header
+		 *
+		 * @param array $header http header.
+		 * @return array
+		 */
 		private function parse_header( $header ) {
 			if ( 'OAuth ' !== substr( $header, 0, 6 ) ) {
 				return array();

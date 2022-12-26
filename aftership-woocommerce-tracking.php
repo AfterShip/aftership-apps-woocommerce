@@ -8,6 +8,8 @@
  * Author URI: http://aftership.com
  *
  * Copyright: © AfterShip
+ *
+ * @package AfterShip
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,17 +20,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Required functions
  */
 
-require_once( 'woo-includes/woo-functions.php' );
+require_once 'woo-includes/woo-functions.php';
 
 define( 'AFTERSHIP_VERSION', '1.15.2' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
+/**
+ * AfterShip class
+ */
 if ( is_woocommerce_active() ) {
-
-	/**
-	 * AfterShip class
-	 */
 	if ( ! class_exists( 'AfterShip' ) ) {
 
 		/**
@@ -43,13 +44,6 @@ if ( is_woocommerce_active() ) {
 			 * @var AfterShip_Actions
 			 */
 			public $actions;
-
-			/**
-			 * Instance of AfterShip_API.
-			 *
-			 * @var AfterShip_API
-			 */
-			public $api;
 
 			/**
 			 * Plugin file.
@@ -128,7 +122,11 @@ if ( is_woocommerce_active() ) {
 				// Include required files.
 				$this->includes();
 
-				// Check if woocommerce active.
+				/**
+				 * Check if woocommerce active.
+				 *
+				 * @since 1.0.0
+				 */
 				if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 					add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'add_rest_api' ) );
 				}
@@ -136,12 +134,12 @@ if ( is_woocommerce_active() ) {
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
 				add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
 				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
-				// Remove other plugins notice message for setting and landing page
+				// Remove other plugins notice message for setting and landing page.
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
 
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
-				// register admin pages for the plugin
+				// register admin pages for the plugin.
 				add_action( 'admin_menu', array( $this, 'automizely_aftership_admin_menu' ) );
 				add_action( 'admin_menu', array( $this, 'automizely_aftership_connect_page' ) );
 				add_action( 'plugins_loaded', array( $this->actions, 'load_plugin_textdomain' ) );
@@ -167,7 +165,7 @@ if ( is_woocommerce_active() ) {
 				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
 				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
 
-				// Register Add Tracking Action for AfterShip
+				// Register Add Tracking Action for AfterShip.
 				add_filter( 'woocommerce_admin_order_actions', array( $this->actions, 'add_aftership_tracking_actions_button' ), 100, 2 );
 				// Custom AfterShip Tracking column in admin orders list.
 				add_filter( 'manage_shop_order_posts_columns', array( $this->actions, 'shop_order_columns' ), 99 );
@@ -181,12 +179,6 @@ if ( is_woocommerce_active() ) {
 				} else {
 					add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', array( $this->actions, 'woocommerce_subscriptions_renewal_order_meta_query' ), 10, 4 );
 				}
-
-				// Add api key config on user profile.
-				add_action( 'show_user_profile', array( $this->actions, 'add_api_key_field' ) );
-				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
-				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
-				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
@@ -238,13 +230,14 @@ if ( is_woocommerce_active() ) {
 			 *              Will redirect to the plugin page if the automizely_aftership_plugin_actived is setup.
 			 * Return:      void
 			 **/
-			function automizely_aftership_plugin_active() {
+			public function automizely_aftership_plugin_active() {
 				if ( get_option( 'automizely_aftership_plugin_actived', false ) ) {
 					delete_option( 'automizely_aftership_plugin_actived' );
-					exit( wp_redirect( 'admin.php?page=automizely-aftership-index' ) );
+					wp_safe_redirect( 'admin.php?page=automizely-aftership-index' );
+					exit();
 				}
 
-				// Set default value for show_orders_actions when upgrade aftership plugin
+				// Set default value for show_orders_actions when upgrade aftership plugin.
 				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
@@ -269,7 +262,7 @@ if ( is_woocommerce_active() ) {
 					'toplevel_page_aftership-setting-admin',
 				);
 
-				if ( current_user_can( 'manage_options' ) && in_array( $page_screen, $screen_remove_notice ) ) {
+				if ( current_user_can( 'manage_options' ) && in_array( $page_screen, $screen_remove_notice, true ) ) {
 					echo '<style>.update-nag, .updated, .notice, #wpfooter, .error, .is-dismissible { display: none; }</style>';
 				}
 			}
@@ -279,19 +272,25 @@ if ( is_woocommerce_active() ) {
 			 * Parameters:  None
 			 */
 			public function automizely_aftership_index() {
-				if ( isset( $this->options['connected'] ) && $this->options['connected'] === true ) {
-					exit( wp_redirect( 'admin.php?page=aftership-setting-admin' ) );
+				if ( isset( $this->options['connected'] ) && true === $this->options['connected'] ) {
+					wp_safe_redirect( 'admin.php?page=aftership-setting-admin' );
+					exit();
 				}
-				include_once AFTERSHIP_PATH . '/views/automizely_aftership_on_boarding_view.php';
+				include_once AFTERSHIP_PATH . '/views/automizely-aftership-on-boarding-view.php';
 			}
 
 			/**
 			 * Options page callback
 			 */
 			public function aftership_setting_page() {
-				include AFTERSHIP_PATH . '/views/automizely_aftership_setting_view.php';
+				include AFTERSHIP_PATH . '/views/automizely-aftership-setting-view.php';
 			}
 
+			/**
+			 * Deactivate modal.
+			 *
+			 * @return void
+			 */
 			public function deactivate_modal() {
 				if ( current_user_can( 'manage_options' ) ) {
 					global $pagenow;
@@ -310,7 +309,7 @@ if ( is_woocommerce_active() ) {
 				$legacy_options['connected'] = false;
 				update_option( 'aftership_option_name', $legacy_options );
 
-				// Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin
+				// Revoke AfterShip plugin REST oauth key when user Deactivation | Delete plugin.
 				call_user_func( array( 'AfterShip_Actions', 'revoke_aftership_key' ) );
 
 				delete_option( 'automizely_aftership_plugin_actived' );
@@ -322,7 +321,7 @@ if ( is_woocommerce_active() ) {
 			 * @param array $controllers REST Controllers.
 			 * @return array
 			 */
-			function add_rest_api( $controllers ) {
+			public function add_rest_api( $controllers ) {
 				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
 				return $controllers;
 			}
@@ -334,19 +333,13 @@ if ( is_woocommerce_active() ) {
 			public static function install() {
 				global $wp_roles;
 
-				if ( class_exists( 'WP_Roles' ) ) {
-					if ( ! isset( $wp_roles ) ) {
-						$wp_roles = new WP_Roles();
-					}
-				}
-
 				if ( is_object( $wp_roles ) ) {
 					$wp_roles->add_cap( 'administrator', 'manage_aftership' );
 				}
 
 				add_option( 'automizely_aftership_plugin_actived', true );
 
-				// Set default value for show_orders_actions when active aftership plugin
+				// Set default value for show_orders_actions when active aftership plugin.
 				call_user_func( array( 'AfterShip_Actions', 'init_aftership_show_orders_actions' ) );
 			}
 
@@ -373,12 +366,10 @@ if ( is_woocommerce_active() ) {
 			 * @since 1.4.0
 			 */
 			private function includes() {
-				require( $this->plugin_dir . '/includes/class-aftership-actions.php' );
+				require $this->plugin_dir . '/includes/class-aftership-actions.php';
 				$this->actions = AfterShip_Actions::get_instance();
-				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
-				$this->api = new AfterShip_API();
-				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
-				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
+				require_once $this->plugin_dir . '/includes/class-aftership-settings.php';
+				require_once $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php';
 			}
 
 			/**
@@ -398,7 +389,7 @@ if ( is_woocommerce_active() ) {
 			}
 		}
 
-	} // End if().
+	}
 
 	/**
 	 * Returns an instance of AfterShip.
@@ -421,4 +412,5 @@ if ( is_woocommerce_active() ) {
 	 * Backward compatibility.
 	 */
 	$GLOBALS['AfterShip'] = aftership();
-} // End if().
+}
+

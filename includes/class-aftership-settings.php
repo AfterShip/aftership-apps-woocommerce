@@ -1,4 +1,12 @@
 <?php
+/**
+ * AfterShip Settings
+ *
+ * All settings used by AfterShip plugin
+ *
+ * @package AfterShip
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -36,14 +44,14 @@ class AfterShip_Settings {
 	private $dom_aftership_connected = 'aftership_connected';
 
 	/**
-	 * show order actions when selected order status.
+	 * Show order actions when selected order status.
 	 *
 	 * @var string $dom_aftership_show_order_actions
 	 */
 	private $dom_id_show_order_actions_select = 'aftership_show_order_actions_select';
 
 	/**
-	 * show order actions when selected order status.
+	 * Show order actions when selected order status.
 	 *
 	 * @var string $dom_aftership_show_order_actions
 	 */
@@ -71,12 +79,12 @@ class AfterShip_Settings {
 	 */
 	public function library_scripts() {
 		$plugin_url = aftership()->plugin_url;
-		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js', array(), AFTERSHIP_VERSION );
-		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js', array(), AFTERSHIP_VERSION );
-		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js', array(), AFTERSHIP_VERSION );
-		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js', array(), AFTERSHIP_VERSION );
-		wp_enqueue_script( 'aftership_script_show_order_actions', $plugin_url . '/assets/js/order-status.js', array(), AFTERSHIP_VERSION );
-		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership_styles_chosen_jquery', $plugin_url . '/assets/plugin/chosen/chosen.jquery.min.js', array(), AFTERSHIP_VERSION, true );
+		wp_enqueue_script( 'aftership_styles_chosen_proto', $plugin_url . '/assets/plugin/chosen/chosen.proto.min.js', array(), AFTERSHIP_VERSION, true );
+		wp_enqueue_script( 'aftership_script_util', $plugin_url . '/assets/js/util.js', array(), AFTERSHIP_VERSION, true );
+		wp_enqueue_script( 'aftership_script_couriers', $plugin_url . '/assets/js/couriers.js', array(), AFTERSHIP_VERSION, true );
+		wp_enqueue_script( 'aftership_script_show_order_actions', $plugin_url . '/assets/js/order-status.js', array(), AFTERSHIP_VERSION, true );
+		wp_enqueue_script( 'aftership_script_setting', $plugin_url . '/assets/js/setting.js', array(), AFTERSHIP_VERSION, true );
 	}
 
 	/**
@@ -166,9 +174,7 @@ class AfterShip_Settings {
 	/**
 	 * Print the Section text
 	 */
-	public function print_section_info() {
-		// print 'Enter your settings below:';.
-	}
+	public function print_section_info() {}
 
 	/**
 	 * Normalize custom domain.
@@ -181,8 +187,7 @@ class AfterShip_Settings {
 			return $url;
 
 		}
-		$domain = parse_url( $url, PHP_URL_HOST );
-		return $domain;
+		return wp_parse_url( $url, PHP_URL_HOST );
 	}
 
 	/**
@@ -195,11 +200,11 @@ class AfterShip_Settings {
 			$couriers = explode( ',', $this->options['couriers'] );
 		}
 		echo '<div class="auto-as-admin-select-title">Courier</div>';
-		echo '<select data-placeholder="Please select couriers" id="' . $this->dom_id_courier_select . '" multiple style="width:100%">';
+		echo '<select data-placeholder="Please select couriers" id="' . esc_html( $this->dom_id_courier_select ) . '" multiple style="width:100%">';
 		echo '</select>';
-		echo '<input type="hidden" id="' . $this->dom_id_couriers . '" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
+		echo '<input type="hidden" id="' . esc_html( $this->dom_id_couriers ) . '" name="aftership_option_name[couriers]" value="' . esc_html( implode( ',', $couriers ) ) . '"/>';
 		if ( isset( $this->options['connected'] ) ) {
-			echo '<input type="hidden" id="' . $this->dom_aftership_connected . '" name="aftership_option_name[connected]" value="' . $this->options['connected'] . '" />';
+			echo '<input type="hidden" id="' . esc_html( $this->dom_aftership_connected ) . '" name="aftership_option_name[connected]" value="' . esc_html( $this->options['connected'] ) . '" />';
 		}
 	}
 
@@ -209,7 +214,7 @@ class AfterShip_Settings {
 	public function custom_domain_callback() {
 		printf(
 			'<div class="auto-as-admin-input-title">Display Tracking Information at Custom Domain</div><input type="text" class="auto-as-admin-input-content" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
-			isset( $this->options['custom_domain'] ) ? $this->normalize_custom_domain( $this->options['custom_domain'] ) : 'track.aftership.com'
+			isset( $this->options['custom_domain'] ) ? esc_html( $this->normalize_custom_domain( $this->options['custom_domain'] ) ) : 'track.aftership.com'
 		);
 	}
 
@@ -233,9 +238,9 @@ class AfterShip_Settings {
 			$show_orders_actions = explode( ',', $this->options['show_orders_actions'] );
 		}
 		echo '<div class="auto-as-admin-select-title">Add Tracking Order action</div>';
-		echo '<select data-placeholder="Please select order status" id="' . $this->dom_id_show_order_actions_select . '" multiple style="width:100%">';
+		echo '<select data-placeholder="Please select order status" id="' . esc_html( $this->dom_id_show_order_actions_select ) . '" multiple style="width:100%">';
 		echo '</select>';
-		echo '<input type="hidden" id="' . $this->dom_id_show_order_actions . '" name="aftership_option_name[show_orders_actions]" value="' . implode( ',', $show_orders_actions ) . '"/>';
+		echo '<input type="hidden" id="' . esc_html( $this->dom_id_show_order_actions ) . '" name="aftership_option_name[show_orders_actions]" value="' . esc_html( implode( ',', $show_orders_actions ) ) . '"/>';
 	}
 }
 
