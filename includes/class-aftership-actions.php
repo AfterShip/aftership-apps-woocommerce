@@ -279,17 +279,27 @@ class AfterShip_Actions {
 	 * @param array  $post post model.
 	 */
 	public function save_meta_box( $post_id, $post ) {
-		if ( isset( $_POST['aftership_tracking_number'] ) && strlen( $_POST['aftership_tracking_number'] ) > 0 ) {
+        // phpcs:ignore.
+        $input = $_POST;
+		$tracking_number     = isset( $input['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $input['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $input['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $input['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $input['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $input['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $input['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $input['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_state'] ) ) : null;
+		if ( $tracking_number ) {
 			$args = array(
-				'slug'              => wc_clean( $_POST['aftership_tracking_slug'] ),
-				'tracking_number'   => wc_clean( $_POST['aftership_tracking_number'] ),
+				'slug'              => $slug,
+				'tracking_number'   => $tracking_number,
 				'additional_fields' => array(
-					'account_number'      => wc_clean( $_POST['aftership_tracking_account_number'] ),
-					'key'                 => wc_clean( $_POST['aftership_tracking_key'] ),
-					'postal_code'         => wc_clean( $_POST['aftership_tracking_postal_code'] ),
-					'ship_date'           => wc_clean( $_POST['aftership_tracking_ship_date'] ),
-					'destination_country' => wc_clean( $_POST['aftership_tracking_destination_country'] ),
-					'state'               => wc_clean( $_POST['aftership_tracking_state'] ),
+					'account_number'      => $account_number,
+					'key'                 => $key,
+					'postal_code'         => $postal_code,
+					'ship_date'           => $ship_date,
+					'destination_country' => $destination_country,
+					'state'               => $state,
 				),
 			);
 
@@ -305,7 +315,10 @@ class AfterShip_Actions {
 	public function get_meta_box_items_ajax() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$order_id = wc_clean( $_POST['order_id'] );
+		$order_id = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		if ( ! $order_id ) {
+			return;
+		}
 		// migrate old tracking data.
 		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
@@ -326,24 +339,33 @@ class AfterShip_Actions {
 	 */
 	public function save_meta_box_ajax() {
 		check_ajax_referer( 'create-tracking-item', 'security', true );
+        // phpcs:ignore.
+        $input = $_POST;
+		$order_id            = isset( $input['order_id'] ) ? wc_clean( wp_unslash( $input['order_id'] ) ) : false;
+		$tracking_number     = isset( $input['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $input['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $input['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $input['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $input['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $input['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $input['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $input['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_state'] ) ) : null;
 
-		if ( isset( $_POST['aftership_tracking_number'] ) && strlen( $_POST['aftership_tracking_number'] ) > 0 ) {
-
-			$order_id = wc_clean( $_POST['order_id'] );
-			$args     = array(
-				'slug'              => wc_clean( $_POST['aftership_tracking_slug'] ),
-				'tracking_number'   => wc_clean( $_POST['aftership_tracking_number'] ),
+		if ( $tracking_number && $order_id ) {
+			$args = array(
+				'slug'              => $slug,
+				'tracking_number'   => $tracking_number,
 				'additional_fields' => array(
-					'account_number'      => wc_clean( $_POST['aftership_tracking_account_number'] ),
-					'key'                 => wc_clean( $_POST['aftership_tracking_key'] ),
-					'postal_code'         => wc_clean( $_POST['aftership_tracking_postal_code'] ),
-					'ship_date'           => wc_clean( $_POST['aftership_tracking_ship_date'] ),
-					'destination_country' => wc_clean( $_POST['aftership_tracking_destination_country'] ),
-					'state'               => wc_clean( $_POST['aftership_tracking_state'] ),
+					'account_number'      => $account_number,
+					'key'                 => $key,
+					'postal_code'         => $postal_code,
+					'ship_date'           => $ship_date,
+					'destination_country' => $destination_country,
+					'state'               => $state,
 				),
 			);
 
-			$post_tracking_id = wc_clean( $_POST['aftership_tracking_id'] );
+			$post_tracking_id = isset( $input['aftership_tracking_id'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_id'] ) ) : null;
 			$tracking_id      = md5( "{$args['slug']}-{$args['tracking_number']}" );
 			if ( $post_tracking_id && $tracking_id !== $post_tracking_id ) {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
@@ -365,8 +387,11 @@ class AfterShip_Actions {
 	public function meta_box_delete_tracking() {
 		check_ajax_referer( 'delete-tracking-item', 'security', true );
 
-		$order_id    = wc_clean( $_POST['order_id'] );
-		$tracking_id = wc_clean( $_POST['tracking_id'] );
+		$order_id    = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : false;
+		if ( ! $order_id || ! $tracking_id ) {
+			return;
+		}
 
 		$this->delete_tracking_item( $order_id, $tracking_id );
 
@@ -384,8 +409,11 @@ class AfterShip_Actions {
 	public function get_meta_box_item_ajax() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$order_id                 = wc_clean( $_POST['order_id'] );
-		$tracking_id              = wc_clean( $_POST['tracking_id'] );
+		$order_id    = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : false;
+		if ( ! $order_id || ! $tracking_id ) {
+			return;
+		}
 		$tracking_item            = $this->get_tracking_item( $order_id, $tracking_id );
 		$tracking_item['courier'] = $this->get_courier_by_slug( $tracking_item['slug'] );
 		header( 'Content-Type: application/json' );
@@ -417,7 +445,7 @@ class AfterShip_Actions {
 	 * @param WC_Order $order Order object.
 	 * @param bool     $sent_to_admin Whether the email is being sent to admin or not.
 	 * @param bool     $plain_text Whether email is in plain text or not.
-	 * @param WC_Email $email Email object.
+	 * @param object   $email Email object.
 	 */
 	public function email_display( $order, $sent_to_admin, $plain_text = null, $email = null ) {
 		/**
@@ -617,7 +645,7 @@ class AfterShip_Actions {
 			}
 			if ( isset( $additional_fields['ship_date'] ) ) {
 				if ( $additional_fields['ship_date'] ) {
-					$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
+					$tracking_item['additional_fields']['ship_date'] = gmdate( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
 				}
 			}
 			$tracking_items[ $key ] = $tracking_item;
@@ -730,6 +758,8 @@ class AfterShip_Actions {
 
 
 	/**
+	 * Get tracking number for tracking button
+	 *
 	 * @param array $item tracking item.
 	 * @param bool  $with_additional_fields with_additional_fields.
 	 * @return string
@@ -756,13 +786,6 @@ class AfterShip_Actions {
 	 */
 	public function add_permission_cap() {
 		global $wp_roles;
-
-		if ( class_exists( 'WP_Roles' ) ) {
-			if ( ! isset( $wp_roles ) ) {
-				$wp_roles = new WP_Roles();
-			}
-		}
-
 		if ( is_object( $wp_roles ) ) {
 			$wp_roles->add_cap( 'administrator', 'manage_aftership' );
 		}
@@ -992,6 +1015,11 @@ class AfterShip_Actions {
 		} else {
 			echo '–';
 		}
+		/**
+		 * Hook to add column at order list page.
+		 *
+		 * @since 0.0.1
+		 */
 		return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
 	}
 
@@ -1022,7 +1050,7 @@ class AfterShip_Actions {
 		if ( empty( $_REQUEST['order_id'] ) ) {
 			$this->format_aftership_tracking_output( 422, 'missing order_id field' );
 		}
-		$order_id = wc_clean( $_REQUEST['order_id'] );
+		$order_id = wc_clean( wp_unslash( $_REQUEST['order_id'] ) );
 
 		// migrate old tracking data.
 		$this->convert_old_meta_in_order( $order_id );

@@ -26,9 +26,6 @@ define( 'AFTERSHIP_VERSION', '1.15.2' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
-/**
- * AfterShip class
- */
 if ( is_woocommerce_active() ) {
 	if ( ! class_exists( 'AfterShip' ) ) {
 

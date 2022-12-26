@@ -49,19 +49,16 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 		 * @return false|mixed|string
 		 */
 		private function get_consumer_key_from_basic_authentication() {
-			$consumer_key    = '';
-			$consumer_secret = '';
-
-			// If the $_GET parameters are present, use those first.
-			if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) {
-				$consumer_key    = $_GET['consumer_key'];
-				$consumer_secret = $_GET['consumer_secret'];
-			}
-
+            // phpcs:ignore.
+			$consumer_key    = isset( $_GET['consumer_key'] ) ? wc_clean( wp_unslash( $_GET['consumer_key'] ) ) : false;
+            // phpcs:ignore.
+			$consumer_secret = isset( $_GET['consumer_secret'] ) ? wc_clean( wp_unslash( $_GET['consumer_secret'] ) ) : false;
+			$auth_user       = isset( $_SERVER['PHP_AUTH_USER'] ) ? wc_clean( wp_unslash( $_SERVER['PHP_AUTH_USER'] ) ) : false;
+			$auth_pw         = isset( $_SERVER['PHP_AUTH_PW'] ) ? wc_clean( wp_unslash( $_SERVER['PHP_AUTH_PW'] ) ) : false;
 			// If the above is not present, we will do full basic auth.
-			if ( ! $consumer_key && ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) {
-				$consumer_key    = $_SERVER['PHP_AUTH_USER'];
-				$consumer_secret = $_SERVER['PHP_AUTH_PW'];
+			if ( ! $consumer_key ) {
+				$consumer_key    = $auth_user;
+				$consumer_secret = $auth_pw;
 			}
 
 			// Stop if don't have any key.
@@ -78,7 +75,8 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 		 * @return mixed|string|null
 		 */
 		private function get_consumer_key_from_oauth_authentication() {
-			$params = array_merge( $_GET, $_POST );
+			// WPCS: input var ok, CSRF ok.
+			$params = array_merge( $_GET, $_POST ); // phpcs:ignore.
 			$params = wp_unslash( $params );
 			$header = $this->get_authorization_header();
 
@@ -102,7 +100,7 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 		 */
 		private function get_authorization_header() {
 			if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-				return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] );
+				return wc_clean( wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ) );
 			}
 
 			if ( function_exists( 'getallheaders' ) ) {
