@@ -43,6 +43,13 @@ if ( is_woocommerce_active() ) {
 			public $actions;
 
 			/**
+			 * Instance of AfterShip_API.
+			 *
+			 * @var AfterShip_API $api aftership plugin api instance.
+			 */
+			public $api;
+
+			/**
 			 * Plugin file.
 			 *
 			 * @var string
@@ -365,6 +372,8 @@ if ( is_woocommerce_active() ) {
 			private function includes() {
 				require $this->plugin_dir . '/includes/class-aftership-actions.php';
 				$this->actions = AfterShip_Actions::get_instance();
+				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
+				$this->api = new AfterShip_API();
 				require_once $this->plugin_dir . '/includes/class-aftership-settings.php';
 				require_once $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php';
 			}
