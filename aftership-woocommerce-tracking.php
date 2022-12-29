@@ -343,6 +343,10 @@ if ( is_woocommerce_active() ) {
 
 				if ( is_object( $wp_roles ) ) {
 					$wp_roles->add_cap( 'administrator', 'manage_aftership' );
+				} else {
+					if ( class_exists( 'WP_Roles' ) ) {
+						( new WP_Roles() )->add_cap( 'administrator', 'manage_aftership' );
+					}
 				}
 
 				add_option( 'automizely_aftership_plugin_actived', true );
