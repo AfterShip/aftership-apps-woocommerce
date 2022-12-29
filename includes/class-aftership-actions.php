@@ -792,6 +792,69 @@ class AfterShip_Actions {
 	}
 
 	/**
+	 * Display the API key info for a user
+	 *
+	 * @param WP_User $user user obj.
+	 */
+	public function add_api_key_field( $user ) {
+
+		$this->add_permission_cap();
+
+		if ( ! current_user_can( 'manage_aftership' ) ) {
+			return;
+		}
+		if ( current_user_can( 'edit_user', $user->ID ) ) {
+			?>
+			<h3>AfterShip</h3>
+			<table class="form-table">
+				<tbody>
+				<tr>
+					<th><label
+								for="aftership_wp_api_key"><?php esc_html_e( 'AfterShip\'s WordPress API Key', 'aftership' ); ?></label>
+					</th>
+					<td>
+						<?php if ( empty( $user->aftership_wp_api_key ) ) : ?>
+							<input name="aftership_wp_generate_api_key" type="checkbox"
+								   id="aftership_wp_generate_api_key" value="0"/>
+							<span class="description"><?php esc_html_e( 'Generate API Key', 'aftership' ); ?></span>
+						<?php else : ?>
+							<code id="aftership_wp_api_key"><?php echo esc_attr( $user->aftership_wp_api_key ); ?></code>
+							<br/>
+							<input name="aftership_wp_generate_api_key" type="checkbox"
+								   id="aftership_wp_generate_api_key" value="0"/>
+							<span class="description"><?php esc_html_e( 'Revoke API Key', 'aftership' ); ?></span>
+						<?php endif; ?>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<?php
+		}
+	}
+
+	/**
+	 * Generate and save (or delete) the API keys for a user
+	 *
+	 * @param int $user_id user id.
+	 */
+	public function generate_api_key( $user_id ) {
+		if ( current_user_can( 'edit_user', $user_id ) ) {
+			$user = get_userdata( $user_id );
+			// creating/deleting key.
+            // phpcs:ignore.
+			if ( isset( $_POST['aftership_wp_generate_api_key'] ) ) {
+				// consumer key.
+				if ( empty( $user->aftership_wp_api_key ) ) {
+					$api_key = 'ck_' . hash( 'md5', $user->user_login . gmdate( 'U' ) . mt_rand() );
+					update_user_meta( $user_id, 'aftership_wp_api_key', $api_key );
+				} else {
+					delete_user_meta( $user_id, 'aftership_wp_api_key' );
+				}
+			}
+		}
+	}
+
+	/**
 	 * Add 'modified_after' and 'modified_before' for data query
 	 *
 	 * @param array           $args query args.

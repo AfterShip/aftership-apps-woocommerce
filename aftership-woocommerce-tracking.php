@@ -183,6 +183,10 @@ if ( is_woocommerce_active() ) {
 				} else {
 					add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', array( $this->actions, 'woocommerce_subscriptions_renewal_order_meta_query' ), 10, 4 );
 				}
+				add_action( 'show_user_profile', array( $this->actions, 'add_api_key_field' ) );
+				add_action( 'edit_user_profile', array( $this->actions, 'add_api_key_field' ) );
+				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
+				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
@@ -372,7 +376,7 @@ if ( is_woocommerce_active() ) {
 			private function includes() {
 				require $this->plugin_dir . '/includes/class-aftership-actions.php';
 				$this->actions = AfterShip_Actions::get_instance();
-				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
+				require $this->plugin_dir . '/includes/api/class-aftership-api.php';
 				$this->api = new AfterShip_API();
 				require_once $this->plugin_dir . '/includes/class-aftership-settings.php';
 				require_once $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php';
