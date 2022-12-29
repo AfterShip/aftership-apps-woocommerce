@@ -183,7 +183,7 @@ class AfterShip_Settings {
 	 * @return string
 	 */
 	public function normalize_custom_domain( $url ) {
-		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return $url;
 
 		}
@@ -224,7 +224,7 @@ class AfterShip_Settings {
 	public function track_button_callback() {
 		printf(
 			'<div class="auto-as-admin-checkbox-title">Display Track Button at Order History Page</div><label><input type="checkbox" id="use_track_button" name="aftership_option_name[use_track_button]" %s>Use Track Button</label>',
-			( isset( $this->options['use_track_button'] ) && true === $this->options['use_track_button'] ) ? 'checked="checked"' : ''
+			( isset( $this->options['use_track_button'] ) && $this->options['use_track_button'] ) ? 'checked="checked"' : ''
 		);
 	}
 

@@ -289,10 +289,10 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				'tracking_destination_country' => order_post_meta_getter( $order, 'aftership_tracking_destination_country' ),
 			);
 		}
-		if ( null === $tn ) {
+		if ( ! $tn ) {
 			// Handle old Shipping Tracking plugin.
 			$tn = order_post_meta_getter( $order, 'tracking_number' );
-			if ( null === $tn ) {
+			if ( ! $tn ) {
 				// Handle new Shipping Tracking plugin version higher than 1.6.4.
 				$tracking_items = order_post_meta_getter( $order, 'wc_shipment_tracking_items' )[0];
 
@@ -341,7 +341,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 		// 获取 postnl  Postalcode.
 		$url_arr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
 
-		if ( false === $url_arr ) {
+		if ( ! $url_arr ) {
 			return array();
 		}
 

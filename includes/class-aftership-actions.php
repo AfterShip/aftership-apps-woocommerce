@@ -30,7 +30,7 @@ class AfterShip_Actions {
 	 * @return AfterShip_Actions
 	 */
 	public static function get_instance() {
-		if ( null === self::$instance ) {
+		if ( ! self::$instance ) {
 
 			self::$instance = new self();
 		}
@@ -216,7 +216,7 @@ class AfterShip_Actions {
 	 * @return string
 	 */
 	public function normalize_custom_domain( $url ) {
-		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return $url;
 
 		}
@@ -459,7 +459,7 @@ class AfterShip_Actions {
 		}
 
 		$order_id = is_callable( array( $order, 'get_id' ) ) ? $order->get_id() : $order->id;
-		if ( true === $plain_text ) {
+		if ( $plain_text ) {
 			wc_get_template( 'email/plain/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
 		} else {
 			wc_get_template( 'email/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );

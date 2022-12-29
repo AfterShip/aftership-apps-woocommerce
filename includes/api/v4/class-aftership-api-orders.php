@@ -322,7 +322,7 @@ class AfterShip_API_V4_Orders extends AfterShip_API_V3_Orders {
 		// 获取 postnl  Postalcode.
 		$url_arr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
 
-		if ( false === $url_arr ) {
+		if ( ! $url_arr ) {
 			return array();
 		}
 

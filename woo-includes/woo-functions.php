@@ -5,6 +5,32 @@
  * @package AfterShip
  */
 
+if ( ! function_exists( 'get_order_id' ) ) {
+	/**
+	 * Get order by id.
+	 *
+	 * @param array $order order obj.
+	 * @return mixed
+	 */
+	function get_order_id( $order ) {
+		return ( method_exists( $order, 'get_id' ) ) ? $order->get_id() : $order->id;
+	}
+}
+
+if ( ! function_exists( 'order_post_meta_getter' ) ) {
+	/**
+	 * Get order meta data.
+	 *
+	 * @param array  $order order obj.
+	 * @param string $attr order meta key.
+	 * @return mixed
+	 */
+	function order_post_meta_getter( $order, $attr ) {
+		$meta = get_post_meta( get_order_id( $order ), '_' . $attr, true );
+		return $meta;
+	}
+}
+
 if ( ! function_exists( 'is_woocommerce_active' ) ) {
 	/**
 	 * Detect WooCommerrce activation.

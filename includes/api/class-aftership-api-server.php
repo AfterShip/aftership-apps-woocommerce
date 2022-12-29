@@ -522,7 +522,7 @@ class AfterShip_API_Server {
 					}
 
 					// For non-variable routes, generate links.
-					if ( strpos( $route, '<' ) === false ) {
+					if ( ! strpos( $route, '<' ) ) {
 						$data['meta'] = array(
 							'self' => $route,
 						);

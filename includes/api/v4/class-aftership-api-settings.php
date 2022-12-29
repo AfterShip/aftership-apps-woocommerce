@@ -61,7 +61,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 	 * @return string
 	 */
 	public function normalize_custom_domain( $url ) {
-		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return $url;
 
 		}

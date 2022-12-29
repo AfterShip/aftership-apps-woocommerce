@@ -76,23 +76,21 @@ class AfterShip_API_Authentication {
 		$headers = getallheaders();
 		$headers = json_decode( wp_json_encode( $headers ), true );
 
-		// it dues to different kind of server configuration.
-		$key  = 'AFTERSHIP_WP_KEY';
-		$key1 = str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', $key ) ) ) );
-		$key2 = 'AFTERSHIP-WP-KEY';
+		$keys = array(
+			'AFTERSHIP_WP_KEY',
+			'AFTERSHIP-WP-KEY',
+			'aftership_wp_key',
+			'aftership-wp-key',
+			'Aftership-Wp-Key',
+		);
         // phpcs:ignore.
-		$qskey = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : null;
-
-		// get aftership wp key.
-		if ( ! empty( $headers[ $key ] ) ) {
-			$api_key = $headers[ $key ];
-		} elseif ( ! empty( $headers[ $key1 ] ) ) {
-			$api_key = $headers[ $key1 ];
-		} elseif ( ! empty( $headers[ $key2 ] ) ) {
-			$api_key = $headers[ $key2 ];
-		} elseif ( ! empty( $qskey ) ) {
-			$api_key = $qskey;
-		} else {
+		$api_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : null;
+		foreach ( $keys as $item ) {
+			if ( ! empty( $headers[ $item ] ) ) {
+				$api_key = $headers[ $item ];
+			}
+		}
+		if ( ! $api_key ) {
 			throw new Exception( __( 'AfterShip\'s WordPress Key is missing', 'aftership' ), 404 );
 		}
 
