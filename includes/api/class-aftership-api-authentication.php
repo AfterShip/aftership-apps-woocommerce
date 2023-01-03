@@ -83,7 +83,7 @@ class AfterShip_API_Authentication {
 			'aftership-wp-key',
 			'Aftership-Wp-Key',
 		);
-        // phpcs:ignore.
+		// phpcs:ignore.
 		$api_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : null;
 		foreach ( $keys as $item ) {
 			if ( ! empty( $headers[ $item ] ) ) {

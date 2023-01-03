@@ -91,12 +91,12 @@ class AfterShip_API {
 		 global $wp;
 
 		if ( ! empty( $_GET['aftership-api'] ) ) {
-            // phpcs:ignore.
+			// phpcs:ignore.
 			$wp->query_vars['aftership-api'] = $_GET['aftership-api'];
 		}
 
 		if ( ! empty( $_GET['aftership-api-route'] ) ) {
-            // phpcs:ignore.
+			// phpcs:ignore.
 			$wp->query_vars['aftership-api-route'] = $_GET['aftership-api-route'];
 		}
 

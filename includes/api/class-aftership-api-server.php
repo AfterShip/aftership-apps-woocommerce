@@ -128,17 +128,17 @@ class AfterShip_API_Server {
 
 		$this->path   = $path;
 		$this->method = $request_method;
-        // phpcs:ignore.
+		// phpcs:ignore.
 		$this->params['GET']  = $_GET;
-        // phpcs:ignore.
+		// phpcs:ignore.
 		$this->params['POST'] = $_POST;
 		$this->headers        = $this->get_headers( $_SERVER );
 		$this->files          = $_FILES;
 
 		// Compatibility for clients that can't use PUT/PATCH/DELETE.
-        // phpcs:ignore.
+		// phpcs:ignore.
 		if ( isset( $_GET['_method'] ) ) {
-            // phpcs:ignore.
+			// phpcs:ignore.
 			$this->method = strtoupper( $_GET['_method'] );
 		}
 
@@ -250,7 +250,7 @@ class AfterShip_API_Server {
 		if ( ! apply_filters( 'aftership_api_enabled', true, $this ) || ( 'no' === get_option( 'aftership_api_enabled' ) ) ) {
 
 			$this->send_status( 404 );
-            // phpcs:ignore.
+			// phpcs:ignore.
 			echo $this->handler->generate_response(
 				array(
 					'errors' => array(
@@ -292,7 +292,7 @@ class AfterShip_API_Server {
 			if ( 'HEAD' === $this->method ) {
 				return;
 			}
-            // phpcs:ignore.
+			// phpcs:ignore.
 			echo $this->handler->generate_response( $result );
 		}
 	}
@@ -459,7 +459,7 @@ class AfterShip_API_Server {
 				$ordered_parameters[] = $param->getDefaultValue();
 			} else {
 				// We don't have this parameter and it wasn't optional, abort!.
-                // phpcs:ignore.
+				// phpcs:ignore.
 				return new WP_Error( 'aftership_api_missing_callback_param', sprintf( __( 'Missing parameter %s', 'aftership' ), $param->getName() ), array( 'status' => 400 ) );
 			}
 		}

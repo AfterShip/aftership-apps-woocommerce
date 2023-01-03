@@ -48,7 +48,7 @@ class AfterShip_API_Common_JSON_Handler implements AfterShip_API_Handler {
 	 * @since 2.1
 	 */
 	public function generate_response( $data ) {
-        // phpcs:ignore.
+		// phpcs:ignore.
         if ( isset( $_GET['_jsonp'] ) ) {
 
 			/**
@@ -69,7 +69,7 @@ class AfterShip_API_Common_JSON_Handler implements AfterShip_API_Handler {
 			}
 
 			// Check for invalid characters (only alphanumeric allowed).
-            // phpcs:ignore.
+			// phpcs:ignore.
             $jsonp            = isset( $_GET['_jsonp'] ) ? wc_clean( wp_unslash( $_GET['_jsonp'] ) ) : "";
 			if ( preg_match( '/\W/', $jsonp ) ) {
 
