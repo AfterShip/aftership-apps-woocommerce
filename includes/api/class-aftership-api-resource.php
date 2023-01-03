@@ -81,7 +81,7 @@ class AfterShip_API_Resource {
 		// validate ID.
 		if ( empty( $id ) ) {
 			// phpcs:ignore.
-			return new WP_Error( "aftership_api_invalid_{$resource_name}_id", sprintf( __( 'Invalid %s ID', 'aftership' ), $type ), array( 'status' => 404 ) );
+			return new WP_Error( "aftership_api_invalid_{$resource_name}_id", sprintf( 'Invalid %s ID', $type ), array( 'status' => 404 ) );
 		}
 
 		// only custom post types have per-post type/permission checks.
@@ -95,7 +95,7 @@ class AfterShip_API_Resource {
 			// validate post type.
 			if ( $type !== $post_type ) {
 				// phpcs:ignore.
-				return new WP_Error( "aftership_api_invalid_{$resource_name}", sprintf( __( 'Invalid %s', 'aftership' ), $resource_name ), array( 'status' => 404 ) );
+				return new WP_Error( "aftership_api_invalid_{$resource_name}", sprintf( 'Invalid %s', $resource_name ), array( 'status' => 404 ) );
 			}
 
 			// validate permissions.
@@ -104,21 +104,21 @@ class AfterShip_API_Resource {
 				case 'read':
 					if ( ! $this->is_readable( $post ) ) {
 						// phpcs:ignore.
-						return new WP_Error( "aftership_api_user_cannot_read_{$resource_name}", sprintf( __( 'You do not have permission to read this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						return new WP_Error( "aftership_api_user_cannot_read_{$resource_name}", sprintf( 'You do not have permission to read this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 
 				case 'edit':
 					if ( ! $this->is_editable( $post ) ) {
 						// phpcs:ignore.
-						return new WP_Error( "aftership_api_user_cannot_edit_{$resource_name}", sprintf( __( 'You do not have permission to edit this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						return new WP_Error( "aftership_api_user_cannot_edit_{$resource_name}", sprintf( 'You do not have permission to edit this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 
 				case 'delete':
 					if ( ! $this->is_deletable( $post ) ) {
 						// phpcs:ignore.
-						return new WP_Error( "aftership_api_user_cannot_delete_{$resource_name}", sprintf( __( 'You do not have permission to delete this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						return new WP_Error( "aftership_api_user_cannot_delete_{$resource_name}", sprintf( 'You do not have permission to delete this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 			}
@@ -365,18 +365,18 @@ class AfterShip_API_Resource {
 
 			if ( ! $result ) {
 				// phpcs:ignore.
-				return new WP_Error( "aftership_api_cannot_delete_{$resource_name}", sprintf( __( 'This %s cannot be deleted', 'aftership' ), $resource_name ), array( 'status' => 500 ) );
+				return new WP_Error( "aftership_api_cannot_delete_{$resource_name}", sprintf( 'This %s cannot be deleted', $resource_name ), array( 'status' => 500 ) );
 			}
 
 			if ( $force ) {
 				// phpcs:ignore.
-				return array( 'message' => sprintf( __( 'Permanently deleted %s', 'aftership' ), $resource_name ) );
+				return array( 'message' => sprintf( 'Permanently deleted %s', $resource_name ) );
 
 			} else {
 
 				$this->server->send_status( '202' );
 				// phpcs:ignore.
-				return array( 'message' => sprintf( __( 'Deleted %s', 'aftership' ), $resource_name ) );
+				return array( 'message' => sprintf( 'Deleted %s', $resource_name ) );
 			}
 		}
 	}

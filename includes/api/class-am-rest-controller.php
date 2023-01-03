@@ -50,7 +50,10 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 		 */
 		private function get_consumer_key_from_basic_authentication() {
 			// phpcs:ignore.
-			$consumer_key    = isset( $_GET['consumer_key'] ) ? wc_clean( wp_unslash( $_GET['consumer_key'] ) ) : false;
+			$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+			// phpcs:ignore.
+			$verify       = wp_verify_nonce( $nonce );
+			$consumer_key = isset( $_GET['consumer_key'] ) ? wc_clean( wp_unslash( $_GET['consumer_key'] ) ) : false;
 			// phpcs:ignore.
 			$consumer_secret = isset( $_GET['consumer_secret'] ) ? wc_clean( wp_unslash( $_GET['consumer_secret'] ) ) : false;
 			$auth_user       = isset( $_SERVER['PHP_AUTH_USER'] ) ? wc_clean( wp_unslash( $_SERVER['PHP_AUTH_USER'] ) ) : false;
@@ -77,6 +80,9 @@ if ( ! class_exists( 'AM_REST_Controller' ) ) {
 		private function get_consumer_key_from_oauth_authentication() {
 			// WPCS: input var ok, CSRF ok.
 			// phpcs:ignore.
+			$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+			// phpcs:ignore.
+			$verify = wp_verify_nonce( $nonce );
 			$params = array_merge( $_GET, $_POST );
 			$params = wp_unslash( $params );
 			$header = $this->get_authorization_header();

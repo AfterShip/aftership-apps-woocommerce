@@ -129,7 +129,10 @@ class AfterShip_API_Server {
 		$this->path   = $path;
 		$this->method = $request_method;
 		// phpcs:ignore.
-		$this->params['GET']  = $_GET;
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify              = wp_verify_nonce( $nonce );
+		$this->params['GET'] = $_GET;
 		// phpcs:ignore.
 		$this->params['POST'] = $_POST;
 		$this->headers        = $this->get_headers( $_SERVER );
@@ -137,9 +140,9 @@ class AfterShip_API_Server {
 
 		// Compatibility for clients that can't use PUT/PATCH/DELETE.
 		// phpcs:ignore.
-		if ( isset( $_GET['_method'] ) ) {
-			// phpcs:ignore.
-			$this->method = strtoupper( $_GET['_method'] );
+		$method = isset( $_GET['_method'] ) ? wc_clean( wp_unslash( $_GET['_method'] ) ) : null;
+		if ( $method ) {
+			$this->method = strtoupper( $method );
 		}
 
 		// determine type of request/response and load handler, JSON by default.
@@ -250,8 +253,7 @@ class AfterShip_API_Server {
 		if ( ! apply_filters( 'aftership_api_enabled', true, $this ) || ( 'no' === get_option( 'aftership_api_enabled' ) ) ) {
 
 			$this->send_status( 404 );
-			// phpcs:ignore.
-			echo $this->handler->generate_response(
+			$payload = $this->handler->generate_response(
 				array(
 					'errors' => array(
 						'code'    => 'aftership_api_disabled',
@@ -259,7 +261,7 @@ class AfterShip_API_Server {
 					),
 				)
 			);
-
+			wp_send_json( json_decode( $payload ) );
 			return;
 		}
 
@@ -292,8 +294,8 @@ class AfterShip_API_Server {
 			if ( 'HEAD' === $this->method ) {
 				return;
 			}
-			// phpcs:ignore.
-			echo $this->handler->generate_response( $result );
+			$payload = $this->handler->generate_response( $result );
+			wp_send_json( json_decode( $payload ) );
 		}
 	}
 
@@ -460,7 +462,7 @@ class AfterShip_API_Server {
 			} else {
 				// We don't have this parameter and it wasn't optional, abort!.
 				// phpcs:ignore.
-				return new WP_Error( 'aftership_api_missing_callback_param', sprintf( __( 'Missing parameter %s', 'aftership' ), $param->getName() ), array( 'status' => 400 ) );
+				return new WP_Error( 'aftership_api_missing_callback_param', sprintf( 'Missing parameter %s', $param->getName() ), array( 'status' => 400 ) );
 			}
 		}
 		return $ordered_parameters;

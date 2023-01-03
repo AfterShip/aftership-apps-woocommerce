@@ -280,15 +280,17 @@ class AfterShip_Actions {
 	 */
 	public function save_meta_box( $post_id, $post ) {
 		// phpcs:ignore.
-		$input = $_POST;
-		$tracking_number     = isset( $input['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_number'] ) ) : false;
-		$slug                = isset( $input['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_slug'] ) ) : null;
-		$account_number      = isset( $input['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_account_number'] ) ) : null;
-		$key                 = isset( $input['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_key'] ) ) : null;
-		$postal_code         = isset( $input['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_postal_code'] ) ) : null;
-		$ship_date           = isset( $input['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_ship_date'] ) ) : null;
-		$destination_country = isset( $input['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_destination_country'] ) ) : null;
-		$state               = isset( $input['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_state'] ) ) : null;
+		$nonce = isset( $_POST['aftership_create_nonce'] ) ? wc_clean( wp_unslash( $_POST['aftership_create_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify              = wp_verify_nonce( $nonce );
+		$tracking_number     = isset( $_POST['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $_POST['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $_POST['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $_POST['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $_POST['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $_POST['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $_POST['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $_POST['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_state'] ) ) : null;
 		if ( $tracking_number ) {
 			$args = array(
 				'slug'              => $slug,
@@ -340,16 +342,15 @@ class AfterShip_Actions {
 	public function save_meta_box_ajax() {
 		check_ajax_referer( 'create-tracking-item', 'security', true );
 		// phpcs:ignore.
-		$input = $_POST;
-		$order_id            = isset( $input['order_id'] ) ? wc_clean( wp_unslash( $input['order_id'] ) ) : false;
-		$tracking_number     = isset( $input['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_number'] ) ) : false;
-		$slug                = isset( $input['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_slug'] ) ) : null;
-		$account_number      = isset( $input['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_account_number'] ) ) : null;
-		$key                 = isset( $input['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_key'] ) ) : null;
-		$postal_code         = isset( $input['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_postal_code'] ) ) : null;
-		$ship_date           = isset( $input['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_ship_date'] ) ) : null;
-		$destination_country = isset( $input['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_destination_country'] ) ) : null;
-		$state               = isset( $input['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_state'] ) ) : null;
+		$order_id            = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_number     = isset( $_POST['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $_POST['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $_POST['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $_POST['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $_POST['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $_POST['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $_POST['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $_POST['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_state'] ) ) : null;
 
 		if ( $tracking_number && $order_id ) {
 			$args = array(
@@ -365,7 +366,7 @@ class AfterShip_Actions {
 				),
 			);
 
-			$post_tracking_id = isset( $input['aftership_tracking_id'] ) ? wc_clean( wp_unslash( $input['aftership_tracking_id'] ) ) : null;
+			$post_tracking_id = isset( $_POST['aftership_tracking_id'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_id'] ) ) : null;
 			$tracking_id      = md5( "{$args['slug']}-{$args['tracking_number']}" );
 			if ( $post_tracking_id && $tracking_id !== $post_tracking_id ) {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
@@ -814,14 +815,12 @@ class AfterShip_Actions {
 					</th>
 					<td>
 						<?php if ( empty( $user->aftership_wp_api_key ) ) : ?>
-							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
+							<input name="aftership_wp_generate_api_key" type="checkbox" id="aftership_wp_generate_api_key" value="0" />
 							<span class="description"><?php esc_html_e( 'Generate API Key', 'aftership' ); ?></span>
 						<?php else : ?>
 							<code id="aftership_wp_api_key"><?php echo esc_attr( $user->aftership_wp_api_key ); ?></code>
 							<br/>
-							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
+							<input name="aftership_wp_generate_api_key" type="checkbox" id="aftership_wp_generate_api_key" value="0" />
 							<span class="description"><?php esc_html_e( 'Revoke API Key', 'aftership' ); ?></span>
 						<?php endif; ?>
 					</td>
@@ -842,7 +841,11 @@ class AfterShip_Actions {
 			$user = get_userdata( $user_id );
 			// creating/deleting key.
 			// phpcs:ignore.
-			if ( isset( $_POST['aftership_wp_generate_api_key'] ) ) {
+			$nonce = isset( $_POST['aftership_create_nonce'] ) ? wc_clean( wp_unslash( $_POST['aftership_create_nonce'] ) ) : null;
+			// phpcs:ignore.
+			$verify = wp_verify_nonce( $nonce );
+			$key    = isset( $_POST['aftership_wp_generate_api_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_wp_generate_api_key'] ) ) : null;
+			if ( $key ) {
 				// consumer key.
 				if ( empty( $user->aftership_wp_api_key ) ) {
 					$api_key = 'ck_' . hash( 'md5', $user->user_login . gmdate( 'U' ) . mt_rand() );

@@ -128,43 +128,24 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 		$order_id = get_order_id( $order );
 
 		$order_data = array(
-			'id'                  => get_order_id( $order ),
-			'order_number'        => $order->get_order_number(),
-			'created_at'          => $this->server->format_datetime( $order_post->post_date_gmt ),
-			'updated_at'          => $this->server->format_datetime( $order_post->post_modified_gmt ),
-			// 'completed_at' => $this->server->format_datetime($order->completed_date, true),
-			// 'status' => $order->status,
-			// 'currency' => $order->order_currency,
-			// 'total' => wc_format_decimal($order->get_total(), 2),
-			// 'subtotal' => wc_format_decimal($this->get_order_subtotal($order), 2),
-			// 'total_line_items_quantity' => $order->get_item_count(),
-			// 'total_tax' => wc_format_decimal($order->get_total_tax(), 2),
-			// 'total_shipping' => wc_format_decimal($order->get_total_shipping(), 2),
-			// 'cart_tax' => wc_format_decimal($order->get_cart_tax(), 2),
-			// 'shipping_tax' => wc_format_decimal($order->get_shipping_tax(), 2),
-			// 'total_discount' => wc_format_decimal($order->get_total_discount(), 2),
-			// 'cart_discount' => wc_format_decimal($order->get_cart_discount(), 2),
-			// 'order_discount' => wc_format_decimal($order->get_order_discount(), 2),
-			// 'shipping_methods' => $order->get_shipping_method(),
-			// 'payment_details' => array(
-			// 'method_id' => $order->payment_method,
-			// 'method_title' => $order->payment_method_title,
-			// 'paid' => isset($order->paid_date),
-			// ),
-				'billing_address' => array(
-					'first_name' => order_post_meta_getter( $order, 'billing_first_name' ),
-					'last_name'  => order_post_meta_getter( $order, 'billing_last_name' ),
-					'company'    => order_post_meta_getter( $order, 'billing_company' ),
-					'address_1'  => order_post_meta_getter( $order, 'billing_address_1' ),
-					'address_2'  => order_post_meta_getter( $order, 'billing_address_2' ),
-					'city'       => order_post_meta_getter( $order, 'billing_city' ),
-					'state'      => order_post_meta_getter( $order, 'billing_state' ),
-					'postcode'   => order_post_meta_getter( $order, 'billing_postcode' ),
-					'country'    => order_post_meta_getter( $order, 'billing_country' ),
-					'email'      => order_post_meta_getter( $order, 'billing_email' ),
-					'phone'      => order_post_meta_getter( $order, 'billing_phone' ),
-				),
-			'shipping_address'    => array(
+			'id'               => get_order_id( $order ),
+			'order_number'     => $order->get_order_number(),
+			'created_at'       => $this->server->format_datetime( $order_post->post_date_gmt ),
+			'updated_at'       => $this->server->format_datetime( $order_post->post_modified_gmt ),
+			'billing_address'  => array(
+				'first_name' => order_post_meta_getter( $order, 'billing_first_name' ),
+				'last_name'  => order_post_meta_getter( $order, 'billing_last_name' ),
+				'company'    => order_post_meta_getter( $order, 'billing_company' ),
+				'address_1'  => order_post_meta_getter( $order, 'billing_address_1' ),
+				'address_2'  => order_post_meta_getter( $order, 'billing_address_2' ),
+				'city'       => order_post_meta_getter( $order, 'billing_city' ),
+				'state'      => order_post_meta_getter( $order, 'billing_state' ),
+				'postcode'   => order_post_meta_getter( $order, 'billing_postcode' ),
+				'country'    => order_post_meta_getter( $order, 'billing_country' ),
+				'email'      => order_post_meta_getter( $order, 'billing_email' ),
+				'phone'      => order_post_meta_getter( $order, 'billing_phone' ),
+			),
+			'shipping_address' => array(
 				'first_name' => order_post_meta_getter( $order, 'shipping_first_name' ),
 				'last_name'  => order_post_meta_getter( $order, 'shipping_last_name' ),
 				'company'    => order_post_meta_getter( $order, 'shipping_company' ),
@@ -175,18 +156,10 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				'postcode'   => order_post_meta_getter( $order, 'shipping_postcode' ),
 				'country'    => order_post_meta_getter( $order, 'shipping_country' ),
 			),
-			'note'                => ( method_exists( $order, 'get_customer_note' ) ) ? $order->get_customer_note() : $order->customer_note,
-			// 'customer_ip' => $order->customer_ip_address,
-			// 'customer_user_agent' => $order->customer_user_agent,
-			// 'customer_id' => $order->customer_user,
-			// 'view_order_url' => $order->get_view_order_url(),
-				'line_items'      => array(),
-			// 'shipping_lines' => array(),
-			// 'tax_lines' => array(),
-			// 'fee_lines' => array(),
-			// 'coupon_lines' => array(),
-				'custom_fields'   => array(),
-			'aftership'           => array(
+			'note'             => ( method_exists( $order, 'get_customer_note' ) ) ? $order->get_customer_note() : $order->customer_note,
+			'line_items'       => array(),
+			'custom_fields'    => array(),
+			'aftership'        => array(
 				'woocommerce' => array(
 					'trackings' => array(
 						array(
@@ -209,75 +182,15 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 			// $product = $order->get_product_from_item($item);
 
 			$order_data['line_items'][] = array(
-				'id'                       => $item_id,
-				// 'subtotal' => wc_format_decimal($order->get_line_subtotal($item), 2),
-				// 'total' => wc_format_decimal($order->get_line_total($item), 2),
-				// 'total_tax' => wc_format_decimal($order->get_line_tax($item), 2),
-				// 'price' => wc_format_decimal($order->get_item_total($item), 2),
-					'quantity'             => (int) $item['qty'],
-				// 'tax_class' => (!empty($item['tax_class'])) ? $item['tax_class'] : null,
-									'name' => $item['name'],
-			// 'product_id' => (isset($product->variation_id)) ? $product->variation_id : (method_exists($product, 'get_id'))? $product->get_id() : $product->id,
-			// 'sku' => is_object($product) ? $product->get_sku() : null,
+				'id'       => $item_id,
+				'quantity' => (int) $item['qty'],
+				'name'     => $item['name'],
 			);
 		}
-
-		/*
-		// add shipping
-		foreach ($order->get_shipping_methods() as $shipping_item_id => $shipping_item) {
-
-			$order_data['shipping_lines'][] = array(
-				'id' => $shipping_item_id,
-				'method_id' => $shipping_item['method_id'],
-				'method_title' => $shipping_item['name'],
-				'total' => wc_format_decimal($shipping_item['cost'], 2),
-			);
-		}
-
-		// add taxes
-		foreach ($order->get_tax_totals() as $tax_code => $tax) {
-
-			$order_data['tax_lines'][] = array(
-				'code' => $tax_code,
-				'title' => $tax->label,
-				'total' => wc_format_decimal($tax->amount, 2),
-				'compound' => (bool)$tax->is_compound,
-			);
-		}
-
-		// add fees
-		foreach ($order->get_fees() as $fee_item_id => $fee_item) {
-
-			$order_data['fee_lines'][] = array(
-				'id' => $fee_item_id,
-				'title' => $fee_item['name'],
-				'tax_class' => (!empty($fee_item['tax_class'])) ? $fee_item['tax_class'] : null,
-				'total' => wc_format_decimal($order->get_line_total($fee_item), 2),
-				'total_tax' => wc_format_decimal($order->get_line_tax($fee_item), 2),
-			);
-		}
-
-		// add coupons
-		foreach ($order->get_items('coupon') as $coupon_item_id => $coupon_item) {
-
-			$order_data['coupon_lines'][] = array(
-				'id' => $coupon_item_id,
-				'code' => $coupon_item['name'],
-				'amount' => wc_format_decimal($coupon_item['discount_amount'], 2),
-			);
-		}
-		*/
 
 		// aftership add.
 		$aftership_tracking_number = order_post_meta_getter( $order, 'aftership_tracking_number' );
 		if ( ! empty( $aftership_tracking_number ) ) {
-
-			// $result = array();
-			// foreach($this->aftership_fields as $field){
-			// $id = $field['id'];
-			// $result[substr($id,10)] = get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_' . $field['id'], true);
-			// }
-			// $order_data['aftership']['woocommerce']['trackings'][] = $result;
 
 			$order_data['aftership']['woocommerce']['trackings'][0] = array(
 				'tracking_provider'            => order_post_meta_getter( $order, 'aftership_tracking_provider' ),

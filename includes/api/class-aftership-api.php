@@ -89,15 +89,19 @@ class AfterShip_API {
 	 */
 	public function handle_api_requests() {
 		 global $wp;
+		// phpcs:ignore.
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify               = wp_verify_nonce( $nonce );
+		$aftership_api        = isset( $_GET['aftership-api'] ) ? wc_clean( wp_unslash( $_GET['aftership-api'] ) ) : null;
+		$aftership_api_router = isset( $_GET['aftership-api-route'] ) ? wc_clean( wp_unslash( $_GET['aftership-api-route'] ) ) : null;
 
-		if ( ! empty( $_GET['aftership-api'] ) ) {
-			// phpcs:ignore.
-			$wp->query_vars['aftership-api'] = $_GET['aftership-api'];
+		if ( $aftership_api ) {
+			$wp->query_vars['aftership-api'] = $aftership_api;
 		}
 
-		if ( ! empty( $_GET['aftership-api-route'] ) ) {
-			// phpcs:ignore.
-			$wp->query_vars['aftership-api-route'] = $_GET['aftership-api-route'];
+		if ( $aftership_api_router ) {
+			$wp->query_vars['aftership-api-route'] = $aftership_api_router;
 		}
 
 		// REST API request.

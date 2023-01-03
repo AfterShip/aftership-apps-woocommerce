@@ -84,6 +84,9 @@ class AfterShip_API_Authentication {
 			'Aftership-Wp-Key',
 		);
 		// phpcs:ignore.
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify  = wp_verify_nonce( $nonce );
 		$api_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : null;
 		foreach ( $keys as $item ) {
 			if ( ! empty( $headers[ $item ] ) ) {

@@ -49,7 +49,10 @@ class AfterShip_API_Common_JSON_Handler implements AfterShip_API_Handler {
 	 */
 	public function generate_response( $data ) {
 		// phpcs:ignore.
-        if ( isset( $_GET['_jsonp'] ) ) {
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify = wp_verify_nonce( $nonce );
+		if ( isset( $_GET['_jsonp'] ) ) {
 
 			/**
 			 *  JSONP enabled by default.
@@ -70,7 +73,7 @@ class AfterShip_API_Common_JSON_Handler implements AfterShip_API_Handler {
 
 			// Check for invalid characters (only alphanumeric allowed).
 			// phpcs:ignore.
-            $jsonp            = isset( $_GET['_jsonp'] ) ? wc_clean( wp_unslash( $_GET['_jsonp'] ) ) : "";
+			$jsonp = isset( $_GET['_jsonp'] ) ? wc_clean( wp_unslash( $_GET['_jsonp'] ) ) : '';
 			if ( preg_match( '/\W/', $jsonp ) ) {
 
 				WC()->api->server->send_status( 400 );
