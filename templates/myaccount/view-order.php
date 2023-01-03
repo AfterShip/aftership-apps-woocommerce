@@ -37,7 +37,13 @@ if ( $tracking_items ) : ?>
 					</td>
 					<?php if ( $use_track_button ) { ?>
 						<td class="order-actions" style="text-align: center;">
-							<div class="as-track-button" data-slug="<?php echo esc_html( $tracking_item['slug'] ); ?>" data-domain="<?php echo esc_html( $tracking_item['custom_domain'] ); ?>" data-tracking-number="<?php echo esc_html( $tracking_item['tracking_number_for_tracking_button'] ); ?>" data-size="normal" data-hide-tracking-number="true"></div>
+							<div class="as-track-button"
+								 data-slug="<?php echo esc_html( $tracking_item['slug'] ); ?>"
+								 data-domain="<?php echo esc_html( parse_url( $tracking_item['custom_domain'], PHP_URL_HOST ) ? parse_url( $tracking_item['custom_domain'], PHP_URL_HOST ) : $tracking_item['custom_domain'] ); ?>"
+								 data-tracking-number="<?php echo esc_html( $tracking_item['tracking_number_for_tracking_button'] ); ?>"
+								 data-size="normal"
+								 data-hide-tracking-number="true">
+							</div>
 						</td>
 					<?php } ?>
 				</tr>
