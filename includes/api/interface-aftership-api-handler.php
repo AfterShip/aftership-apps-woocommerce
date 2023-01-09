@@ -4,16 +4,17 @@
  *
  * Defines an interface that API request/response handlers should implement
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit;
 }
 
+/**
+ * AfterShip Plugin API Interface.
+ */
 interface AfterShip_API_Handler {
 
 
@@ -31,7 +32,7 @@ interface AfterShip_API_Handler {
 	 * Parse the raw request body entity into an array
 	 *
 	 * @since 2.1
-	 * @param string $data
+	 * @param string $data data.
 	 * @return array
 	 */
 	public function parse_body( $data);
@@ -40,7 +41,7 @@ interface AfterShip_API_Handler {
 	 * Generate a response from an array of data
 	 *
 	 * @since 2.1
-	 * @param array $data
+	 * @param array $data data.
 	 * @return string
 	 */
 	public function generate_response( $data);

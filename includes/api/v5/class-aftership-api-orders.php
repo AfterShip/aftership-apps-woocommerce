@@ -4,8 +4,6 @@
  *
  * Handles requests to the /orders endpoint
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
@@ -14,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Order API V5 version
+ */
 class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 
 	/**
@@ -57,9 +58,9 @@ class AfterShip_API_V5_Orders extends AfterShip_API_V4_Orders {
 		$tracking_order = parent::get_order( $id, $fields );
 
 		$object = new WC_Order( $id );
-		// get order detial like rest v3 api
-		$restOrders                 = new Rest_Orders_Helper();
-		$rest_raw_order             = $restOrders->get_formatted_item_data( $object );
+		// get order detial like rest v3 api.
+		$rest_orders                = new Rest_Orders_Helper();
+		$rest_raw_order             = $rest_orders->get_formatted_item_data( $object );
 		$tracking_order['raw_data'] = $rest_raw_order;
 
 		return $tracking_order;

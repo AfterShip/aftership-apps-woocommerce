@@ -1,4 +1,11 @@
 <?php
+/**
+ * AfterShip Settings
+ *
+ * All settings used by AfterShip plugin
+ *
+ * @package AfterShip
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,7 +61,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 	 * @return string
 	 */
 	public function normalize_custom_domain( $url ) {
-		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return $url;
 
 		}
@@ -93,7 +100,7 @@ class AfterShip_API_V4_Settings extends AfterShip_API_Resource {
 			}
 		}
 
-		// Notice: true -> '1', false -> ''
+		// Notice: true -> '1', false -> ''.
 		if ( isset( $data['connected'] ) && in_array( $data['connected'], array( '1', '' ) ) && in_array( boolval( $data['connected'] ), array( true, false ), true ) ) {
 			$options['connected'] = boolval( $data['connected'] );
 		}

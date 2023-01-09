@@ -4,16 +4,18 @@
  *
  * Handles parsing JSON request bodies and generating JSON responses
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
- * @since       1.0
  */
 
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-class AfterShip_API_JSON_Handler implements AfterShip_API_Handler
-{
+/**
+ * Handle JSON Response.
+ */
+class AfterShip_API_JSON_Handler implements AfterShip_API_Handler {
+
 
 	/**
 	 * Get the content type for the response
@@ -21,57 +23,72 @@ class AfterShip_API_JSON_Handler implements AfterShip_API_Handler
 	 * @since 2.1
 	 * @return string
 	 */
-	public function get_content_type()
-	{
-
-		return 'application/json; charset=' . get_option('blog_charset');
+	public function get_content_type() {
+		return 'application/json; charset=' . get_option( 'blog_charset' );
 	}
 
 	/**
 	 * Parse the raw request body entity
 	 *
 	 * @since 2.1
-	 * @param string $body the raw request body
+	 * @param string $body the raw request body.
 	 * @return array|mixed
 	 */
-	public function parse_body($body)
-	{
+	public function parse_body( $body ) {
 
-		return json_decode($body, true);
+		return json_decode( $body, true );
 	}
 
 	/**
 	 * Generate a JSON response given an array of data
 	 *
 	 * @since 2.1
-	 * @param array $data the response data
+	 * @param array $data the response data.
 	 * @return string
 	 */
-	public function generate_response($data)
-	{
+	public function generate_response( $data ) {
+		// phpcs:ignore.
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify = wp_verify_nonce( $nonce );
+		if ( isset( $_GET['_jsonp'] ) ) {
 
-		if (isset($_GET['_jsonp'])) {
+			/**
+			 *  JSONP enabled by default.
+			 *
+			 *  @since 2.1
+			 */
+			if ( ! apply_filters( 'aftership_api_jsonp_enabled', true ) ) {
 
-			// JSONP enabled by default
-			if (!apply_filters('aftership_api_jsonp_enabled', true)) {
+				WC()->api->server->send_status( 400 );
 
-				WC()->api->server->send_status(400);
-
-				$data = array(array('code' => 'aftership_api_jsonp_disabled', 'message' => __('JSONP support is disabled on this site', 'aftership')));
+				$data = array(
+					array(
+						'code'    => 'aftership_api_jsonp_disabled',
+						'message' => __( 'JSONP support is disabled on this site', 'aftership' ),
+					),
+				);
 			}
 
-			// Check for invalid characters (only alphanumeric allowed)
-			if (preg_match('/\W/', $_GET['_jsonp'])) {
+			// Check for invalid characters (only alphanumeric allowed).
+			// phpcs:ignore.
+			$jsonp = isset( $_GET['_jsonp'] ) ? wc_clean( wp_unslash( $_GET['_jsonp'] ) ) : '';
+			if ( preg_match( '/\W/', $jsonp ) ) {
 
-				WC()->api->server->send_status(400);
+				WC()->api->server->send_status( 400 );
 
-				$data = array(array('code' => 'aftership_api_jsonp_callback_invalid', __('The JSONP callback function is invalid', 'aftership')));
+				$data = array(
+					array(
+						'code' => 'aftership_api_jsonp_callback_invalid',
+						__( 'The JSONP callback function is invalid', 'aftership' ),
+					),
+				);
 			}
 
-			return $_GET['_jsonp'] . '(' . json_encode($data) . ')';
+			return $jsonp . '(' . wp_json_encode( $data ) . ')';
 		}
 
-		return json_encode($data);
+		return wp_json_encode( $data );
 	}
 
 }

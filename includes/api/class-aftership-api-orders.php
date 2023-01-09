@@ -2,22 +2,26 @@
 /**
  * AfterShip API Orders Class
  *
- * Handles requests to the /orders endpoint
+ * Handle requests to the /orders endpoint
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit;
 }
 
+/**
+ * Orders API Class
+ */
 class AfterShip_API_Orders extends AfterShip_API_Resource {
 
-
-	/** @var string $base the route base */
+	/**
+	 * Base endpoint.
+	 *
+	 * @var string
+	 */
 	protected $base = '/orders';
 
 	/**
@@ -29,33 +33,33 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * GET /orders/<id>/notes
 	 *
 	 * @since 2.1
-	 * @param array $routes
+	 * @param array $routes routers array.
 	 * @return array
 	 */
 	public function register_routes( $routes ) {
 
-		// GET /orders
+		// GET /orders.
 		$routes[ $this->base ] = array(
 			array( array( $this, 'get_orders' ), AfterShip_API_Server::READABLE ),
 		);
 
-		// GET /orders/count
+		// GET /orders/count.
 		$routes[ $this->base . '/count' ] = array(
 			array( array( $this, 'get_orders_count' ), AfterShip_API_Server::READABLE ),
 		);
 
-		// GET|PUT /orders/<id>
+		// GET|PUT /orders/<id>.
 		$routes[ $this->base . '/(?P<id>\d+)' ] = array(
 			array( array( $this, 'get_order' ), AfterShip_API_Server::READABLE ),
 			array( array( $this, 'edit_order' ), AfterShip_API_Server::EDITABLE | AfterShip_API_Server::ACCEPT_DATA ),
 		);
 
-		// GET /orders/<id>/notes
+		// GET /orders/<id>/notes.
 		$routes[ $this->base . '/(?P<id>\d+)/notes' ] = array(
 			array( array( $this, 'get_order_notes' ), AfterShip_API_Server::READABLE ),
 		);
 
-		// GET /orders/ping
+		// GET /orders/ping.
 		$routes[ $this->base . '/ping' ] = array(
 			array( array( $this, 'ping' ), AfterShip_API_Server::READABLE ),
 		);
@@ -67,10 +71,10 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Get all orders
 	 *
 	 * @since 2.1
-	 * @param string $fields
-	 * @param array  $filter
-	 * @param string $status
-	 * @param int    $page
+	 * @param string $fields fields to return back.
+	 * @param array  $filter filter condition.
+	 * @param string $status status filter.
+	 * @param int    $page page number.
 	 * @return array
 	 */
 	public function get_orders( $fields = null, $filter = array(), $status = null, $page = 1 ) {
@@ -104,13 +108,13 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Get the order for the given ID
 	 *
 	 * @since 2.1
-	 * @param int   $id the order ID
-	 * @param array $fields
+	 * @param int   $id the order ID.
+	 * @param array $fields fields.
 	 * @return array
 	 */
 	public function get_order( $id, $fields = null ) {
 
-		// ensure order ID is valid & user has permission to read
+		// ensure order ID is valid & user has permission to read.
 		$id = $this->validate_request( $id, 'shop_order', 'read' );
 
 		if ( is_wp_error( $id ) ) {
@@ -124,43 +128,24 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 		$order_id = get_order_id( $order );
 
 		$order_data = array(
-			'id'                  => get_order_id( $order ),
-			'order_number'        => $order->get_order_number(),
-			'created_at'          => $this->server->format_datetime( $order_post->post_date_gmt ),
-			'updated_at'          => $this->server->format_datetime( $order_post->post_modified_gmt ),
-			// 'completed_at' => $this->server->format_datetime($order->completed_date, true),
-			// 'status' => $order->status,
-			// 'currency' => $order->order_currency,
-			// 'total' => wc_format_decimal($order->get_total(), 2),
-			// 'subtotal' => wc_format_decimal($this->get_order_subtotal($order), 2),
-			// 'total_line_items_quantity' => $order->get_item_count(),
-			// 'total_tax' => wc_format_decimal($order->get_total_tax(), 2),
-			// 'total_shipping' => wc_format_decimal($order->get_total_shipping(), 2),
-			// 'cart_tax' => wc_format_decimal($order->get_cart_tax(), 2),
-			// 'shipping_tax' => wc_format_decimal($order->get_shipping_tax(), 2),
-			// 'total_discount' => wc_format_decimal($order->get_total_discount(), 2),
-			// 'cart_discount' => wc_format_decimal($order->get_cart_discount(), 2),
-			// 'order_discount' => wc_format_decimal($order->get_order_discount(), 2),
-			// 'shipping_methods' => $order->get_shipping_method(),
-			// 'payment_details' => array(
-			// 'method_id' => $order->payment_method,
-			// 'method_title' => $order->payment_method_title,
-			// 'paid' => isset($order->paid_date),
-			// ),
-				'billing_address' => array(
-					'first_name' => order_post_meta_getter( $order, 'billing_first_name' ),
-					'last_name'  => order_post_meta_getter( $order, 'billing_last_name' ),
-					'company'    => order_post_meta_getter( $order, 'billing_company' ),
-					'address_1'  => order_post_meta_getter( $order, 'billing_address_1' ),
-					'address_2'  => order_post_meta_getter( $order, 'billing_address_2' ),
-					'city'       => order_post_meta_getter( $order, 'billing_city' ),
-					'state'      => order_post_meta_getter( $order, 'billing_state' ),
-					'postcode'   => order_post_meta_getter( $order, 'billing_postcode' ),
-					'country'    => order_post_meta_getter( $order, 'billing_country' ),
-					'email'      => order_post_meta_getter( $order, 'billing_email' ),
-					'phone'      => order_post_meta_getter( $order, 'billing_phone' ),
-				),
-			'shipping_address'    => array(
+			'id'               => get_order_id( $order ),
+			'order_number'     => $order->get_order_number(),
+			'created_at'       => $this->server->format_datetime( $order_post->post_date_gmt ),
+			'updated_at'       => $this->server->format_datetime( $order_post->post_modified_gmt ),
+			'billing_address'  => array(
+				'first_name' => order_post_meta_getter( $order, 'billing_first_name' ),
+				'last_name'  => order_post_meta_getter( $order, 'billing_last_name' ),
+				'company'    => order_post_meta_getter( $order, 'billing_company' ),
+				'address_1'  => order_post_meta_getter( $order, 'billing_address_1' ),
+				'address_2'  => order_post_meta_getter( $order, 'billing_address_2' ),
+				'city'       => order_post_meta_getter( $order, 'billing_city' ),
+				'state'      => order_post_meta_getter( $order, 'billing_state' ),
+				'postcode'   => order_post_meta_getter( $order, 'billing_postcode' ),
+				'country'    => order_post_meta_getter( $order, 'billing_country' ),
+				'email'      => order_post_meta_getter( $order, 'billing_email' ),
+				'phone'      => order_post_meta_getter( $order, 'billing_phone' ),
+			),
+			'shipping_address' => array(
 				'first_name' => order_post_meta_getter( $order, 'shipping_first_name' ),
 				'last_name'  => order_post_meta_getter( $order, 'shipping_last_name' ),
 				'company'    => order_post_meta_getter( $order, 'shipping_company' ),
@@ -171,18 +156,10 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				'postcode'   => order_post_meta_getter( $order, 'shipping_postcode' ),
 				'country'    => order_post_meta_getter( $order, 'shipping_country' ),
 			),
-			'note'                => ( method_exists( $order, 'get_customer_note' ) ) ? $order->get_customer_note() : $order->customer_note,
-			// 'customer_ip' => $order->customer_ip_address,
-			// 'customer_user_agent' => $order->customer_user_agent,
-			// 'customer_id' => $order->customer_user,
-			// 'view_order_url' => $order->get_view_order_url(),
-				'line_items'      => array(),
-			// 'shipping_lines' => array(),
-			// 'tax_lines' => array(),
-			// 'fee_lines' => array(),
-			// 'coupon_lines' => array(),
-				'custom_fields'   => array(),
-			'aftership'           => array(
+			'note'             => ( method_exists( $order, 'get_customer_note' ) ) ? $order->get_customer_note() : $order->customer_note,
+			'line_items'       => array(),
+			'custom_fields'    => array(),
+			'aftership'        => array(
 				'woocommerce' => array(
 					'trackings' => array(
 						array(
@@ -199,81 +176,21 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 			),
 		);
 
-		// add line items
+		// add line items.
 		foreach ( $order->get_items() as $item_id => $item ) {
 
 			// $product = $order->get_product_from_item($item);
 
 			$order_data['line_items'][] = array(
-				'id'                       => $item_id,
-				// 'subtotal' => wc_format_decimal($order->get_line_subtotal($item), 2),
-				// 'total' => wc_format_decimal($order->get_line_total($item), 2),
-				// 'total_tax' => wc_format_decimal($order->get_line_tax($item), 2),
-				// 'price' => wc_format_decimal($order->get_item_total($item), 2),
-					'quantity'             => (int) $item['qty'],
-				// 'tax_class' => (!empty($item['tax_class'])) ? $item['tax_class'] : null,
-									'name' => $item['name'],
-			// 'product_id' => (isset($product->variation_id)) ? $product->variation_id : (method_exists($product, 'get_id'))? $product->get_id() : $product->id,
-			// 'sku' => is_object($product) ? $product->get_sku() : null,
+				'id'       => $item_id,
+				'quantity' => (int) $item['qty'],
+				'name'     => $item['name'],
 			);
 		}
 
-		/*
-		// add shipping
-		foreach ($order->get_shipping_methods() as $shipping_item_id => $shipping_item) {
-
-			$order_data['shipping_lines'][] = array(
-				'id' => $shipping_item_id,
-				'method_id' => $shipping_item['method_id'],
-				'method_title' => $shipping_item['name'],
-				'total' => wc_format_decimal($shipping_item['cost'], 2),
-			);
-		}
-
-		// add taxes
-		foreach ($order->get_tax_totals() as $tax_code => $tax) {
-
-			$order_data['tax_lines'][] = array(
-				'code' => $tax_code,
-				'title' => $tax->label,
-				'total' => wc_format_decimal($tax->amount, 2),
-				'compound' => (bool)$tax->is_compound,
-			);
-		}
-
-		// add fees
-		foreach ($order->get_fees() as $fee_item_id => $fee_item) {
-
-			$order_data['fee_lines'][] = array(
-				'id' => $fee_item_id,
-				'title' => $fee_item['name'],
-				'tax_class' => (!empty($fee_item['tax_class'])) ? $fee_item['tax_class'] : null,
-				'total' => wc_format_decimal($order->get_line_total($fee_item), 2),
-				'total_tax' => wc_format_decimal($order->get_line_tax($fee_item), 2),
-			);
-		}
-
-		// add coupons
-		foreach ($order->get_items('coupon') as $coupon_item_id => $coupon_item) {
-
-			$order_data['coupon_lines'][] = array(
-				'id' => $coupon_item_id,
-				'code' => $coupon_item['name'],
-				'amount' => wc_format_decimal($coupon_item['discount_amount'], 2),
-			);
-		}
-		*/
-
-		// aftership add
+		// aftership add.
 		$aftership_tracking_number = order_post_meta_getter( $order, 'aftership_tracking_number' );
 		if ( ! empty( $aftership_tracking_number ) ) {
-
-			// $result = array();
-			// foreach($this->aftership_fields as $field){
-			// $id = $field['id'];
-			// $result[substr($id,10)] = get_post_meta((method_exists($order, 'get_id'))? $order->get_id() : $order->id, '_' . $field['id'], true);
-			// }
-			// $order_data['aftership']['woocommerce']['trackings'][] = $result;
 
 			$order_data['aftership']['woocommerce']['trackings'][0] = array(
 				'tracking_provider'            => order_post_meta_getter( $order, 'aftership_tracking_provider' ),
@@ -285,11 +202,11 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				'tracking_destination_country' => order_post_meta_getter( $order, 'aftership_tracking_destination_country' ),
 			);
 		}
-		if ( $tn == null ) {
-			// Handle old Shipping Tracking plugin
+		if ( ! $tn ) {
+			// Handle old Shipping Tracking plugin.
 			$tn = order_post_meta_getter( $order, 'tracking_number' );
-			if ( $tn == null ) {
-				// Handle new Shipping Tracking plugin version higher than 1.6.4
+			if ( ! $tn ) {
+				// Handle new Shipping Tracking plugin version higher than 1.6.4.
 				$tracking_items = order_post_meta_getter( $order, 'wc_shipment_tracking_items' )[0];
 
 				if ( ! empty( $tracking_items ) ) {
@@ -302,11 +219,11 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 						'tracking_key'                 => '',
 						'tracking_destination_country' => '',
 					);
-					// 获取 tracking_provider, tracking_postal_code
-					$trackingArr = $this->getTrackingInfoByShipmentTracking( $tracking_items );
-					if ( ! empty( $trackingArr ) ) {
-						$order_data['aftership']['woocommerce']['trackings'][0]['tracking_postal_code'] = $trackingArr['tracking_postal_code'];
-						$order_data['aftership']['woocommerce']['trackings'][0]['tracking_provider']    = $trackingArr['tracking_provider'];
+					// 获取 tracking_provider, tracking_postal_code.
+					$tracking_arr = $this->getTrackingInfoByShipmentTracking( $tracking_items );
+					if ( ! empty( $tracking_arr ) ) {
+						$order_data['aftership']['woocommerce']['trackings'][0]['tracking_postal_code'] = $tracking_arr['tracking_postal_code'];
+						$order_data['aftership']['woocommerce']['trackings'][0]['tracking_provider']    = $tracking_arr['tracking_provider'];
 					}
 				}
 			} else {
@@ -315,44 +232,51 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				);
 			}
 		}
-		// aftership add finish
-
+		/**
+		 *  AfterShip add finish.
+		 *
+		 * @since 2.1
+		 */
 		return array( 'order' => apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server ) );
 	}
 
-
-	// 从wc ShipmentTracking 插件获取 Postalcode  - postnl
+	/**
+	 * 从wc ShipmentTracking 插件获取 Postalcode  - postnl.
+	 *
+	 * @param array $tracking_items Tracking items array.
+	 * @return array
+	 */
 	private function getTrackingInfoByShipmentTracking( $tracking_items ) {
 		if ( ! isset( $tracking_items['custom_tracking_link'] ) ) {
 			return array();
 		}
 
-		// 获取 postnl  Postalcode
-		$urlArr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
+		// 获取 postnl  Postalcode.
+		$url_arr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
 
-		if ( $urlArr === false ) {
+		if ( ! $url_arr ) {
 			return array();
 		}
 
-		if ( ! isset( $urlArr['host'] ) ) {
+		if ( ! isset( $url_arr['host'] ) ) {
 			return array();
 		}
 
-		$hostArr      = explode( '.', $urlArr['host'] );
-		$hostArrIndex = count( $hostArr ) - 2;
-		if ( empty( $hostArr ) || ! isset( $hostArr[ $hostArrIndex ] ) ) {
+		$host_arr       = explode( '.', $url_arr['host'] );
+		$host_arr_index = count( $host_arr ) - 2;
+		if ( empty( $host_arr ) || ! isset( $host_arr[ $host_arr_index ] ) ) {
 			return array();
 		}
 
-		if ( $hostArr[ $hostArrIndex ] == 'postnl' ) {
-			parse_str( $urlArr['query'], $queryArr );
-			if ( ! isset( $queryArr['Postalcode'] ) ) {
+		if ( 'postnl' === $host_arr[ $host_arr_index ] ) {
+			parse_str( $url_arr['query'], $query_arr );
+			if ( ! isset( $query_arr['Postalcode'] ) ) {
 				return array();
 			}
 
 			return array(
 				'tracking_provider'    => 'postnl',
-				'tracking_postal_code' => str_replace( ' ', '', $queryArr['Postalcode'] ),
+				'tracking_postal_code' => str_replace( ' ', '', $query_arr['Postalcode'] ),
 			);
 		}
 		return array();
@@ -363,8 +287,8 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Get the total number of orders
 	 *
 	 * @since 2.1
-	 * @param string $status
-	 * @param array  $filter
+	 * @param string $status order status.
+	 * @param array  $filter filter metrics.
 	 * @return array
 	 */
 	public function get_orders_count( $status = null, $filter = array() ) {
@@ -388,8 +312,8 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * API v1 only allows updating the status of an order
 	 *
 	 * @since 2.1
-	 * @param int   $id the order ID
-	 * @param array $data
+	 * @param int   $id the order ID.
+	 * @param array $data order data.
 	 * @return array
 	 */
 	public function edit_order( $id, $data ) {
@@ -414,8 +338,8 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Delete an order
 	 *
 	 * @TODO enable along with POST in 2.2
-	 * @param int  $id the order ID
-	 * @param bool $force true to permanently delete order, false to move to trash
+	 * @param int  $id the order ID.
+	 * @param bool $force true to permanently delete order, false to move to trash.
 	 * @return array
 	 */
 	public function delete_order( $id, $force = false ) {
@@ -429,13 +353,13 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Get the admin order notes for an order
 	 *
 	 * @since 2.1
-	 * @param int    $id the order ID
-	 * @param string $fields fields to include in response
+	 * @param int    $id the order ID.
+	 * @param string $fields fields to include in response.
 	 * @return array
 	 */
 	public function get_order_notes( $id, $fields = null ) {
 
-		// ensure ID is valid order ID
+		// ensure ID is valid order ID.
 		$id = $this->validate_request( $id, 'shop_order', 'read' );
 
 		if ( is_wp_error( $id ) ) {
@@ -466,6 +390,11 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 			);
 		}
 
+		/**
+		 * Response hook
+		 *
+		 * @since 2.1
+		 */
 		return array( 'order_notes' => apply_filters( 'aftership_api_order_notes_response', $order_notes, $id, $fields, $notes, $this->server ) );
 	}
 
@@ -473,27 +402,32 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Helper method to get order post objects
 	 *
 	 * @since 2.1
-	 * @param array $args request arguments for filtering query
+	 * @param array $args request arguments for filtering query.
 	 * @return WP_Query
 	 */
 	private function query_orders( $args ) {
 
+		/**
+		 * Get wooCommerce version.
+		 *
+		 * @return mixed|null
+		 */
 		function aftership_wpbo_get_woo_version_number() {
-			// If get_plugins() isn't available, require it
+			// If get_plugins() isn't available, require it.
 			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 
-			// Create the plugins folder and file variables
-			$plugin_folder = get_plugins( '/' . 'woocommerce' );
+			// Create the plugins folder and file variables.
+			$plugin_folder = get_plugins( '/woocommerce' );
 			$plugin_file   = 'woocommerce.php';
 
-			// If the plugin version number is set, return it
+			// If the plugin version number is set, return it.
 			if ( isset( $plugin_folder[ $plugin_file ]['Version'] ) ) {
 				return $plugin_folder[ $plugin_file ]['Version'];
 
 			} else {
-				// Otherwise return null
+				// Otherwise return null.
 				return null;
 			}
 		}
@@ -501,7 +435,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 		$woo_version = aftership_wpbo_get_woo_version_number();
 
 		if ( $woo_version >= 2.2 ) {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -509,7 +443,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 				'post_status' => array_keys( wc_get_order_statuses() ),
 			);
 		} else {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -517,7 +451,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 			);
 		}
 
-		// add status argument
+		// add status argument.
 		if ( ! empty( $args['status'] ) ) {
 
 			$statuses = explode( ',', $args['status'] );
@@ -542,14 +476,14 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Helper method to get the order subtotal
 	 *
 	 * @since 2.1
-	 * @param WC_Order $order
+	 * @param WC_Order $order wooCommerce order.
 	 * @return float
 	 */
 	private function get_order_subtotal( $order ) {
 
 		$subtotal = 0;
 
-		// subtotal
+		// subtotal.
 		foreach ( $order->get_items() as $item ) {
 
 			$subtotal += ( isset( $item['line_subtotal'] ) ) ? $item['line_subtotal'] : 0;
@@ -562,9 +496,7 @@ class AfterShip_API_Orders extends AfterShip_API_Resource {
 	 * Get the total number of orders
 	 *
 	 * @since 2.1
-	 * @param string $status
-	 * @param array  $filter
-	 * @return array
+	 * @return string
 	 */
 	public function ping() {
 		return 'pong';

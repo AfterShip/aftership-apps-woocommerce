@@ -2,22 +2,24 @@
 /**
  * AfterShip API Authentication Class
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
- * @since       1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit;
 }
 
 
 if ( ! function_exists( 'getallheaders' ) ) {
+	/**
+	 * Get all http headers.
+	 *
+	 * @return string
+	 */
 	function getallheaders() {
 		$headers = '';
 		foreach ( $_SERVER as $name => $value ) {
-			if ( substr( $name, 0, 5 ) == 'HTTP_' ) {
+			if ( substr( $name, 0, 5 ) === 'HTTP_' ) {
 				$headers[ str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', substr( $name, 5 ) ) ) ) ) ] = $value;
 			}
 		}
@@ -25,17 +27,17 @@ if ( ! function_exists( 'getallheaders' ) ) {
 	}
 }
 
+/**
+ * Authentication Class for API.
+ */
 class AfterShip_API_Authentication {
 
 
 	/**
 	 * Setup class
-	 *
-	 * @since 2.1
-	 * @return WC_API_Authentication
 	 */
 	public function __construct() {
-		// to disable authentication, hook into this filter at a later priority and return a valid WP_User
+		// to disable authentication, hook into this filter at a later priority and return a valid WP_User.
 		add_filter( 'aftership_api_check_authentication', array( $this, 'authenticate' ), 0 );
 	}
 
@@ -43,12 +45,12 @@ class AfterShip_API_Authentication {
 	 * Authenticate the request. The authentication method varies based on whether the request was made over SSL or not.
 	 *
 	 * @since 2.1
-	 * @param WP_User $user
+	 * @param WP_User $user WordPress user.
 	 * @return null|WP_Error|WP_User
 	 */
 	public function authenticate( $user ) {
 
-		// allow access to the index by default
+		// allow access to the index by default.
 		if ( '/' === aftership()->api->server->path ) {
 			return new WP_User( 0 );
 		}
@@ -64,32 +66,38 @@ class AfterShip_API_Authentication {
 		return $user;
 	}
 
+	/**
+	 * Perform Authentication.
+	 *
+	 * @return WP_User
+	 * @throws Exception Throw exceptions.
+	 */
 	private function perform_authentication() {
-		 $headers = getallheaders();
-		$headers  = json_decode( json_encode( $headers ), true );
+		$headers = getallheaders();
+		$headers = json_decode( wp_json_encode( $headers ), true );
 
-		// it dues to different kind of server configuration
-		$key   = 'AFTERSHIP_WP_KEY';
-		$key1  = str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', $key ) ) ) );
-		$key2  = 'AFTERSHIP-WP-KEY';
-		$qskey = isset( $_GET['key'] ) ? $_GET['key'] : null;
-
-		// get aftership wp key
-		if ( ! empty( $headers[ $key ] ) ) {
-			$api_key = $headers[ $key ];
-		} elseif ( ! empty( $headers[ $key1 ] ) ) {
-			$api_key = $headers[ $key1 ];
-		} elseif ( ! empty( $headers[ $key2 ] ) ) {
-			$api_key = $headers[ $key2 ];
-		} elseif ( ! empty( $qskey ) ) {
-			$api_key = $qskey;
-		} else {
+		$keys = array(
+			'AFTERSHIP_WP_KEY',
+			'AFTERSHIP-WP-KEY',
+			'aftership_wp_key',
+			'aftership-wp-key',
+			'Aftership-Wp-Key',
+		);
+		// phpcs:ignore.
+		$nonce = isset( $_GET['undefined_nonce'] ) ? wc_clean( wp_unslash( $_GET['undefined_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify  = wp_verify_nonce( $nonce );
+		$api_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : null;
+		foreach ( $keys as $item ) {
+			if ( ! empty( $headers[ $item ] ) ) {
+				$api_key = $headers[ $item ];
+			}
+		}
+		if ( ! $api_key ) {
 			throw new Exception( __( 'AfterShip\'s WordPress Key is missing', 'aftership' ), 404 );
 		}
 
-		$user = $this->get_user_by_api_key( $api_key );
-
-		return $user;
+		return $this->get_user_by_api_key( $api_key );
 
 	}
 

@@ -4,42 +4,50 @@
  *
  * Provides shared functionality for resource-specific API classes
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit;
 }
 
+/**
+ * AfterShip Plugin API Resource
+ */
 class AfterShip_API_Resource {
 
 
-	/** @var WC_API_Server the API server */
+	/**
+	 * API Server
+	 *
+	 * @var WC_API_Server the API server.
+	 */
 	protected $server;
 
-	/** @var string sub-classes override this to set a resource-specific base route */
+	/**
+	 * Base router.
+	 *
+	 * @var string sub-classes override this to set a resource-specific base route.
+	 */
 	protected $base;
 
 	/**
 	 * Setup class
 	 *
 	 * @since 2.1
-	 * @param WC_API_Server $server
-	 * @return WC_API_Resource
+	 * @param AfterShip_API_Server $server server instance.
 	 */
 	public function __construct( AfterShip_API_Server $server ) {
 
 		$this->server = $server;
 
-		// automatically register routes for sub-classes
+		// automatically register routes for sub-classes.
 		add_filter( 'aftership_api_endpoints', array( $this, 'register_routes' ) );
 
-		// remove fields from responses when requests specify certain fields
-		// note these are hooked at a later priority so data added via filters (e.g. customer data to the order response)
-		// still has the fields filtered properly
+		// remove fields from responses when requests specify certain fields.
+		// note these are hooked at a later priority so data added via filters (e.g. customer data to the order response).
+		// still has the fields filtered properly.
 		foreach ( array( 'order', 'coupon', 'customer', 'product', 'report' ) as $resource ) {
 
 			add_filter( "aftership_api_{$resource}_response", array( $this, 'maybe_add_meta' ), 15, 2 );
@@ -55,10 +63,10 @@ class AfterShip_API_Resource {
 	 * 3) the current user has the proper permissions to read/edit/delete the post
 	 *
 	 * @since 2.1
-	 * @param string|int $id the post ID
-	 * @param string     $type the post type, either `shop_order`, `shop_coupon`, or `product`
-	 * @param string     $context the context of the request, either `read`, `edit` or `delete`
-	 * @return int|WP_Error valid post ID or WP_Error if any of the checks fails
+	 * @param string|int $id the post ID.
+	 * @param string     $type the post type, either `shop_order`, `shop_coupon`, or `product`.
+	 * @param string     $context the context of the request, either `read`, `edit` or `delete`.
+	 * @return int|WP_Error valid post ID or WP_Error if any of the checks fails.
 	 */
 	protected function validate_request( $id, $type, $context ) {
 
@@ -70,42 +78,47 @@ class AfterShip_API_Resource {
 
 		$id = absint( $id );
 
-		// validate ID
+		// validate ID.
 		if ( empty( $id ) ) {
-			return new WP_Error( "aftership_api_invalid_{$resource_name}_id", sprintf( __( 'Invalid %s ID', 'aftership' ), $type ), array( 'status' => 404 ) );
+			// phpcs:ignore.
+			return new WP_Error( "aftership_api_invalid_{$resource_name}_id", sprintf( 'Invalid %s ID', $type ), array( 'status' => 404 ) );
 		}
 
-		// only custom post types have per-post type/permission checks
+		// only custom post types have per-post type/permission checks.
 		if ( 'customer' !== $type ) {
 
 			$post = get_post( $id );
 
-			// for checking permissions, product variations are the same as the product post type
+			// for checking permissions, product variations are the same as the product post type.
 			$post_type = ( 'product_variation' === $post->post_type ) ? 'product' : $post->post_type;
 
-			// validate post type
+			// validate post type.
 			if ( $type !== $post_type ) {
-				return new WP_Error( "aftership_api_invalid_{$resource_name}", sprintf( __( 'Invalid %s', 'aftership' ), $resource_name ), array( 'status' => 404 ) );
+				// phpcs:ignore.
+				return new WP_Error( "aftership_api_invalid_{$resource_name}", sprintf( 'Invalid %s', $resource_name ), array( 'status' => 404 ) );
 			}
 
-			// validate permissions
+			// validate permissions.
 			switch ( $context ) {
 
 				case 'read':
 					if ( ! $this->is_readable( $post ) ) {
-						return new WP_Error( "aftership_api_user_cannot_read_{$resource_name}", sprintf( __( 'You do not have permission to read this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						// phpcs:ignore.
+						return new WP_Error( "aftership_api_user_cannot_read_{$resource_name}", sprintf( 'You do not have permission to read this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 
 				case 'edit':
 					if ( ! $this->is_editable( $post ) ) {
-						return new WP_Error( "aftership_api_user_cannot_edit_{$resource_name}", sprintf( __( 'You do not have permission to edit this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						// phpcs:ignore.
+						return new WP_Error( "aftership_api_user_cannot_edit_{$resource_name}", sprintf( 'You do not have permission to edit this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 
 				case 'delete':
 					if ( ! $this->is_deletable( $post ) ) {
-						return new WP_Error( "aftership_api_user_cannot_delete_{$resource_name}", sprintf( __( 'You do not have permission to delete this %s', 'aftership' ), $resource_name ), array( 'status' => 401 ) );
+						// phpcs:ignore.
+						return new WP_Error( "aftership_api_user_cannot_delete_{$resource_name}", sprintf( 'You do not have permission to delete this %s', $resource_name ), array( 'status' => 401 ) );
 					}
 					break;
 			}
@@ -118,20 +131,20 @@ class AfterShip_API_Resource {
 	 * Add common request arguments to argument list before WP_Query is run
 	 *
 	 * @since 2.1
-	 * @param array $base_args required arguments for the query (e.g. `post_type`, etc)
-	 * @param array $request_args arguments provided in the request
+	 * @param array $base_args required arguments for the query (e.g. `post_type`, etc).
+	 * @param array $request_args arguments provided in the request.
 	 * @return array
 	 */
 	protected function merge_query_args( $base_args, $request_args ) {
 
 		$args = array();
 
-		// date
+		// date.
 		if ( ! empty( $request_args['created_at_min'] ) || ! empty( $request_args['created_at_max'] ) || ! empty( $request_args['updated_at_min'] ) || ! empty( $request_args['updated_at_max'] ) ) {
 
 			$args['date_query'] = array();
 
-			// resources created after specified date
+			// resources created after specified date.
 			if ( ! empty( $request_args['created_at_min'] ) ) {
 				$args['date_query'][] = array(
 					'column'    => 'post_date_gmt',
@@ -140,7 +153,7 @@ class AfterShip_API_Resource {
 				);
 			}
 
-			// resources created before specified date
+			// resources created before specified date.
 			if ( ! empty( $request_args['created_at_max'] ) ) {
 				$args['date_query'][] = array(
 					'column'    => 'post_date_gmt',
@@ -149,7 +162,7 @@ class AfterShip_API_Resource {
 				);
 			}
 
-			// resources updated after specified date
+			// resources updated after specified date.
 			if ( ! empty( $request_args['updated_at_min'] ) ) {
 				$args['date_query'][] = array(
 					'column'    => 'post_modified_gmt',
@@ -158,7 +171,7 @@ class AfterShip_API_Resource {
 				);
 			}
 
-			// resources updated before specified date
+			// resources updated before specified date.
 			if ( ! empty( $request_args['updated_at_max'] ) ) {
 				$args['date_query'][] = array(
 					'column'    => 'post_modified_gmt',
@@ -168,25 +181,25 @@ class AfterShip_API_Resource {
 			}
 		}
 
-		// search
+		// search.
 		if ( ! empty( $request_args['q'] ) ) {
 			$args['s'] = $request_args['q'];
 		}
 
-		// resources per response
+		// resources per response.
 		if ( ! empty( $request_args['limit'] ) ) {
 			$args['posts_per_page'] = $request_args['limit'];
 		}
 
-		// resource offset
+		// resource offset.
 		if ( ! empty( $request_args['offset'] ) ) {
 			$args['offset'] = $request_args['offset'];
 		}
 
-		// resource page
+		// resource page.
 		$args['paged'] = ( isset( $request_args['page'] ) ) ? absint( $request_args['page'] ) : 1;
 
-		// order
+		// order.
 		if ( ! empty( $request_args['orderby'] ) ) {
 			$args['orderby'] = $request_args['orderby'];
 		}
@@ -202,20 +215,20 @@ class AfterShip_API_Resource {
 	 * `<resource_name>_meta` attribute (e.g. `order_meta`) as a list of key/value pairs
 	 *
 	 * @since 2.1
-	 * @param array  $data the resource data
-	 * @param object $resource the resource object (e.g WC_Order)
+	 * @param array  $data the resource data.
+	 * @param object $resource the resource object (e.g WC_Order).
 	 * @return mixed
 	 */
 	public function maybe_add_meta( $data, $resource ) {
 
 		if ( isset( $this->server->params['GET']['filter']['meta'] ) && 'true' === $this->server->params['GET']['filter']['meta'] && is_object( $resource ) ) {
 
-			// don't attempt to add meta more than once
+			// don't attempt to add meta more than once.
 			if ( preg_grep( '/[a-z]+_meta/', array_keys( $data ) ) ) {
 				return $data;
 			}
 
-			// define the top-level property name for the meta
+			// define the top-level property name for the meta.
 			switch ( get_class( $resource ) ) {
 
 				case 'WC_Order':
@@ -237,23 +250,23 @@ class AfterShip_API_Resource {
 
 			if ( is_a( $resource, 'WP_User' ) ) {
 
-				// customer meta
+				// customer meta.
 				$meta = (array) get_user_meta( $resource->ID );
 
 			} elseif ( is_a( $resource, 'WC_Product_Variation' ) ) {
 
-				// product variation meta
+				// product variation meta.
 				$meta = (array) get_post_meta( $resource->get_variation_id() );
 
 			} else {
 
-				// coupon/order/product meta
+				// coupon/order/product meta.
 				$meta = (array) get_post_meta( $resource->id );
 			}
 
 			foreach ( $meta as $meta_key => $meta_value ) {
 
-				// don't add hidden meta by default
+				// don't add hidden meta by default.
 				if ( ! is_protected_meta( $meta_key ) ) {
 					$data[ $meta_name ][ $meta_key ] = maybe_unserialize( $meta_value[0] );
 				}
@@ -267,9 +280,9 @@ class AfterShip_API_Resource {
 	 * Restrict the fields included in the response if the request specified certain only certain fields should be returned
 	 *
 	 * @since 2.1
-	 * @param array                                                                $data the response data
-	 * @param object                                                               $resource the object that provided the response data, e.g. WC_Coupon or WC_Order
-	 * @param array|string the requested list of fields to include in the response
+	 * @param array  $data the response data.
+	 * @param object $resource the object that provided the response data, e.g. WC_Coupon or WC_Order.
+	 * @param object $fields fields.
 	 * @return array response data
 	 */
 	public function filter_response_fields( $data, $resource, $fields ) {
@@ -281,7 +294,7 @@ class AfterShip_API_Resource {
 		$fields     = explode( ',', $fields );
 		$sub_fields = array();
 
-		// get sub fields
+		// get sub fields.
 		foreach ( $fields as $field ) {
 
 			if ( false !== strpos( $field, '.' ) ) {
@@ -292,24 +305,24 @@ class AfterShip_API_Resource {
 			}
 		}
 
-		// iterate through top-level fields
+		// iterate through top-level fields.
 		foreach ( $data as $data_field => $data_value ) {
 
-			// if a field has sub-fields and the top-level field has sub-fields to filter
-			if ( is_array( $data_value ) && in_array( $data_field, array_keys( $sub_fields ) ) ) {
+			// if a field has sub-fields and the top-level field has sub-fields to filter.
+			if ( is_array( $data_value ) && in_array( $data_field, array_keys( $sub_fields ), true ) ) {
 
-				// iterate through each sub-field
+				// iterate through each sub-field.
 				foreach ( $data_value as $sub_field => $sub_field_value ) {
 
-					// remove non-matching sub-fields
-					if ( ! in_array( $sub_field, $sub_fields ) ) {
+					// remove non-matching sub-fields.
+					if ( ! in_array( $sub_field, $sub_fields, true ) ) {
 						unset( $data[ $data_field ][ $sub_field ] );
 					}
 				}
 			} else {
 
-				// remove non-matching top-level fields
-				if ( ! in_array( $data_field, $fields ) ) {
+				// remove non-matching top-level fields.
+				if ( ! in_array( $data_field, $fields, true ) ) {
 					unset( $data[ $data_field ] );
 				}
 			}
@@ -322,9 +335,9 @@ class AfterShip_API_Resource {
 	 * Delete a given resource
 	 *
 	 * @since 2.1
-	 * @param int    $id the resource ID
-	 * @param string $type the resource post type, or `customer`
-	 * @param bool   $force true to permanently delete resource, false to move to trash (not supported for `customer`)
+	 * @param int    $id the resource ID.
+	 * @param string $type the resource post type, or `customer`.
+	 * @param bool   $force true to permanently delete resource, false to move to trash (not supported for `customer`).
 	 * @return array|WP_Error
 	 */
 	protected function delete( $id, $type, $force = false ) {
@@ -346,22 +359,24 @@ class AfterShip_API_Resource {
 			}
 		} else {
 
-			// delete order/coupon/product
+			// delete order/coupon/product.
 
 			$result = ( $force ) ? wp_delete_post( $id, true ) : wp_trash_post( $id );
 
 			if ( ! $result ) {
-				return new WP_Error( "aftership_api_cannot_delete_{$resource_name}", sprintf( __( 'This %s cannot be deleted', 'aftership' ), $resource_name ), array( 'status' => 500 ) );
+				// phpcs:ignore.
+				return new WP_Error( "aftership_api_cannot_delete_{$resource_name}", sprintf( 'This %s cannot be deleted', $resource_name ), array( 'status' => 500 ) );
 			}
 
 			if ( $force ) {
-				return array( 'message' => sprintf( __( 'Permanently deleted %s', 'aftership' ), $resource_name ) );
+				// phpcs:ignore.
+				return array( 'message' => sprintf( 'Permanently deleted %s', $resource_name ) );
 
 			} else {
 
 				$this->server->send_status( '202' );
-
-				return array( 'message' => sprintf( __( 'Deleted %s', 'aftership' ), $resource_name ) );
+				// phpcs:ignore.
+				return array( 'message' => sprintf( 'Deleted %s', $resource_name ) );
 			}
 		}
 	}
@@ -372,7 +387,7 @@ class AfterShip_API_Resource {
 	 *
 	 * @since 2.1
 	 * @see WC_API_Resource::check_permission()
-	 * @param WP_Post|int $post
+	 * @param WP_Post|int $post post.
 	 * @return bool
 	 */
 	protected function is_readable( $post ) {
@@ -385,7 +400,7 @@ class AfterShip_API_Resource {
 	 *
 	 * @since 2.1
 	 * @see WC_API_Resource::check_permission()
-	 * @param WP_Post|int $post
+	 * @param WP_Post|int $post post.
 	 * @return bool
 	 */
 	protected function is_editable( $post ) {
@@ -399,7 +414,7 @@ class AfterShip_API_Resource {
 	 *
 	 * @since 2.1
 	 * @see WC_API_Resource::check_permission()
-	 * @param WP_Post|int $post
+	 * @param WP_Post|int $post post.
 	 * @return bool
 	 */
 	protected function is_deletable( $post ) {
@@ -411,9 +426,9 @@ class AfterShip_API_Resource {
 	 * Checks the permissions for the current user given a post and context
 	 *
 	 * @since 2.1
-	 * @param WP_Post|int $post
-	 * @param string      $context the type of permission to check, either `read`, `write`, or `delete`
-	 * @return bool true if the current user has the permissions to perform the context on the post
+	 * @param WP_Post|int $post post data.
+	 * @param string      $context the type of permission to check, either `read`, `write`, or `delete`.
+	 * @return bool true if the current user has the permissions to perform the context on the post.
 	 */
 	private function check_permission( $post, $context ) {
 

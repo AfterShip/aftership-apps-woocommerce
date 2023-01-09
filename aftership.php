@@ -1,11 +1,13 @@
 <?php
+/**
+ * Backwards compat.
+ *
+ * @package AfterShip
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/**
- * Backwards compat.
- */
 
 $active_plugins = get_option( 'active_plugins', array() );
 foreach ( $active_plugins as $key => $active_plugin ) {

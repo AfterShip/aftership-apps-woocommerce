@@ -4,8 +4,6 @@
  *
  * Handles requests to the /orders endpoint
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
@@ -14,17 +12,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-
+/**
+ * Rest Order Helper Class
+ */
 class Rest_Orders_Helper {
 
 	/**
 	 * Return the number of decimals after the decimal point.
 	 *
 	 * @since  2.3
+	 * @var int $dp decimal.
 	 * @return int
 	 */
 	protected $dp;
 
+	/**
+	 * Construct function.
+	 */
 	public function __construct() {
 		$this->dp = wc_get_price_decimals();
 	}

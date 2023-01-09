@@ -1,4 +1,11 @@
 <?php
+/**
+ * AfterShip Rest API: Settings
+ *
+ * Settings API used by AfterShip
+ *
+ * @package AfterShip
+ */
 
 if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 
@@ -60,12 +67,11 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 		 * @return string
 		 */
 		public function normalize_custom_domain( $url ) {
-			if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 				return $url;
 
 			}
-			$domain = parse_url( $url, PHP_URL_HOST );
-			return $domain;
+			return wp_parse_url( $url, PHP_URL_HOST );
 		}
 
 		/**

@@ -1,4 +1,12 @@
 <?php
+/**
+ * AfterShip Actions
+ *
+ * All actions used by AfterShip plugin
+ *
+ * @package AfterShip
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,9 +30,9 @@ class AfterShip_Actions {
 	 * @return AfterShip_Actions
 	 */
 	public static function get_instance() {
-		if ( null === self::$instance ) {
+		if ( ! self::$instance ) {
 
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -33,13 +41,13 @@ class AfterShip_Actions {
 	/**
 	 * Get courier detail by slug
 	 *
-	 * @param string $slug
+	 * @param string $slug courier slug.
 	 * @return array
 	 */
 	public function get_courier_by_slug( $slug ) {
 		$courier = array();
 		foreach ( $GLOBALS['AfterShip']->couriers as $item ) {
-			if ( $item['slug'] == $slug ) {
+			if ( $item['slug'] === $slug ) {
 				$courier = $item;
 			}
 		}
@@ -79,18 +87,20 @@ class AfterShip_Actions {
 	 *   1. This function is applied on 2 pages
 	 *      orders list page: page id = "edit-shop_order"
 	 *      order edit page: page id = "shop_order"
+	 *
+	 * @param string $hook page id.
 	 */
 	public function load_orders_page_script( $hook ) {
 		if ( 'edit.php' !== $hook ) {
 			return;
 		}
-		// The following code will be executed only when the detect page which the function belongs to
-		$page_screen          = get_current_screen()->id;
+		// The following code will be executed only when the detect page which the function belongs to.
+		$page_screen            = get_current_screen()->id;
 		$screen_handle_tracking = array(
 			'edit-shop_order',
 			'shop_order',
 		);
-		if ( !in_array( $page_screen, $screen_handle_tracking ) ) {
+		if ( ! in_array( $page_screen, $screen_handle_tracking, true ) ) {
 			return;
 		}
 
@@ -119,7 +129,8 @@ class AfterShip_Actions {
 			'aftership-orders-page-script',
 			$plugin_url . '/assets/frontend/dist/orders/index.js',
 			array( 'wc-admin-order-meta-boxes' ),
-			AFTERSHIP_VERSION
+			AFTERSHIP_VERSION,
+			true
 		);
 	}
 
@@ -134,9 +145,9 @@ class AfterShip_Actions {
 	/**
 	 * Returns a HTML node for a tracking item for the admin meta box
 	 *
-	 * @param $order_id string
-	 * @param $item array
-	 * @param $index number
+	 * @param string $order_id order id.
+	 * @param array  $item tracking items.
+	 * @param number $index tracking number index.
 	 */
 	public function display_html_tracking_item_for_meta_box( $order_id, $item, $index ) {
 		$courier = $this->get_courier_by_slug( $item['slug'] );
@@ -156,13 +167,14 @@ class AfterShip_Actions {
 						class="edit-tracking"
 					rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
-						<?php _e( 'Edit', 'aftership' ); ?>
+						<?php esc_html_e( 'Edit', 'aftership' ); ?>
 					</a>
 					<a
-						href="#" class="delete-tracking"
-					   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+						href="#"
+						class="delete-tracking"
+						rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
-						<?php _e( 'Delete', 'aftership' ); ?>
+						<?php esc_html_e( 'Delete', 'aftership' ); ?>
 					</a>
 				</div>
 			</div>
@@ -184,14 +196,14 @@ class AfterShip_Actions {
 	/**
 	 * Generate tracking page links
 	 *
-	 * @param $item
+	 * @param array $item an tracking item.
 	 * @return string
 	 */
 	public function generate_tracking_page_link( $item ) {
 		$custom_domain  = $GLOBALS['AfterShip']->custom_domain;
 		$contains_http  = strpos( $custom_domain, 'http://' );
 		$contains_https = strpos( $custom_domain, 'https://' );
-		if ( $contains_http !== false || $contains_https !== false ) {
+		if ( false !== $contains_http || false !== $contains_https ) {
 			return $custom_domain . "/${item['slug']}/${item['tracking_number']}";
 		}
 		return 'https://' . $custom_domain . "/${item['slug']}/${item['tracking_number']}";
@@ -204,22 +216,20 @@ class AfterShip_Actions {
 	 * @return string
 	 */
 	public function normalize_custom_domain( $url ) {
-		if ( filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return $url;
 
 		}
-		$domain = parse_url( $url, PHP_URL_HOST );
-		return $domain;
+		return wp_parse_url( $url, PHP_URL_HOST );
 	}
 
 	/**
-	 * Do some migrate staff
+	 * Do some migrate staff CNT-7928
 	 */
 	public function migrate() {
-		// CNT-7928
 		$options = get_option( 'aftership_option_name' );
 		$domain  = $this->normalize_custom_domain( $options['custom_domain'] );
-		if ( $domain != $options['custom_domain'] ) {
+		if ( $domain !== $options['custom_domain'] ) {
 			$options['custom_domain'] = $domain;
 			update_option( 'aftership_option_name', $options );
 		}
@@ -257,7 +267,7 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontend/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontend/dist/metabox/index.js', array(), AFTERSHIP_VERSION, true );
 	}
 
 	/**
@@ -265,21 +275,33 @@ class AfterShip_Actions {
 	 *
 	 * Function for saving tracking items
 	 *
-	 * @param $post_id string
-	 * @param $post array
+	 * @param string $post_id post id.
+	 * @param array  $post post model.
 	 */
 	public function save_meta_box( $post_id, $post ) {
-		if ( isset( $_POST['aftership_tracking_number'] ) && strlen( $_POST['aftership_tracking_number'] ) > 0 ) {
+		// phpcs:ignore.
+		$nonce = isset( $_POST['aftership_create_nonce'] ) ? wc_clean( wp_unslash( $_POST['aftership_create_nonce'] ) ) : null;
+		// phpcs:ignore.
+		$verify              = wp_verify_nonce( $nonce );
+		$tracking_number     = isset( $_POST['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $_POST['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $_POST['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $_POST['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $_POST['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $_POST['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $_POST['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $_POST['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_state'] ) ) : null;
+		if ( $tracking_number ) {
 			$args = array(
-				'slug'              => wc_clean( $_POST['aftership_tracking_slug'] ),
-				'tracking_number'   => wc_clean( $_POST['aftership_tracking_number'] ),
+				'slug'              => $slug,
+				'tracking_number'   => $tracking_number,
 				'additional_fields' => array(
-					'account_number'      => wc_clean( $_POST['aftership_tracking_account_number'] ),
-					'key'                 => wc_clean( $_POST['aftership_tracking_key'] ),
-					'postal_code'         => wc_clean( $_POST['aftership_tracking_postal_code'] ),
-					'ship_date'           => wc_clean( $_POST['aftership_tracking_ship_date'] ),
-					'destination_country' => wc_clean( $_POST['aftership_tracking_destination_country'] ),
-					'state'               => wc_clean( $_POST['aftership_tracking_state'] ),
+					'account_number'      => $account_number,
+					'key'                 => $key,
+					'postal_code'         => $postal_code,
+					'ship_date'           => $ship_date,
+					'destination_country' => $destination_country,
+					'state'               => $state,
 				),
 			);
 
@@ -295,8 +317,11 @@ class AfterShip_Actions {
 	public function get_meta_box_items_ajax() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$order_id = wc_clean( $_POST['order_id'] );
-		// migrate old tracking data
+		$order_id = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		if ( ! $order_id ) {
+			return;
+		}
+		// migrate old tracking data.
 		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
 
@@ -313,29 +338,35 @@ class AfterShip_Actions {
 	 * Order Tracking Save AJAX
 	 *
 	 * Function for saving tracking items via AJAX
-	 *
-	 * @throws WC_Data_Exception
 	 */
 	public function save_meta_box_ajax() {
 		check_ajax_referer( 'create-tracking-item', 'security', true );
+		// phpcs:ignore.
+		$order_id            = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_number     = isset( $_POST['aftership_tracking_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_number'] ) ) : false;
+		$slug                = isset( $_POST['aftership_tracking_slug'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_slug'] ) ) : null;
+		$account_number      = isset( $_POST['aftership_tracking_account_number'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_account_number'] ) ) : null;
+		$key                 = isset( $_POST['aftership_tracking_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_key'] ) ) : null;
+		$postal_code         = isset( $_POST['aftership_tracking_postal_code'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_postal_code'] ) ) : null;
+		$ship_date           = isset( $_POST['aftership_tracking_ship_date'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_ship_date'] ) ) : null;
+		$destination_country = isset( $_POST['aftership_tracking_destination_country'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_destination_country'] ) ) : null;
+		$state               = isset( $_POST['aftership_tracking_state'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_state'] ) ) : null;
 
-		if ( isset( $_POST['aftership_tracking_number'] ) && strlen( $_POST['aftership_tracking_number'] ) > 0 ) {
-
-			$order_id = wc_clean( $_POST['order_id'] );
-			$args     = array(
-				'slug'              => wc_clean( $_POST['aftership_tracking_slug'] ),
-				'tracking_number'   => wc_clean( $_POST['aftership_tracking_number'] ),
+		if ( $tracking_number && $order_id ) {
+			$args = array(
+				'slug'              => $slug,
+				'tracking_number'   => $tracking_number,
 				'additional_fields' => array(
-					'account_number'      => wc_clean( $_POST['aftership_tracking_account_number'] ),
-					'key'                 => wc_clean( $_POST['aftership_tracking_key'] ),
-					'postal_code'         => wc_clean( $_POST['aftership_tracking_postal_code'] ),
-					'ship_date'           => wc_clean( $_POST['aftership_tracking_ship_date'] ),
-					'destination_country' => wc_clean( $_POST['aftership_tracking_destination_country'] ),
-					'state'               => wc_clean( $_POST['aftership_tracking_state'] ),
+					'account_number'      => $account_number,
+					'key'                 => $key,
+					'postal_code'         => $postal_code,
+					'ship_date'           => $ship_date,
+					'destination_country' => $destination_country,
+					'state'               => $state,
 				),
 			);
 
-			$post_tracking_id = wc_clean( $_POST['aftership_tracking_id'] );
+			$post_tracking_id = isset( $_POST['aftership_tracking_id'] ) ? wc_clean( wp_unslash( $_POST['aftership_tracking_id'] ) ) : null;
 			$tracking_id      = md5( "{$args['slug']}-{$args['tracking_number']}" );
 			if ( $post_tracking_id && $tracking_id !== $post_tracking_id ) {
 				$this->delete_tracking_item( $order_id, $post_tracking_id );
@@ -353,14 +384,15 @@ class AfterShip_Actions {
 	 * Order Tracking Delete
 	 *
 	 * Function to delete a tracking item
-	 *
-	 * @throws WC_Data_Exception
 	 */
 	public function meta_box_delete_tracking() {
 		check_ajax_referer( 'delete-tracking-item', 'security', true );
 
-		$order_id    = wc_clean( $_POST['order_id'] );
-		$tracking_id = wc_clean( $_POST['tracking_id'] );
+		$order_id    = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : false;
+		if ( ! $order_id || ! $tracking_id ) {
+			return;
+		}
 
 		$this->delete_tracking_item( $order_id, $tracking_id );
 
@@ -378,19 +410,22 @@ class AfterShip_Actions {
 	public function get_meta_box_item_ajax() {
 		check_ajax_referer( 'get-tracking-item', 'security', true );
 
-		$order_id                 = wc_clean( $_POST['order_id'] );
-		$tracking_id              = wc_clean( $_POST['tracking_id'] );
+		$order_id    = isset( $_POST['order_id'] ) ? wc_clean( wp_unslash( $_POST['order_id'] ) ) : false;
+		$tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : false;
+		if ( ! $order_id || ! $tracking_id ) {
+			return;
+		}
 		$tracking_item            = $this->get_tracking_item( $order_id, $tracking_id );
 		$tracking_item['courier'] = $this->get_courier_by_slug( $tracking_item['slug'] );
 		header( 'Content-Type: application/json' );
-		echo json_encode( $tracking_item, true );
+		echo wp_json_encode( $tracking_item, true );
 		die();
 	}
 
 	/**
 	 * Display Shipment info in the frontend (order view/tracking page).
 	 *
-	 * @param  string $order_id
+	 * @param  string $order_id order id.
 	 */
 	public function display_tracking_info( $order_id ) {
 		wc_get_template(
@@ -411,7 +446,7 @@ class AfterShip_Actions {
 	 * @param WC_Order $order Order object.
 	 * @param bool     $sent_to_admin Whether the email is being sent to admin or not.
 	 * @param bool     $plain_text Whether email is in plain text or not.
-	 * @param WC_Email $email Email object.
+	 * @param object   $email Email object.
 	 */
 	public function email_display( $order, $sent_to_admin, $plain_text = null, $email = null ) {
 		/**
@@ -425,7 +460,7 @@ class AfterShip_Actions {
 		}
 
 		$order_id = is_callable( array( $order, 'get_id' ) ) ? $order->get_id() : $order->id;
-		if ( true === $plain_text ) {
+		if ( $plain_text ) {
 			wc_get_template( 'email/plain/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
 		} else {
 			wc_get_template( 'email/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
@@ -434,6 +469,12 @@ class AfterShip_Actions {
 
 	/**
 	 * Prevents data being copied to subscription renewals
+	 *
+	 * @param string $order_meta_query order_meta_query.
+	 * @param string $original_order_id original_order_id.
+	 * @param string $renewal_order_id renewal_order_id.
+	 * @param string $new_order_role new_order_role.
+	 * @return string
 	 */
 	public function woocommerce_subscriptions_renewal_order_meta_query( $order_meta_query, $original_order_id, $renewal_order_id, $new_order_role ) {
 		$order_meta_query .= " AND `meta_key` NOT IN ( '_aftership_tracking_items' )";
@@ -443,8 +484,8 @@ class AfterShip_Actions {
 	/**
 	 * Deletes a tracking item from post_meta array
 	 *
-	 * @param int    $order_id Order ID
-	 * @param string $tracking_id Tracking ID
+	 * @param int    $order_id Order ID.
+	 * @param string $tracking_id Tracking ID.
 	 *
 	 * @return bool True if tracking item is deleted successfully
 	 */
@@ -455,7 +496,7 @@ class AfterShip_Actions {
 
 		if ( count( $tracking_items ) > 0 ) {
 			foreach ( $tracking_items as $key => $item ) {
-				if ( $item['tracking_id'] == $tracking_id ) {
+				if ( $item['tracking_id'] === $tracking_id ) {
 					unset( $tracking_items[ $key ] );
 					$is_deleted = true;
 					break;
@@ -467,13 +508,12 @@ class AfterShip_Actions {
 		return $is_deleted;
 	}
 
-	/*
+	/**
 	 * Adds a tracking item to the post_meta array, no repeat items
 	 *
-	 * @param int   $order_id    Order ID
-	 * @param array $tracking_items List of tracking item
-	 *
-	 * @return array Tracking item
+	 * @param int   $order_id Order ID.
+	 * @param array $args tracking item info.
+	 * @return array Tracking item.
 	 */
 	public function add_tracking_item( $order_id, $args ) {
 		$tracking_item                      = array();
@@ -495,7 +535,7 @@ class AfterShip_Actions {
 		$tracking_items                     = $this->get_tracking_items( $order_id );
 		$exist                              = false;
 		foreach ( $tracking_items as $key => $item ) {
-			if ( $item['tracking_id'] == $tracking_item['tracking_id'] ) {
+			if ( $item['tracking_id'] === $tracking_item['tracking_id'] ) {
 				$exist = true;
 				if ( isset( $item['metrics'] ) && isset( $item['metrics']['created_at'] ) ) {
 					$tracking_item['metrics']['created_at'] = $item['metrics']['created_at'];
@@ -515,8 +555,8 @@ class AfterShip_Actions {
 	/**
 	 * Saves the tracking items array to post_meta.
 	 *
-	 * @param int   $order_id Order ID
-	 * @param array $tracking_items List of tracking item
+	 * @param int   $order_id Order ID.
+	 * @param array $tracking_items List of tracking item.
 	 */
 	public function save_tracking_items( $order_id, $tracking_items ) {
 		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
@@ -535,8 +575,8 @@ class AfterShip_Actions {
 	/**
 	 * Gets a single tracking item from the post_meta array for an order.
 	 *
-	 * @param int    $order_id Order ID
-	 * @param string $tracking_id Tracking ID
+	 * @param int    $order_id Order ID.
+	 * @param string $tracking_id Tracking ID.
 	 *
 	 * @return null|array Null if not found, otherwise array of tracking item will be returned
 	 */
@@ -554,10 +594,10 @@ class AfterShip_Actions {
 		return null;
 	}
 
-	/*
+	/**
 	 * Gets all tracking items from the post meta array for an order
 	 *
-	 * @param int  $order_id  Order ID
+	 * @param int $order_id  Order ID.
 	 *
 	 * @return array List of tracking items
 	 */
@@ -577,26 +617,26 @@ class AfterShip_Actions {
 		}
 	}
 
-	/*
-	* Gets all tracking items from the post meta array for an order using by restful api
-	*
-	* @param int  $order_id  Order ID
-	*
-	* @return array List of tracking items
-	*/
+	/**
+	 * Gets all tracking items from the post meta array for an order using by restful api
+	 *
+	 * @param int $order_id  Order ID.
+	 *
+	 * @return array List of tracking items.
+	 */
 	public function get_tracking_items_for_api( $order_id ) {
-		// migrate old tracking meta
+		// migrate old tracking meta.
 		$this->convert_old_meta_in_order( $order_id );
 		$tracking_items = $this->get_tracking_items( $order_id );
 		$order          = new WC_Order( $order_id );
 		foreach ( $tracking_items as $key => $tracking_item ) {
 			$additional_fields = $tracking_item['additional_fields'];
 			if ( isset( $additional_fields['destination_country'] ) ) {
-				// Use customer's input first
+				// Use customer's input first.
 				if ( $additional_fields['destination_country'] ) {
 					$tracking_item['additional_fields']['destination_country'] = convert_country_code( $additional_fields['destination_country'] );
 				} else {
-					// Use destination_country from shipping address
+					// Use destination_country from shipping address.
 					$destination_country = $order->get_shipping_country();
 					if ( ! $destination_country ) {
 						$destination_country = $order->get_billing_country();
@@ -606,7 +646,7 @@ class AfterShip_Actions {
 			}
 			if ( isset( $additional_fields['ship_date'] ) ) {
 				if ( $additional_fields['ship_date'] ) {
-					$tracking_item['additional_fields']['ship_date'] = date( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
+					$tracking_item['additional_fields']['ship_date'] = gmdate( 'Ymd', strtotime( $tracking_item['additional_fields']['ship_date'] ) );
 				}
 			}
 			$tracking_items[ $key ] = $tracking_item;
@@ -622,7 +662,7 @@ class AfterShip_Actions {
 	public function convert_old_meta_in_order( $order_id ) {
 
 		$migrate = get_post_meta( $order_id, '_aftership_migrated', true );
-		if ( $migrate === 'ok' ) {
+		if ( 'ok' === $migrate ) {
 			return;
 		}
 		update_post_meta( $order_id, '_aftership_migrated', 'ok' );
@@ -639,13 +679,13 @@ class AfterShip_Actions {
 			return;
 		}
 
-		// 需要判断 _aftership_tracking_provider_name 是否正确，否则 slug 为 空
+		// 需要判断 _aftership_tracking_provider_name 是否正确，否则 slug 为 空.
 		$slug = null;
-		// 值是正确的slug，直接使用
-		if ( in_array( $aftership_tracking_provider_name, array_column( $GLOBALS['AfterShip']->selected_couriers, 'slug' ) ) ) {
+		// 值是正确的slug，直接使用.
+		if ( in_array( $aftership_tracking_provider_name, array_column( $GLOBALS['AfterShip']->selected_couriers, 'slug' ), true ) ) {
 			$slug = $aftership_tracking_provider_name;
 		}
-		// 由于历史版本原因，值可能为courier name，则匹配 name 对应的 slug
+		// 由于历史版本原因，值可能为courier name，则匹配 name 对应的 slug.
 		if ( ! $slug ) {
 			$couriers_by_name = array();
 			foreach ( $GLOBALS['AfterShip']->selected_couriers as $i => $courier ) {
@@ -653,7 +693,7 @@ class AfterShip_Actions {
 					array_push( $couriers_by_name, $courier );
 				}
 			}
-			// 有可能 name 相同的有多条，只有1条时匹配
+			// 有可能 name 相同的有多条，只有1条时匹配.
 			if ( count( $couriers_by_name ) === 1 ) {
 				$slug = $couriers_by_name[0]['slug'];
 			}
@@ -676,13 +716,13 @@ class AfterShip_Actions {
 
 	}
 
-	/*
-	* Gets all tracking items from the post meta array for an order
-	*
-	* @param int  $order_id  Order ID
-	*
-	* @return array List of tracking items
-	*/
+	/**
+	 * Gets all tracking items from the post meta array for an order
+	 *
+	 * @param int $order_id  Order ID.
+	 *
+	 * @return array List of tracking items.
+	 */
 	public function get_tracking_items_for_display( $order_id ) {
 		$custom_domain          = $GLOBALS['AfterShip']->custom_domain;
 		$tracking_items         = $this->get_tracking_items( $order_id );
@@ -700,7 +740,7 @@ class AfterShip_Actions {
 	/**
 	 * Map courier required_fields to tracking additional_fields
 	 *
-	 * @param string $courier_required_field
+	 * @param string $courier_required_field courier_required_field.
 	 * @return string
 	 */
 	public function mapping_tracking_additional_fields( $courier_required_field ) {
@@ -719,8 +759,10 @@ class AfterShip_Actions {
 
 
 	/**
-	 * @param $item array
-	 * @param bool       $with_additional_fields
+	 * Get tracking number for tracking button
+	 *
+	 * @param array $item tracking item.
+	 * @param bool  $with_additional_fields with_additional_fields.
 	 * @return string
 	 * @todo AfterShip tracking button not support additional_fields yet.
 	 */
@@ -745,13 +787,6 @@ class AfterShip_Actions {
 	 */
 	public function add_permission_cap() {
 		global $wp_roles;
-
-		if ( class_exists( 'WP_Roles' ) ) {
-			if ( ! isset( $wp_roles ) ) {
-				$wp_roles = new WP_Roles();
-			}
-		}
-
 		if ( is_object( $wp_roles ) ) {
 			$wp_roles->add_cap( 'administrator', 'manage_aftership' );
 		}
@@ -760,7 +795,7 @@ class AfterShip_Actions {
 	/**
 	 * Display the API key info for a user
 	 *
-	 * @param WP_User $user
+	 * @param WP_User $user user obj.
 	 */
 	public function add_api_key_field( $user ) {
 
@@ -776,19 +811,17 @@ class AfterShip_Actions {
 				<tbody>
 				<tr>
 					<th><label
-								for="aftership_wp_api_key"><?php _e( 'AfterShip\'s WordPress API Key', 'aftership' ); ?></label>
+								for="aftership_wp_api_key"><?php esc_html_e( 'AfterShip\'s WordPress API Key', 'aftership' ); ?></label>
 					</th>
 					<td>
 						<?php if ( empty( $user->aftership_wp_api_key ) ) : ?>
-							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
-							<span class="description"><?php _e( 'Generate API Key', 'aftership' ); ?></span>
+							<input name="aftership_wp_generate_api_key" type="checkbox" id="aftership_wp_generate_api_key" value="0" />
+							<span class="description"><?php esc_html_e( 'Generate API Key', 'aftership' ); ?></span>
 						<?php else : ?>
-							<code id="aftership_wp_api_key"><?php echo $user->aftership_wp_api_key; ?></code>
+							<code id="aftership_wp_api_key"><?php echo esc_attr( $user->aftership_wp_api_key ); ?></code>
 							<br/>
-							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
-							<span class="description"><?php _e( 'Revoke API Key', 'aftership' ); ?></span>
+							<input name="aftership_wp_generate_api_key" type="checkbox" id="aftership_wp_generate_api_key" value="0" />
+							<span class="description"><?php esc_html_e( 'Revoke API Key', 'aftership' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -801,16 +834,21 @@ class AfterShip_Actions {
 	/**
 	 * Generate and save (or delete) the API keys for a user
 	 *
-	 * @param int $user_id
+	 * @param int $user_id user id.
 	 */
 	public function generate_api_key( $user_id ) {
 		if ( current_user_can( 'edit_user', $user_id ) ) {
 			$user = get_userdata( $user_id );
-			// creating/deleting key
-			if ( isset( $_POST['aftership_wp_generate_api_key'] ) ) {
-				// consumer key
+			// creating/deleting key.
+			// phpcs:ignore.
+			$nonce = isset( $_POST['aftership_create_nonce'] ) ? wc_clean( wp_unslash( $_POST['aftership_create_nonce'] ) ) : null;
+			// phpcs:ignore.
+			$verify = wp_verify_nonce( $nonce );
+			$key    = isset( $_POST['aftership_wp_generate_api_key'] ) ? wc_clean( wp_unslash( $_POST['aftership_wp_generate_api_key'] ) ) : null;
+			if ( $key ) {
+				// consumer key.
 				if ( empty( $user->aftership_wp_api_key ) ) {
-					$api_key = 'ck_' . hash( 'md5', $user->user_login . date( 'U' ) . mt_rand() );
+					$api_key = 'ck_' . hash( 'md5', $user->user_login . gmdate( 'U' ) . mt_rand() );
 					update_user_meta( $user_id, 'aftership_wp_api_key', $api_key );
 				} else {
 					delete_user_meta( $user_id, 'aftership_wp_api_key' );
@@ -822,11 +860,11 @@ class AfterShip_Actions {
 	/**
 	 * Add 'modified_after' and 'modified_before' for data query
 	 *
-	 * @param array           $args
-	 * @param WP_REST_Request $request
+	 * @param array           $args query args.
+	 * @param WP_REST_Request $request wp rest request.
 	 * @return array
 	 */
-	function add_query( array $args, $request ) {
+	public function add_query( array $args, $request ) {
 		$modified_after  = $request->get_param( 'modified_after' );
 		$modified_before = $request->get_param( 'modified_before' );
 		if ( ! $modified_after || ! $modified_before ) {
@@ -843,11 +881,11 @@ class AfterShip_Actions {
 	/**
 	 * Add 'modified_after' and 'modified_before' for data query
 	 *
-	 * @param array           $args
-	 * @param WP_REST_Request $request
+	 * @param array           $args query args.
+	 * @param WP_REST_Request $request wp rest request.
 	 * @return array
 	 */
-	function add_customer_query( array $args, $request ) {
+	public function add_customer_query( array $args, $request ) {
 		$order           = $request->get_param( 'order' );
 		$modified_after  = $request->get_param( 'modified_after' );
 		$modified_before = $request->get_param( 'modified_before' );
@@ -873,11 +911,11 @@ class AfterShip_Actions {
 	/**
 	 * Add 'modified' to orderby enum
 	 *
-	 * @param array $params
+	 * @param array $params query args.
 	 */
 	public function add_collection_params( $params ) {
 		$enums = $params['orderby']['enum'];
-		if ( ! in_array( 'modified', $enums ) ) {
+		if ( ! in_array( 'modified', $enums, true ) ) {
 			$params['orderby']['enum'][] = 'modified';
 		}
 		return $params;
@@ -889,7 +927,7 @@ class AfterShip_Actions {
 	public static function revoke_aftership_key() {
 		try {
 			global $wpdb;
-			// AfterShip Oauth key
+			// AfterShip Oauth key.
 			$key_permission         = 'read_write';
 			$key_description_prefix = 'AfterShip - API Read/Write';
 
@@ -929,12 +967,12 @@ class AfterShip_Actions {
 			'shop_order',
 			'edit-shop_order',
 		);
-		if ( ! in_array( $screen, $pages_with_tip ) ) {
+		if ( ! in_array( $screen, $pages_with_tip, true ) ) {
 			return;
 		}
 
 		$aftership_plugin_is_actived = is_plugin_active( 'aftership-woocommerce-tracking/aftership-woocommerce-tracking.php' );
-		$unconnect_aftership         = ! ( isset( $aftership_options['connected'] ) && $aftership_options['connected'] === true );
+		$unconnect_aftership         = ! ( isset( $aftership_options['connected'] ) && true === $aftership_options['connected'] );
 		?>
 		<?php if ( $aftership_plugin_is_actived && $unconnect_aftership ) : ?>
 			<div class="updated notice is-dismissible">
@@ -945,9 +983,13 @@ class AfterShip_Actions {
 		<?php
 	}
 
-	/*
-	* Add action button in order list to change order status from completed to delivered
-	*/
+	/**
+	 * Add action button in order list to change order status from completed to delivered
+	 *
+	 * @param array $actions actions.
+	 * @param array $order order.
+	 * @return mixed
+	 */
 	public function add_aftership_tracking_actions_button( $actions, $order ) {
 		$saved_options = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 		$order_array   = array();
@@ -959,12 +1001,12 @@ class AfterShip_Actions {
 			}
 		}
 
-		if ( $order->get_shipping_method() != 'Local pickup' && $order->get_shipping_method() != 'Local Pickup' ) {
+		if ( $order->get_shipping_method() !== 'Local pickup' && $order->get_shipping_method() !== 'Local Pickup' ) {
 			if ( $order->has_status( $order_array ) ) {
 				$actions['add_tracking_by_aftership'] = array(
 					'url'    => '#order-id-' . $order->get_id(),
 					'name'   => 'Add Tracking By AfterShip',
-					'action' => 'aftership_add_inline_tracking', // keep "view" class for a clean button CSS
+					'action' => 'aftership_add_inline_tracking',
 				);
 			}
 		}
@@ -975,7 +1017,7 @@ class AfterShip_Actions {
 	/**
 	 * Define shipment tracking column in admin orders list.
 	 *
-	 * @param array $columns Existing columns
+	 * @param array $columns Existing columns.
 	 *
 	 * @return array Altered columns
 	 */
@@ -987,7 +1029,7 @@ class AfterShip_Actions {
 	/**
 	 * Render shipment tracking in custom column.
 	 *
-	 * @param string $column Current column
+	 * @param string $column Current column.
 	 */
 	public function render_shop_order_columns( $column ) {
 		global $post;
@@ -999,7 +1041,7 @@ class AfterShip_Actions {
 	/**
 	 * Get content for shipment tracking column.
 	 *
-	 * @param int $order_id Order ID
+	 * @param int $order_id Order ID.
 	 *
 	 * @return string Column content to render
 	 */
@@ -1012,9 +1054,9 @@ class AfterShip_Actions {
 			echo '<ul class="wcas-tracking-number-list">';
 
 			foreach ( $tracking_items as $tracking_item ) {
-				// 根据 slug，匹配显示的 courier name
+				// 根据 slug，匹配显示的 courier name.
 				$provider_courier = $this->get_courier_by_slug( $tracking_item['slug'] );
-				// 根据规则，生成 tracking link
+				// 根据规则，生成 tracking link.
 				$aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
 
 				printf(
@@ -1039,6 +1081,11 @@ class AfterShip_Actions {
 		} else {
 			echo '–';
 		}
+		/**
+		 * Hook to add column at order list page.
+		 *
+		 * @since 0.0.1
+		 */
 		return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
 	}
 
@@ -1069,17 +1116,17 @@ class AfterShip_Actions {
 		if ( empty( $_REQUEST['order_id'] ) ) {
 			$this->format_aftership_tracking_output( 422, 'missing order_id field' );
 		}
-		$order_id = wc_clean( $_REQUEST['order_id'] );
+		$order_id = wc_clean( wp_unslash( $_REQUEST['order_id'] ) );
 
-		// migrate old tracking data
+		// migrate old tracking data.
 		$this->convert_old_meta_in_order( $order_id );
 
-		// get order line items
+		// get order line items.
 		$order_line_items = $this->get_order_item_data( $order_id );
-		// get exist order trackings
+		// get exist order trackings.
 		$order_tracking_items = $this->get_tracking_items( $order_id );
 
-		// get some fields form order
+		// get some fields form order.
 		$order = new WC_Order( $order_id );
 
 		$order_trackings = array(
@@ -1102,13 +1149,13 @@ class AfterShip_Actions {
 		$params          = json_decode( file_get_contents( 'php://input' ), true );
 		$order_id        = wc_clean( $params['order_id'] );
 		$order_trackings = $params['trackings'];
-		// check order trackings fields from front
+		// check order trackings fields from front.
 		$this->check_aftership_tracking_fields( $order_id, $order_trackings );
-		// check fulfill item quantity
+		// check fulfill item quantity.
 		$this->check_order_fulfill_items( $order_id, $order_trackings );
 
 		$this->save_tracking_items( $order_id, $order_trackings );
-		// date_modified update
+		// date_modified update.
 		$order = new WC_Order( $order_id );
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
@@ -1134,7 +1181,7 @@ class AfterShip_Actions {
 
 		$this->delete_tracking_item( $order_id, $tracking_id );
 
-		// date_modified update
+		// date_modified update.
 		$order = new WC_Order( $order_id );
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
@@ -1144,9 +1191,12 @@ class AfterShip_Actions {
 
 	/**
 	 * Validate required fields
+	 *
+	 * @param string $order_id order_id.
+	 * @param array  $trackings trackings.
 	 */
 	private function check_aftership_tracking_fields( $order_id, $trackings ) {
-		// check order trackings from front
+		// check order trackings from front.
 		if ( empty( $order_id ) || empty( $trackings ) || ! is_array( $trackings ) ) {
 			$this->format_aftership_tracking_output( 422, 'missing required field' );
 		}
@@ -1160,14 +1210,17 @@ class AfterShip_Actions {
 
 	/**
 	 * Check fulfill item quantity
+	 *
+	 * @param string $order_id order_id.
+	 * @param array  $trackings trackings.
 	 */
 	private function check_order_fulfill_items( $order_id, $trackings ) {
-		// get order line items
+		// get order line items.
 		$order_line_items   = $this->get_order_item_data( $order_id );
 		$line_item_quantity = absint( array_sum( array_column( $order_line_items, 'quantity' ) ) );
 		$tracking_items     = array_column( $trackings, 'line_items' );
 
-		// line_items 降为二维数组
+		// line_items 降为二维数组.
 		$tmp = array();
 		foreach ( $tracking_items as $one ) {
 			$result = array_merge( $tmp, $one );
@@ -1182,6 +1235,9 @@ class AfterShip_Actions {
 
 	/**
 	 * Get order item detail
+	 *
+	 * @param string $order_id order_id.
+	 * @return array
 	 */
 	private function get_order_item_data( $order_id ) {
 		$order      = wc_get_order( $order_id );
@@ -1221,12 +1277,16 @@ class AfterShip_Actions {
 
 	/**
 	 * Format output
+	 *
+	 * @param string $code code.
+	 * @param string $message message.
+	 * @param array  $data response payload.
 	 */
 	private function format_aftership_tracking_output( $code, $message, $data = array() ) {
 		$response = array(
 			'meta' => array(
 				'code'    => $code,
-				'type'    => $code === 200 ? 'OK' : 'ERROR',
+				'type'    => 200 === $code ? 'OK' : 'ERROR',
 				'message' => $message,
 			),
 			'data' => $data,

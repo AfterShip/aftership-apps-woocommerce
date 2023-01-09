@@ -1,4 +1,11 @@
 <?php
+/**
+ * AfterShip Settings
+ *
+ * All settings used by AfterShip plugin
+ *
+ * @package AfterShip
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

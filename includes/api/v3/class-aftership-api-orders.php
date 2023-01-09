@@ -4,20 +4,24 @@
  *
  * Handles requests to the /orders endpoint
  *
- * @author      AfterShip
- * @category    API
  * @package     AfterShip/API
  * @since       1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Orders API V3.
+ */
 class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 
-
-	/** @var string $base the route base */
+	/**
+	 * Base router.
+	 *
+	 * @var $base string  base router.
+	 */
 	protected $base = '/v3/orders';
 
 	/**
@@ -25,23 +29,23 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 	 *
 	 * GET /orders
 	 *
-	 * @param array $routes
+	 * @param array $routes routers.
 	 *
 	 * @return array
 	 * @since 2.1
 	 */
 	public function register_routes( $routes ) {
-		// GET /orders/ping
+		// GET /orders/ping.
 		$routes[ $this->base . '/ping' ] = array(
 			array( array( $this, 'ping' ), AfterShip_API_Server::READABLE ),
 		);
 
-		// GET /orders
+		// GET /orders.
 		$routes[ $this->base ] = array(
 			array( array( $this, 'get_orders' ), AfterShip_API_Server::READABLE ),
 		);
 
-		// GET /orders/:id
+		// GET /orders/:id.
 		$routes[ $this->base . '/(?P<id>[\d]+)' ] = array(
 			array( array( $this, 'get_order' ), AfterShip_API_Server::READABLE ),
 		);
@@ -50,7 +54,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 	}
 
 	/**
-	 * heath checkendpoint for WordPress url validation
+	 * Heath checkendpoint for WordPress url validation.
 	 *
 	 * @return string
 	 * @since 2.1
@@ -62,12 +66,12 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 	/**
 	 * Get orders
 	 *
-	 * @param string $updated_at_min
-	 * @param string $updated_at_max
-	 * @param string $max_results_number
+	 * @param array  $fields fields to return.
+	 * @param string $filter filter metrics.
+	 * @param string $status status filter.
+	 * @param string $page page number.
 	 *
 	 * @return array
-	 * @throws Exception
 	 * @since 2.1
 	 */
 	public function get_orders( $fields = null, $filter = array(), $status = null, $page = 1 ) {
@@ -79,7 +83,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 
 		$query = $this->query_orders( $filter );
 
-		// define pagination
+		// define pagination.
 		$pagination = array(
 			'page'  => $query->query['paged'],
 			'limit' => intval( $query->query['posts_per_page'] ),
@@ -101,16 +105,16 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 	}
 
 	/**
-	 * get single order by id
+	 * Get single order by id.
 	 *
-	 * @param $id
+	 * @param string $id order id.
+	 * @param string $fields fields.
 	 * @return array|int|WP_Error
-	 * @throws Exception
 	 */
 	public function get_order( $id, $fields = null ) {
 		$weight_unit = get_option( 'woocommerce_weight_unit' );
 		$dp          = wc_get_price_decimals();
-		// ensure order ID is valid & user has permission to read
+		// ensure order ID is valid & user has permission to read.
 		$id = $this->validate_request( $id, 'shop_order', 'read' );
 		if ( is_wp_error( $id ) ) {
 			return $id;
@@ -197,7 +201,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 			'trackings'        => array(),
 		);
 
-		// add line items
+		// add line items.
 		foreach ( $order->get_items() as $item_id => $item ) {
 			if ( is_callable( $item, 'get_product' ) ) {
 				$product = $item->get_product();
@@ -221,17 +225,17 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 			}
 			$subtotal = wc_format_decimal( $order->get_line_subtotal( $item, false, false ), $dp );
 			$total    = wc_format_decimal( $order->get_line_total( $item, false, false ), $dp );
-			// set the response object
+			// set the response object.
 			$terms_tags   = get_the_terms( $product_id, 'product_tag' );
 			$product_tags = array();
-			foreach ( $terms_tags as $termsKey => $termsVal ) {
-				$product_tags[] = $termsVal->name;
+			foreach ( $terms_tags as $terms_key => $terms_val ) {
+				$product_tags[] = $terms_val->name;
 			}
 			$product_categories = array();
 
 			$categories = get_the_terms( $product_id, 'product_cat' );
-			foreach ( $categories as $categoriesKey => $categoriesVal ) {
-				$product_categories[] = $categoriesVal->name;
+			foreach ( $categories as $categories_key => $categories_val ) {
+				$product_categories[] = $categories_val->name;
 			}
 			$order_data['items'][] = array(
 				'id'                  => (string) $item_id,
@@ -243,7 +247,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 				'returnable_quantity' => (int) ( $item['qty'] - abs( $order->get_qty_refunded_for_item( $item_id ) ) ),
 				'unit_weight'         => array(
 					'unit'  => $weight_unit,
-					'value' => $weight === '' ? null : (float) $weight,
+					'value' => '' === $weight ? null : (float) $weight,
 				),
 				'unit_price'          => array(
 					'currency' => $order->get_currency(),
@@ -279,18 +283,18 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 				);
 			}
 
-			// 兼容 woocommerce 官方的 tracking 插件
+			// 兼容 woocommerce 官方的 tracking 插件.
 			$woocommerce_tracking_arr = order_post_meta_getter( $order, 'wc_shipment_tracking_items' );
 			if ( empty( $aftership_tracking_number ) && ! empty( $woocommerce_tracking_arr ) ) {
-				foreach ( $woocommerce_tracking_arr as $trackingKey => $trackingVal ) {
-					$trackingInfo = $this->getTrackingInfoByShipmentTracking( $trackingVal );
-					$trackings[]  = array(
-						'slug'              => ! empty( $trackingInfo ) ? $trackingInfo['tracking_provider'] : $trackingVal['tracking_provider'],
-						'tracking_number'   => $trackingVal['tracking_number'],
+				foreach ( $woocommerce_tracking_arr as $tracking_key => $tracking_val ) {
+					$tracking_info = $this->getTrackingInfoByShipmentTracking( $tracking_val );
+					$trackings[]   = array(
+						'slug'              => ! empty( $tracking_info ) ? $tracking_info['tracking_provider'] : $tracking_val['tracking_provider'],
+						'tracking_number'   => $tracking_val['tracking_number'],
 						'additional_fields' => array(
 							'account_number'      => null,
 							'key'                 => null,
-							'postal_code'         => ! empty( $trackingInfo ) ? $trackingInfo['tracking_postal_code'] : null,
+							'postal_code'         => ! empty( $tracking_info ) ? $tracking_info['tracking_postal_code'] : null,
 							'ship_date'           => null,
 							'destination_country' => null,
 							'state'               => null,
@@ -301,14 +305,18 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 			}
 			$order_data['trackings'] = $trackings;
 		}
-
+		/**
+		 * Apply filters.
+		 *
+		 * @since 2.1
+		 */
 		return array( 'order' => apply_filters( 'aftership_api_order_response', $order_data, $order, $fields, $this->server ) );
 	}
 
 	/**
-	 * 从wc ShipmentTracking 插件获取 Postalcode  - postnl
+	 * 从wc ShipmentTracking 插件获取 Postalcode  - postnl.
 	 *
-	 * @param $tracking_items
+	 * @param array $tracking_items tracking items.
 	 * @return array
 	 */
 	private function getTrackingInfoByShipmentTracking( $tracking_items ) {
@@ -316,32 +324,32 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 			return array();
 		}
 
-		// 获取 postnl  Postalcode
-		$urlArr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
+		// 获取 postnl  Postalcode.
+		$url_arr = parse_url( stripslashes( $tracking_items['custom_tracking_link'] ) );
 
-		if ( $urlArr === false ) {
+		if ( ! $url_arr ) {
 			return array();
 		}
 
-		if ( ! isset( $urlArr['host'] ) ) {
+		if ( ! isset( $url_arr['host'] ) ) {
 			return array();
 		}
 
-		$hostArr      = explode( '.', $urlArr['host'] );
-		$hostArrIndex = count( $hostArr ) - 2;
-		if ( empty( $hostArr ) || ! isset( $hostArr[ $hostArrIndex ] ) ) {
+		$host_arr       = explode( '.', $url_arr['host'] );
+		$host_arr_index = count( $host_arr ) - 2;
+		if ( empty( $host_arr ) || ! isset( $host_arr[ $host_arr_index ] ) ) {
 			return array();
 		}
 
-		if ( $hostArr[ $hostArrIndex ] == 'postnl' ) {
-			parse_str( $urlArr['query'], $queryArr );
-			if ( ! isset( $queryArr['Postalcode'] ) ) {
+		if ( 'postnl' === $host_arr[ $host_arr_index ] ) {
+			parse_str( $url_arr['query'], $query_arr );
+			if ( ! isset( $query_arr['Postalcode'] ) ) {
 				return array();
 			}
 
 			return array(
 				'tracking_provider'    => 'postnl',
-				'tracking_postal_code' => str_replace( ' ', '', $queryArr['Postalcode'] ),
+				'tracking_postal_code' => str_replace( ' ', '', $query_arr['Postalcode'] ),
 			);
 		}
 		return array();
@@ -351,29 +359,33 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 	/**
 	 * Helper method to get order post objects
 	 *
-	 * @param array $args request arguments for filtering query
+	 * @param array $args request arguments for filtering query.
 	 *
 	 * @return WP_Query
 	 * @since 2.1
 	 */
 	private function query_orders( $args ) {
-
+		/**
+		 * Get wooCimmerce version.
+		 *
+		 * @return mixed|null
+		 */
 		function aftership_wpbo_get_woo_version_number() {
-			// If get_plugins() isn't available, require it
+			// If get_plugins() isn't available, require it.
 			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 
-			// Create the plugins folder and file variables
-			$plugin_folder = get_plugins( '/' . 'woocommerce' );
+			// Create the plugins folder and file variables.
+			$plugin_folder = get_plugins( '/woocommerce' );
 			$plugin_file   = 'woocommerce.php';
 
-			// If the plugin version number is set, return it
+			// If the plugin version number is set, return it.
 			if ( isset( $plugin_folder[ $plugin_file ]['Version'] ) ) {
 				return $plugin_folder[ $plugin_file ]['Version'];
 
 			} else {
-				// Otherwise return null
+				// Otherwise return null.
 				return null;
 			}
 		}
@@ -381,7 +393,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 		$woo_version = aftership_wpbo_get_woo_version_number();
 
 		if ( $woo_version >= 2.2 ) {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -389,7 +401,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 				'post_status' => array_keys( wc_get_order_statuses() ),
 			);
 		} else {
-			// set base query arguments
+			// set base query arguments.
 			$query_args = array(
 				'fields'      => 'ids',
 				'post_type'   => 'shop_order',
@@ -397,7 +409,7 @@ class AfterShip_API_V3_Orders extends AfterShip_API_Resource {
 			);
 		}
 
-		// add status argument
+		// add status argument.
 		if ( ! empty( $args['status'] ) ) {
 
 			$statuses = explode( ',', $args['status'] );
