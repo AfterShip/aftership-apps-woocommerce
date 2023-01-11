@@ -59,7 +59,10 @@ class AfterShip_ShipmentTracking_Migrator {
 			if ( empty( $tracking_items ) ) {
 				continue;
 			}
-			$aftership_tracking_items   = $order->get_meta( '_aftership_tracking_items' );
+			$aftership_tracking_items = $order->get_meta( '_aftership_tracking_items' );
+			if ( empty( $aftership_tracking_items ) ) {
+				$aftership_tracking_items = array();
+			}
 			$tracking_numbers           = array_column( $tracking_items, 'tracking_number' );
 			$aftership_tracking_numbers = array_column( $aftership_tracking_items, 'tracking_number' );
 			$migrated                   = false;
