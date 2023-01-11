@@ -376,6 +376,7 @@ if ( is_woocommerce_active() ) {
 				require( $this->plugin_dir . '/includes/class-aftership-actions.php' );
 				$this->actions = AfterShip_Actions::get_instance();
 				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
+				require( $this->plugin_dir . '/includes/api/class-shipment-tracking-migrator' );
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
 				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );

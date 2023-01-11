@@ -100,6 +100,10 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 				}
 			}
 
+			if ( isset( $data['shipment_tracking_migrate_interval'] ) ) {
+				$options['shipment_tracking_migrate_interval'] = $data['shipment_tracking_migrate_interval'];
+			}
+
 			if ( isset( $data['show_orders_actions'] ) && $data['show_orders_actions'] ) {
 				if ( '' === $this->seek_option_value( $options, 'show_orders_actions' ) ) {
 					$options['show_orders_actions'] = $data['show_orders_actions'];
