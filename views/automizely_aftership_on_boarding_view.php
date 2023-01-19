@@ -31,7 +31,7 @@ if ( $debug === 'yes' ) {
 	<div class="auto-as-index-header">
 	<div class="auto-as-index-logo">
 		<img
-		src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg'; ?>"
+		src="https://websites.am-static.com/assets/brands/glyph/aftership_tracking.svg"
 		alt=""
 		/>
 	</div>

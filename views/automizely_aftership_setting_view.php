@@ -34,7 +34,7 @@ if ( $debug === 'yes' ) {
 	<div class="auto-as-admin-header" style="<?php echo $is_display_connect ? 'display:none;' : ''; ?>">
 		<div class="auto-as-admin-logo">
 			<img
-				src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg'; ?>"
+				src="https://websites.am-static.com/assets/brands/glyph/aftership_tracking.svg"
 				alt=""
 			/>
 		</div>
@@ -73,13 +73,13 @@ if ( $debug === 'yes' ) {
 			<!-- postmen -->
 			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=postmen-woo-shipping" target="_blank">
 				<div class="auto-as-admin-recommand-list-item">
-					<img style="width: 64px; height: 64px" src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_postmen.svg'; ?>" alt="" />
+					<img style="width: 64px; height: 64px" src="https://websites.am-static.com/assets/brands/glyph/aftership_shipping.svg" alt="" />
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
-					<strong>Postmen </strong>
+					<strong>AfterShip Shipping </strong>
 					</span>
 					<span>
-					The ultimate multi-carrier shipping software
+					Multi-carrier shipping software
 					</span>
 					</div>
 				</div>
@@ -109,15 +109,15 @@ if ( $debug === 'yes' ) {
 				<div class="auto-as-admin-recommand-list-item">
 					<img
 							style="width: 64px; height: 64px"
-							src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_returns-center.svg'; ?>"
+							src="https://websites.am-static.com/assets/brands/glyph/aftership_returns.svg"
 							alt=""
 					/>
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
-					<strong>Returns Center</strong>
+					<strong>AfterShip Returns</strong>
 					</span>
 					<span>
-					Delight customers with the best returns experience
+					Returns management software
 					</span>
 					</div>
 				</div>
