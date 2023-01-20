@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.15.5
+ * Version: 1.15.6
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.15.5' );
+define( 'AFTERSHIP_VERSION', '1.15.6' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
@@ -209,12 +209,12 @@ if ( is_woocommerce_active() ) {
 			 */
 			public function automizely_aftership_admin_menu() {
 				add_menu_page(
-					'AfterShip',
-					'AfterShip',
+					'AfterShip Tracking',
+					'AfterShip Tracking',
 					'manage_options',
 					'aftership-setting-admin',
 					array( $this, 'aftership_setting_page' ),
-					AFTERSHIP_ASSETS_URL . '/assets/images/favicon-aftership.svg'
+					'https://websites.am-static.com/assets/brands/glyph/aftership_tracking.svg'
 				);
 			}
 
@@ -224,8 +224,8 @@ if ( is_woocommerce_active() ) {
 			 */
 			public function automizely_aftership_connect_page() {
 				add_menu_page(
-					'AfterShip Connect',
-					'AfterShip Connect',
+					'AfterShip Tracking Connect',
+					'AfterShip Tracking Connect',
 					'manage_options',
 					'automizely-aftership-index',
 					array( $this, 'automizely_aftership_index' )
