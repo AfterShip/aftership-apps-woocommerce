@@ -31,11 +31,11 @@ if ( $debug === 'yes' ) {
 	<div class="auto-as-index-header">
 	<div class="auto-as-index-logo">
 		<img
-		src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg'; ?>"
+		src="https://websites.am-static.com/assets/brands/logo/aftership_tracking.svg"
 		alt=""
 		/>
 	</div>
-	<div class="auto-as-index-header-title">Connect with AfterShip</div>
+	<div class="auto-as-index-header-title">Connect with AfterShip Tracking</div>
 	<div class="auto-as-index-header-desc">
 		Track your WooCommerce orders and get delivery updates from 800+
 		carriers like UPS, USPS, FedEx, and DHL all in one place.

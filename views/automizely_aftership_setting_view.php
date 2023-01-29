@@ -34,7 +34,7 @@ if ( $debug === 'yes' ) {
 	<div class="auto-as-admin-header" style="<?php echo $is_display_connect ? 'display:none;' : ''; ?>">
 		<div class="auto-as-admin-logo">
 			<img
-				src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/wordpress-aftership-logo.svg'; ?>"
+				src="https://websites.am-static.com/assets/brands/logo/aftership_tracking.svg"
 				alt=""
 			/>
 		</div>
@@ -73,32 +73,13 @@ if ( $debug === 'yes' ) {
 			<!-- postmen -->
 			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=postmen-woo-shipping" target="_blank">
 				<div class="auto-as-admin-recommand-list-item">
-					<img style="width: 64px; height: 64px" src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_postmen.svg'; ?>" alt="" />
+					<img style="width: 64px; height: 64px" src="https://websites.am-static.com/assets/brands/glyph/aftership_shipping.svg" alt="" />
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
-					<strong>Postmen </strong>
+					<strong>AfterShip Shipping </strong>
 					</span>
 					<span>
-					The ultimate multi-carrier shipping software
-					</span>
-					</div>
-				</div>
-			</a>
-
-			<!-- marketing -->
-			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=automizely-marketing" target="_blank">
-				<div class="auto-as-admin-recommand-list-item">
-					<img
-							style="width: 64px; height: 64px"
-							src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_marketing.svg'; ?>"
-							alt=""
-					/>
-					<div class="auto-as-admin-recommand-list-item-detail">
-					<span>
-					<strong>Marketing</strong>
-					</span>
-					<span>
-					30-in-1 marketing app for Woocommerce
+					Multi-carrier shipping tool to help brands automate their shipping process and print labels faster
 					</span>
 					</div>
 				</div>
@@ -109,19 +90,57 @@ if ( $debug === 'yes' ) {
 				<div class="auto-as-admin-recommand-list-item">
 					<img
 							style="width: 64px; height: 64px"
-							src="<?php echo AFTERSHIP_ASSETS_URL . '/assets/images/glyph_returns-center.svg'; ?>"
+							src="https://websites.am-static.com/assets/brands/glyph/aftership_returns.svg"
 							alt=""
 					/>
 					<div class="auto-as-admin-recommand-list-item-detail">
 					<span>
-					<strong>Returns Center</strong>
+					<strong>AfterShip Returns</strong>
 					</span>
 					<span>
-					Delight customers with the best returns experience
+					Automated returns solution for brands to save time and recapture revenue on returns
 					</span>
 					</div>
 				</div>
 			</a>
+
+			<!-- marketing -->
+			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=automizely-marketing" target="_blank">
+				<div class="auto-as-admin-recommand-list-item">
+					<img
+							style="width: 64px; height: 64px"
+							src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-marketing.svg"
+							alt=""
+					/>
+					<div class="auto-as-admin-recommand-list-item-detail">
+					<span>
+					<strong>Automizely Marketing</strong>
+					</span>
+					<span>
+					The all-in-one marketing automation platform for WooCommerce stores
+					</span>
+					</div>
+				</div>
+			</a>
+
+			<!-- feed -->
+			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=feed-for-tiktok-shop" target="_blank">
+                    <div class="auto-rc-admin-recommand-list-item">
+                        <img
+                                style="width: 64px; height: 64px"
+                                src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-feed.svg"
+                                alt=""
+                        />
+                        <div class="auto-rc-admin-recommand-list-item-detail">
+                        <span>
+                        <strong>Automizely Feed </strong>
+                        </span>
+                        <span>
+                        Sync and sell with TikTok Shop in minutes
+                        </span>
+                        </div>
+                    </div>
+                </a>
 		</div>
 	</div>
 </div>
