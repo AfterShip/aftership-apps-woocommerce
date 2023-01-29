@@ -214,7 +214,7 @@ if ( is_woocommerce_active() ) {
 					'manage_options',
 					'aftership-setting-admin',
 					array( $this, 'aftership_setting_page' ),
-					'https://websites.am-static.com/assets/brands/glyph/aftership_tracking.svg'
+					AFTERSHIP_ASSETS_URL . '/assets/images/sidebar-aftership-tracking.svg'
 				);
 			}
 
