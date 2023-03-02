@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ini_set( 'auto_detect_line_endings', true );
 
 class AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG {
-	public static function log( $logs_content, $file_name = 'import_tracking.txt', $max = 200 ) {
+	public static function log( $logs_content, $file_name = 'import_tracking.txt', $max = 2000 ) {
 		$log_file     = AFTERSHIP_TRACKING_CACHE . "{$file_name}";
 		$logs_content = '[' . date( 'Y-m-d H:i:s' ) . '] ' . $logs_content;
 		if ( is_file( $log_file ) ) {
