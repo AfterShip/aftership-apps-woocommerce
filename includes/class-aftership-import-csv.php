@@ -638,7 +638,6 @@ class AfterShip_Import_Csv {
 		global $pagenow;
 		$page = isset( $_REQUEST['page'] ) ? sanitize_text_field( $_REQUEST['page'] ) : '';
 		if ( $pagenow === 'admin.php' && $page === 'aftership-orders-tracking-import-csv' ) {
-			wp_enqueue_script( 'aftership-tracking-semantic-ui-form', AFTERSHIP_TRACKING_IMPORT_JS . 'form.min.js', array( 'jquery' ) );
 			wp_enqueue_style( 'aftership-tracking-semantic-ui-form', AFTERSHIP_TRACKING_IMPORT_CSS . 'form.min.css' );
 			wp_enqueue_script( 'aftership-tracking-semantic-ui-progress', AFTERSHIP_TRACKING_IMPORT_JS . 'progress.min.js', array( 'jquery' ) );
 			wp_enqueue_style( 'aftership-tracking-semantic-ui-progress', AFTERSHIP_TRACKING_IMPORT_CSS . 'progress.min.css' );
