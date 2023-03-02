@@ -139,7 +139,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 2.0.0 =
-* Enhancement - Import Tracking From CSV
+* Feature - Uploading tracking number via CSV
 
 = 1.15.8 =
 * Update media files
