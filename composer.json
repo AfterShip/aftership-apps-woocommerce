@@ -2,7 +2,13 @@
 	"require-dev": {
 		"squizlabs/php_codesniffer": "3.*",
 		"woocommerce/woocommerce-sniffs": "^0.1.0",
-		"ccinn/composer-husky-plugin": "^0.1.0",
+		"ccinn/composer-husky-plugin": "^0.2.0",
 		"ccinn/husky-php": "^0.1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"ccinn/composer-husky-plugin": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

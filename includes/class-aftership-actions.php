@@ -85,12 +85,12 @@ class AfterShip_Actions {
 			return;
 		}
 		// The following code will be executed only when the detect page which the function belongs to
-		$page_screen          = get_current_screen()->id;
+		$page_screen            = get_current_screen()->id;
 		$screen_handle_tracking = array(
 			'edit-shop_order',
 			'shop_order',
 		);
-		if ( !in_array( $page_screen, $screen_handle_tracking ) ) {
+		if ( ! in_array( $page_screen, $screen_handle_tracking ) ) {
 			return;
 		}
 
@@ -438,6 +438,64 @@ class AfterShip_Actions {
 	public function woocommerce_subscriptions_renewal_order_meta_query( $order_meta_query, $original_order_id, $renewal_order_id, $new_order_role ) {
 		$order_meta_query .= " AND `meta_key` NOT IN ( '_aftership_tracking_items' )";
 		return $order_meta_query;
+	}
+
+	/*
+	 * Adds a tracking item to the post_meta array, used by Import Tracking
+	 *
+	 * @param int   $order_id    Order ID
+	 * @param array $tracking_items List of tracking item
+	 *
+	 * @return array Tracking item
+	 */
+	public function post_order_tracking( $order_id, $args ) {
+		$tracking_item                    = array();
+		$tracking_item['slug']            = wc_clean( $args['slug'] );
+		$tracking_item['tracking_number'] = wc_clean( $args['tracking_number'] );
+		$tracking_item['tracking_id']     = md5( "{$tracking_item['slug']}-{$tracking_item['tracking_number']}" );
+		// It's empty when Import Tracking from CSV
+		$tracking_item['additional_fields'] = isset( $args['additional_fields'] ) ? array(
+			'account_number'      => wc_clean( $args['additional_fields']['account_number'] ),
+			'key'                 => wc_clean( $args['additional_fields']['key'] ),
+			'postal_code'         => wc_clean( $args['additional_fields']['postal_code'] ),
+			'ship_date'           => wc_clean( $args['additional_fields']['ship_date'] ),
+			'destination_country' => wc_clean( $args['additional_fields']['destination_country'] ),
+			'state'               => wc_clean( $args['additional_fields']['state'] ),
+		) : array();
+		// line items for each tracking
+		if ( isset( $args['line_items'] ) && is_array( $args['line_items'] ) && count( $args['line_items'] ) ) {
+			$tracking_item['line_items'] = $args['line_items'];
+		}
+
+		$tracking_item['metrics'] = array(
+			'created_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+			'updated_at' => current_time( 'Y-m-d\TH:i:s\Z' ),
+		);
+		$tracking_items           = $this->get_tracking_items( $order_id );
+		$exist                    = false;
+		foreach ( $tracking_items as $key => $item ) {
+			if ( $item['tracking_id'] == $tracking_item['tracking_id'] ) {
+				$exist = true;
+				if ( isset( $item['metrics'] ) && isset( $item['metrics']['created_at'] ) ) {
+					$tracking_item['metrics']['created_at'] = $item['metrics']['created_at'];
+				}
+				$tracking_items[ $key ] = $tracking_item;
+			}
+		}
+		if ( ! $exist ) {
+			$tracking_items[] = $tracking_item;
+		}
+
+		// check order tracking, fulfill line items quantity <= order line items quantity
+		$check_exceed = $this->check_order_fulfill_items( $order_id, $tracking_items, true );
+		// If exceed, Skip this item from CSV; means duplicate import
+		if ( $check_exceed ) {
+			return array();
+		}
+
+		$this->save_tracking_items( $order_id, array_values( $tracking_items ) );
+
+		return array_values( $tracking_items );
 	}
 
 	/**
@@ -1161,7 +1219,7 @@ class AfterShip_Actions {
 	/**
 	 * Check fulfill item quantity
 	 */
-	private function check_order_fulfill_items( $order_id, $trackings ) {
+	private function check_order_fulfill_items( $order_id, $trackings, $only_check = false ) {
 		// get order line items
 		$order_line_items   = $this->get_order_item_data( $order_id );
 		$line_item_quantity = absint( array_sum( array_column( $order_line_items, 'quantity' ) ) );
@@ -1176,6 +1234,9 @@ class AfterShip_Actions {
 		$fulfill_items_quantity = absint( array_sum( array_column( $tmp, 'quantity' ) ) );
 
 		if ( $fulfill_items_quantity > $line_item_quantity ) {
+			if ( $only_check ) {
+				return true;
+			}
 			$this->format_aftership_tracking_output( 422, 'fulfill item quantity gte order item qiantity' );
 		}
 	}

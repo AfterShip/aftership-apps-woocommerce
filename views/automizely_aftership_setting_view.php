@@ -9,7 +9,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 }
 
 $this->options      = get_option( 'aftership_option_name' );
-$is_display_connect = $this->options['connected'] && $this->options['connected'] === true;
+$is_display_connect = isset( $this->options['connected'] ) ? $this->options['connected'] === true : false;
 
 $store_url = get_home_url();
 
@@ -125,22 +125,22 @@ if ( $debug === 'yes' ) {
 
 			<!-- feed -->
 			<a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=feed-for-tiktok-shop" target="_blank">
-                    <div class="auto-rc-admin-recommand-list-item">
-                        <img
-                                style="width: 64px; height: 64px"
-                                src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-feed.svg"
-                                alt=""
-                        />
-                        <div class="auto-rc-admin-recommand-list-item-detail">
-                        <span>
-                        <strong>Automizely Feed </strong>
-                        </span>
-                        <span>
-                        Sync and sell with TikTok Shop in minutes
-                        </span>
-                        </div>
-                    </div>
-                </a>
+					<div class="auto-rc-admin-recommand-list-item">
+						<img
+								style="width: 64px; height: 64px"
+								src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-feed.svg"
+								alt=""
+						/>
+						<div class="auto-rc-admin-recommand-list-item-detail">
+						<span>
+						<strong>Automizely Feed </strong>
+						</span>
+						<span>
+						Sync and sell with TikTok Shop in minutes
+						</span>
+						</div>
+					</div>
+				</a>
 		</div>
 	</div>
 </div>
