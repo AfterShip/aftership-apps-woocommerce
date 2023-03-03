@@ -86,6 +86,14 @@ class AfterShip_Import_Csv {
 	}
 
 	public function add_menu() {
+		$options = get_option( 'aftership_option_name' );
+		if ( ! $options ) {
+			return;
+		}
+		$enable_import_tracking = isset( $options['enable_import_tracking'] ) ? $options['enable_import_tracking'] : -1;
+		if ( $enable_import_tracking !== 1 ) {
+			return;
+		}
 		add_submenu_page(
 			'aftership-setting-admin',
 			'Import Tracking',
@@ -158,17 +166,10 @@ class AfterShip_Import_Csv {
 				$this->step     = 'import';
 				$this->file_url = isset( $_POST['aftership_orders_tracking_file_url'] ) ? wp_unslash( $_POST['aftership_orders_tracking_file_url'] ) : '';
 				$this->nonce    = isset( $_POST['_aftership_orders_tracking_import_nonce'] ) ? sanitize_text_field( $_POST['_aftership_orders_tracking_import_nonce'] ) : '';
-				$map_to         = array_map(
-					array(
-						'Aftership_Import_Csv',
-						'sanitize_text_field',
-					),
-					array(
-						'order_id'        => 'Order+ID',
-						'tracking_number' => 'Tracking+Number',
-						'carrier_slug'    => 'Carrier+Slug',
-					)
-				);
+				$map_to         = isset( $_POST['aftership_orders_tracking_map_to'] ) ? array_map( array(
+					'Aftership_Import_Csv',
+					'sanitize_text_field'
+				), $_POST['aftership_orders_tracking_map_to'] ) : array();
 
 				if ( is_file( $this->file_url ) ) {
 					if ( ( $file_handle = fopen( $this->file_url, 'r' ) ) !== false ) {
@@ -699,21 +700,18 @@ class AfterShip_Import_Csv {
 			<div class="vi-ui segment">
 				<div class="vi-ui steps fluid">
 					<div class="step <?php echo esc_attr( $steps_state['start'] ); ?>">
-						<i class="upload icon"></i>
 						<div class="content">
-							<div class="title"><?php esc_html_e( 'Select file', 'aftership-orders-tracking' ); ?></div>
+							<div class="title"><?php esc_html_e( '1. Select file', 'aftership-orders-tracking' ); ?></div>
 						</div>
 					</div>
 					<div class="step <?php echo esc_attr( $steps_state['mapping'] ); ?>">
-						<i class="exchange icon"></i>
 						<div class="content">
-							<div class="title"><?php esc_html_e( 'Mapping', 'aftership-orders-tracking' ); ?></div>
+							<div class="title"><?php esc_html_e( '2. Mapping', 'aftership-orders-tracking' ); ?></div>
 						</div>
 					</div>
 					<div class="step <?php echo esc_attr( $steps_state['import'] ); ?>">
-						<i class="refresh icon <?php echo esc_attr( self::set( 'import-icon' ) ); ?>"></i>
 						<div class="content">
-							<div class="title"><?php esc_html_e( 'Import', 'aftership-orders-tracking' ); ?></div>
+							<div class="title"><?php esc_html_e( '3. Import', 'aftership-orders-tracking' ); ?></div>
 						</div>
 					</div>
 				</div>
@@ -810,7 +808,6 @@ class AfterShip_Import_Csv {
 											<td>
 												<select id="<?php echo esc_attr( self::set( $header_k ) ); ?>"
 														class="vi-ui fluid dropdown"
-														disabled="disabled"
 														name="<?php echo esc_attr( self::set( 'map_to', true ) ); ?>[<?php echo esc_attr( $header_k ); ?>]">
 													<?php
 													foreach ( $this->header as $file_header ) {
@@ -856,7 +853,7 @@ class AfterShip_Import_Csv {
 								   value="<?php echo esc_attr( $this->file_url ); ?>">
 							<p>
 								<input type="submit" name="aftership_orders_tracking_import"
-									   class="vi-ui primary button <?php echo esc_attr( self::set( 'import-continue' ) ); ?>"
+									   class="button"
 									   value="<?php echo esc_attr( 'Import', 'aftership-orders-tracking' ); ?>">
 							</p>
 						</form>
@@ -883,23 +880,18 @@ class AfterShip_Import_Csv {
 							wp_nonce_field( 'aftership_orders_tracking_import_action_nonce', '_aftership_orders_tracking_import_nonce' );
 							?>
 							<div class="vi-ui positive message <?php echo esc_attr( self::set( 'import-container' ) ); ?>">
-								<div class="header">
-									<label for="<?php echo esc_attr( self::set( 'import-file' ) ); ?>"><?php esc_html_e( 'Select csv file to import', 'aftership-orders-tracking' ); ?></label>
-								</div>
 								<ul class="list">
 									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order id</strong>, <strong>Tracking number</strong>, <strong>Carrier slug</strong>.', 'aftership-orders-tracking' ) ); ?></li>
 									<li>
 										<?php echo wp_kses_post( __( '<strong>Carrier slug</strong>: slug of an carrier defined in plugin settings, get <strong>selected Carrier slug list</strong> by ', 'aftership-orders-tracking' ) ); ?>
-										<input type="submit"
-											   class="vi-ui button green vi-aftership-orders-tracking-download-carriers-file"
+										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_carriers_file"
 											   value="<?php echo esc_attr( 'Download File', 'aftership-orders-tracking' ); ?>">
 										<?php printf( wp_kses_post( __( 'If you can not find your carrier, please go to <a target="_blank" href="%s">Plugin settings</a> to Add Carrier', 'aftership-orders-tracking' ) ), esc_url( admin_url( 'admin.php?page=aftership-setting-admin' ) ) ); ?>
 									</li>
 									<li>
 										<?php esc_html_e( 'Each tracking number, carrier slug of an order will be set for every product line item of that order', 'aftership-orders-tracking' ); ?>
-										<input type="submit"
-											   class="vi-ui button olive vi-aftership-orders-tracking-download-demo-file"
+										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_demo_file"
 											   value="<?php echo esc_attr( 'Download Demo', 'aftership-orders-tracking' ); ?>">
 									</li>
@@ -922,8 +914,7 @@ class AfterShip_Import_Csv {
 										   required>
 								</div>
 							</div>
-							<p><input type="submit" name="aftership_orders_tracking_select_file"
-									  class="vi-ui primary button <?php echo esc_attr( self::set( 'import-continue' ) ); ?>"
+							<p><input type="submit" name="aftership_orders_tracking_select_file" class="button"
 									  value="<?php echo esc_attr( 'Continue', 'aftership-orders-tracking' ); ?>">
 							</p>
 						</form>
@@ -964,7 +955,7 @@ class AfterShip_Import_Csv {
 			foreach ( $logs as $log ) {
 				?>
 				<p>
-					<a target="_blank" rel="nofollow" class="vi-ui button olive vi-aftership-orders-tracking-download-demo-file"
+					<a target="_blank" rel="nofollow" class="button"
 					   href="
 					   <?php
 						echo esc_url(
