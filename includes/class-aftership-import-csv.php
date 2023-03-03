@@ -166,10 +166,13 @@ class AfterShip_Import_Csv {
 				$this->step     = 'import';
 				$this->file_url = isset( $_POST['aftership_orders_tracking_file_url'] ) ? wp_unslash( $_POST['aftership_orders_tracking_file_url'] ) : '';
 				$this->nonce    = isset( $_POST['_aftership_orders_tracking_import_nonce'] ) ? sanitize_text_field( $_POST['_aftership_orders_tracking_import_nonce'] ) : '';
-				$map_to         = isset( $_POST['aftership_orders_tracking_map_to'] ) ? array_map( array(
-					'Aftership_Import_Csv',
-					'sanitize_text_field'
-				), $_POST['aftership_orders_tracking_map_to'] ) : array();
+				$map_to         = isset( $_POST['aftership_orders_tracking_map_to'] ) ? array_map(
+					array(
+						'Aftership_Import_Csv',
+						'sanitize_text_field',
+					),
+					$_POST['aftership_orders_tracking_map_to']
+				) : array();
 
 				if ( is_file( $this->file_url ) ) {
 					if ( ( $file_handle = fopen( $this->file_url, 'r' ) ) !== false ) {
