@@ -425,6 +425,18 @@ class AfterShip_Import_Csv {
 						fclose( $file_handle );
 						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::create_plugin_cache_folder();
 						if ( $total > 1 ) {
+							// Limit 200 from csv
+							if ( $total > 201 ) {
+								$current_total_rows = $total - 1;
+								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Error: import order rows can not more than 200, current total order rows: {$current_total_rows}", 'aftership-orders-tracking' ) );
+								wp_send_json(
+									array(
+										'status'  => 'error',
+										'total'   => $total,
+										'message' => esc_html__( "Import order rows can not more than 200, current total order rows: {$current_total_rows}", 'aftership-orders-tracking' ),
+									)
+								);
+							}
 							if ( $total > $start ) {
 								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( 'Start importing tracking', 'aftership-orders-tracking' ) );
 								wp_send_json(
@@ -909,6 +921,10 @@ class AfterShip_Import_Csv {
 										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_demo_file"
 											   value="<?php echo esc_attr( 'Download Demo', 'aftership-orders-tracking' ); ?>">
+									</li>
+									<li>
+									    <?php printf( wp_kses_post( __( 'After import tracking completed, you can go to <a target="_blank" href="%s">Orders</a> to view orders tracking, ', 'aftership-orders-tracking' ) ), esc_url( admin_url( 'edit.php?post_type=shop_order' ) ) ); ?>
+									    <?php echo wp_kses_post( __( 'You can also view logs via <strong>Import tracking logs</strong>.', 'aftership-orders-tracking' ) ); ?>
 									</li>
 								</ul>
 							</div>
