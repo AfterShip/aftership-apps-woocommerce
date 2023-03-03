@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+}
+
+th {
+    text-align: left;
+}
+
+th > p {
+    font-style: italic;
+    font-weight: normal;
+}
+
+.vi-ui.toggle.checkbox label {
+    font-size: 14px;
+}
+
+.select2-search__field {
+    width: 100% !important;
+}
+
+input.vi-ui.button {
+    height: auto;
+}
+
+tr.description td {
+    padding-top: 0;
+}
+
+.aftership-orders-tracking-import-container {
+    margin: 20px 0;
+}
+
+.aftership-orders-tracking-import-container-form table.aftership-orders-tracking-order-statuses {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-table thead th {
+    text-align: center;
+}
+
+.aftership-orders-tracking-updating {
+    animation: vi_rotation 3s infinite linear;
+}
+
+.aftership-orders-tracking-paypal-progress.vi-ui.progress,
+.aftership-orders-tracking-ppec_paypal-progress.vi-ui.progress,
+.aftership-orders-tracking-send-email-progress.vi-ui.progress {
+    display: none;
+}
+
+@keyframes vi_rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}

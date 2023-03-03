@@ -36,6 +36,13 @@ class AfterShip_Settings {
 	private $dom_aftership_connected = 'aftership_connected';
 
 	/**
+	 * DOM id for hidden aftership connected.
+	 *
+	 * @var string $dom_aftership_enable_import_tracking
+	 */
+	private $dom_aftership_enable_import_tracking = 'aftership_enable_import_tracking';
+
+	/**
 	 * show order actions when selected order status.
 	 *
 	 * @var string $dom_aftership_show_order_actions
@@ -156,6 +163,10 @@ class AfterShip_Settings {
 			$new_input['connected'] = boolval( $input['connected'] );
 		}
 
+		if ( isset( $input['enable_import_tracking'] ) ) {
+			$new_input['enable_import_tracking'] = intval( $input['enable_import_tracking'] );
+		}
+
 		if ( isset( $input['show_orders_actions'] ) ) {
 			$new_input['show_orders_actions'] = sanitize_text_field( $input['show_orders_actions'] );
 		}
@@ -200,6 +211,9 @@ class AfterShip_Settings {
 		echo '<input type="hidden" id="' . $this->dom_id_couriers . '" name="aftership_option_name[couriers]" value="' . implode( ',', $couriers ) . '"/>';
 		if ( isset( $this->options['connected'] ) ) {
 			echo '<input type="hidden" id="' . $this->dom_aftership_connected . '" name="aftership_option_name[connected]" value="' . $this->options['connected'] . '" />';
+		}
+		if ( isset( $this->options['enable_import_tracking'] ) ) {
+			echo '<input type="hidden" id="' . $this->dom_aftership_enable_import_tracking . '" name="aftership_option_name[enable_import_tracking]" value="' . $this->options['enable_import_tracking'] . '" />';
 		}
 	}
 

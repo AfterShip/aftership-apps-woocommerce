@@ -104,6 +104,11 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 				$options['shipment_tracking_migrate_interval'] = $data['shipment_tracking_migrate_interval'];
 			}
 
+			// check for import csv, value: 1 or -1
+			if ( isset( $data['enable_import_tracking'] ) && $data['enable_import_tracking'] ) {
+				$options['enable_import_tracking'] = $data['enable_import_tracking'];
+			}
+
 			if ( isset( $data['show_orders_actions'] ) && $data['show_orders_actions'] ) {
 				if ( '' === $this->seek_option_value( $options, 'show_orders_actions' ) ) {
 					$options['show_orders_actions'] = $data['show_orders_actions'];

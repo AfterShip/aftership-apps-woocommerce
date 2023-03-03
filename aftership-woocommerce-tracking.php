@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.15.8
+ * Version: 1.16.0
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.15.8' );
+define( 'AFTERSHIP_VERSION', '1.16.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
@@ -43,6 +43,13 @@ if ( is_woocommerce_active() ) {
 			 * @var AfterShip_Actions
 			 */
 			public $actions;
+
+			/**
+			 * Instance of AfterShip_Import_Csv.
+			 *
+			 * @var AfterShip_Import_Csv
+			 */
+			public $import_csv;
 
 			/**
 			 * Instance of AfterShip_API.
@@ -380,6 +387,10 @@ if ( is_woocommerce_active() ) {
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
 				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
+				// require new files, don't adjust file order
+				require_once( $this->plugin_dir . '/includes/define.php' );
+				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
+				$this->import_csv = new AfterShip_Import_Csv();
 			}
 
 			/**
