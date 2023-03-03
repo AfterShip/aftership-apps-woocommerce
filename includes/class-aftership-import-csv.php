@@ -923,8 +923,8 @@ class AfterShip_Import_Csv {
 											   value="<?php echo esc_attr( 'Download Demo', 'aftership-orders-tracking' ); ?>">
 									</li>
 									<li>
-									    <?php printf( wp_kses_post( __( 'After import tracking completed, you can go to <a target="_blank" href="%s">Orders</a> to view orders tracking, ', 'aftership-orders-tracking' ) ), esc_url( admin_url( 'edit.php?post_type=shop_order' ) ) ); ?>
-									    <?php echo wp_kses_post( __( 'You can also view logs via <strong>Import tracking logs</strong>.', 'aftership-orders-tracking' ) ); ?>
+										<?php printf( wp_kses_post( __( 'After import tracking completed, you can go to <a target="_blank" href="%s">Orders</a> to view orders tracking, ', 'aftership-orders-tracking' ) ), esc_url( admin_url( 'edit.php?post_type=shop_order' ) ) ); ?>
+										<?php echo wp_kses_post( __( 'You can also view logs via <strong>Import tracking logs</strong>.', 'aftership-orders-tracking' ) ); ?>
 									</li>
 								</ul>
 							</div>
