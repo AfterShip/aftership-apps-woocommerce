@@ -25,12 +25,15 @@ class AfterShip_Import_Csv {
 	protected $orders_per_request;
 	protected $nonce;
 	protected $carriers;
+	protected $selected_carrier_slugs;
 	protected $actions;
 
 	public function __construct() {
-		$this->actions  = AfterShip_Actions::get_instance();
-		$this->options  = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
-		$this->carriers = json_decode( file_get_contents( AFTERSHIP_TRACKING_JS . '/couriers.json' ), true );
+		$this->actions                = AfterShip_Actions::get_instance();
+		$this->options                = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
+		$selected_carrier_slugs       = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
+		$this->selected_carrier_slugs = array_filter( $selected_carrier_slugs );
+		$this->carriers               = json_decode( file_get_contents( AFTERSHIP_TRACKING_JS . '/couriers.json' ), true );
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 19 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'admin_init', array( $this, 'import_csv' ) );
@@ -117,10 +120,12 @@ class AfterShip_Import_Csv {
 	 * @return array
 	 */
 	public function get_user_selected_couriers() {
-		$slugs                  = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
+		if ( ! count( $this->selected_carrier_slugs ) ) {
+			return array();
+		}
 		$user_selected_couriers = array();
 		foreach ( $this->carriers as $carrier ) {
-			if ( in_array( $carrier['slug'], $slugs, true ) ) {
+			if ( in_array( $carrier['slug'], $this->selected_carrier_slugs, true ) ) {
 				$user_selected_couriers[] = array( $carrier['name'], $carrier['slug'] );
 			}
 		}
@@ -369,16 +374,16 @@ class AfterShip_Import_Csv {
 							$change ++;
 						} else {
 							// The same order was detected and imported repeatedly
-							AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Imported repeatedly for order #{$order_id}, tracking number: {$item['tracking_number']}", 'aftership-orders-tracking' ) );
+							AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Imported repeatedly for order {$order_id}, tracking number: {$item['tracking_number']}", 'aftership-orders-tracking' ) );
 						}
 					}
 				}
 				if ( $change > 0 ) {
-					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order #{$order_id}", 'aftership-orders-tracking' ) );
+					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order {$order_id}", 'aftership-orders-tracking' ) );
 				}
 			} else {
 				// Skip - The store can't find this order
-				AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found for order #{$order_id}", 'aftership-orders-tracking' ) );
+				AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found for order {$order_id}", 'aftership-orders-tracking' ) );
 			}
 		}
 	}
@@ -495,6 +500,13 @@ class AfterShip_Import_Csv {
 							if ( empty( $order_id_1 ) || empty( $carrier_slug ) || empty( $tracking_number ) ) {
 								$ftell_2 = $ftell_1;
 								// If exist empty, skip
+								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, missing value of required fields for order {$order_id_1}", 'aftership-orders-tracking' ) );
+								continue;
+							}
+							// Check if valid carrier slug
+							if ( ! in_array( $carrier_slug, $this->selected_carrier_slugs, true ) ) {
+								// invalid slug, skip
+								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, invalid carrier slug for order {$order_id_1}, slug: {$carrier_slug}", 'aftership-orders-tracking' ) );
 								continue;
 							}
 							// set time limit
