@@ -1296,4 +1296,13 @@ class AfterShip_Actions {
 		wp_send_json( $response );
 		wp_die();
 	}
+
+	/**
+	 * Handle action from shipstation
+	 */
+    public function handle_woocommerce_shipstation_shipnotify($order, $tracking) {
+		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking['tracking_number'] ) );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+    }
 }
