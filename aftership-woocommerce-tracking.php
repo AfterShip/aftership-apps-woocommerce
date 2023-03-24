@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.16.1
+ * Version: 1.16.2
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.16.1' );
+define( 'AFTERSHIP_VERSION', '1.16.2' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 
@@ -195,6 +195,11 @@ if ( is_woocommerce_active() ) {
 				add_action( 'personal_options_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'edit_user_profile_update', array( $this->actions, 'generate_api_key' ) );
 				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
+
+				// Add support for woocommerce-shipstation
+				if (in_array( 'woocommerce-shipstation-integration/woocommerce-shipstation.php', (array) get_option( 'active_plugins', array() ))) {
+					add_action( 'woocommerce_shipstation_shipnotify', array( $this->actions, 'handle_woocommerce_shipstation_shipnotify' ), 10, 2 );
+				}
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'rest_shop_coupon_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
