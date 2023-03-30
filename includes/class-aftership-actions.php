@@ -1085,7 +1085,7 @@ class AfterShip_Actions {
 							<span class="dashicons dashicons-trash"></span>
 						</a>
 					</li>',
-					esc_html( $provider_courier['name'] ),
+					esc_html( isset($provider_courier['name']) ? $provider_courier['name'] : ''),
 					esc_url( $aftership_tracking_link ),
 					esc_html( $tracking_item['tracking_number'] ),
 					esc_html( $tracking_item['tracking_number'] ),
