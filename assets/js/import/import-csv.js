@@ -11,6 +11,7 @@ jQuery(document).ready( function ($) {
         start = 1;
     }
     let orders_per_request = parseInt(aftership_orders_tracking_import_params.orders_per_request);
+    let order_status = aftership_orders_tracking_import_params.order_status;
     let vi_at_index = aftership_orders_tracking_import_params.vi_at_index;
     let $import_icon = $('.aftership-orders-tracking-import-icon');
     if (aftership_orders_tracking_import_params.step === 'import') {
@@ -26,6 +27,7 @@ jQuery(document).ready( function ($) {
                 file_url: aftership_orders_tracking_import_params.file_url,
                 vi_at_index: vi_at_index,
                 orders_per_request: orders_per_request,
+                order_status: order_status,
                 step: step,
                 start: start,
             },
@@ -60,6 +62,7 @@ jQuery(document).ready( function ($) {
                 nonce: aftership_orders_tracking_import_params.nonce,
                 file_url: aftership_orders_tracking_import_params.file_url,
                 orders_per_request: orders_per_request,
+                order_status: order_status,
                 vi_at_index: vi_at_index,
                 step: step,
                 ftell: ftell,
