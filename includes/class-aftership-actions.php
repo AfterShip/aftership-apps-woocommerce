@@ -1305,4 +1305,28 @@ class AfterShip_Actions {
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
     }
+
+    /*
+     * Handle order comment events send by restful api call.
+     */
+	public function handle_woocommerce_rest_insert_order_note($comment, $request) {
+		$order = wc_get_order( (int) $request['order_id'] );
+		$tracking_number = $this->get_tracking_number_from_note($request['note']);
+		if (!$tracking_number) return;
+		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking_number ) );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+	}
+
+	/**
+     * Parse tracking number from order note.
+	 */
+	private function get_tracking_number_from_note ($note) {
+		if (!$note) return null;
+		// royalmail "Your order has been despatched via Royal Mail Tracked 48 LBT.\n\nYour tracking number is 121212.\n\nYour order can be tracked here: https://www.royalmail.com/portal/rm/track?trackNumber=1121212.";
+		if (preg_match('/Your tracking number is (\w+)\./', $note, $matches)) {
+			return $matches[1];
+		}
+		return null;
+	}
 }

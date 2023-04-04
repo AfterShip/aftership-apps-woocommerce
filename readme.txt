@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 6.0
-Stable tag: 1.16.2
+Stable tag: 1.16.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,9 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 6. AfterShip Tracking Admin portal
 
 == Changelog ==
+
+= 1.16.3 =
+* Get tracking number from order notes.
 
 = 1.16.2 =
 * Update courier list
