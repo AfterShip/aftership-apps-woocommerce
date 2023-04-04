@@ -1311,21 +1311,30 @@ class AfterShip_Actions {
      */
 	public function handle_woocommerce_rest_insert_order_note($comment, $request) {
 		$order = wc_get_order( (int) $request['order_id'] );
-		$tracking_number = $this->get_tracking_number_from_note($request['note']);
-		if (!$tracking_number) return;
-		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking_number ) );
+		$tracking = $this->get_tracking_from_note($request['note']);
+		if (!$tracking) return;
+		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking['tracking_number'], 'slug' => $tracking['slug'] ) );
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
 	}
 
 	/**
-     * Parse tracking number from order note.
+	 * Parse tracking from order note.
 	 */
-	private function get_tracking_number_from_note ($note) {
+	private function get_tracking_from_note ($note) {
 		if (!$note) return null;
+		$tracking = array(
+			'tracking_number' => null,
+			'slug' => null
+		);
+		// 设置 SLUG
+		if (strpos($note, "royalmail") !== false) {
+			$tracking['slug'] = 'royal-mail';
+		}
 		// royalmail "Your order has been despatched via Royal Mail Tracked 48 LBT.\n\nYour tracking number is 121212.\n\nYour order can be tracked here: https://www.royalmail.com/portal/rm/track?trackNumber=1121212.";
 		if (preg_match('/Your tracking number is (\w+)\./', $note, $matches)) {
-			return $matches[1];
+			$tracking['tracking_number'] =  $matches[1];
+			return $tracking;
 		}
 		return null;
 	}
