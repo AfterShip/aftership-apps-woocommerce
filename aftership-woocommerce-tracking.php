@@ -197,7 +197,7 @@ if ( is_woocommerce_active() ) {
 				add_action( 'admin_notices', array( $this->actions, 'show_notices' ) );
 
 				// Add support for woocommerce-shipstation
-				if (in_array( 'woocommerce-shipstation-integration/woocommerce-shipstation.php', (array) get_option( 'active_plugins', array() ))) {
+				if ( in_array( 'woocommerce-shipstation-integration/woocommerce-shipstation.php', (array) get_option( 'active_plugins', array() ) ) ) {
 					add_action( 'woocommerce_shipstation_shipnotify', array( $this->actions, 'handle_woocommerce_shipstation_shipnotify' ), 10, 2 );
 				}
 				// Get tracking number from order notes created by restful api like royalmail.

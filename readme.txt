@@ -139,7 +139,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 1.16.3 =
-* Get tracking number from order notes.
+* Fix known issue
 
 = 1.16.2 =
 * Update courier list

@@ -584,8 +584,9 @@ class AfterShip_Actions {
 		} else {
 			$order = new WC_Order( $order_id );
 			$order->update_meta_data( '_aftership_tracking_items', $tracking_items );
-			$order->update_meta_data( '_aftership_tracking_number', $tracking_items[0]['tracking_number'] );
-			$order->update_meta_data( '_aftership_tracking_provider_name', $tracking_items[0]['slug'] );
+			// Delete order trackings, $tracking_items may be []
+			$order->update_meta_data( '_aftership_tracking_number', isset( $tracking_items[0]['tracking_number'] ) ? $tracking_items[0]['tracking_number'] : '' );
+			$order->update_meta_data( '_aftership_tracking_provider_name', isset( $tracking_items[0]['slug'] ) ? $tracking_items[0]['slug'] : '' );
 			$order->save_meta_data();
 		}
 	}
@@ -1085,7 +1086,7 @@ class AfterShip_Actions {
 							<span class="dashicons dashicons-trash"></span>
 						</a>
 					</li>',
-					esc_html( isset($provider_courier['name']) ? $provider_courier['name'] : ''),
+					esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : '' ),
 					esc_url( $aftership_tracking_link ),
 					esc_html( $tracking_item['tracking_number'] ),
 					esc_html( $tracking_item['tracking_number'] ),

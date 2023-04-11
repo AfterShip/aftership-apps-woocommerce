@@ -25,6 +25,7 @@ class AfterShip_Import_Csv {
 	protected $orders_per_request;
 	protected $nonce;
 	protected $carriers;
+	protected $change_order_status;
 	protected $selected_carrier_slugs;
 	protected $actions;
 
@@ -34,6 +35,10 @@ class AfterShip_Import_Csv {
 		$selected_carrier_slugs       = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
 		$this->selected_carrier_slugs = array_filter( $selected_carrier_slugs );
 		$this->carriers               = json_decode( file_get_contents( AFTERSHIP_TRACKING_JS . '/couriers.json' ), true );
+		$this->change_order_status    = array(
+			'wc-processing' => 'Processing',
+			'wc-completed'  => 'Completed',
+		);
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 19 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'admin_init', array( $this, 'import_csv' ) );
@@ -342,11 +347,14 @@ class AfterShip_Import_Csv {
 	 *
 	 * @param $order_id
 	 * @param $data
+	 * @param $import_options
 	 *
 	 * @throws Exception
 	 */
-	public function import_tracking( $order_id, $data ) {
+	public function import_tracking( $order_id, $data, $import_options ) {
 		if ( $order_id && count( $data ) ) {
+			$order_status = $import_options['order_status'];
+
 			$order = wc_get_order( $order_id );
 			if ( $order ) {
 				$line_items = $order->get_items();
@@ -379,6 +387,16 @@ class AfterShip_Import_Csv {
 					}
 				}
 				if ( $change > 0 ) {
+					// User expects to update order status, If user choose "Not Change", will not execute
+					if ( $order_status ) {
+						$order_status   = strtolower( $order_status );
+						$order_statuses = wc_get_order_statuses();
+						if ( isset( $order_statuses[ $order_status ] ) ) {
+							$order->update_status( substr( $order_status, 3 ) );
+							$order->save();
+						}
+					}
+
 					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order {$order_id}", 'aftership-orders-tracking' ) );
 				}
 			} else {
@@ -409,6 +427,7 @@ class AfterShip_Import_Csv {
 		$step               = isset( $_POST['step'] ) ? sanitize_text_field( $_POST['step'] ) : '';
 		$index              = isset( $_POST['vi_at_index'] ) ? array_map( 'intval', $_POST['vi_at_index'] ) : array();
 		$orders_per_request = isset( $_POST['orders_per_request'] ) ? absint( sanitize_text_field( $_POST['orders_per_request'] ) ) : 1;
+		$order_status       = isset( $_POST['order_status'] ) ? sanitize_text_field( $_POST['order_status'] ) : '';
 
 		switch ( $step ) {
 			case 'check':
@@ -488,11 +507,14 @@ class AfterShip_Import_Csv {
 					if ( ( $file_handle = fopen( $file_url, 'r' ) ) !== false ) {
 						$header = fgetcsv( $file_handle, 0, ',' );
 						unset( $header );
-						$count      = 0;
-						$orders     = array();
-						$order_data = array();
-						$order_id   = '';
-						$ftell_2    = 0;
+						$count          = 0;
+						$import_options = array(
+							'order_status' => $order_status,
+						);
+						$orders         = array();
+						$order_data     = array();
+						$order_id       = '';
+						$ftell_2        = 0;
 						if ( $ftell > 0 ) {
 							fseek( $file_handle, $ftell );
 						} elseif ( $start > 1 ) {
@@ -525,7 +547,7 @@ class AfterShip_Import_Csv {
 							vi_at_set_time_limit();
 							if ( ! in_array( $order_id_1, $orders ) ) {
 								/*create previous order*/
-								$this->import_tracking( $order_id, $order_data );
+								$this->import_tracking( $order_id, $order_data, $import_options );
 								if ( count( $orders ) < $orders_per_request ) {
 									$order_id   = $order_id_1;
 									$orders[]   = $order_id;
@@ -560,7 +582,7 @@ class AfterShip_Import_Csv {
 							$next_item = fgetcsv( $file_handle, 0, ',' );
 							if ( false === $next_item ) {
 								/*create previous order*/
-								$this->import_tracking( $order_id, $order_data );
+								$this->import_tracking( $order_id, $order_data, $import_options );
 								fclose( $file_handle );
 								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( 'Finish importing tracking', 'aftership-orders-tracking' ) );
 
@@ -586,7 +608,7 @@ class AfterShip_Import_Csv {
 
 								if ( ! in_array( $order_id_2, $orders ) ) {
 									/*create previous order*/
-									$this->import_tracking( $order_id, $order_data );
+									$this->import_tracking( $order_id, $order_data, $import_options );
 									if ( count( $orders ) < $orders_per_request ) {
 										$order_id   = $order_id_2;
 										$orders[]   = $order_id;
@@ -619,7 +641,7 @@ class AfterShip_Import_Csv {
 								unset( $next_item );
 							}
 						}
-						$this->import_tracking( $order_id, $order_data );
+						$this->import_tracking( $order_id, $order_data, $import_options );
 						fclose( $file_handle );
 						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( 'Finish importing tracking', 'aftership-orders-tracking' ) );
 
@@ -687,6 +709,7 @@ class AfterShip_Import_Csv {
 					'vi_at_index'        => $this->index,
 					'orders_per_request' => isset( $_POST['aftership_orders_tracking_orders_per_request'] ) ? absint( sanitize_text_field( $_POST['aftership_orders_tracking_orders_per_request'] ) ) : '1',
 					'custom_start'       => isset( $_POST['aftership_orders_tracking_custom_start'] ) ? sanitize_text_field( $_POST['aftership_orders_tracking_custom_start'] ) : 1,
+					'order_status'       => isset( $_POST['aftership_orders_tracking_order_status'] ) ? sanitize_text_field( $_POST['aftership_orders_tracking_order_status'] ) : '',
 					'required_fields'    => array(
 						'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
 						'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
@@ -804,6 +827,35 @@ class AfterShip_Import_Csv {
 							wp_nonce_field( 'aftership_orders_tracking_import_action_nonce', '_aftership_orders_tracking_import_nonce' );
 
 							?>
+
+							<div class="vi-ui segment">
+								<table class="form-table">
+									<tbody>
+									<tr>
+										<th>
+											<label for="<?php echo esc_attr( self::set( 'order_status' ) ); ?>"><?php esc_html_e( 'Change order status', 'aftership-orders-tracking' ); ?></label>
+										</th>
+										<td>
+											<select name="<?php echo esc_attr( self::set( 'order_status', true ) ); ?>"
+													id="<?php echo esc_attr( self::set( 'order_status' ) ); ?>"
+													class="vi-ui fluid dropdown">
+												<option value=""><?php esc_html_e( 'Not Change', 'aftership-orders-tracking' ); ?></option>
+												<?php
+												if ( count( $this->change_order_status ) ) {
+													foreach ( $this->change_order_status as $status_id => $status_name ) {
+														?>
+														<option value="<?php echo esc_attr( $status_id ); ?>" <?php selected( 'aftership_orders_tracking_order_status', $status_id ); ?> ><?php echo esc_html( $status_name ); ?></option>
+														<?php
+													}
+												}
+												?>
+											</select>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+
 							<div class="vi-ui segment">
 								<table class="form-table">
 									<thead>
