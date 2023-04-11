@@ -1328,8 +1328,8 @@ class AfterShip_Actions {
 			'tracking_number' => null,
 			'slug' => null
 		);
-		// 设置 SLUG
-		if (strpos($note, "royalmail") !== false) {
+		// set SLUG
+		if (strpos($note, "royalmail") !== false || strpos($note, "Royal Mail") !== false) {
 			$tracking['slug'] = 'royal-mail';
 		}
 		// royalmail "Your order has been despatched via Royal Mail Tracked 48 LBT.\n\nYour tracking number is 121212.\n\nYour order can be tracked here: https://www.royalmail.com/portal/rm/track?trackNumber=1121212.";
