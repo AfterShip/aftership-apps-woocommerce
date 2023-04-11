@@ -1301,9 +1301,42 @@ class AfterShip_Actions {
 	/**
 	 * Handle action from shipstation
 	 */
-	public function handle_woocommerce_shipstation_shipnotify( $order, $tracking ) {
+    public function handle_woocommerce_shipstation_shipnotify($order, $tracking) {
 		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking['tracking_number'] ) );
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
+    }
+
+    /*
+     * Handle order comment events send by restful api call.
+     */
+	public function handle_woocommerce_rest_insert_order_note($comment, $request) {
+		$order = wc_get_order( (int) $request['order_id'] );
+		$tracking = $this->get_tracking_from_note($request['note']);
+		if (!$tracking) return;
+		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking['tracking_number'], 'slug' => $tracking['slug'] ) );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+	}
+
+	/**
+	 * Parse tracking from order note.
+	 */
+	private function get_tracking_from_note ($note) {
+		if (!$note) return null;
+		$tracking = array(
+			'tracking_number' => null,
+			'slug' => null
+		);
+		// set SLUG
+		if (strpos($note, "royalmail") !== false || strpos($note, "Royal Mail") !== false) {
+			$tracking['slug'] = 'royal-mail';
+		}
+		// royalmail "Your order has been despatched via Royal Mail Tracked 48 LBT.\n\nYour tracking number is 121212.\n\nYour order can be tracked here: https://www.royalmail.com/portal/rm/track?trackNumber=1121212.";
+		if (preg_match('/Your tracking number is (\w+)\./', $note, $matches)) {
+			$tracking['tracking_number'] =  $matches[1];
+			return $tracking;
+		}
+		return null;
 	}
 }
