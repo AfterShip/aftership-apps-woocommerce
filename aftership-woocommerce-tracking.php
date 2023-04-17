@@ -24,6 +24,7 @@ define( 'AFTERSHIP_VERSION', '1.16.4' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
+define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Shipping Insurance Fee' );
 
 if ( is_woocommerce_active() ) {
 
@@ -149,6 +150,15 @@ if ( is_woocommerce_active() ) {
 
 				// Enqueue js on frontend.
 				add_action('wp_enqueue_scripts', array( $this, 'enqueue_frontend_js' ));
+				// Get cart details.
+				add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
+				add_action( 'wp_ajax_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
+				// Set insurance fee.
+				add_action( 'wp_ajax_nopriv_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
+				// Remove insurance fee.
+				add_action( 'wp_ajax_nopriv_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
 
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
@@ -215,10 +225,70 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_customer_query', array( $this->actions, 'add_customer_query' ), 10, 2 );
 
+				add_action('woocommerce_cart_calculate_fees', array($this, 'apply_aftership_shipping_insurance_fee'), 20, 1);
+
 				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
+			}
+
+
+			function apply_aftership_shipping_insurance_fee() {
+				$amount = WC()->session->get( 'aftership_shipping_insurance_fee', '-');
+				if ($amount !== '-') {
+					WC()->cart->add_fee(AFTERSHIP_PROTECTION_LABEL, $amount, false, "");
+				}
+			}
+
+			/**
+			 * Ajax handler to set insurance fee.
+			 */
+			function set_insurance_fee_ajax_handler() {
+				WC()->cart->calculate_totals();
+				$wc_cart = WC()->cart;
+				$cart = $wc_cart->get_cart();
+				$amount = wc_clean( $_REQUEST['amount'] );
+				WC()->session->set( 'aftership_shipping_insurance_fee' ,  $amount);
+				// re-calculate cart fees.
+				WC()->cart->calculate_totals();
+				wp_send_json_success( array(
+					'fees'=>$wc_cart->fees_api()->get_fees(),
+					'cart'=> $cart,
+					'totals'=> $wc_cart->get_totals(),
+				));
+			}
+			/**
+			 * Ajax handler to remove insurance fee.
+			 */
+			function remove_insurance_fee_ajax_handler () {
+				$wc_cart = WC()->cart;
+				$cart = $wc_cart->get_cart();
+				WC()->session->set( 'aftership_shipping_insurance_fee' ,  '-');
+				WC()->cart->calculate_totals();
+				wp_send_json_success( array(
+					'fees'=>$wc_cart->fees_api()->get_fees(),
+					'cart'=> $cart,
+					'totals'=> $wc_cart->get_totals(),
+				));
+			}
+
+			/**
+			 * Ajax handler to get cart info.
+			 */
+			function get_cart_details_ajax_handler() {
+				WC()->cart->calculate_totals();
+				$wc_cart = WC()->cart;
+				$cart = $wc_cart->get_cart();
+				foreach ( $cart as $cart_item_key => $cart_item ) {
+					$product = wc_get_product( $cart_item['product_id'] );
+					$cart[$cart_item_key]['product'] = $product->get_data();
+				}
+				wp_send_json_success( array(
+						'cart'=> $wc_cart->get_cart(),
+						'fees'=> $wc_cart->fees_api()->get_fees(),
+						'totals'=> $wc_cart->get_totals(),)
+				);
 			}
 
 			/**
