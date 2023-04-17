@@ -453,15 +453,6 @@ class AfterShip_Actions {
 		$tracking_item['slug']            = wc_clean( $args['slug'] );
 		$tracking_item['tracking_number'] = wc_clean( $args['tracking_number'] );
 		$tracking_item['tracking_id']     = md5( "{$tracking_item['slug']}-{$tracking_item['tracking_number']}" );
-		// It's empty when Import Tracking from CSV
-		$tracking_item['additional_fields'] = isset( $args['additional_fields'] ) ? array(
-			'account_number'      => wc_clean( $args['additional_fields']['account_number'] ),
-			'key'                 => wc_clean( $args['additional_fields']['key'] ),
-			'postal_code'         => wc_clean( $args['additional_fields']['postal_code'] ),
-			'ship_date'           => wc_clean( $args['additional_fields']['ship_date'] ),
-			'destination_country' => wc_clean( $args['additional_fields']['destination_country'] ),
-			'state'               => wc_clean( $args['additional_fields']['state'] ),
-		) : array();
 		// line items for each tracking
 		if ( isset( $args['line_items'] ) && is_array( $args['line_items'] ) && count( $args['line_items'] ) ) {
 			$tracking_item['line_items'] = $args['line_items'];
