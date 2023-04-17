@@ -23,6 +23,7 @@ require_once( 'woo-includes/woo-functions.php' );
 define( 'AFTERSHIP_VERSION', '1.16.4' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
+define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
 
 if ( is_woocommerce_active() ) {
 
@@ -146,6 +147,9 @@ if ( is_woocommerce_active() ) {
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
 
+				// Enqueue js on frontend.
+				add_action('wp_enqueue_scripts', array( $this, 'enqueue_frontend_js' ));
+
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
 				// register admin pages for the plugin
@@ -215,6 +219,17 @@ if ( is_woocommerce_active() ) {
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
+			}
+
+			/**
+			 * Add frontend javascript
+			 */
+			function enqueue_frontend_js()
+			{
+				$options = get_option(AFTERSHIP_SCRIPT_TAGS, array());
+				foreach ($options as $id => $option) {
+					wp_enqueue_script($id, $option['src']);
+				}
 			}
 
 			/**
@@ -337,6 +352,7 @@ if ( is_woocommerce_active() ) {
 			 * @return array
 			 */
 			function add_rest_api( $controllers ) {
+				$controllers['wc/v3']['script_tags'] = 'AfterShip_API_Script_Tags';
 				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
 				return $controllers;
 			}
@@ -393,6 +409,7 @@ if ( is_woocommerce_active() ) {
 				require( $this->plugin_dir . '/includes/class-shipment-tracking-migrator.php' );
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
+				require_once( $this->plugin_dir . '/includes/api/class-aftership-api-script-tags.php' );
 				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
 				// require new files, don't adjust file order
 				require_once( $this->plugin_dir . '/includes/define.php' );
