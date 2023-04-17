@@ -256,6 +256,7 @@ if ( is_woocommerce_active() ) {
 					'fees'=>$wc_cart->fees_api()->get_fees(),
 					'cart'=> $cart,
 					'totals'=> $wc_cart->get_totals(),
+					'currency'=> get_woocommerce_currency(),
 				));
 			}
 			/**
@@ -270,6 +271,7 @@ if ( is_woocommerce_active() ) {
 					'fees'=>$wc_cart->fees_api()->get_fees(),
 					'cart'=> $cart,
 					'totals'=> $wc_cart->get_totals(),
+					'currency'=> get_woocommerce_currency(),
 				));
 			}
 
@@ -285,10 +287,11 @@ if ( is_woocommerce_active() ) {
 					$cart[$cart_item_key]['product'] = $product->get_data();
 				}
 				wp_send_json_success( array(
-						'cart'=> $wc_cart->get_cart(),
-						'fees'=> $wc_cart->fees_api()->get_fees(),
-						'totals'=> $wc_cart->get_totals(),)
-				);
+					'cart'=> $wc_cart->get_cart(),
+					'fees'=> $wc_cart->fees_api()->get_fees(),
+					'totals'=> $wc_cart->get_totals(),
+					'currency'=> get_woocommerce_currency(),
+				));
 			}
 
 			/**
