@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.16.4
+ * Version: 1.16.6
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.16.4' );
+define( 'AFTERSHIP_VERSION', '1.16.6' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
@@ -487,7 +487,7 @@ if ( is_woocommerce_active() ) {
 				// require new files, don't adjust file order
 				require_once( $this->plugin_dir . '/includes/define.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
-				$this->import_csv = new AfterShip_Import_Csv();
+				$this->import_csv = new AfterShip_Import_Csv($this->actions, $this->couriers);
 			}
 
 			/**
