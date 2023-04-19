@@ -6,7 +6,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-ini_set( 'auto_detect_line_endings', true );
 
 class AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG {
 	public static function log( $logs_content, $file_name = 'import_tracking.txt', $max = 2000 ) {

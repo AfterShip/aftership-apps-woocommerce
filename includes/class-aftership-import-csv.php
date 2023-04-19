@@ -7,11 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * When turned on, PHP will examine the data read by fgets() and file() to see if it is using Unix, MS-Dos or Macintosh line-ending conventions.
- */
-ini_set( 'auto_detect_line_endings', true );
-
 class AfterShip_Import_Csv {
 	protected $settings;
 	protected $options;
@@ -29,12 +24,12 @@ class AfterShip_Import_Csv {
 	protected $selected_carrier_slugs;
 	protected $actions;
 
-	public function __construct() {
-		$this->actions                = AfterShip_Actions::get_instance();
+	public function __construct($actions, $couriers) {
+		$this->actions                = $actions;
 		$this->options                = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 		$selected_carrier_slugs       = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
 		$this->selected_carrier_slugs = array_filter( $selected_carrier_slugs );
-		$this->carriers               = json_decode( file_get_contents( AFTERSHIP_TRACKING_JS . '/couriers.json' ), true );
+		$this->carriers               = $couriers;
 		$this->change_order_status    = array(
 			'wc-processing' => 'Processing',
 			'wc-completed'  => 'Completed',
