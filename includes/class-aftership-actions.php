@@ -486,6 +486,11 @@ class AfterShip_Actions {
 
 		$this->save_tracking_items( $order_id, array_values( $tracking_items ) );
 
+		// date_modified update
+		$order = new WC_Order( $order_id );
+		$order->set_date_modified( current_time( 'mysql' ) );
+		$order->save();
+
 		return array_values( $tracking_items );
 	}
 
