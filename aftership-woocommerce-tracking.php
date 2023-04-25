@@ -24,7 +24,7 @@ define( 'AFTERSHIP_VERSION', '1.16.6' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
-define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Shipping Insurance Fee' );
+define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Protection' );
 
 if ( is_woocommerce_active() ) {
 
@@ -226,11 +226,16 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_customer_query', array( $this->actions, 'add_customer_query' ), 10, 2 );
 
 				add_action('woocommerce_cart_calculate_fees', array($this, 'apply_aftership_shipping_insurance_fee'), 20, 1);
+				add_action( 'woocommerce_cart_emptied', array( $this, 'handle_woocommerce_cart_emptied' ) );
 
 				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
+			}
+
+			function handle_woocommerce_cart_emptied() {
+				WC()->session->set( 'aftership_shipping_insurance_fee', null);
 			}
 
 
@@ -248,6 +253,10 @@ if ( is_woocommerce_active() ) {
 				WC()->cart->calculate_totals();
 				$wc_cart = WC()->cart;
 				$cart = $wc_cart->get_cart();
+				foreach ( $cart as $cart_item_key => $cart_item ) {
+					$product = wc_get_product( $cart_item['product_id'] );
+					$cart[$cart_item_key]['product'] = $product->get_data();
+				}
 				$amount = wc_clean( $_REQUEST['amount'] );
 				WC()->session->set( 'aftership_shipping_insurance_fee' ,  $amount);
 				// re-calculate cart fees.
@@ -265,6 +274,10 @@ if ( is_woocommerce_active() ) {
 			function remove_insurance_fee_ajax_handler () {
 				$wc_cart = WC()->cart;
 				$cart = $wc_cart->get_cart();
+				foreach ( $cart as $cart_item_key => $cart_item ) {
+					$product = wc_get_product( $cart_item['product_id'] );
+					$cart[$cart_item_key]['product'] = $product->get_data();
+				}
 				WC()->session->set( 'aftership_shipping_insurance_fee' ,  '-');
 				WC()->cart->calculate_totals();
 				wp_send_json_success( array(
@@ -287,7 +300,7 @@ if ( is_woocommerce_active() ) {
 					$cart[$cart_item_key]['product'] = $product->get_data();
 				}
 				wp_send_json_success( array(
-					'cart'=> $wc_cart->get_cart(),
+					'cart'=> $cart,
 					'fees'=> $wc_cart->fees_api()->get_fees(),
 					'totals'=> $wc_cart->get_totals(),
 					'currency'=> get_woocommerce_currency(),
