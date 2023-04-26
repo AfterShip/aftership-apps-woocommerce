@@ -23,7 +23,6 @@ require_once( 'woo-includes/woo-functions.php' );
 define( 'AFTERSHIP_VERSION', '1.16.8' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
-define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
 define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Protection' );
 
 if ( is_woocommerce_active() ) {
@@ -148,8 +147,6 @@ if ( is_woocommerce_active() ) {
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
 
-				// Enqueue js on frontend.
-				add_action('wp_enqueue_scripts', array( $this, 'enqueue_frontend_js' ));
 				// Get cart details.
 				add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
 				add_action( 'wp_ajax_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
@@ -250,42 +247,16 @@ if ( is_woocommerce_active() ) {
 			 * Ajax handler to set insurance fee.
 			 */
 			function set_insurance_fee_ajax_handler() {
-				WC()->cart->calculate_totals();
-				$wc_cart = WC()->cart;
-				$cart = $wc_cart->get_cart();
-				foreach ( $cart as $cart_item_key => $cart_item ) {
-					$product = wc_get_product( $cart_item['product_id'] );
-					$cart[$cart_item_key]['product'] = $product->get_data();
-				}
 				$amount = wc_clean( $_REQUEST['amount'] );
 				WC()->session->set( 'aftership_shipping_insurance_fee' ,  $amount);
-				// re-calculate cart fees.
-				WC()->cart->calculate_totals();
-				wp_send_json_success( array(
-					'fees'=>$wc_cart->fees_api()->get_fees(),
-					'cart'=> $cart,
-					'totals'=> $wc_cart->get_totals(),
-					'currency'=> get_woocommerce_currency(),
-				));
+				$this->get_cart_details_ajax_handler();
 			}
 			/**
 			 * Ajax handler to remove insurance fee.
 			 */
 			function remove_insurance_fee_ajax_handler () {
-				$wc_cart = WC()->cart;
-				$cart = $wc_cart->get_cart();
-				foreach ( $cart as $cart_item_key => $cart_item ) {
-					$product = wc_get_product( $cart_item['product_id'] );
-					$cart[$cart_item_key]['product'] = $product->get_data();
-				}
 				WC()->session->set( 'aftership_shipping_insurance_fee' ,  '-');
-				WC()->cart->calculate_totals();
-				wp_send_json_success( array(
-					'fees'=>$wc_cart->fees_api()->get_fees(),
-					'cart'=> $cart,
-					'totals'=> $wc_cart->get_totals(),
-					'currency'=> get_woocommerce_currency(),
-				));
+				$this->get_cart_details_ajax_handler();
 			}
 
 			/**
@@ -305,17 +276,6 @@ if ( is_woocommerce_active() ) {
 					'totals'=> $wc_cart->get_totals(),
 					'currency'=> get_woocommerce_currency(),
 				));
-			}
-
-			/**
-			 * Add frontend javascript
-			 */
-			function enqueue_frontend_js()
-			{
-				$options = get_option(AFTERSHIP_SCRIPT_TAGS, array());
-				foreach ($options as $id => $option) {
-					wp_enqueue_script($id, $option['src']);
-				}
 			}
 
 			/**
@@ -438,7 +398,6 @@ if ( is_woocommerce_active() ) {
 			 * @return array
 			 */
 			function add_rest_api( $controllers ) {
-				$controllers['wc/v3']['script_tags'] = 'AfterShip_API_Script_Tags';
 				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
 				return $controllers;
 			}
@@ -495,7 +454,6 @@ if ( is_woocommerce_active() ) {
 				require( $this->plugin_dir . '/includes/class-shipment-tracking-migrator.php' );
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
-				require_once( $this->plugin_dir . '/includes/api/class-aftership-api-script-tags.php' );
 				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
 				// require new files, don't adjust file order
 				require_once( $this->plugin_dir . '/includes/define.php' );
