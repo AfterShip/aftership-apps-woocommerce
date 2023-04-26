@@ -46,6 +46,13 @@ if ( is_woocommerce_active() ) {
 			public $actions;
 
 			/**
+			 * Instance of AfterShip_Protection.
+			 *
+			 * @var AfterShip_Protection
+			 */
+			public $protection;
+
+			/**
 			 * Instance of AfterShip_Import_Csv.
 			 *
 			 * @var AfterShip_Import_Csv
@@ -148,14 +155,14 @@ if ( is_woocommerce_active() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
 
 				// Get cart details.
-				add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
-				add_action( 'wp_ajax_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
+				add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this->protection, 'get_cart_details_ajax_handler') );
+				add_action( 'wp_ajax_aftership_get_cart_details', array($this->protection, 'get_cart_details_ajax_handler') );
 				// Set insurance fee.
-				add_action( 'wp_ajax_nopriv_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
-				add_action( 'wp_ajax_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_nopriv_aftership_set_insurance_fee', array($this->protection, 'set_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_aftership_set_insurance_fee', array($this->protection, 'set_insurance_fee_ajax_handler') );
 				// Remove insurance fee.
-				add_action( 'wp_ajax_nopriv_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
-				add_action( 'wp_ajax_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_nopriv_aftership_remove_insurance_fee', array($this->protection, 'remove_insurance_fee_ajax_handler') );
+				add_action( 'wp_ajax_aftership_remove_insurance_fee', array($this->protection, 'remove_insurance_fee_ajax_handler') );
 
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
@@ -222,60 +229,13 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_customer_query', array( $this->actions, 'add_customer_query' ), 10, 2 );
 
-				add_action('woocommerce_cart_calculate_fees', array($this, 'apply_aftership_shipping_insurance_fee'), 20, 1);
-				add_action( 'woocommerce_cart_emptied', array( $this, 'handle_woocommerce_cart_emptied' ) );
+				add_action('woocommerce_cart_calculate_fees', array($this->protection, 'apply_aftership_shipping_insurance_fee'), 20, 1);
+				add_action( 'woocommerce_cart_emptied', array( $this->protection, 'handle_woocommerce_cart_emptied' ) );
 
 				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
-			}
-
-			function handle_woocommerce_cart_emptied() {
-				WC()->session->set( 'aftership_shipping_insurance_fee', null);
-			}
-
-
-			function apply_aftership_shipping_insurance_fee() {
-				$amount = WC()->session->get( 'aftership_shipping_insurance_fee', '-');
-				if ($amount !== '-') {
-					WC()->cart->add_fee(AFTERSHIP_PROTECTION_LABEL, $amount, false, "");
-				}
-			}
-
-			/**
-			 * Ajax handler to set insurance fee.
-			 */
-			function set_insurance_fee_ajax_handler() {
-				$amount = wc_clean( $_REQUEST['amount'] );
-				WC()->session->set( 'aftership_shipping_insurance_fee' ,  $amount);
-				$this->get_cart_details_ajax_handler();
-			}
-			/**
-			 * Ajax handler to remove insurance fee.
-			 */
-			function remove_insurance_fee_ajax_handler () {
-				WC()->session->set( 'aftership_shipping_insurance_fee' ,  '-');
-				$this->get_cart_details_ajax_handler();
-			}
-
-			/**
-			 * Ajax handler to get cart info.
-			 */
-			function get_cart_details_ajax_handler() {
-				WC()->cart->calculate_totals();
-				$wc_cart = WC()->cart;
-				$cart = $wc_cart->get_cart();
-				foreach ( $cart as $cart_item_key => $cart_item ) {
-					$product = wc_get_product( $cart_item['product_id'] );
-					$cart[$cart_item_key]['product'] = $product->get_data();
-				}
-				wp_send_json_success( array(
-					'cart'=> $cart,
-					'fees'=> $wc_cart->fees_api()->get_fees(),
-					'totals'=> $wc_cart->get_totals(),
-					'currency'=> get_woocommerce_currency(),
-				));
 			}
 
 			/**
@@ -449,7 +409,9 @@ if ( is_woocommerce_active() ) {
 			 */
 			private function includes() {
 				require( $this->plugin_dir . '/includes/class-aftership-actions.php' );
+				require( $this->plugin_dir . '/includes/class-aftership-protection.php' );
 				$this->actions = AfterShip_Actions::get_instance();
+				$this->protection = AfterShip_Protection::get_instance();
 				require( $this->plugin_dir . '/includes/api/class-aftership-api.php' );
 				require( $this->plugin_dir . '/includes/class-shipment-tracking-migrator.php' );
 				$this->api = new AfterShip_API();
