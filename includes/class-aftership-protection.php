@@ -30,6 +30,22 @@ class AfterShip_Protection {
 		return self::$instance;
 	}
 
+	private function __construct()
+	{
+		// Get cart details.
+		add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
+		add_action( 'wp_ajax_aftership_get_cart_details', array($this, 'get_cart_details_ajax_handler') );
+		// Set insurance fee.
+		add_action( 'wp_ajax_nopriv_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
+		add_action( 'wp_ajax_aftership_set_insurance_fee', array($this, 'set_insurance_fee_ajax_handler') );
+		// Remove insurance fee.
+		add_action( 'wp_ajax_nopriv_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
+		add_action( 'wp_ajax_aftership_remove_insurance_fee', array($this, 'remove_insurance_fee_ajax_handler') );
+		// Re calculate & empty cart
+		add_action('woocommerce_cart_calculate_fees', array($this, 'apply_aftership_shipping_insurance_fee'), 20, 1);
+		add_action( 'woocommerce_cart_emptied', array( $this, 'handle_woocommerce_cart_emptied' ) );
+	}
+
 	/**
 	 * Clear AfterShip shipping insurance fee.
 	 */

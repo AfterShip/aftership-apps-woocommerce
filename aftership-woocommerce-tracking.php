@@ -154,16 +154,6 @@ if ( is_woocommerce_active() ) {
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
 
-				// Get cart details.
-				add_action( 'wp_ajax_nopriv_aftership_get_cart_details', array($this->protection, 'get_cart_details_ajax_handler') );
-				add_action( 'wp_ajax_aftership_get_cart_details', array($this->protection, 'get_cart_details_ajax_handler') );
-				// Set insurance fee.
-				add_action( 'wp_ajax_nopriv_aftership_set_insurance_fee', array($this->protection, 'set_insurance_fee_ajax_handler') );
-				add_action( 'wp_ajax_aftership_set_insurance_fee', array($this->protection, 'set_insurance_fee_ajax_handler') );
-				// Remove insurance fee.
-				add_action( 'wp_ajax_nopriv_aftership_remove_insurance_fee', array($this->protection, 'remove_insurance_fee_ajax_handler') );
-				add_action( 'wp_ajax_aftership_remove_insurance_fee', array($this->protection, 'remove_insurance_fee_ajax_handler') );
-
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
 				// register admin pages for the plugin
@@ -228,9 +218,6 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_product_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_customer_query', array( $this->actions, 'add_customer_query' ), 10, 2 );
-
-				add_action('woocommerce_cart_calculate_fees', array($this->protection, 'apply_aftership_shipping_insurance_fee'), 20, 1);
-				add_action( 'woocommerce_cart_emptied', array( $this->protection, 'handle_woocommerce_cart_emptied' ) );
 
 				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
