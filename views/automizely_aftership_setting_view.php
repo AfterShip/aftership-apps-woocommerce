@@ -109,7 +109,7 @@ if ( $debug === 'yes' ) {
 				<div class="auto-as-admin-recommand-list-item">
 					<img
 							style="width: 64px; height: 64px"
-							src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-marketing.svg"
+							src="https://websites.am-static.com/assets/brands/glyph/aftership_email.svg"
 							alt=""
 					/>
 					<div class="auto-as-admin-recommand-list-item-detail">
@@ -128,7 +128,7 @@ if ( $debug === 'yes' ) {
 					<div class="auto-rc-admin-recommand-list-item">
 						<img
 								style="width: 64px; height: 64px"
-								src="https://websites.am-static.com/assets/logos/glyph/glyph_automizely-feed.svg"
+								src="https://websites.am-static.com/assets/brands/glyph/aftership_feed.svg"
 								alt=""
 						/>
 						<div class="auto-rc-admin-recommand-list-item-detail">
