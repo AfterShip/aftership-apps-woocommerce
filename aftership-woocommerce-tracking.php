@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.16.9
+ * Version: 1.17.0
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,9 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.16.9' );
+define( 'AFTERSHIP_VERSION', '1.17.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
+define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
 define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Protection' );
 
 if ( is_woocommerce_active() ) {
@@ -153,6 +154,9 @@ if ( is_woocommerce_active() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
 				// Remove other plugins notice message for setting and landing page
 				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
+
+				// Enqueue js on frontend.
+				add_action( 'wp_enqueue_scripts', array( $this, 'as_enqueue_frontend_js' ) );
 
 				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
@@ -297,6 +301,35 @@ if ( is_woocommerce_active() ) {
 			}
 
 			/**
+			 * Add frontend javascript
+			 */
+			function as_enqueue_frontend_js() {
+				$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
+				foreach ( $options as $id => $option ) {
+					// Script tags only display on specific page. eg: checkout、cart
+					if ( isset( $option['display_scope'] ) && ! empty( $option['display_scope'] ) ) {
+						switch ( $option['display_scope'] ) {
+							case 'checkout':
+								if ( is_checkout() ) {
+									wp_enqueue_script( $id, $option['src'] );
+								}
+								break;
+							case 'cart':
+								if ( is_cart() ) {
+									wp_enqueue_script( $id, $option['src'] );
+								}
+								break;
+							default:
+								break;
+						}
+					} else {
+						// Default all pages
+						wp_enqueue_script( $id, $option['src'] );
+					}
+				}
+			}
+
+			/**
 			 * Description:
 			 * Parameters:  None
 			 */
@@ -346,6 +379,7 @@ if ( is_woocommerce_active() ) {
 			 */
 			function add_rest_api( $controllers ) {
 				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
+				$controllers['wc/v3']['script_tags']        = 'AfterShip_REST_Script_Tags_Controller';
 				return $controllers;
 			}
 
@@ -404,6 +438,8 @@ if ( is_woocommerce_active() ) {
 				$this->api = new AfterShip_API();
 				require_once( $this->plugin_dir . '/includes/class-aftership-settings.php' );
 				require_once( $this->plugin_dir . '/includes/api/aftership/v1/class-am-rest-settings-controller.php' );
+				// Support enqueue scripts
+				require_once( $this->plugin_dir . '/includes/api/class-aftership-api-script-tags.php' );
 				// require new files, don't adjust file order
 				require_once( $this->plugin_dir . '/includes/define.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
