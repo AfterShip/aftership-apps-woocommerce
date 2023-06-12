@@ -109,10 +109,12 @@ if ( ! class_exists( 'AfterShip_REST_Script_Tags_Controller' ) ) {
 				);
 
 				// Enqueue script on specific page
-				if ( ! empty( $display_scope ) && in_array( $display_scope, $this->allow_display_scope, true ) ) {
-					$script_fields['display_scope'] = $display_scope;
-				} else {
-					return new WP_Error( 'woocommerce_rest_script_tags_invalid_display_scope', __( 'Script tags display_scope invalid.', 'woocommerce' ), array( 'status' => 400 ) );
+				if ( ! empty( $display_scope ) ) {
+					if ( in_array( $display_scope, $this->allow_display_scope, true ) ) {
+						$script_fields['display_scope'] = $display_scope;
+					} else {
+						return new WP_Error( 'woocommerce_rest_script_tags_invalid_display_scope', __( 'Script tags display_scope invalid.', 'woocommerce' ), array( 'status' => 400 ) );
+					}
 				}
 
 				$options[ $id ] = $script_fields;
@@ -166,13 +168,16 @@ if ( ! class_exists( 'AfterShip_REST_Script_Tags_Controller' ) ) {
 			if ( $option['consumer_key'] != $this->consumer_key ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_invalid_id', __( 'Invalid script_tags ID.', 'woocommerce' ), array( 'status' => 404 ) );
 			}
-			if ( ! empty( $display_scope ) && ! in_array( $display_scope, $this->allow_display_scope, true ) ) {
-				return new WP_Error( 'woocommerce_rest_script_tags_invalid_display_scope', __( 'invalid display_scope.', 'woocommerce' ), array( 'status' => 400 ) );
+			if ( ! empty( $display_scope ) ) {
+				if ( in_array( $display_scope, $this->allow_display_scope, true ) ) {
+					$option['display_scope'] = $display_scope;
+				} else {
+					return new WP_Error( 'woocommerce_rest_script_tags_invalid_display_scope', __( 'invalid display_scope.', 'woocommerce' ), array( 'status' => 400 ) );
+				}
 			}
-			$option['src']           = $src;
-			$option['display_scope'] = $display_scope;
-			$option['updated_at']    = current_time( 'Y-m-d\TH:i:s\Z', true );
-			$options[ $id ]          = $option;
+			$option['src']        = $src;
+			$option['updated_at'] = current_time( 'Y-m-d\TH:i:s\Z', true );
+			$options[ $id ]       = $option;
 			update_option( AFTERSHIP_SCRIPT_TAGS, $options );
 			return array( 'script_tag' => $this->filter_consumer_key( $option ) );
 		}
