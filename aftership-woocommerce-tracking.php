@@ -319,6 +319,9 @@ if ( is_woocommerce_active() ) {
 									wp_enqueue_script( $id, $option['src'] );
 								}
 								break;
+							case 'all':
+								wp_enqueue_script( $id, $option['src'] );
+								break;
 							default:
 								break;
 						}
