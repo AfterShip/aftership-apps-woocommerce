@@ -23,7 +23,7 @@ require_once( 'woo-includes/woo-functions.php' );
 define( 'AFTERSHIP_VERSION', '1.17.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
-define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
+define( 'AUTOMIZELY_SCRIPT_TAGS', 'automizely_script_tags' );
 define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Protection' );
 
 if ( is_woocommerce_active() ) {
@@ -304,7 +304,7 @@ if ( is_woocommerce_active() ) {
 			 * Add frontend javascript
 			 */
 			function as_enqueue_frontend_js() {
-				$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
+				$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
 				foreach ( $options as $id => $option ) {
 					// Script tags only display on specific page. eg: checkout、cart
 					if ( isset( $option['display_scope'] ) && ! empty( $option['display_scope'] ) ) {
@@ -382,7 +382,7 @@ if ( is_woocommerce_active() ) {
 			 */
 			function add_rest_api( $controllers ) {
 				$controllers['wc/aftership/v1']['settings'] = 'AM_REST_Settings_Controller';
-				$controllers['wc/v3']['script_tags']        = 'AfterShip_REST_Script_Tags_Controller';
+				$controllers['wc/v3']['script_tags']        = 'AfterShip_API_Script_Tags';
 				return $controllers;
 			}
 
