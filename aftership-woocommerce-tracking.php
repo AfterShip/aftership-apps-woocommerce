@@ -23,7 +23,7 @@ require_once( 'woo-includes/woo-functions.php' );
 define( 'AFTERSHIP_VERSION', '1.17.0' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
-define( 'AUTOMIZELY_SCRIPT_TAGS', 'automizely_script_tags' );
+define( 'AFTERSHIP_SCRIPT_TAGS', 'automizely_script_tags' );
 define( 'AFTERSHIP_PROTECTION_LABEL', 'AfterShip Protection' );
 
 if ( is_woocommerce_active() ) {

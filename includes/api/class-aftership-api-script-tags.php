@@ -50,7 +50,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 		 */
 		public function get_script_tag( WP_REST_Request $request ) {
 			$id      = $request->get_param( 'id' );
-			$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+			$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 			if ( ! array_key_exists( $id, $options ) ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_invalid_id', __( 'Invalid script_tags ID.', 'woocommerce' ), array( 'status' => 404 ) );
 			}
@@ -69,7 +69,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 		 */
 		public function get_script_tags( WP_REST_Request $request ) {
 			$force       = $request->get_param( 'force' );
-			$options     = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+			$options     = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 			$script_tags = array();
 			foreach ( $options as $id => $item ) {
 				if ( ! $force && $item['consumer_key'] != $this->consumer_key ) {
@@ -89,7 +89,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 		public function create_script_tag( WP_REST_Request $request ) {
 			$src           = $request->get_param( 'src' );
 			$display_scope = $request->get_param( 'display_scope' );
-			$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+			$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 			if ( count( $options ) >= 10 ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_reach_size_limit', __( 'Script tags size reach limit.', 'woocommerce' ), array( 'status' => 400 ) );
 			}
@@ -117,7 +117,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 				}
 
 				$options[ $id ] = $script_fields;
-				update_option( AUTOMIZELY_SCRIPT_TAGS, $options );
+				update_option( AFTERSHIP_SCRIPT_TAGS, $options );
 			}
 			return array( 'script_tag' => $this->filter_consumer_key( $this->get_option_by_src( $options, $src ) ) );
 		}
@@ -131,7 +131,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 		public function delete_script_tag( WP_REST_Request $request ) {
 			$id      = $request->get_param( 'id' );
 			$force   = $request->get_param( 'force' );
-			$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+			$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 			if ( ! array_key_exists( $id, $options ) ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_invalid_id', __( 'Invalid script_tags ID.', 'woocommerce' ), array( 'status' => 404 ) );
 			}
@@ -142,7 +142,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 				}
 			}
 			unset( $options[ $id ] );
-			update_option( AUTOMIZELY_SCRIPT_TAGS, $options );
+			update_option( AFTERSHIP_SCRIPT_TAGS, $options );
 			return array( 'script_tag' => $this->filter_consumer_key( $option ) );
 		}
 
@@ -159,7 +159,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 			if ( ! $this->is_script_tag_valid( $src ) ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_invalid_src', __( 'Script tags src invalid.', 'woocommerce' ), array( 'status' => 400 ) );
 			}
-			$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+			$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 			if ( ! array_key_exists( $id, $options ) ) {
 				return new WP_Error( 'woocommerce_rest_script_tags_invalid_id', __( 'Invalid script_tags ID.', 'woocommerce' ), array( 'status' => 404 ) );
 			}
@@ -177,7 +177,7 @@ if ( ! class_exists( 'AfterShip_API_Script_Tags' ) ) {
 			$option['src']        = $src;
 			$option['updated_at'] = current_time( 'Y-m-d\TH:i:s\Z', true );
 			$options[ $id ]       = $option;
-			update_option( AUTOMIZELY_SCRIPT_TAGS, $options );
+			update_option( AFTERSHIP_SCRIPT_TAGS, $options );
 			return array( 'script_tag' => $this->filter_consumer_key( $option ) );
 		}
 
