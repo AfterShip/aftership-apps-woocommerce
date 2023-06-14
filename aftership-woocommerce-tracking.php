@@ -304,7 +304,7 @@ if ( is_woocommerce_active() ) {
 			 * Add frontend javascript
 			 */
 			function as_enqueue_frontend_js() {
-				$options = get_option( AUTOMIZELY_SCRIPT_TAGS, array() );
+				$options = get_option( AFTERSHIP_SCRIPT_TAGS, array() );
 				foreach ( $options as $id => $option ) {
 					// Script tags only display on specific page. eg: checkout、cart
 					if ( isset( $option['display_scope'] ) && ! empty( $option['display_scope'] ) ) {
