@@ -139,7 +139,7 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 1.17.0 =
-* Enqueue scrips for checkout page
+* Enhancement: support script tags API
 
 = 1.16.9 =
 * Update recommendation icons
