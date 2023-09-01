@@ -4,7 +4,7 @@ Donate link: https://www.aftership.com/
 Tags: woocommerce shipping,woocommerce tracking,shipment tracking,order tracking, woocommerce,track order,dhl,ups,usps,fedex,shipping,tracking,order
 Requires at least: 2.9
 Tested up to: 6.3
-Stable tag: 1.17.1
+Stable tag: 1.17.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ Automatically import your tracking numbers to AfterShip, so you can get current 
 ###ANALYZE & TAKE ACTION
 - Get powerful insight on shipping performance, notifications, tracking pages, and customer feedback
 - Filter Data by shipping date, shipment type, devices, location, visits, and more
+
+###INTEGRATE WITH AFTERSHIP RETURNS
+[AfterShip Returns](https://wordpress.org/plugins/automizely-returnscenter) streamline your return processes with automated functions based on shipment statuses
 
 ###PARTIAL LIST OF SUPPORTED SHIPPING PROVIDERS (900+):
 **①. US, Canada & Global Tracking (35)**
