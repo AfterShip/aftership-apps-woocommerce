@@ -87,6 +87,10 @@ class AfterShip_Protection {
 		$wc_cart = WC()->cart;
 		$cart = $wc_cart->get_cart();
 		foreach ( $cart as $cart_item_key => $cart_item ) {
+			if (isset($cart_item['variation_id']) && isset($cart_item['variation'])) {
+				$variation    = new WC_Product_Variation( $cart_item['variation_id'] );
+				$cart[$cart_item_key]['variation'] = array_merge($cart_item['variation'], $variation->get_data());
+			}
 			$product = wc_get_product( $cart_item['product_id'] );
 			$cart[$cart_item_key]['product'] = $product->get_data();
 		}
