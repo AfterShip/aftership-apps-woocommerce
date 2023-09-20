@@ -20,6 +20,15 @@ if ( ! function_exists( 'wc_order_util_method_exists' ) ) {
 	}
 }
 
+if ( ! function_exists( 'custom_orders_table_usage_is_enabled' ) ) {
+	function custom_orders_table_usage_is_enabled() {
+		if(!wc_order_util_method_exists('custom_orders_table_usage_is_enabled')) {
+			return false;
+		}
+		return call_user_func_array(array('Automattic\WooCommerce\Utilities\OrderUtil', 'custom_orders_table_usage_is_enabled'), array());
+	}
+}
+
 if ( ! function_exists( 'get_order_admin_screen' ) ) {
 	function get_order_admin_screen() {
 		if(!wc_order_util_method_exists('get_order_admin_screen')) {

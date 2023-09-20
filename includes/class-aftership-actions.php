@@ -583,7 +583,11 @@ class AfterShip_Actions {
 			// Delete order trackings, $tracking_items may be []
 			$order->update_meta_data( '_aftership_tracking_number', isset( $tracking_items[0]['tracking_number'] ) ? $tracking_items[0]['tracking_number'] : '' );
 			$order->update_meta_data( '_aftership_tracking_provider_name', isset( $tracking_items[0]['slug'] ) ? $tracking_items[0]['slug'] : '' );
-			$order->save_meta_data();
+			if (custom_orders_table_usage_is_enabled()) {
+				$order->save();
+			} else {
+				$order->save_meta_data();
+			}
 		}
 	}
 
