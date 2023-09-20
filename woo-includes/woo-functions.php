@@ -14,6 +14,21 @@ if ( ! function_exists( 'is_woocommerce_active' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_order_util_method_exists' ) ) {
+	function wc_order_util_method_exists($method_name) {
+		return class_exists('Automattic\WooCommerce\Utilities\OrderUtil') && method_exists('Automattic\WooCommerce\Utilities\OrderUtil', $method_name);
+	}
+}
+
+if ( ! function_exists( 'get_order_admin_screen' ) ) {
+	function get_order_admin_screen() {
+		if(!wc_order_util_method_exists('get_order_admin_screen')) {
+			return 'shop_order';
+		}
+		return call_user_func_array(array('Automattic\WooCommerce\Utilities\OrderUtil', 'get_order_admin_screen'), array());
+	}
+}
+
 if ( ! function_exists( 'get_order_id' ) ) {
     function get_order_id($order) {
         return (method_exists($order, 'get_id'))? $order->get_id() : $order->id;

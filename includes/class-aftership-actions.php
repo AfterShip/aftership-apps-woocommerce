@@ -128,7 +128,7 @@ class AfterShip_Actions {
 	 * Add the meta box for shipment info on the order page
 	 */
 	public function add_meta_box() {
-		add_meta_box( 'woocommerce-aftership', __( 'AfterShip', 'aftership' ), array( $this, 'meta_box' ), 'shop_order', 'side', 'high' );
+		add_meta_box( 'woocommerce-aftership', __( 'AfterShip', 'aftership' ), array( $this, 'meta_box' ), get_order_admin_screen(), 'side', 'high' );
 	}
 
 	/**
@@ -1048,6 +1048,22 @@ class AfterShip_Actions {
 		global $post;
 		if ( 'woocommerce-automizely-aftership-tracking' === $column ) {
 			echo wp_kses_post( $this->get_automizely_aftership_tracking_column( $post->ID ) );
+		}
+	}
+
+	/**
+	 * Render AfterShip tracking in custom column on WC Orders page (when using Custom Order Tables).
+	 *
+	 * @param string $column_name Identifier for the custom column.
+	 * @param \WC_Order $order Current WooCommerce order object.
+	 *
+	 * @return void
+	 * @since 1.8.0
+	 *
+	 */
+	public function render_wc_orders_list_columns( $column_name, $order ) {
+		if ( 'woocommerce-automizely-aftership-tracking' === $column_name ) {
+			echo wp_kses_post( $this->get_automizely_aftership_tracking_column( $order->get_id() ) );
 		}
 	}
 
