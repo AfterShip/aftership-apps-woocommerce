@@ -130,6 +130,14 @@ class AfterShip_Settings {
 		);
 
 		add_settings_field(
+			'enable_import_tracking',
+			'',
+			array( $this, 'enable_import_tracking_callback' ),
+			'aftership-setting-admin',
+			'aftership_setting_section_id'
+		);
+
+		add_settings_field(
 			$this->dom_id_show_order_actions,
 			'',
 			array( $this, 'show_order_actions_callback' ),
@@ -164,7 +172,9 @@ class AfterShip_Settings {
 		}
 
 		if ( isset( $input['enable_import_tracking'] ) ) {
-			$new_input['enable_import_tracking'] = intval( $input['enable_import_tracking'] );
+			if ($input['enable_import_tracking'] == 'on' || $input['enable_import_tracking'] === true || intval($input['enable_import_tracking']) === 1 ) {
+				$new_input['enable_import_tracking'] = 1;
+			}
 		}
 
 		if ( isset( $input['show_orders_actions'] ) ) {
@@ -212,9 +222,6 @@ class AfterShip_Settings {
 		if ( isset( $this->options['connected'] ) ) {
 			echo '<input type="hidden" id="' . $this->dom_aftership_connected . '" name="aftership_option_name[connected]" value="' . $this->options['connected'] . '" />';
 		}
-		if ( isset( $this->options['enable_import_tracking'] ) ) {
-			echo '<input type="hidden" id="' . $this->dom_aftership_enable_import_tracking . '" name="aftership_option_name[enable_import_tracking]" value="' . $this->options['enable_import_tracking'] . '" />';
-		}
 	}
 
 	/**
@@ -224,6 +231,16 @@ class AfterShip_Settings {
 		printf(
 			'<div class="auto-as-admin-input-title">Display Tracking Information at Custom Domain</div><input type="text" class="auto-as-admin-input-content" id="custom_domain" name="aftership_option_name[custom_domain]" value="%s" style="width:100%%">',
 			isset( $this->options['custom_domain'] ) ? $this->normalize_custom_domain( $this->options['custom_domain'] ) : 'track.aftership.com'
+		);
+	}
+
+	/**
+	 * Call this func before shown on pages.
+	 */
+	public function enable_import_tracking_callback() {
+		printf(
+			'<div class="auto-as-admin-checkbox-title">Enable CSV Tracking Import</div><label><input type="checkbox" id="enable_import_tracking" name="aftership_option_name[enable_import_tracking]" %s>Enable</label>',
+			( isset( $this->options['enable_import_tracking'] ) && 1 === $this->options['enable_import_tracking'] ) ? 'checked="checked"' : ''
 		);
 	}
 
