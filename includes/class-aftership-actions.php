@@ -987,6 +987,7 @@ class AfterShip_Actions {
 			'plugin-install',
 			'shop_order',
 			'edit-shop_order',
+			'woocommerce_page_wc-orders',
 		);
 		if ( ! in_array( $screen, $pages_with_tip ) ) {
 			return;
