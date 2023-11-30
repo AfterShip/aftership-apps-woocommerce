@@ -2394,6 +2394,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dpd-at",
+			"name": "DPD Austria",
+			"other_name": "DPD AT",
+			"required_fields": []
+		},
+		{
 			"slug": "dpd-at-sftp",
 			"name": "DPD Austria",
 			"other_name": "DPD AT",
@@ -2530,6 +2536,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "dsv-reference",
 			"name": "DSV Futurewave",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "dsv-za-sftp",
+			"name": "DSV",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -2770,6 +2782,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "emega",
+			"name": "eMEGA Logistics",
+			"other_name": "eMEGA Logistics",
+			"required_fields": []
+		},
+		{
 			"slug": "emirates-post",
 			"name": "Emirates Post",
 			"other_name": "مجموعة بريد الإمارات, UAE Post",
@@ -2859,6 +2877,12 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "estafeta",
+			"name": "Estafeta",
+			"other_name": "Estafeta Mexicana",
+			"required_fields": []
+		},
+		{
+			"slug": "estafeta-api",
 			"name": "Estafeta",
 			"other_name": "Estafeta Mexicana",
 			"required_fields": []
@@ -3035,7 +3059,7 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "fastway-au",
-			"name": "Aramex Australia (formerly Fastway AU)",
+			"name": "Aramex Australia",
 			"other_name": "Fastway Couriers",
 			"required_fields": []
 		},
@@ -4638,6 +4662,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "landmark-global-ftp",
+			"name": "Landmark Global",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
 			"slug": "landmark-global-reference",
 			"name": "Landmark Global Reference",
 			"other_name": "",
@@ -4757,6 +4787,12 @@ function get_aftership_couriers() {
 			"slug": "livrapide",
 			"name": "Livrapide",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "lmparcel",
+			"name": "LM Parcel",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5333,6 +5369,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "navlungo",
+			"name": "Navlungo",
+			"other_name": "Navlungo",
+			"required_fields": []
+		},
+		{
 			"slug": "new-zealand-post",
 			"name": "New Zealand Post",
 			"other_name": "NZ Post",
@@ -5689,13 +5731,13 @@ function get_aftership_couriers() {
 		{
 			"slug": "osm-worldwide",
 			"name": "OSM Worldwide",
-			"other_name": "",
+			"other_name": "OSM",
 			"required_fields": []
 		},
 		{
 			"slug": "osm-worldwide-sftp",
 			"name": "OSM Worldwide",
-			"other_name": "",
+			"other_name": "OSM",
 			"required_fields": []
 		},
 		{
@@ -5757,6 +5799,12 @@ function get_aftership_couriers() {
 			]
 		},
 		{
+			"slug": "packs-api",
+			"name": "DPD Netherlands",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "padtf",
 			"name": "平安达腾飞快递",
 			"other_name": "PAD",
@@ -5812,6 +5860,12 @@ function get_aftership_couriers() {
 			"slug": "pandago-api",
 			"name": "Pandago",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "pandago-ph-api",
+			"name": "Pandago",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5956,8 +6010,8 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "parcll",
-			"name": "PARCLL",
-			"other_name": null,
+			"name": "CIRRO E-Commerce",
+			"other_name": "Parcll",
 			"required_fields": []
 		},
 		{
@@ -6147,6 +6201,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "porterex-webhook",
+			"name": "Porter Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "portugal-ctt",
 			"name": "Portugal CTT",
 			"other_name": "Correios de Portugal",
@@ -6249,7 +6309,6 @@ function get_aftership_couriers() {
 			"name": "PostNL International 3S",
 			"other_name": "TNT Post parcel service United Kingdom",
 			"required_fields": [
-				"tracking_destination_country",
 				"tracking_postal_code"
 			]
 		},
@@ -6776,6 +6835,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "sendy",
+			"name": "Sendy Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "servientrega",
 			"name": "Servientrega",
 			"other_name": null,
@@ -6795,6 +6860,12 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "sf-express",
+			"name": "SF Express",
+			"other_name": "順豊快遞, SF",
+			"required_fields": []
+		},
+		{
+			"slug": "sf-express-api",
 			"name": "SF Express",
 			"other_name": "順豊快遞, SF",
 			"required_fields": []
@@ -7464,6 +7535,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "stress-test",
+			"name": "Stress Test",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "superpackline",
 			"name": "Super Pac Line",
 			"other_name": null,
@@ -7611,6 +7688,18 @@ function get_aftership_couriers() {
 			"slug": "tarrive",
 			"name": "TONDA GLOBAL",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "tasco-my",
+			"name": "TASCO BERHAD",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "tasco-my-webhook",
+			"name": "TASCO BERHAD",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
