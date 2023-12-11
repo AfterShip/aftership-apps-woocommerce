@@ -1334,7 +1334,46 @@ class AfterShip_Actions {
 		$this->add_tracking_item( $order->get_id(), array( 'tracking_number' => $tracking['tracking_number'], 'slug' => $tracking['slug'] ) );
 		$order->set_date_modified( current_time( 'mysql' ) );
 		$order->save();
+		if ($this->save_notes_to_meta_data_enabled()) {
+			try {
+				$order_id = $request['order_id'];
+				$order_notes = $this->get_order_notes($order_id);
+				$order = new WC_Order( $order_id );
+				$order->update_meta_data( '_aftership_order_notes', $order_notes );
+				$order->save_meta_data();
+			}catch ( Exception $e) {
+				return;
+			}
+		}
 	}
+
+	/*
+     * Handle order comment events send by restful api call.
+     */
+	public function handle_woocommerce_insert_order_note($comment_id, $order) {
+		if ($this->save_notes_to_meta_data_enabled()) {
+			try {
+				$order_id = $order->get_id();
+				$order_notes = $this->get_order_notes($order_id);
+				$order->update_meta_data( '_aftership_order_notes', $order_notes );
+				$order->save_meta_data();
+			}catch ( Exception $e) {
+				return;
+			}
+		}
+	}
+
+    public function save_notes_to_meta_data_enabled() {
+		$options = get_option( 'aftership_option_name' );
+		if ( ! $options ) {
+			return false;
+		}
+		$enable = isset( $options['save_notes_to_meta_data'] ) ? $options['save_notes_to_meta_data'] : -1;
+		if ( $enable !== 1 ) {
+			return false;
+		}
+        return true;
+    }
 
 	/**
 	 * Parse tracking from order note.
@@ -1354,6 +1393,55 @@ class AfterShip_Actions {
 			$tracking['tracking_number'] =  $matches[1];
 			return $tracking;
 		}
-		return null;
+        return $this->get_tracking_number_from_shippo($note);
+	}
+
+    private function get_tracking_number_from_shippo ($note) {
+		$tracking = array(
+			'tracking_number' => null,
+			'slug' => (strpos($note, "usps") !== false) ? 'usps': null,
+		);
+		if (strpos($note, "Shippo") !== false || strpos($note, "shippo") !== false) {
+			$html = stripslashes($note);
+			$pattern = '/<a[^>]*>(.*?)<\/a>/i';
+			preg_match($pattern, $html, $matches);
+			if (empty($matches[0])) {
+				return null;
+			}
+			$tracking['tracking_number'] = $matches[0];
+			return $tracking;
+		}
+        return null;
+    }
+
+	/**
+	 * Get Order Notes
+	 *
+	 * @param  $order_id string
+	 * @return array
+	 */
+	private function get_order_notes( $order_id ) {
+		$args = array(
+			'post_id' => $order_id,
+			'approve' => 'approve',
+			'type'    => 'order_note',
+		);
+
+		remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+		$notes = get_comments( $args );
+		add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+
+		$order_notes = array();
+
+		foreach ( $notes as $note ) {
+			$order_notes[] = [
+				"author" => $note->comment_author,
+				"date_created_gmt" => $note->comment_date_gmt,
+				"note" => $note->comment_content,
+				'customer_note'    => (bool) get_comment_meta( $note->comment_ID, 'is_customer_note', true ),
+			];
+		}
+
+		return $order_notes;
 	}
 }

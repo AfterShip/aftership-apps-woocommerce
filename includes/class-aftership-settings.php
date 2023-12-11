@@ -138,6 +138,14 @@ class AfterShip_Settings {
 		);
 
 		add_settings_field(
+			'save_notes_to_meta_data',
+			'',
+			array( $this, 'save_notes_to_meta_data_callback' ),
+			'aftership-setting-admin',
+			'aftership_setting_section_id'
+		);
+
+		add_settings_field(
 			$this->dom_id_show_order_actions,
 			'',
 			array( $this, 'show_order_actions_callback' ),
@@ -174,6 +182,12 @@ class AfterShip_Settings {
 		if ( isset( $input['enable_import_tracking'] ) ) {
 			if ($input['enable_import_tracking'] == 'on' || $input['enable_import_tracking'] === true || intval($input['enable_import_tracking']) === 1 ) {
 				$new_input['enable_import_tracking'] = 1;
+			}
+		}
+
+		if ( isset( $input['save_notes_to_meta_data'] ) ) {
+			if ($input['save_notes_to_meta_data'] == 'on' || $input['save_notes_to_meta_data'] === true || intval($input['save_notes_to_meta_data']) === 1 ) {
+				$new_input['save_notes_to_meta_data'] = 1;
 			}
 		}
 
@@ -241,6 +255,16 @@ class AfterShip_Settings {
 		printf(
 			'<div class="auto-as-admin-checkbox-title">Enable CSV Tracking Import</div><label><input type="checkbox" id="enable_import_tracking" name="aftership_option_name[enable_import_tracking]" %s>Enable</label>',
 			( isset( $this->options['enable_import_tracking'] ) && 1 === $this->options['enable_import_tracking'] ) ? 'checked="checked"' : ''
+		);
+	}
+
+	/**
+	 * Call this func before shown on pages.
+	 */
+	public function save_notes_to_meta_data_callback() {
+		printf(
+			'<div class="auto-as-admin-checkbox-title">Parse tracking from order notes</div><label><input type="checkbox" id="save_notes_to_meta_data" name="aftership_option_name[save_notes_to_meta_data]" %s>Enable</label>',
+			( isset( $this->options['save_notes_to_meta_data'] ) && 1 === $this->options['save_notes_to_meta_data'] ) ? 'checked="checked"' : ''
 		);
 	}
 

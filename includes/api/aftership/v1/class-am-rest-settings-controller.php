@@ -109,6 +109,11 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 				$options['enable_import_tracking'] = $data['enable_import_tracking'];
 			}
 
+			// save notes to meta, value: 1 or -1
+			if ( isset( $data['save_notes_to_meta_data'] ) && $data['save_notes_to_meta_data'] ) {
+				$options['save_notes_to_meta_data'] = $data['save_notes_to_meta_data'];
+			}
+
 			if ( isset( $data['show_orders_actions'] ) && $data['show_orders_actions'] ) {
 				if ( '' === $this->seek_option_value( $options, 'show_orders_actions' ) ) {
 					$options['show_orders_actions'] = $data['show_orders_actions'];
