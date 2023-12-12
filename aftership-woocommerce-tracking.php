@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.17.6
+ * Version: 1.17.7
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.17.6' );
+define( 'AFTERSHIP_VERSION', '1.17.7' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
@@ -216,6 +216,7 @@ if ( is_woocommerce_active() ) {
 				}
 				// Get tracking number from order notes created by restful api like royalmail.
 				add_action( 'woocommerce_rest_insert_order_note', array( $this->actions, 'handle_woocommerce_rest_insert_order_note' ), 10, 2 );
+				add_action('woocommerce_order_note_added', array( $this->actions, 'handle_woocommerce_insert_order_note' ), 10, 2 );
 
 				add_filter( 'rest_shop_order_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
 				add_filter( 'rest_shop_coupon_collection_params', array( $this->actions, 'add_collection_params' ), 10, 1 );
