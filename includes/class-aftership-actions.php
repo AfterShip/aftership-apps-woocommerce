@@ -1393,26 +1393,21 @@ class AfterShip_Actions {
 			$tracking['tracking_number'] =  $matches[1];
 			return $tracking;
 		}
-        return $this->get_tracking_number_from_shippo($note);
-	}
-
-    private function get_tracking_number_from_shippo ($note) {
-		$tracking = array(
-			'tracking_number' => null,
-			'slug' => (strpos($note, "usps") !== false) ? 'usps': null,
-		);
-		if (strpos($note, "Shippo") !== false || strpos($note, "shippo") !== false) {
-			$html = stripslashes($note);
-			$pattern = '/<a[^>]*>(.*?)<\/a>/i';
-			preg_match($pattern, $html, $matches);
-			if (empty($matches[0])) {
-				return null;
+		$home = get_home_url();
+		if (strpos($home, "99jersey.com") !== false) {
+			if (strpos($note, "tracking number") !== false) {
+				$html = stripslashes($note);
+				$pattern = '/<a[^>]*>(.*?)<\/a>/i';
+				preg_match($pattern, $html, $matches);
+				if (empty($matches[0])) {
+					return null;
+				}
+				$tracking['tracking_number'] = $matches[0];
+				return $tracking;
 			}
-			$tracking['tracking_number'] = $matches[0];
-			return $tracking;
 		}
         return null;
-    }
+	}
 
 	/**
 	 * Get Order Notes
