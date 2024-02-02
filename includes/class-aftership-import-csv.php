@@ -247,7 +247,7 @@ class AfterShip_Import_Csv {
 							'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
 							'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 							'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-							'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
+							'carrier_slug'    => esc_html__( 'Carrier Slug/Name', 'aftership-orders-tracking' ),
 						);
 						$random_required_fields         = array(
 							'order_id',
@@ -345,7 +345,7 @@ class AfterShip_Import_Csv {
 					'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
 					'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 					'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-					'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
+					'carrier_slug'    => esc_html__( 'Carrier Slug/Name', 'aftership-orders-tracking' ),
 				);
 				$data_rows  = array(
 					array(
@@ -812,7 +812,7 @@ class AfterShip_Import_Csv {
 						'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
 						'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 						'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-						'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
+						'carrier_slug'    => esc_html__( 'Carrier Slug/Name', 'aftership-orders-tracking' ),
 					),
 				)
 			);
@@ -975,7 +975,7 @@ class AfterShip_Import_Csv {
 										'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
 										'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 										'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-										'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
+										'carrier_slug'    => esc_html__( 'Carrier Slug/Name', 'aftership-orders-tracking' ),
 									);
 									$description     = array(
 										'order_id'        => '',
@@ -1071,9 +1071,9 @@ class AfterShip_Import_Csv {
 							?>
 							<div class="vi-ui positive message <?php echo esc_attr( self::set( 'import-container' ) ); ?>">
 								<ul class="list">
-									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order ID</strong>, <strong>Order Number</strong>, <strong>Tracking Number</strong>, <strong>Carrier Name</strong>. for <strong>Order ID</strong> and <strong>Order Number</strong>, you can choose to fill in one or both of them (at least one).', 'aftership-orders-tracking' ) ); ?></li>
+									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order ID</strong>, <strong>Order Number</strong>, <strong>Tracking Number</strong>, <strong>Carrier Slug/Name</strong>. for <strong>Order ID</strong> and <strong>Order Number</strong>, you can choose to fill in one or both of them (at least one).', 'aftership-orders-tracking' ) ); ?></li>
 									<li>
-										<?php esc_html_e( 'Each tracking number, carrier name of an order will be set for every product line item of that order', 'aftership-orders-tracking' ); ?>
+										<?php esc_html_e( 'Each tracking number, carrier slug/name of an order will be set for every product line item of that order', 'aftership-orders-tracking' ); ?>
 										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_demo_file"
 											   value="<?php echo esc_attr( 'Download Demo', 'aftership-orders-tracking' ); ?>">
