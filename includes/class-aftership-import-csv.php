@@ -24,7 +24,7 @@ class AfterShip_Import_Csv {
 	protected $selected_carrier_slugs;
 	protected $actions;
 
-	public function __construct($actions, $couriers) {
+	public function __construct( $actions, $couriers ) {
 		$this->actions                = $actions;
 		$this->options                = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 		$selected_carrier_slugs       = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
@@ -108,6 +108,66 @@ class AfterShip_Import_Csv {
 				'import_csv_callback',
 			)
 		);
+
+		// The user has enabled Import Tracking.
+		// Only need detect once: the user's store order number has used default id or has customized order number
+		if ( empty( $this->options['import_tracking'] ) ) {
+			// Query the user's latest order to determine: 1. whether the user has used a custom number 2. the custom fields used
+			$this->check_use_custom_order_number();
+		}
+	}
+
+	/**
+	 * Query the user's latest order to determine: 1. whether the user has used a custom number 2. the custom fields used
+	 */
+	public function check_use_custom_order_number() {
+		// Query the user's latest order
+		$latest_orders = wc_get_orders(
+			array(
+				'limit'   => 1,
+				'orderby' => 'date',
+				'order'   => 'DESC',
+			)
+		);
+
+		if ( $latest_orders ) {
+			$use_custom_order_number = false;
+			$custom_order_number_key = '';
+
+			// Access the latest order details
+			$latest_order        = $latest_orders[0];
+			$latest_order_id     = (string) $latest_order->get_id();
+			$latest_order_number = $latest_order->get_order_number();
+
+			// Diff order id and order number
+			// 1. id = number , the user does not use a custom number
+			// 2. id != number , the user has used custom number
+			if ( $latest_order_id != $latest_order_number ) {
+				$use_custom_order_number = true;
+
+				// Query the custom meta_data field which the user has used for value was order number value
+				$order_meta_data = $latest_order->get_meta_data();
+				// filter object with a specific value (order number), get the custom order number key
+				$find_custom_fields = array_filter(
+					$order_meta_data,
+					function( $obj ) use ( $latest_order_number ) {
+						return $obj->value === $latest_order_number;
+					}
+				);
+				if ( $find_custom_fields ) {
+					$custom_number_fields    = array_values( $find_custom_fields );
+					$custom_order_number_key = 'meta_data.' . $custom_number_fields[0]->key;
+				}
+			}
+
+			// Write these two attribute to the settings API
+			$current_as_options                    = $this->options;
+			$current_as_options['import_tracking'] = array(
+				'use_custom_order_number' => $use_custom_order_number,
+				'custom_order_number_key' => $custom_order_number_key,
+			);
+			update_option( 'aftership_option_name', $current_as_options );
+		}
 	}
 
 	public function sanitize_text_field( $value ) {
@@ -183,28 +243,38 @@ class AfterShip_Import_Csv {
 					if ( ( $file_handle = fopen( $this->file_url, 'r' ) ) !== false ) {
 						$header = fgetcsv( $file_handle, 0, ',' );
 
-						$headers = array(
+						$headers                        = array(
 							'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
+							'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 							'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-							'carrier_slug'    => esc_html__( 'Carrier Slug', 'aftership-orders-tracking' ),
+							'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
 						);
-						$index   = array();
+						$random_required_fields         = array(
+							'order_id',
+							'order_number',
+						);
+						$index                          = array();
+						$random_required_fields_missing = 0;
 						foreach ( $headers as $header_k => $header_v ) {
 							$field_index = array_search( $map_to[ $header_k ], $header );
 							if ( $field_index === false ) {
 								$index[ $header_k ] = - 1;
+								if ( in_array( $header_k, $random_required_fields ) ) {
+									$random_required_fields_missing ++;
+								}
 							} else {
 								$index[ $header_k ] = $field_index;
 							}
 						}
 						$required_fields = array(
 							'order_id',
+							'order_number',
 							'tracking_number',
 							'carrier_slug',
 						);
 
 						foreach ( $required_fields as $required_field ) {
-							if ( 0 > $index[ $required_field ] ) {
+							if ( ( ! in_array( $required_field, $random_required_fields ) && 0 > $index[ $required_field ] ) || $random_required_fields_missing > 1 ) {
 								wp_safe_redirect( add_query_arg( array( 'vi_at_error' => 1 ), admin_url( 'admin.php?page=aftership-orders-tracking-import-csv&step=mapping&file_url=' . urlencode( $this->file_url ) ) ) );
 								exit();
 							}
@@ -269,53 +339,32 @@ class AfterShip_Import_Csv {
 					);
 					exit();
 				}
-			} elseif ( isset( $_POST['aftership_orders_tracking_download_carriers_file'] ) ) {
-				$filename   = 'aftership-selected-carriers.csv';
-				$header_row = array(
-					esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
-					esc_html__( 'Carrier Slug', 'aftership-orders-tracking' ),
-				);
-				// Get user selected carriers
-				$data_rows = $this->get_user_selected_couriers();
-
-				$fh = @fopen( 'php://output', 'w' );
-				fprintf( $fh, chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
-				header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-				header( 'Content-Description: File Transfer' );
-				header( 'Content-type: text/csv' );
-				header( 'Content-Disposition: attachment; filename=' . $filename );
-				header( 'Expires: 0' );
-				header( 'Pragma: public' );
-				fputcsv( $fh, $header_row );
-				foreach ( $data_rows as $data_row ) {
-					fputcsv( $fh, $data_row );
-
-				}
-				$csvFile = stream_get_contents( $fh );
-				fclose( $fh );
-				die();
 			} elseif ( isset( $_POST['aftership_orders_tracking_download_demo_file'] ) ) {
 				$filename   = 'Import file example.csv';
 				$header_row = array(
 					'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
+					'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 					'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-					'carrier_slug'    => esc_html__( 'Carrier Slug', 'aftership-orders-tracking' ),
+					'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
 				);
 				$data_rows  = array(
 					array(
 						'111',
+						'111',
 						'tracking_number1',
-						'dhl-logistics',
+						'DHL Express',
 					),
 					array(
 						'112',
+						'112',
 						'tracking_number2',
-						'dhl-logistics',
+						'DHL Express',
 					),
 					array(
 						'113',
+						'113',
 						'tracking_number3',
-						'dhl-logistics',
+						'DHL Express',
 					),
 				);
 				$fh         = @fopen( 'php://output', 'w' );
@@ -346,9 +395,54 @@ class AfterShip_Import_Csv {
 	 *
 	 * @throws Exception
 	 */
-	public function import_tracking( $order_id, $data, $import_options ) {
-		if ( $order_id && count( $data ) ) {
+	public function import_tracking( $order_id = null, $data, $import_options, $order_number = null ) {
+		if ( ( $order_id || $order_number ) && count( $data ) ) {
 			$order_status = $import_options['order_status'];
+
+			/**
+			 * New feature： support csv import tracking by order number
+			 */
+			// Check AfterShip settings - import_tracking
+			$as_import_tracking_setting = $this->options['import_tracking'] ? $this->options['import_tracking'] : null;
+			if ( $as_import_tracking_setting && $as_import_tracking_setting['use_custom_order_number'] === true ) {
+				// Parse the custom field, eg: "meta_data._order_number"
+				$field_name_define = explode( '.', $as_import_tracking_setting['custom_order_number_key'] );
+				// Need to distinguish number query order，find order id when Order ID missing
+				if ( empty( $order_id ) && ! empty( $order_number ) ) {
+					// remove first char (#) from number
+					$order_number = substr( $order_number, 0, 1 ) === '#' ? substr( $order_number, 1 ) : $order_number;
+					// try to get order id by order number
+					$query_custom_number_args = array(
+						'limit'       => 1,
+						'post_type'   => 'shop_order',
+						'post_status' => 'any',
+					);
+					// Define query schema for number (Can be expanded later, even if the user is not defined under meta_data)
+					if ( $field_name_define[0] == 'meta_data' ) {
+						$query_custom_number_args['meta_query'] = array(
+							array(
+								'key'     => $field_name_define[1],
+								'value'   => $order_number,  // here you pass the Order Number
+								'compare' => '=',
+							),
+						);
+					}
+					if ( count( $query_custom_number_args ) == 3 ) {
+						// IF query field not found, logger
+						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found query field by number {$order_number}", 'aftership-orders-tracking' ) );
+						return;
+					}
+
+					$order_record = new WP_Query( $query_custom_number_args );
+					if ( ! empty( $order_record->posts ) ) {
+						$order_id = $order_record->posts[0]->ID;
+					} else {
+						// IF order not found, logger
+						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found for order by number {$order_number}", 'aftership-orders-tracking' ) );
+						return;
+					}
+				}
+			}
 
 			$order = wc_get_order( $order_id );
 			if ( $order ) {
@@ -392,7 +486,7 @@ class AfterShip_Import_Csv {
 						}
 					}
 
-					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order {$order_id}", 'aftership-orders-tracking' ) );
+					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order: order id ({$order_id}), order number ({$order_number})", 'aftership-orders-tracking' ) );
 				}
 			} else {
 				// Skip - The store can't find this order
@@ -507,8 +601,10 @@ class AfterShip_Import_Csv {
 							'order_status' => $order_status,
 						);
 						$orders         = array();
+						$order_numbers  = array();
 						$order_data     = array();
 						$order_id       = '';
+						$order_number   = '';
 						$ftell_2        = 0;
 						if ( $ftell > 0 ) {
 							fseek( $file_handle, $ftell );
@@ -520,33 +616,37 @@ class AfterShip_Import_Csv {
 						}
 						while ( ( $item = fgetcsv( $file_handle, 0, ',' ) ) !== false ) {
 							$count ++;
-							$order_id_1      = $item[ $index['order_id'] ];
+							$order_id_1      = $index['order_id'] > -1 ? $item[ $index['order_id'] ] : '';
+							$order_number_1  = $index['order_number'] > -1 ? $item[ $index['order_number'] ] : '';
 							$tracking_number = $item[ $index['tracking_number'] ];
 							$carrier_slug    = $item[ $index['carrier_slug'] ];
 							$start ++;
 							$ftell_1 = ftell( $file_handle );
 							// Check if has value for required fields
-							if ( empty( $order_id_1 ) || empty( $carrier_slug ) || empty( $tracking_number ) ) {
+							// number or id at least one required
+							if ( ( empty( $order_id_1 ) && empty( $order_number_1 ) ) || empty( $tracking_number ) || empty( $carrier_slug ) ) {
 								$ftell_2 = $ftell_1;
 								// If exist empty, skip
-								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, missing value of required fields for order {$order_id_1}", 'aftership-orders-tracking' ) );
+								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, missing value of required fields for order id {$order_id_1}, order number {$order_number_1}", 'aftership-orders-tracking' ) );
 								continue;
 							}
-							// Check if valid carrier slug
-							if ( ! in_array( $carrier_slug, $this->selected_carrier_slugs, true ) ) {
-								// invalid slug, skip
-								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, invalid carrier slug for order {$order_id_1}, slug: {$carrier_slug}", 'aftership-orders-tracking' ) );
-								continue;
-							}
+							// If not empty, Check if valid carrier slug
+							// if ( ! empty($carrier_slug) && ! in_array( $carrier_slug, $this->selected_carrier_slugs, true ) ) {
+							// invalid slug, skip
+							// AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, invalid carrier slug for order {$order_id_1}, slug: {$carrier_slug}", 'aftership-orders-tracking' ) );
+							// continue;
+							// }
 							// set time limit
 							vi_at_set_time_limit();
-							if ( ! in_array( $order_id_1, $orders ) ) {
+							if ( ! in_array( $order_id_1, $orders ) || ! in_array( $order_number_1, $order_numbers ) ) {
 								/*create previous order*/
-								$this->import_tracking( $order_id, $order_data, $import_options );
+								$this->import_tracking( $order_id, $order_data, $import_options, $order_number );
 								if ( count( $orders ) < $orders_per_request ) {
-									$order_id   = $order_id_1;
-									$orders[]   = $order_id;
-									$order_data = array(
+									$order_id        = $order_id_1;
+									$order_number    = $order_number_1;
+									$orders[]        = $order_id;
+									$order_numbers[] = $order_number;
+									$order_data      = array(
 										array(
 											'tracking_number' => $tracking_number,
 											'carrier_slug' => $carrier_slug,
@@ -577,7 +677,7 @@ class AfterShip_Import_Csv {
 							$next_item = fgetcsv( $file_handle, 0, ',' );
 							if ( false === $next_item ) {
 								/*create previous order*/
-								$this->import_tracking( $order_id, $order_data, $import_options );
+								$this->import_tracking( $order_id, $order_data, $import_options, $order_number );
 								fclose( $file_handle );
 								AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( 'Finish importing tracking', 'aftership-orders-tracking' ) );
 
@@ -592,22 +692,25 @@ class AfterShip_Import_Csv {
 								);
 							} else {
 								$count ++;
-								$order_id_2      = $next_item[ $index['order_id'] ];
+								$order_id_2      = $index['order_id'] > -1 ? $next_item[ $index['order_id'] ] : '';
+								$order_number_2  = $index['order_number'] > -1 ? $next_item[ $index['order_number'] ] : '';
 								$tracking_number = $next_item[ $index['tracking_number'] ];
 								$carrier_slug    = $next_item[ $index['carrier_slug'] ];
 								$start ++;
 								$ftell_2 = ftell( $file_handle );
-								if ( empty( $order_id_2 ) || empty( $carrier_slug ) || empty( $tracking_number ) ) {
+								if ( ( empty( $order_id_2 ) && empty( $order_number_2 ) ) || empty( $tracking_number ) || empty( $carrier_slug ) ) {
 									continue;
 								}
 
-								if ( ! in_array( $order_id_2, $orders ) ) {
+								if ( ! in_array( $order_id_2, $orders ) || ! in_array( $order_number_2, $order_numbers ) ) {
 									/*create previous order*/
-									$this->import_tracking( $order_id, $order_data, $import_options );
+									$this->import_tracking( $order_id, $order_data, $import_options, $order_number );
 									if ( count( $orders ) < $orders_per_request ) {
-										$order_id   = $order_id_2;
-										$orders[]   = $order_id;
-										$order_data = array(
+										$order_id        = $order_id_2;
+										$orders[]        = $order_id;
+										$order_number    = $order_number_2;
+										$order_numbers[] = $order_number;
+										$order_data      = array(
 											array(
 												'tracking_number' => $tracking_number,
 												'carrier_slug'    => $carrier_slug,
@@ -636,7 +739,7 @@ class AfterShip_Import_Csv {
 								unset( $next_item );
 							}
 						}
-						$this->import_tracking( $order_id, $order_data, $import_options );
+						$this->import_tracking( $order_id, $order_data, $import_options, $order_number );
 						fclose( $file_handle );
 						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( 'Finish importing tracking', 'aftership-orders-tracking' ) );
 
@@ -707,8 +810,9 @@ class AfterShip_Import_Csv {
 					'order_status'       => isset( $_POST['aftership_orders_tracking_order_status'] ) ? sanitize_text_field( $_POST['aftership_orders_tracking_order_status'] ) : '',
 					'required_fields'    => array(
 						'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
+						'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 						'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-						'carrier_slug'    => esc_html__( 'Carrier Slug', 'aftership-orders-tracking' ),
+						'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
 					),
 				)
 			);
@@ -863,16 +967,19 @@ class AfterShip_Import_Csv {
 									<?php
 									$required_fields = array(
 										'order_id',
+										'order_number',
 										'tracking_number',
 										'carrier_slug',
 									);
 									$headers         = array(
 										'order_id'        => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
+										'order_number'    => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
 										'tracking_number' => esc_html__( 'Tracking Number', 'aftership-orders-tracking' ),
-										'carrier_slug'    => esc_html__( 'Carrier Slug', 'aftership-orders-tracking' ),
+										'carrier_slug'    => esc_html__( 'Carrier Name', 'aftership-orders-tracking' ),
 									);
 									$description     = array(
 										'order_id'        => '',
+										'order_number'    => '',
 										'tracking_number' => '',
 										'carrier_slug'    => '',
 									);
@@ -883,6 +990,7 @@ class AfterShip_Import_Csv {
 												<select id="<?php echo esc_attr( self::set( $header_k ) ); ?>"
 														class="vi-ui fluid dropdown"
 														name="<?php echo esc_attr( self::set( 'map_to', true ) ); ?>[<?php echo esc_attr( $header_k ); ?>]">
+														<option value=""><?php esc_html_e( 'Do not map', 'aftership-orders-tracking' ); ?></option>
 													<?php
 													foreach ( $this->header as $file_header ) {
 														$selected = '';
@@ -898,9 +1006,17 @@ class AfterShip_Import_Csv {
 											</td>
 											<td>
 												<?php
-												$label = $header_v;
+												$label                  = $header_v;
+												$random_required_fields = array(
+													'order_id' => esc_html__( 'Order Number', 'aftership-orders-tracking' ),
+													'order_number' => esc_html__( 'Order ID', 'aftership-orders-tracking' ),
+												);
 												if ( in_array( $header_k, $required_fields ) ) {
-													$label .= '<strong>(*Required)</strong>';
+													if ( in_array( $header_k, array_keys( $random_required_fields ) ) ) {
+														$label .= '<strong>(*Required when missing ' . $random_required_fields[ $header_k ] . ')</strong>';
+													} else {
+														$label .= '<strong>(*Required)</strong>';
+													}
 												}
 												?>
 												<label for="<?php echo esc_attr( self::set( $header_k ) ); ?>"><?php echo wp_kses_post( $label ); ?></label>
@@ -955,16 +1071,9 @@ class AfterShip_Import_Csv {
 							?>
 							<div class="vi-ui positive message <?php echo esc_attr( self::set( 'import-container' ) ); ?>">
 								<ul class="list">
-									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order id</strong>, <strong>Tracking number</strong>, <strong>Carrier slug</strong>.', 'aftership-orders-tracking' ) ); ?></li>
+									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order ID</strong>, <strong>Order Number</strong>, <strong>Tracking Number</strong>, <strong>Carrier Name</strong>. for <strong>Order ID</strong> and <strong>Order Number</strong>, you can choose to fill in one or both of them (at least one).', 'aftership-orders-tracking' ) ); ?></li>
 									<li>
-										<?php echo wp_kses_post( __( '<strong>Carrier slug</strong>: slug of an carrier defined in plugin settings, get <strong>selected Carrier slug list</strong> by ', 'aftership-orders-tracking' ) ); ?>
-										<input type="submit" class="button"
-											   name="aftership_orders_tracking_download_carriers_file"
-											   value="<?php echo esc_attr( 'Download File', 'aftership-orders-tracking' ); ?>">
-										<?php printf( wp_kses_post( __( 'If you can not find your carrier, please go to <a target="_blank" href="%s">Plugin settings</a> to Add Carrier', 'aftership-orders-tracking' ) ), esc_url( admin_url( 'admin.php?page=aftership-setting-admin' ) ) ); ?>
-									</li>
-									<li>
-										<?php esc_html_e( 'Each tracking number, carrier slug of an order will be set for every product line item of that order', 'aftership-orders-tracking' ); ?>
+										<?php esc_html_e( 'Each tracking number, carrier name of an order will be set for every product line item of that order', 'aftership-orders-tracking' ); ?>
 										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_demo_file"
 											   value="<?php echo esc_attr( 'Download Demo', 'aftership-orders-tracking' ); ?>">
