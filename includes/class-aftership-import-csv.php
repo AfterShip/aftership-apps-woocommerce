@@ -417,18 +417,21 @@ class AfterShip_Import_Csv {
 	 */
 	public function import_tracking( $order_id = null, $data, $import_options, $order_number = null ) {
 		if ( ( $order_id || $order_number ) && count( $data ) ) {
-			$order_status = $import_options['order_status'];
+			$order_status      = $import_options['order_status'];
+			$original_order_id = $order_id;
 
 			/**
 			 * New feature： support csv import tracking by order number
 			 */
-			// Check AfterShip settings - import_tracking
-			$as_import_tracking_setting = $this->options['import_tracking'] ? $this->options['import_tracking'] : null;
-			if ( $as_import_tracking_setting && $as_import_tracking_setting['use_custom_order_number'] === true ) {
-				// Parse the custom field, eg: "meta_data._order_number"
-				$field_name_define = explode( '.', $as_import_tracking_setting['custom_order_number_key'] );
-				// Need to distinguish number query order，find order id when Order ID missing
-				if ( empty( $order_id ) && ! empty( $order_number ) ) {
+			// Need distinguish number query order，find order id when Order ID missing
+			if ( empty( $order_id ) && ! empty( $order_number ) ) {
+				// 1. The customer store has used custom order number
+				// Check AfterShip settings - import_tracking
+				$as_import_tracking_setting = $this->options['import_tracking'] ? $this->options['import_tracking'] : null;
+				if ( $as_import_tracking_setting && $as_import_tracking_setting['use_custom_order_number'] === true ) {
+					// Parse the custom field, eg: "meta_data._order_number"
+					$field_name_define = explode( '.', $as_import_tracking_setting['custom_order_number_key'] );
+					// Need to distinguish number query order，find order id when Order ID missing
 					// remove first char (#) from number
 					$order_number = substr( $order_number, 0, 1 ) === '#' ? substr( $order_number, 1 ) : $order_number;
 					// try to get order id by order number
@@ -449,7 +452,7 @@ class AfterShip_Import_Csv {
 					}
 					if ( count( $query_custom_number_args ) == 3 ) {
 						// IF query field not found, logger
-						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found query field by number {$order_number}", 'aftership-orders-tracking' ) );
+						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't find custom order number field by number {$order_number}", 'aftership-orders-tracking' ) );
 						return;
 					}
 
@@ -461,6 +464,9 @@ class AfterShip_Import_Csv {
 						AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found for order by number {$order_number}", 'aftership-orders-tracking' ) );
 						return;
 					}
+				} else {
+					// 2. Default order number from order id
+					$order_id = $order_number;
 				}
 			}
 
@@ -506,11 +512,11 @@ class AfterShip_Import_Csv {
 						}
 					}
 
-					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order: order id ({$order_id}), order number ({$order_number})", 'aftership-orders-tracking' ) );
+					AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Import tracking successfully for order: order id ({$original_order_id}), order number ({$order_number})", 'aftership-orders-tracking' ) );
 				}
 			} else {
 				// Skip - The store can't find this order
-				AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't be found for order {$order_id}", 'aftership-orders-tracking' ) );
+				AFTERSHIP_ORDERS_TRACKING_IMPORT_LOG::log( esc_html__( "Skipped, Can't find order: order id ({$original_order_id}), order number ({$order_number})", 'aftership-orders-tracking' ) );
 			}
 		}
 	}
