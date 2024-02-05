@@ -1098,9 +1098,8 @@ class AfterShip_Import_Csv {
 							?>
 							<div class="vi-ui positive message <?php echo esc_attr( self::set( 'import-container' ) ); ?>">
 								<ul class="list">
-									<li><?php echo wp_kses_post( __( 'Your csv file should have following columns:<strong>Order ID</strong>, <strong>Order Number</strong>, <strong>Tracking Number</strong>, <strong>Carrier Name</strong>. for <strong>Order ID</strong> and <strong>Order Number</strong>, you can choose to fill in one or both of them (at least one).', 'aftership-orders-tracking' ) ); ?></li>
 									<li>
-										<?php esc_html_e( 'Download our basic CSV template to ensure you use the correct format. Duplicate shipments will not be imported or overwritten.', 'aftership-orders-tracking' ); ?>
+										<?php esc_html_e( 'Download our basic CSV template to ensure you use the correct format. for Order ID and Order Number, you can choose to fill in one or both of them (at least one); duplicate shipments will not be imported or overwritten.', 'aftership-orders-tracking' ); ?>
 										<input type="submit" class="button"
 											   name="aftership_orders_tracking_download_demo_file"
 											   value="<?php echo esc_attr( 'Download', 'aftership-orders-tracking' ); ?>">
