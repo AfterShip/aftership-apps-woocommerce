@@ -112,8 +112,12 @@ class AfterShip_Import_Csv {
 		// The user has enabled Import Tracking.
 		// Only need detect once: the user's store order number has used default id or has customized order number
 		if ( empty( $this->options['import_tracking'] ) ) {
-			// Query the user's latest order to determine: 1. whether the user has used a custom number 2. the custom fields used
-			$this->check_use_custom_order_number();
+			try {
+				// Query the user's latest order to determine: 1. whether the user has used a custom number 2. the custom fields used
+				$this->check_use_custom_order_number();
+			} catch (Throwable $ex) {
+				return;
+			}
 		}
 	}
 
@@ -124,6 +128,7 @@ class AfterShip_Import_Csv {
 		// Query the user's latest order
 		$latest_orders = wc_get_orders(
 			array(
+				'type' => 'shop_order',
 				'limit'   => 1,
 				'orderby' => 'date',
 				'order'   => 'DESC',
