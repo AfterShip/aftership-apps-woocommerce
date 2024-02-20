@@ -453,6 +453,8 @@ class AfterShip_Actions {
 		$tracking_item['slug']            = wc_clean( $args['slug'] );
 		$tracking_item['tracking_number'] = wc_clean( $args['tracking_number'] );
 		$tracking_item['tracking_id']     = md5( "{$tracking_item['slug']}-{$tracking_item['tracking_number']}" );
+		// need apply default value
+		$tracking_item['additional_fields'] = array();
 		// line items for each tracking
 		if ( isset( $args['line_items'] ) && is_array( $args['line_items'] ) && count( $args['line_items'] ) ) {
 			$tracking_item['line_items'] = $args['line_items'];
@@ -1103,7 +1105,7 @@ class AfterShip_Actions {
 							<span class="dashicons dashicons-trash"></span>
 						</a>
 					</li>',
-					esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : '' ),
+					esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : $tracking_item['slug'] ),
 					esc_url( $aftership_tracking_link ),
 					esc_html( $tracking_item['tracking_number'] ),
 					esc_html( $tracking_item['tracking_number'] ),
