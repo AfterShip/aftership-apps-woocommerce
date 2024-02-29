@@ -420,7 +420,7 @@ class AfterShip_Import_Csv {
 	 *
 	 * @throws Exception
 	 */
-	public function import_tracking( $order_id = null, $data, $import_options, $order_number = null ) {
+	public function import_tracking( $order_id, $data, $import_options, $order_number = null ) {
 		if ( ( $order_id || $order_number ) && count( $data ) ) {
 			$order_status      = $import_options['order_status'];
 			$original_order_id = $order_id;
