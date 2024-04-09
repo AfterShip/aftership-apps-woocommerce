@@ -276,7 +276,7 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "airterra",
-			"name": "Airterra",
+			"name": "Quiet Platforms",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -563,6 +563,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "aramex-au-api",
+			"name": "Fastway Australia",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "araskargo",
 			"name": "Aras Cargo",
 			"other_name": null,
@@ -615,6 +621,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "asendia",
+			"name": "Asendia Global",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "asendia-de",
 			"name": "Asendia",
 			"other_name": "Asendia De",
@@ -655,6 +667,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "asyadexpress",
 			"name": "Asyad Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "ata",
+			"name": "ATA",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -757,6 +775,12 @@ function get_aftership_couriers() {
 			"slug": "barqexp",
 			"name": "Barq",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "barsan",
+			"name": "Barsan Global Lojistik",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -1056,6 +1080,12 @@ function get_aftership_couriers() {
 			]
 		},
 		{
+			"slug": "btxglobal-ftp",
+			"name": "BTX GLOBAL LOGISTICS",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "budbee-webhook",
 			"name": "Budbee",
 			"other_name": "",
@@ -1337,6 +1367,12 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "chronopost-france",
+			"name": "Chronopost France",
+			"other_name": "La Poste EMS",
+			"required_fields": []
+		},
+		{
+			"slug": "chronopost-france-webhook",
 			"name": "Chronopost France",
 			"other_name": "La Poste EMS",
 			"required_fields": []
@@ -2041,8 +2077,14 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "dhl-ecommerce-gc",
-			"name": "DHL eCommerce Greater China",
-			"other_name": "DHL eCommerce Greater China",
+			"name": "DHL Global Forwarding eCommerce",
+			"other_name": "DHL Global Forwarding eCommerce",
+			"required_fields": []
+		},
+		{
+			"slug": "dhl-ecommerce-gc-api",
+			"name": "DHL Global Forwarding eCommerce",
+			"other_name": "DHL Global Forwarding eCommerce",
 			"required_fields": []
 		},
 		{
@@ -2394,6 +2436,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dpd-api",
+			"name": "DPD",
+			"other_name": "Dynamic Parcel Distribution",
+			"required_fields": []
+		},
+		{
 			"slug": "dpd-at",
 			"name": "DPD Austria",
 			"other_name": "DPD AT",
@@ -2474,6 +2522,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "dpd-prt",
+			"name": "DPD Portugal",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "dpd-ro",
 			"name": "DPD Romania",
 			"other_name": "",
@@ -2531,6 +2585,12 @@ function get_aftership_couriers() {
 			"slug": "dsv",
 			"name": "DSV",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "dsv-are-webhook",
+			"name": "DSV UAE",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -2612,6 +2672,12 @@ function get_aftership_couriers() {
 			"required_fields": [
 				"tracking_account_number"
 			]
+		},
+		{
+			"slug": "e-courier-webhook",
+			"name": "e-courier (MDS)",
+			"other_name": "MDS",
+			"required_fields": []
 		},
 		{
 			"slug": "earlybird",
@@ -2783,8 +2849,8 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "emega",
-			"name": "eMEGA Logistics",
-			"other_name": "eMEGA Logistics",
+			"name": "Discount Post",
+			"other_name": "Discount Post",
 			"required_fields": []
 		},
 		{
@@ -3064,6 +3130,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "fastway-au-api",
+			"name": "Aramex Australia",
+			"other_name": "Fastway Couriers",
+			"required_fields": []
+		},
+		{
 			"slug": "fastway-ireland",
 			"name": "Fastway Ireland",
 			"other_name": "Fastway Couriers",
@@ -3211,6 +3283,12 @@ function get_aftership_couriers() {
 			"slug": "flashexpress-webhook",
 			"name": "Flash Express",
 			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "fleetopticsinc",
+			"name": "FleetOptics",
+			"other_name": "FleetOptics",
 			"required_fields": []
 		},
 		{
@@ -3586,6 +3664,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "gls-netherlands-webhook",
+			"name": "GLS Netherlands",
+			"other_name": "GLS NL",
+			"required_fields": []
+		},
+		{
 			"slug": "gls-romania",
 			"name": "GLS Romania",
 			"other_name": null,
@@ -3639,6 +3723,12 @@ function get_aftership_couriers() {
 			"slug": "gofly",
 			"name": "GoFly",
 			"other_name": "GoFlyi",
+			"required_fields": []
+		},
+		{
+			"slug": "goforgps",
+			"name": "Go For GPS",
+			"other_name": "GPS",
 			"required_fields": []
 		},
 		{
@@ -3970,6 +4060,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "hsm-global",
 			"name": "HSM Global",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "htdkgroup-webhook",
+			"name": "HTDK (Shanghai)",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -4320,6 +4416,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "jawar",
+			"name": "Jawar",
+			"other_name": "transenviosjawar",
+			"required_fields": []
+		},
+		{
 			"slug": "jayonexpress",
 			"name": "Jayon Express (JEX)",
 			"other_name": "",
@@ -4520,13 +4622,13 @@ function get_aftership_couriers() {
 		{
 			"slug": "kerry-logistics",
 			"name": "Kerry Express Thailand",
-			"other_name": "嘉里物流, Kerry Logistics",
+			"other_name": "嘉里物流, Kerry Logistics ",
 			"required_fields": []
 		},
 		{
 			"slug": "kerry-logistics-webhook",
 			"name": "Kerry Logistics 1",
-			"other_name": null,
+			"other_name": "嘉里物流, Kerry Logistics ",
 			"required_fields": []
 		},
 		{
@@ -4581,6 +4683,12 @@ function get_aftership_couriers() {
 			"slug": "knuk",
 			"name": "KNAirlink Aerospace Domestic Network",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "kolay-gelsin",
+			"name": "Kolay Gelsin",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -4686,6 +4794,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "lasership-api",
+			"name": "LaserShip",
+			"other_name": "LaserShip",
+			"required_fields": []
+		},
+		{
 			"slug": "latvijas-pasts",
 			"name": "Latvijas Pasts",
 			"other_name": "Latvijas Pasts",
@@ -4725,6 +4839,12 @@ function get_aftership_couriers() {
 			"slug": "legion-express",
 			"name": "Legion Express",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "leman",
+			"name": "Leman",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -4925,6 +5045,12 @@ function get_aftership_couriers() {
 			"slug": "m3logistics",
 			"name": "M3 Logistics",
 			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "madrooex",
+			"name": "Madrooex",
+			"other_name": "madrooex",
 			"required_fields": []
 		},
 		{
@@ -5133,6 +5259,12 @@ function get_aftership_couriers() {
 			"slug": "misumi-cn",
 			"name": "MISUMI Group Inc.",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "mng-kargo",
+			"name": "MNG Kargo",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5579,6 +5711,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ntilogistics-ftp",
+			"name": "NTI Logistics",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "ntl",
 			"name": "NTL logistics",
 			"other_name": "",
@@ -5600,6 +5738,12 @@ function get_aftership_couriers() {
 			"slug": "nytlogistics",
 			"name": "NYT SUPPLY CHAIN LOGISTICS Co.,LTD",
 			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "oakh",
+			"name": "Oakh Harbour Freight Lines",
+			"other_name": "Oakh",
 			"required_fields": []
 		},
 		{
@@ -5664,6 +5808,12 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "omniva",
+			"name": "Omniva",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "omniva-api",
 			"name": "Omniva",
 			"other_name": "",
 			"required_fields": []
@@ -5741,6 +5891,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "otschile",
+			"name": "OTS",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "overseas-hr",
 			"name": "Overseas Express",
 			"other_name": null,
@@ -5753,6 +5909,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "p2p-delivery-api",
+			"name": "P2P Delivery Ltd",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "paack-webhook",
 			"name": "Paack",
 			"other_name": "",
@@ -5762,6 +5924,12 @@ function get_aftership_couriers() {
 			"slug": "pack-man",
 			"name": "pack-man",
 			"other_name": "pack-man",
+			"required_fields": []
+		},
+		{
+			"slug": "pack-up",
+			"name": "Pack-Up",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -5893,6 +6061,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "panther-order-number-api",
+			"name": "Panther Order Number",
+			"other_name": "Panther Group UK",
+			"required_fields": []
+		},
+		{
 			"slug": "panther-reference",
 			"name": "Panther Reference",
 			"other_name": "Panther Group UK",
@@ -5928,6 +6102,12 @@ function get_aftership_couriers() {
 			"slug": "paquetexpress",
 			"name": "Paquetexpress",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "parcalogistics-api",
+			"name": "Parca Logistics ",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -6063,6 +6243,18 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "pdn",
+			"name": "Parcel Delivery Network",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "pdn-api",
+			"name": "Parcel Delivery Network",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "pfcexpress",
 			"name": "PFC Express",
 			"other_name": "pfcexpress",
@@ -6126,6 +6318,12 @@ function get_aftership_couriers() {
 			"slug": "pidge",
 			"name": "Pidge",
 			"other_name": "Pidge",
+			"required_fields": []
+		},
+		{
+			"slug": "piggyship",
+			"name": "PIGGYSHIP",
+			"other_name": "PIGGYSHIP",
 			"required_fields": []
 		},
 		{
@@ -6203,6 +6401,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "porterex-webhook",
 			"name": "Porter Express",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "portless-api",
+			"name": "Parcel Delivery Network",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -6393,6 +6597,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "pts",
 			"name": "PTS",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "ptt-kargo",
+			"name": "PTT Kargo",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -6697,6 +6907,18 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "rxo",
+			"name": "RXO",
+			"other_name": "RXO",
+			"required_fields": []
+		},
+		{
+			"slug": "rxo-api",
+			"name": "RXO",
+			"other_name": "RXO",
+			"required_fields": []
+		},
+		{
 			"slug": "rzyexpress",
 			"name": "RZY Express",
 			"other_name": "RZYExpress",
@@ -6751,6 +6973,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "sassy-api",
+			"name": "Sassy",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "saudi-post",
 			"name": "Saudi Post",
 			"other_name": "البريد السعودي",
@@ -6759,6 +6987,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "sberlogistics-ru",
 			"name": "Sber Logistics",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "scotty",
+			"name": "Scotty",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -6814,6 +7048,12 @@ function get_aftership_couriers() {
 			"slug": "selektvracht",
 			"name": "Selektvracht",
 			"other_name": "Selektvracht NL",
+			"required_fields": []
+		},
+		{
+			"slug": "sendeo-kargo",
+			"name": "Sendeo Kargo",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -6957,6 +7197,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "shipgate",
 			"name": "ShipGate",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "shipglobal-us",
+			"name": "ShipGlobal",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -7250,8 +7496,8 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "smartkargo",
-			"name": "SmartKargo",
-			"other_name": null,
+			"name": "DeliverDirect",
+			"other_name": "SmartKargo",
 			"required_fields": []
 		},
 		{
@@ -7276,6 +7522,12 @@ function get_aftership_couriers() {
 			"slug": "smsa-express-webhook",
 			"name": "SMSA Express",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "smtl",
+			"name": "Southwestern Motor Transport. Inc",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -7543,6 +7795,12 @@ function get_aftership_couriers() {
 		{
 			"slug": "superpackline",
 			"name": "Super Pac Line",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "surat-kargo",
+			"name": "Surat Kargo",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -7999,6 +8257,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "toshi-webhook",
+			"name": "Toshi",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "total-express",
 			"name": "Total Express",
 			"other_name": "",
@@ -8166,6 +8430,12 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "ucfs-api",
+			"name": "UNITED CALIFORNIA FREIGHT SOLUTIONS",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "ucs",
 			"name": "UCS",
 			"other_name": "合众速递",
@@ -8173,8 +8443,8 @@ function get_aftership_couriers() {
 		},
 		{
 			"slug": "uds",
-			"name": "United Delivery Service, Ltd",
-			"other_name": "",
+			"name": "United Delivery Service",
+			"other_name": "United Delivery Service",
 			"required_fields": []
 		},
 		{
@@ -8286,8 +8556,14 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "usps-iv-api",
+			"name": "USPS Informed Visibility",
+			"other_name": "USPS IV",
+			"required_fields": []
+		},
+		{
 			"slug": "usps-webhook",
-			"name": "USPS Informed Visibility - Webhook",
+			"name": "USPS Informed Visibility",
 			"other_name": "USPS IV",
 			"required_fields": []
 		},
@@ -8312,6 +8588,18 @@ function get_aftership_couriers() {
 		{
 			"slug": "venipak",
 			"name": "Venipak",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "vesyl",
+			"name": "Vesyl",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
+			"slug": "vesyl-api",
+			"name": "Vesyl",
 			"other_name": null,
 			"required_fields": []
 		},
@@ -8594,9 +8882,21 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "xindus",
+			"name": "Xindus",
+			"other_name": "Xindus",
+			"required_fields": []
+		},
+		{
 			"slug": "xl-express",
 			"name": "XL Express",
 			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "xmszm",
+			"name": "xmszm",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -8720,6 +9020,24 @@ function get_aftership_couriers() {
 			"required_fields": []
 		},
 		{
+			"slug": "youparcel",
+			"name": "YouParcel",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "youparcel-webhook",
+			"name": "YouParcel",
+			"other_name": "",
+			"required_fields": []
+		},
+		{
+			"slug": "yourparcel",
+			"name": "YouParcel",
+			"other_name": null,
+			"required_fields": []
+		},
+		{
 			"slug": "yrc",
 			"name": "YRC",
 			"other_name": "YRC Freight",
@@ -8747,6 +9065,12 @@ function get_aftership_couriers() {
 			"slug": "yunexpress",
 			"name": "YunExpress",
 			"other_name": "云途物流",
+			"required_fields": []
+		},
+		{
+			"slug": "yunhuipost",
+			"name": "Yunhuipost",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
@@ -8831,6 +9155,12 @@ function get_aftership_couriers() {
 			"slug": "zjs-express",
 			"name": "ZJS International",
 			"other_name": "宅急送快運",
+			"required_fields": []
+		},
+		{
+			"slug": "zoom-red",
+			"name": "Zoom",
+			"other_name": null,
 			"required_fields": []
 		},
 		{
