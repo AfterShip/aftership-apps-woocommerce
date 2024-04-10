@@ -24,7 +24,7 @@ class AfterShip_Actions {
 	public static function get_instance() {
 		if ( null === self::$instance ) {
 
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -160,7 +160,7 @@ class AfterShip_Actions {
 					</a>
 					<a
 						href="#" class="delete-tracking"
-					   rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
+						rel="<?php echo esc_attr( $item['tracking_id'] ); ?>"
 					>
 						<?php _e( 'Delete', 'aftership' ); ?>
 					</a>
@@ -188,13 +188,8 @@ class AfterShip_Actions {
 	 * @return string
 	 */
 	public function generate_tracking_page_link( $item ) {
-		$custom_domain  = $GLOBALS['AfterShip']->custom_domain;
-		$contains_http  = strpos( $custom_domain, 'http://' );
-		$contains_https = strpos( $custom_domain, 'https://' );
-		if ( $contains_http !== false || $contains_https !== false ) {
-			return $custom_domain . "/${item['slug']}/${item['tracking_number']}";
-		}
-		return 'https://' . $custom_domain . "/${item['slug']}/${item['tracking_number']}";
+		$custom_domain = str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain );
+		return sprintf( 'https://%s/%s/%s', $custom_domain, $item['slug'], $item['tracking_number'] );
 	}
 
 	/**
@@ -398,7 +393,8 @@ class AfterShip_Actions {
 			array(
 				'tracking_items'   => $this->get_tracking_items_for_display( $order_id ),
 				'use_track_button' => $GLOBALS['AfterShip']->use_track_button,
-				'domain'           => $GLOBALS['AfterShip']->custom_domain,
+				// tracking button 中的 domain 是不可以带有前面的 https:// 或者 http:// 的
+				'domain'           => str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain ),
 			),
 			'aftership-woocommerce-tracking/',
 			$GLOBALS['AfterShip']->get_plugin_path() . '/templates/'
@@ -424,7 +420,7 @@ class AfterShip_Actions {
 			return;
 		}
 
-		$order_id = is_callable( array( $order, 'get_id' ) ) ? $order->get_id() : $order->id;
+		$order_id = $order->get_id();
 		if ( true === $plain_text ) {
 			wc_get_template( 'email/plain/tracking-info.php', array( 'tracking_items' => $this->get_tracking_items_for_display( $order_id ) ), 'aftership-woocommerce-tracking/', $GLOBALS['AfterShip']->get_plugin_path() . '/templates/' );
 		} else {
@@ -585,7 +581,7 @@ class AfterShip_Actions {
 			// Delete order trackings, $tracking_items may be []
 			$order->update_meta_data( '_aftership_tracking_number', isset( $tracking_items[0]['tracking_number'] ) ? $tracking_items[0]['tracking_number'] : '' );
 			$order->update_meta_data( '_aftership_tracking_provider_name', isset( $tracking_items[0]['slug'] ) ? $tracking_items[0]['slug'] : '' );
-			if (custom_orders_table_usage_is_enabled()) {
+			if ( custom_orders_table_usage_is_enabled() ) {
 				$order->save();
 			} else {
 				$order->save_meta_data();
@@ -734,7 +730,6 @@ class AfterShip_Actions {
 		);
 
 		$this->add_tracking_item( $order_id, $args );
-
 	}
 
 	/*
@@ -842,13 +837,13 @@ class AfterShip_Actions {
 					<td>
 						<?php if ( empty( $user->aftership_wp_api_key ) ) : ?>
 							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
+									id="aftership_wp_generate_api_key" value="0"/>
 							<span class="description"><?php _e( 'Generate API Key', 'aftership' ); ?></span>
 						<?php else : ?>
 							<code id="aftership_wp_api_key"><?php echo $user->aftership_wp_api_key; ?></code>
 							<br/>
 							<input name="aftership_wp_generate_api_key" type="checkbox"
-								   id="aftership_wp_generate_api_key" value="0"/>
+									id="aftership_wp_generate_api_key" value="0"/>
 							<span class="description"><?php _e( 'Revoke API Key', 'aftership' ); ?></span>
 						<?php endif; ?>
 					</td>
@@ -892,7 +887,7 @@ class AfterShip_Actions {
 		$modified_before = $request->get_param( 'modified_before' );
 		if ( ! $modified_after || ! $modified_before ) {
 			return $args;
-		};
+		}
 		$args['date_query'][] = array(
 			'column' => 'post_modified',
 			'after'  => $modified_after,
@@ -914,7 +909,7 @@ class AfterShip_Actions {
 		$modified_before = $request->get_param( 'modified_before' );
 		if ( ! $modified_after || ! $modified_before ) {
 			return $args;
-		};
+		}
 		// @notice may overwrite other service's query
 		// @notice currently only AfterShip use modified_after & modified_before
 		$args['meta_query'] = array(
@@ -1061,12 +1056,11 @@ class AfterShip_Actions {
 	/**
 	 * Render AfterShip tracking in custom column on WC Orders page (when using Custom Order Tables).
 	 *
-	 * @param string $column_name Identifier for the custom column.
+	 * @param string    $column_name Identifier for the custom column.
 	 * @param \WC_Order $order Current WooCommerce order object.
 	 *
 	 * @return void
 	 * @since 1.8.0
-	 *
 	 */
 	public function render_wc_orders_list_columns( $column_name, $order ) {
 		if ( 'woocommerce-automizely-aftership-tracking' === $column_name ) {
