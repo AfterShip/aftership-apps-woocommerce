@@ -15,38 +15,65 @@ defined( 'ABSPATH' ) || exit;
 class AfterShip_ShipmentTracking_Migrator {
 
 	/**
+	 * Get the interval.
+	 *
+	 * @return bool
+	 */
+	public static function get_interval() {
+		$options = get_option( 'aftership_option_name' );
+		if ( ! $options ) {
+			return 0;
+		}
+		$interval = isset( $options['shipment_tracking_migrate_interval'] ) ? $options['shipment_tracking_migrate_interval'] : -1;
+		if ( ! $interval || $interval <= 0 ) {
+			return 0;
+		}
+		return $interval;
+	}
+
+	/**
+	 * Check if the migration is enabled.
+	 *
+	 * @return bool
+	 */
+	public static function is_enabled() {
+		if ( ! self::get_interval() ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Setup.
 	 */
 	public static function load() {
-		add_action( 'init', array( __CLASS__, 'init' ) );
+		if ( ! self::is_enabled() ) {
+			return;
+		}
+		add_action( 'init', array( __CLASS__, 'schedule' ) );
+		add_action( 'aftership_migrate_from_shipment_tracking', array( __CLASS__, 'migrate_from_shipment_tracking' ) );
 	}
 
 	/**
 	 * Schedule events and hook appropriate actions.
 	 */
-	public static function init() {
+	public static function schedule() {
 		$queue = WC()->queue();
 		$next  = $queue->get_next( 'aftership_migrate_from_shipment_tracking' );
 		if ( ! $next ) {
 			$queue->schedule_recurring( time(), DAY_IN_SECONDS, 'aftership_migrate_from_shipment_tracking' );
 		}
-
-		add_action( 'aftership_migrate_from_shipment_tracking', array( __CLASS__, 'migrate_from_shipment_tracking' ) );
 	}
 
 	/**
 	 * Migrate tracking number from shipment tracking.
 	 */
 	public static function migrate_from_shipment_tracking() {
-		$options = get_option( 'aftership_option_name' );
-		if ( ! $options ) {
+		if ( ! self::is_enabled() ) {
 			return;
 		}
-		$interval = isset( $options['shipment_tracking_migrate_interval'] ) ? $options['shipment_tracking_migrate_interval'] : -1;
-		if ( ! $interval || $interval <= 0 ) {
-			return;
-		}
-		$orders = wc_get_orders(
+		$interval = self::get_interval();
+		$orders   = wc_get_orders(
 			array(
 				'date_created' => gmdate( 'Y-m-d', time() - $interval ) . '...' . gmdate( 'Y-m-d' ),
 				'limit'        => -1,
