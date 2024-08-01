@@ -1,7 +1,11 @@
-import { selectedCouriers, trackings, courierMap } from '@src/storages/tracking';
-import { Tracking, AdditionalFields } from '@src/typings/trackings';
-import { createEffect, createMemo, createSignal, For, Show, Switch, Match } from 'solid-js';
-import { capitalize } from 'lodash-es';
+import {selectedCouriers, courierMap, fulfillments} from '@src/storages/tracking';
+import {
+    AdditionalFields,
+    Fulfillment, FulfillmentFactory,
+    FulfillmentTrackingFactory,
+} from '@src/typings/trackings';
+import {createMemo, For, Show, Switch, Match, Accessor, createSignal} from 'solid-js';
+import {capitalize} from 'lodash-es';
 
 import Modal from '../Modal';
 import NumberInput from '../NumberInput';
@@ -11,292 +15,313 @@ import { calcUnfulfilledItems } from '@src/utils/common';
 
 interface Props {
   visible: boolean;
-  value?: Tracking;
-  onOk(v: FormValue): void;
+  onOk(v: Fulfillment): void;
   onCancel(): void;
   orderId: string;
 }
 
-export interface FormValue {
-  tracking_id: string;
-  slug: string;
-  tracking_number: string;
-  additional_fields: AdditionalFields;
-  line_items?: {
-    [id: string]: number;
-  };
-}
-
-const defaultValue = {
-  tracking_id: '',
-  tracking_number: '',
-  slug: '',
-  additional_fields: {
-    account_number: '',
-    key: '',
-    postal_code: '',
-    ship_date: '',
-    destination_country: '',
-    state: '',
-  },
-  line_items: {},
-};
-
+export const [editingFulfillment, setEditingFulfillment] = createSignal<Fulfillment>(FulfillmentFactory.createDefault());
 export default function EditTrackingModal(props: Props) {
-  const [_val, _setVal] = createSignal<FormValue>(defaultValue);
-
-  const slugName = createMemo(() => _val().slug || '');
-
-  const additionalFields = createMemo(() => {
-    const r = courierMap().get(slugName())?.required_fields || [];
-    return r.map((item) => ({
-      key: item.replace(/^tracking_/, '') as keyof AdditionalFields,
-      name: item
-        .replace(/^tracking_/, '')
-        .split('_')
-        .map(capitalize)
-        .join(' '),
-    }));
-  });
-  const otherTrackings = createMemo(() => {
-    if (props.value) {
-      return trackings().filter((t) => t.tracking_id !== props.value?.tracking_id);
-    } else {
-      return trackings();
-    }
-  });
-  const hasMoreThanOneTracking = createMemo(() => otherTrackings().length);
-  const remainLineItems = createMemo(() => calcUnfulfilledItems(otherTrackings()));
-
-  // handle props.value change
-  createEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const lineItems = props.value?.line_items || [];
-    if (props.value) {
-      // Caveat old tracking don't have line_items property
-      // for old tracking,
-      // if there's only one tracking, default items qty value should be remain items
-      // if there's more than one tracking, default items qty value should be 0
-      if (props.value.line_items) {
-        _setVal({
-          tracking_id: props.value.tracking_id,
-          slug: props.value.slug,
-          tracking_number: props.value.tracking_number,
-          additional_fields: {
-            ...props.value.additional_fields,
-            ship_date: props.value.additional_fields.ship_date || today,
-          },
-          line_items: Object.fromEntries(
-            lineItems.map((item) => [Number(item.id), Number(item.quantity)])
-          ),
+    function updateFormValueAtIndex(index: Accessor<number>, field: string, newValue: string) {
+        setEditingFulfillment(f => {
+            const newFulfillments = {...f};
+            switch (field){
+                case "tracking_number":
+                    newFulfillments.trackings[index()].tracking_number = newValue
+                    break;
+                case "slug":
+                    newFulfillments.trackings[index()].slug = newValue
+                    break;
+            }
+            return newFulfillments;
         });
-      } else {
-        if (hasMoreThanOneTracking()) {
-          _setVal({
-            tracking_id: props.value.tracking_id,
-            slug: props.value.slug,
-            tracking_number: props.value.tracking_number,
-            additional_fields: {
-              ...props.value.additional_fields,
-              ship_date: props.value.additional_fields.ship_date || today,
-            },
-            line_items: Object.fromEntries(remainLineItems().map((item) => [Number(item.id), 0])),
-          });
+    }
+
+    function updateAdditionalFieldsAtIndex(index: Accessor<number>, field: string, newValue: string) {
+        setEditingFulfillment(f => {
+            const newFulfillments = {...f};
+            switch (field){
+                case "account_number":
+                    newFulfillments.trackings[index()].additional_fields.account_number = newValue
+                    break;
+                case "postal_code":
+                    newFulfillments.trackings[index()].additional_fields.postal_code = newValue
+                    break;
+                case "key":
+                    newFulfillments.trackings[index()].additional_fields.key = newValue
+                    break;
+                case "destination_country":
+                    newFulfillments.trackings[index()].additional_fields.destination_country = newValue
+                    break;
+                case "state":
+                    newFulfillments.trackings[index()].additional_fields.state = newValue
+                    break;
+                case "ship_date":
+                    newFulfillments.trackings[index()].additional_fields.ship_date = newValue
+                    break;
+            }
+            return newFulfillments;
+        });
+    }
+
+    function addTracking() {
+        setEditingFulfillment(f => {
+            const newFulfillments = {...f};
+            newFulfillments.trackings.push(FulfillmentTrackingFactory.createDefault());
+            return newFulfillments;
+        });
+    }
+
+    function removeTracking(index: Accessor<number>) {
+        const newTrackings = [...editingFulfillment().trackings];
+        newTrackings.splice(index(), 1);
+        setEditingFulfillment({ ...editingFulfillment(), trackings: newTrackings });
+    }
+
+    function additionalFields(index: Accessor<number>) {
+        const r = courierMap().get(editingFulfillment().trackings[index()].slug)?.required_fields || [];
+        return r.map((item) => ({
+            key: item.replace(/^tracking_/, '') as keyof AdditionalFields,
+            name: item
+                .replace(/^tracking_/, '')
+                .split('_')
+                .map(capitalize)
+                .join(' '),
+        }));
+    };
+
+    const otherFulfillments = createMemo(() => {
+        if (editingFulfillment()) {
+            return fulfillments().filter((t) => t.id !== editingFulfillment().id);
         } else {
-          _setVal({
-            tracking_id: props.value.tracking_id,
-            slug: props.value.slug,
-            tracking_number: props.value.tracking_number,
-            additional_fields: {
-              ...props.value.additional_fields,
-              ship_date: props.value.additional_fields.ship_date || today,
-            },
-            line_items: Object.fromEntries(
-              remainLineItems().map((item) => [Number(item.id), Number(item.quantity)])
-            ),
-          });
+            return fulfillments();
         }
-      }
-    } else {
-      _setVal({
-        ...defaultValue,
-        slug: selectedCouriers()?.[0]?.slug || '',
-        additional_fields: {
-          ...defaultValue.additional_fields,
-          ship_date: today,
-        },
-        line_items: Object.fromEntries(
-          remainLineItems().map((item) => [Number(item.id), Number(item.quantity)])
-        ),
-      });
-    }
-  });
-
-  const resetAdditionalFields = () => {
-    _setVal((prev) => {
-      const today = new Date().toISOString().split('T')[0];
-      return {
-        ...prev,
-        additional_fields: {
-          ...defaultValue.additional_fields,
-          ship_date: today,
-        },
-      };
     });
-  };
 
-  const validator = createMemo(() => {
-    let isValid = true;
-    const errors: any = {};
-    const hasLineItem = Object.entries(_val().line_items || []).some(([, v]) => !!v);
-    if (!hasLineItem) {
-      isValid = false;
-    }
-    if (_val().slug === '') {
-      isValid = false;
-      errors.slug = 'Required';
-    }
-    if (_val().tracking_number === '') {
-      isValid = false;
-    }
-    if (
-      otherTrackings().some(
-        (t) => t.slug === _val().slug && t.tracking_number === _val().tracking_number
-      )
-    ) {
-      isValid = false;
-      errors.tracking_number = 'This shipment has already been added.';
-    }
+    const otherFulfillmentsTrackings = createMemo(() => {
+        let filter = new Map();
+        for (const otherFulfillment of otherFulfillments()) {
+            for (let t of otherFulfillment.trackings) {
+                let exist = filter.get(t.slug + t.tracking_number);
+                if (exist === undefined) {
+                    filter.set(t.slug + t.tracking_number, true);
+                }
+            }
+        }
+        return filter
+    });
 
-    additionalFields().forEach((item) => {
-      if (_val().additional_fields[item.key] === '') {
+    const remainLineItems = createMemo(() => calcUnfulfilledItems(otherFulfillments()));
+
+    const validator = createMemo(() => {
+        let isValid = true;
+        let errors: string = '';
+
+        const items = editingFulfillment().items;
+
+        if (!items || items.length === 0) {
+            return {isValid: false, errors: 'Required items'};
+        }
+        // 任意 item.quantity > 0 即可
         isValid = false;
-        errors.additional_fields = {
-          ...errors.additional_fields,
-          [item.key]: 'Required',
-        };
-      }
+        items.forEach((item) => {
+            if (item.quantity > 0) {
+                isValid = true;
+            }
+        });
+        if (!isValid) {
+            return {isValid: false, errors: 'Required items'};
+        }
+
+        let filter = new Map();
+        for (const tracking of editingFulfillment().trackings) {
+            if (tracking.slug === '') {
+                return { isValid: false, errors: 'Required tracking slug' };
+            }
+            if (tracking.tracking_number === '') {
+                return { isValid: false, errors: 'Required tracking number' };
+            }
+            if (tracking.tracking_number.length > 256) {
+                return { isValid: false, errors: 'Tracking number invalid' };
+            }
+
+            // check if tracking number has already been added by other fulfillments
+            var exist = otherFulfillmentsTrackings().get(tracking.slug + tracking.tracking_number);
+            if (exist) {
+                return { isValid: false, errors: 'Tracking number has already been added' };
+            }
+
+            // check if tracking number has already been added by current fulfillment
+            exist = filter.get(tracking.slug + tracking.tracking_number);
+            if (exist) {
+                return { isValid: false, errors: 'Tracking number has already been added' };
+            }
+            if (exist === undefined) {
+                filter.set(tracking.slug + tracking.tracking_number, true);
+            }
+
+            var requiredFields = courierMap().get(tracking.slug)?.required_fields || [];
+            if (requiredFields.length > 0) {
+                requiredFields.forEach((field) => {
+                    var fieldKey = field.replace(/^tracking_/, '') as keyof AdditionalFields;
+                    var fieldName = fieldKey.split('_').join(' ');
+                    if (tracking.additional_fields[fieldKey] === '') {
+                        isValid = false;
+                        errors = `Required ${fieldName}`;
+                    }
+                    if (tracking.additional_fields[fieldKey].length > 256) {
+                        isValid = false;
+                        errors = `${fieldName} invalid`;
+                    }
+                });
+            }
+        }
+
+        if (editingFulfillment().trackings.length > 20) {
+            isValid = false;
+            errors = 'Tracking number limit exceeded';
+        }
+
+        return { isValid, errors };
     });
-    return { isValid, errors };
-  });
 
-  const handleLineItemChange = (id: number, value: number) => {
-    _setVal((prev) => ({
-      ...prev,
-      line_items: {
-        ...prev.line_items,
-        [id]: value,
-      },
-    }));
-  };
-  const handleChange = (key: string, value: string) => {
-    _setVal((prev) => ({
-      ...prev,
-      [key]: value.trim(),
-    }));
-  };
-  const handleAdditionalFieldChange = (key: string, value: string) => {
-    _setVal((prev) => ({
-      ...prev,
-      additional_fields: {
-        ...prev.additional_fields,
-        [key]: value.trim(),
-      },
-    }));
-  };
+    const handleLineItemChange = (id: number, value: number) => {
+        setEditingFulfillment(f => {
+            const newFulfillment = {...f};
+            var i = newFulfillment.items?.find((item) => item.id === id);
+            if (i !== undefined) {
+                i.quantity = value
+            } else {
+                newFulfillment.items?.push({id: id, quantity: value});
+            }
+            return newFulfillment;
+        });
+    };
 
-  const handleOk = () => props.onOk(_val());
+    const handleOk = () => {
+        props.onOk(editingFulfillment());
+    };
 
-  const title = createMemo(
-    () =>
-      `${props.value?.tracking_id ? 'Edit tracking' : 'Add tracking'} - order - #${props.orderId}`
-  );
-  return (
-    <Modal
-      title={title()}
-      visible={props.visible}
-      okText={props.value?.tracking_id ? 'Save' : 'Add'}
-      onOk={handleOk}
-      onCancel={props.onCancel}
-      disabled={!validator().isValid}>
-      <div className={styles.modal}>
-        <Switch fallback={<div className={styles.empty}>All items have been fulfilled</div>}>
-          <Match when={remainLineItems().length > 0}>
-            <table className={styles.items}>
-              <thead>
-                <tr>
-                  <th>Items</th>
-                  <th>Qty.</th>
-                </tr>
-              </thead>
-              <tbody>
-                <For each={remainLineItems()}>
-                  {(item) => (
-                    <tr>
-                      <td>{item.name}</td>
-                      <td>
-                        <NumberInput
-                          min={0}
-                          max={item.quantity}
-                          step={1}
-                          value={_val().line_items?.[item.id] || 0}
-                          onChange={(val) => handleLineItemChange(item.id, val || 0)}
-                        />
-                      </td>
-                    </tr>
-                  )}
+    const title = createMemo(
+        () => {
+            var ts = editingFulfillment().trackings;
+            if (ts === undefined) {
+                return `order - #${props.orderId}`
+            }
+            return `${ts.length > 0 ? 'Edit tracking' : 'Add tracking'} - order - #${props.orderId}`
+        }
+    );
+
+    const buttonText = createMemo(
+        () => {
+            var ts = editingFulfillment().trackings;
+            if (ts === undefined) {
+                return `Add`
+            }
+            if (ts.length > 0) {
+                return `Save`
+            }
+            return `Add`
+        }
+    );
+
+    return (
+        <Modal
+            title={title()}
+            visible={props.visible}
+            okText={buttonText().toString()}
+            onOk={handleOk}
+            onCancel={props.onCancel}
+            disabled={!validator().isValid}>
+            <div className={styles.modal}>
+                <Switch fallback={<div className={styles.empty}>All items have been fulfilled</div>}>
+                    <Match when={remainLineItems().length > 0}>
+                        <table className={styles.items}>
+                            <thead>
+                            <tr>
+                                <th>Items</th>
+                                <th>Qty.</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <For each={remainLineItems()}>
+                                {(item) => (
+                                    <tr>
+                                        <td>{item.name}</td>
+                                        <td>
+                                            <NumberInput
+                                                min={0}
+                                                max={item.quantity}
+                                                step={1}
+                                                value={editingFulfillment().items?.find((i) => i.id === item.id)?.quantity || 0}
+                                                onChange={(val) => handleLineItemChange(item.id, val || 0)}
+                                            />
+                                        </td>
+                                    </tr>
+                                )}
+                            </For>
+                            </tbody>
+                        </table>
+                    </Match>
+                </Switch>
+                <Show when={!validator().isValid}>
+                    <hr style={{margin: '20px 0'}}/>
+                    <div style="color: red;">{validator().errors}</div>
+                </Show>
+                <hr style={{margin: '20px 0'}}/>
+                <div style={{margin: '10px 0'}}>
+                    <a href="admin.php?page=aftership-setting-admin">Update carrier list</a>
+                </div>
+                <For each={editingFulfillment().trackings}>
+                {(tracking, index) =>
+                    <div>
+                        <div className={styles.input}>
+                            <label style={{marginLeft: '10px'}}>
+                                Courier:
+                                <select
+                                    value={tracking?.slug}
+                                    onChange={(e) => {
+                                        updateFormValueAtIndex(index, 'slug', e.currentTarget.value)
+                                    }}>
+                                    <For each={selectedCouriers()}>
+                                        {(item) => <option
+                                            value={item.slug}>{item.name || item.other_name}</option>}
+                                    </For>
+                                </select>
+                            </label>
+                            <label>
+                                Tracking number:
+                                <input
+                                    value={tracking.tracking_number}
+                                    onInput={(e) =>
+                                        updateFormValueAtIndex(index, 'tracking_number', e.currentTarget.value)
+                                    }
+                                />
+                            </label>
+                            <button onClick={() => removeTracking(index)}>x</button>
+                        </div>
+                        <div className={styles.input}>
+                            <For each={additionalFields(index)}>
+                                {(item) => (
+                                    <div>
+                                        <label>
+                                            {item.name}:
+                                            <input
+                                                type={item.key === 'ship_date' ? 'date' : 'text'}
+                                                value={tracking.additional_fields[item.key]}
+                                                onInput={(e) => updateAdditionalFieldsAtIndex(index, item.key, e.currentTarget.value)}
+                                            />
+                                        </label>
+                                    </div>
+                                )}
+                            </For>
+                        </div>
+                    </div>
+                    }
                 </For>
-              </tbody>
-            </table>
-          </Match>
-        </Switch>
-        <hr style={{ margin: '20px 0' }} />
-        <div className={styles.input}>
-          <div>
-            <label>
-              Courier:
-              <select
-                value={_val()?.slug}
-                onChange={(e) => {
-                  resetAdditionalFields();
-                  handleChange('slug', e.currentTarget.value);
-                }}>
-                <For each={selectedCouriers()}>
-                  {(item) => <option value={item.slug}>{item.name || item.other_name}</option>}
-                </For>
-              </select>
-            </label>
-            <a href="admin.php?page=aftership-setting-admin">Update carrier list</a>
-          </div>
-          <div>
-            <label>
-              Tracking number:
-              <input
-                value={_val().tracking_number}
-                onInput={(e) => handleChange('tracking_number', e.currentTarget.value)}
-              />
-            </label>
-
-            <Show when={validator().errors.tracking_number}>
-              <div style="color: red;">{validator().errors.tracking_number}</div>
-            </Show>
-          </div>
-          <For each={additionalFields()}>
-            {(item) => (
-              <div>
-                <label>
-                  {item.name}:
-                  <input
-                    type={item.key === 'ship_date' ? 'date' : 'text'}
-                    value={_val().additional_fields[item.key]}
-                    onInput={(e) => handleAdditionalFieldChange(item.key, e.currentTarget.value)}
-                  />
-                </label>
-              </div>
-            )}
-          </For>
-        </div>
-      </div>
-    </Modal>
-  );
+                <br/>
+                <button onClick={addTracking}>Add Tracking Number</button>
+            </div>
+        </Modal>
+    );
 }

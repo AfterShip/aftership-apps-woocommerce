@@ -22,7 +22,7 @@ customElements.define(
         linkElm.href = currentScript.src.replace(/\/index\.js\?/, '/style.css?');
         this.shadowRoot.appendChild(linkElm);
       }
-      render(() => <Metabox />, this.shadowRoot);
+        render(() => <Metabox />, this.shadowRoot);
     }
   }
 );

@@ -81,12 +81,13 @@ class AfterShip_Actions {
 	 *      order edit page: page id = "shop_order"
 	 */
 	public function load_orders_page_script( $hook ) {
-		if ( 'edit.php' !== $hook ) {
+		if ( 'edit.php' !== $hook && 'woocommerce_page_wc-orders' !== $hook ) {
 			return;
 		}
 		// The following code will be executed only when the detect page which the function belongs to
 		$page_screen            = get_current_screen()->id;
 		$screen_handle_tracking = array(
+            'woocommerce_page_wc-orders',
 			'edit-shop_order',
 			'shop_order',
 		);
@@ -189,7 +190,7 @@ class AfterShip_Actions {
 	 */
 	public function generate_tracking_page_link( $item ) {
 		$custom_domain = str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain );
-		return sprintf( 'https://%s/%s/%s', $custom_domain, $item['slug'], $item['tracking_number'] );
+		return sprintf( 'https://%s/%s/%s', $custom_domain, $item['slug'] ?? '', $item['tracking_number'] ?? '' );
 	}
 
 	/**
@@ -226,7 +227,7 @@ class AfterShip_Actions {
 	public function meta_box() {
 		global $post;
 
-		$this->convert_old_meta_in_order( $post->ID );
+		$this->convert_old_meta_in_order( $post->ID ?? 0);
 
 		$this->migrate();
 
@@ -519,6 +520,49 @@ class AfterShip_Actions {
 		return $is_deleted;
 	}
 
+    public function delete_fulfillment( $order_id, $fulfillment_id )
+    {
+        $fulfillments = $this->get_fulfillments_by_wc($order_id);
+
+        if ( count( $fulfillments ) > 0 ) {
+            foreach ( $fulfillments as $key => $item ) {
+                if ( $item['id'] == $fulfillment_id ) {
+                    unset( $fulfillments[ $key ] );
+                    break;
+                }
+            }
+            $this->save_fulfillments_to_wc( $order_id, array_values( $fulfillments ) );
+        }
+    }
+
+    public function delete_fulfillment_tracking( $order_id, $tracking_id )
+    {
+        $fulfillments = $this->get_fulfillments_by_wc($order_id);
+		if (count($fulfillments) <= 0) {
+			return;
+		}
+
+		foreach ( $fulfillments as $index => $fulfillment ) {
+			if (isset($fulfillment['trackings'])) {
+				$trackings = $fulfillment['trackings'];
+				foreach ($trackings as $key => $item) {
+					if ($item['tracking_id'] === $tracking_id) {
+						unset($trackings[$key]);
+						break;
+					}
+				}
+				$fulfillment['trackings'] = array_values($trackings);
+
+				if (count($fulfillment['trackings']) === 0) {
+					unset($fulfillments[$index]);
+				} else {
+					$fulfillments[$index] = $fulfillment;
+				}
+			}
+		}
+		$this->save_fulfillments_to_wc( $order_id, array_values( $fulfillments ) );
+    }
+
 	/*
 	 * Adds a tracking item to the post_meta array, no repeat items
 	 *
@@ -589,6 +633,18 @@ class AfterShip_Actions {
 		}
 	}
 
+    public function save_fulfillments_to_wc($order_id, $fulfillments)
+    {
+//		error_log("save_fulfillments_to_wc".var_export($fulfillments, true));
+        $order = new WC_Order($order_id);
+        $order->update_meta_data('_aftership_fulfillments', $fulfillments);
+        if ( custom_orders_table_usage_is_enabled() ) {
+            $order->save();
+        } else {
+            $order->save_meta_data();
+        }
+    }
+
 	/**
 	 * Gets a single tracking item from the post_meta array for an order.
 	 *
@@ -633,6 +689,36 @@ class AfterShip_Actions {
 			return array();
 		}
 	}
+
+    public function get_fulfillments_by_wc($order_id)
+    {
+        $order          = new WC_Order($order_id);
+        $fulfillments = $order->get_meta( '_aftership_fulfillments', true );
+        if (!empty($fulfillments)) {
+            return $fulfillments;
+        }
+        $trackings = $this->get_tracking_items($order_id);
+        return $this->trackings_to_fulfillments($trackings);
+    }
+
+    public function trackings_to_fulfillments($trackings)
+    {
+        $fulfillments = array();
+        foreach ( $trackings as $index => $tracking ) {
+            $item = [];
+            $item['id'] = $index;
+            $item['trackings']['tracking_id'] = $tracking['tracking_id'] ?? '';
+            $item['trackings']['tracking_number'] = $tracking['tracking_number'] ?? '';
+            $item['trackings']['slug'] = $tracking['slug'] ?? '';
+            $item['trackings']['additional_fields'] = $tracking['additional_fields'] ?? [];
+            $item['items'] = $tracking['line_items'] ?? [];
+            $item['created_at'] = $tracking['metrics']['created_at'] ?? '';
+            $item['updated_at'] = $tracking['metrics']['updated_at'] ?? '';
+            $item['from_tracking'] = true;
+            $fulfillments[] = $item;
+        }
+        return $fulfillments;
+    }
 
 	/*
 	* Gets all tracking items from the post meta array for an order using by restful api
@@ -1075,44 +1161,49 @@ class AfterShip_Actions {
 	 *
 	 * @return string Column content to render
 	 */
-	public function get_automizely_aftership_tracking_column( $order_id ) {
-		ob_start();
+    public function get_automizely_aftership_tracking_column( $order_id ) {
+        ob_start();
 
-		$tracking_items = $this->get_tracking_items( $order_id );
+        $fulfilments = $this->get_fulfillments_by_wc( $order_id );
+        $tracking_items = [];
+        foreach ($fulfilments as $fulfilment) {
+            if (isset($fulfilment['trackings'])) {
+                $tracking_items = array_merge($tracking_items, $fulfilment['trackings']);
+            }
+        }
 
-		if ( count( $tracking_items ) > 0 ) {
-			echo '<ul class="wcas-tracking-number-list">';
+        if ( count( $tracking_items ) > 0 ) {
+            echo '<ul class="wcas-tracking-number-list">';
+            foreach ( $tracking_items as $tracking_item ) {
+                // 根据 slug，匹配显示的 courier name
+                $provider_courier = $this->get_courier_by_slug( $tracking_item['slug'] ?? '' );
+                // 根据规则，生成 tracking link
+                $aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
 
-			foreach ( $tracking_items as $tracking_item ) {
-				// 根据 slug，匹配显示的 courier name
-				$provider_courier = $this->get_courier_by_slug( $tracking_item['slug'] );
-				// 根据规则，生成 tracking link
-				$aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
-
-				printf(
-					'<li>
-						<div>
-							<b>%s</b>
-						</div>
-						<a href="%s" title="%s" target="_blank" class=ft11>%s</a>
-						<a href="#" class="aftership_inline_tracking_delete" data-tracking-id="%s" data-order-id="%s">
-							<span class="dashicons dashicons-trash"></span>
-						</a>
-					</li>',
-					esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : $tracking_item['slug'] ),
-					esc_url( $aftership_tracking_link ),
-					esc_html( $tracking_item['tracking_number'] ),
-					esc_html( $tracking_item['tracking_number'] ),
-					esc_attr( $tracking_item['tracking_id'] ),
-					esc_attr( $order_id )
-				);
-			}
-			echo '</ul>';
-		} else {
-			echo '–';
-		}
-		return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
-	}
+                printf(
+                    '<li>
+                    <div>
+                        <b>%s</b>
+                    </div>
+                    <a href="%s" title="%s" target="_blank" class=ft11>%s</a>
+                    <a href="#" class="aftership_inline_tracking_delete" data-tracking-id="%s" data-order-id="%s">
+                        <span class="dashicons dashicons-trash"></span>
+                    </a>
+                </li>',
+                    esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : ($tracking_item['slug'] ?? '') ),
+                    esc_url( $aftership_tracking_link ),
+                    esc_html( $tracking_item['tracking_number'] ?? ''),
+                    esc_html( $tracking_item['tracking_number'] ?? ''),
+                    esc_attr( $tracking_item['tracking_id'] ?? ''),
+                    esc_attr( $order_id )
+                );
+            }
+            echo '</ul>';
+        } else {
+            echo '–';
+        }
+        return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
+    }
 
 	/**
 	 * Order Tracking Get All Order Items AJAX
@@ -1163,6 +1254,31 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success', $order_trackings );
 	}
 
+    public function get_order_fulfillments_controller() {
+        check_ajax_referer( 'get-tracking-item', 'security', true );
+
+        if ( empty( $_REQUEST['order_id'] ) ) {
+            $this->format_aftership_tracking_output( 422, 'missing order_id field' );
+        }
+        $order_id = wc_clean( $_REQUEST['order_id'] );
+
+        // migrate old tracking data
+        $this->convert_old_meta_in_order( $order_id );
+
+        $order_line_items = $this->get_order_item_data( $order_id );
+        $order_fulfillment_items = $this->get_fulfillments_by_wc( $order_id );
+//		error_log('order_fulfillment_items' . var_export($order_fulfillment_items, true));
+
+        $order = new WC_Order( $order_id );
+        $order_trackings = array(
+            'line_items' => $order_line_items,
+            'fulfillments'  => $order_fulfillment_items,
+            'number'     => (string) $order->get_order_number(),
+        );
+
+        $this->format_aftership_tracking_output( 200, 'success', $order_trackings );
+    }
+
 	/**
 	 * Order Tracking Save AJAX
 	 *
@@ -1187,6 +1303,40 @@ class AfterShip_Actions {
 
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
+
+    public function save_order_fulfillments_controller()
+    {
+        check_ajax_referer( 'create-tracking-item', 'security', true );
+        $params          = json_decode( file_get_contents( 'php://input' ), true );
+        $order_id        = wc_clean( $params['order_id'] );
+        $order_fulfillments = $params['fulfillments'];
+        // check
+        $order_fulfillments = $this->check_aftership_fulfillments_fields($order_id, $order_fulfillments);
+        $this->check_order_fulfillments_items($order_id, $order_fulfillments);
+        // clear old tracking
+        $is_any_fulfillment_from_tracking = $this->is_any_fulfillment_from_tracking($order_fulfillments);
+        if ($is_any_fulfillment_from_tracking) {
+            $this->save_tracking_items( $order_id, array() );
+        }
+        // save
+        $this->save_fulfillments_to_wc($order_id, $order_fulfillments);
+        // date_modified update
+        $order = new WC_Order( $order_id );
+        $order->set_date_modified( current_time( 'mysql' ) );
+        $order->save();
+        // response
+        $this->format_aftership_tracking_output( 200, 'success' );
+    }
+
+    private function is_any_fulfillment_from_tracking($fulfillments)
+    {
+        foreach ($fulfillments as $fulfillment) {
+            if ($fulfillment['from_tracking']) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * Order Tracking Delete
@@ -1214,6 +1364,48 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
+    public function delete_order_fulfillments_controller() {
+        check_ajax_referer( 'delete-tracking-item', 'security', true );
+
+        $params      = json_decode( file_get_contents( 'php://input' ), true );
+        $order_id    = wc_clean( $params['order_id'] );
+        $fulfillment_id = wc_clean( $params['fulfillment_id'] );
+
+        if ( empty( $order_id ) || empty( $fulfillment_id ) ) {
+            $this->format_aftership_tracking_output( 422, 'missing required field' );
+        }
+
+        $this->delete_fulfillment( $order_id, $fulfillment_id );
+
+        // date_modified update
+        $order = new WC_Order( $order_id );
+        $order->set_date_modified( current_time( 'mysql' ) );
+        $order->save();
+
+        $this->format_aftership_tracking_output( 200, 'success' );
+    }
+
+    public function delete_order_fulfillment_tracking_controller() {
+        check_ajax_referer( 'delete-tracking-item', 'security', true );
+
+        $params      = json_decode( file_get_contents( 'php://input' ), true );
+        $order_id    = wc_clean( $params['order_id'] );
+        $tracking_id = wc_clean( $params['tracking_id'] );
+
+        if ( empty( $order_id ) || empty( $tracking_id ) ) {
+            $this->format_aftership_tracking_output( 422, 'missing required field' );
+        }
+
+        $this->delete_fulfillment_tracking( $order_id, $tracking_id );
+
+        // date_modified update
+        $order = new WC_Order( $order_id );
+        $order->set_date_modified( current_time( 'mysql' ) );
+        $order->save();
+
+        $this->format_aftership_tracking_output( 200, 'success' );
+    }
+
 	/**
 	 * Validate required fields
 	 */
@@ -1229,6 +1421,38 @@ class AfterShip_Actions {
 			}
 		}
 	}
+
+    private function check_aftership_fulfillments_fields( $order_id, $fulfillments ) {
+        if ( empty( $order_id ) || empty( $fulfillments ) || ! is_array( $fulfillments )) {
+            $this->format_aftership_tracking_output( 422, 'missing required field' );
+        }
+
+        foreach ($fulfillments as $i => $fulfillment) {
+            if (empty($fulfillment['trackings']) || !is_array($fulfillment['trackings'])){
+                $this->format_aftership_tracking_output( 422, 'missing required field' );
+            }
+            foreach ($fulfillment['trackings'] as $j => $tracking) {
+                $tracking_number = str_replace(' ', '', $tracking['tracking_number'] ?? '');
+                if (empty($tracking_number) || empty($tracking['slug'])) {
+                    $this->format_aftership_tracking_output( 422, 'missing required field' );
+                }
+				if (strlen($tracking_number) > 256 || strlen($tracking['slug']) > 256 || strlen($tracking['tracking_id']) > 256) {
+                    $this->format_aftership_tracking_output( 400, 'bad request' );
+                }
+                $fulfillments[$i]['trackings'][$j]['tracking_number'] = $tracking_number;
+
+                $additional_fields = $tracking['additional_fields'] ?? [];
+				foreach ($additional_fields as $key => $value) {
+                    $value = str_replace(' ', '', $value ?? '');
+					if (strlen($value) > 256) {
+						$this->format_aftership_tracking_output( 400, 'bad request' );
+					}
+                    $fulfillments[$i]['trackings'][$j]['additional_fields'][$key] = $value;
+				}
+            }
+        }
+		return $fulfillments;
+    }
 
 	/**
 	 * Check fulfill item quantity
@@ -1254,6 +1478,30 @@ class AfterShip_Actions {
 			$this->format_aftership_tracking_output( 422, 'fulfill item quantity gte order item qiantity' );
 		}
 	}
+
+    /*
+     *
+     * */
+    private function check_order_fulfillments_items( $order_id, $fulfillments, $only_check = false ) {
+        // get order line items
+        $order_line_items   = $this->get_order_item_data( $order_id );
+        $line_item_quantity = absint( array_sum( array_column( $order_line_items, 'quantity' ) ) );
+        $fulfillment_items     = array_column( $fulfillments, 'items' );
+
+        $tmp = array();
+        foreach ( $fulfillment_items as $one ) {
+            $result = array_merge( $tmp, $one );
+            $tmp    = $result;
+        }
+        $fulfill_items_quantity = absint( array_sum( array_column( $tmp, 'quantity' ) ) );
+
+        if ( $fulfill_items_quantity > $line_item_quantity ) {
+            if ( $only_check ) {
+                return true;
+            }
+            $this->format_aftership_tracking_output( 422, 'fulfill item quantity gte order item qiantity' );
+        }
+    }
 
 	/**
 	 * Get order item detail

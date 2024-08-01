@@ -1,10 +1,10 @@
 import { lineItems } from '@src/storages/tracking';
-import { Tracking } from '@src/typings/trackings';
+import {Fulfillment} from '@src/typings/trackings';
 
-export function calcUnfulfilledItems(trackings: Tracking[]) {
+export function calcUnfulfilledItems(fulfillments: Fulfillment[]) {
   const itemsMap = new Map<number, number>();
-  trackings.forEach((tracking) => {
-    tracking.line_items?.forEach((item) => {
+  fulfillments.forEach((f) => {
+    f.items?.forEach((item) => {
       // TODO 后端兼容后不需要转换 number
       if (itemsMap.has(Number(item.id))) {
         itemsMap.set(Number(item.id), (itemsMap.get(Number(item.id)) || 0) + Number(item.quantity));

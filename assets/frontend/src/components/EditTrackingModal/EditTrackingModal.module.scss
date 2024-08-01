@@ -34,7 +34,7 @@
 
 .input {
   color: #3c434a;
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr;
   column-gap: 20px;
   row-gap: 10px;
@@ -67,4 +67,17 @@
     line-height: 28px;
     padding: 0 8px;
   }
+  button {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0;
+    min-height: 30px;
+    width: 25px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+  }
 }
+
