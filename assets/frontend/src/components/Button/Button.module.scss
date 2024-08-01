@@ -1,0 +1,26 @@
+.button {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f7f7f7;
+  color: #555;
+  font-size: 13px;
+  min-height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  &[disabled] {
+    color: #a7aaad !important;
+    background: #f6f7f7 !important;
+    border-color: #dcdcde !important;
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  border-color: #2271b1;
+  background: #2271b1;
+  color: #fff;
+  &:hover {
+    background: #135e96;
+    border-color: #135e96;
+  }
+}
