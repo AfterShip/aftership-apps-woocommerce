@@ -119,8 +119,9 @@ class AfterShip_Actions {
         $plugin_url = $GLOBALS['AfterShip']->plugin_url;
         $options = get_option( 'aftership_option_name' );
         if ($options) {
-            $enable_import_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : -1;
-            if ( $enable_import_tracking === 1 ) {
+            $enable_fulfillment_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : false;
+//            $enable_fulfillment_tracking = true;
+            if ( $enable_fulfillment_tracking === true ) {
                 $src = $plugin_url . '/assets/frontendv2/dist/orders/index.js';
             } else {
                 $src = $plugin_url . '/assets/frontend/dist/orders/index.js';
@@ -264,7 +265,21 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontendv2/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
+
+        // 前端灰度
+        $plugin_url = $GLOBALS['AfterShip']->plugin_url;
+        $options = get_option( 'aftership_option_name' );
+        if ($options) {
+            $enable_fulfillment_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : false;
+//            $enable_fulfillment_tracking = true;
+            if ( $enable_fulfillment_tracking === true ) {
+                $src = $plugin_url . '/assets/frontendv2/dist/metabox/index.js';
+            } else {
+                $src = $plugin_url . '/assets/frontend/dist/metabox/index.js';
+            }
+        }
+
+		wp_enqueue_script( 'aftership-js-tracking-items', $src, array(), AFTERSHIP_VERSION );
 	}
 
 	/**
@@ -534,16 +549,19 @@ class AfterShip_Actions {
     public function delete_fulfillment( $order_id, $fulfillment_id )
     {
         $fulfillments = $this->get_fulfillments_by_wc($order_id);
+		$deleted_fulfillment = null;
 
         if ( count( $fulfillments ) > 0 ) {
             foreach ( $fulfillments as $key => $item ) {
-                if ( $item['id'] == $fulfillment_id ) {
+                if ( $item['id'] === $fulfillment_id ) {
+                    $deleted_fulfillment = $item;
                     unset( $fulfillments[ $key ] );
                     break;
                 }
             }
             $this->save_fulfillments_to_wc( $order_id, array_values( $fulfillments ) );
         }
+		return $deleted_fulfillment;
     }
 
     public function delete_fulfillment_tracking( $order_id, $tracking_id )
@@ -1405,7 +1423,10 @@ class AfterShip_Actions {
             $this->format_aftership_tracking_output( 422, 'missing required field' );
         }
 
-        $this->delete_fulfillment( $order_id, $fulfillment_id );
+        $deleted_fulfillment = $this->delete_fulfillment($order_id, $fulfillment_id);
+		foreach ($deleted_fulfillment['trackings'] as $tracking) {
+            $this->delete_tracking_item( $order_id, $tracking['tracking_id'] );
+		}
 
         // date_modified update
         $order = new WC_Order( $order_id );
@@ -1427,6 +1448,7 @@ class AfterShip_Actions {
         }
 
         $this->delete_fulfillment_tracking( $order_id, $tracking_id );
+        $this->delete_tracking_item( $order_id, $tracking_id );
 
         // date_modified update
         $order = new WC_Order( $order_id );
