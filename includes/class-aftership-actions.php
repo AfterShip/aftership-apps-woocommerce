@@ -115,10 +115,21 @@ class AfterShip_Actions {
 		);
 		echo '<aftership-orders-modal></aftership-orders-modal>';
 
-		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
+		// 前端灰度
+        $plugin_url = $GLOBALS['AfterShip']->plugin_url;
+        $options = get_option( 'aftership_option_name' );
+        if ($options) {
+            $enable_import_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : -1;
+            if ( $enable_import_tracking === 1 ) {
+                $src = $plugin_url . '/assets/frontendv2/dist/orders/index.js';
+            } else {
+                $src = $plugin_url . '/assets/frontend/dist/orders/index.js';
+			}
+        }
+
 		wp_enqueue_script(
 			'aftership-orders-page-script',
-			$plugin_url . '/assets/frontend/dist/orders/index.js',
+            $src,
 			array( 'wc-admin-order-meta-boxes' ),
 			AFTERSHIP_VERSION
 		);
@@ -253,7 +264,7 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontend/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
+		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontendv2/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
 	}
 
 	/**
@@ -1314,10 +1325,9 @@ class AfterShip_Actions {
         $order_fulfillments = $this->check_aftership_fulfillments_fields($order_id, $order_fulfillments);
         $this->check_order_fulfillments_items($order_id, $order_fulfillments);
         // clear old tracking
-        $is_any_fulfillment_from_tracking = $this->is_any_fulfillment_from_tracking($order_fulfillments);
-        if ($is_any_fulfillment_from_tracking) {
-            $this->save_tracking_items( $order_id, array() );
-        }
+        $old_trackings = $this->fulfillments_to_trackings($order_fulfillments);
+		// migrate old tracking data
+		$this->save_tracking_items( $order_id, $old_trackings);
         // save
         $this->save_fulfillments_to_wc($order_id, $order_fulfillments);
         // date_modified update
@@ -1326,6 +1336,24 @@ class AfterShip_Actions {
         $order->save();
         // response
         $this->format_aftership_tracking_output( 200, 'success' );
+    }
+
+	private function fulfillments_to_trackings($fulfillments)
+    {
+        $trackings = array();
+		foreach ($fulfillments as $fulfillment) {
+			foreach ($fulfillment['trackings'] as $tracking) {
+                $tracking['tracking_number'] = $tracking['tracking_number'] ?? '';
+                $tracking['tracking_id'] = $tracking['tracking_id'] ?? '';
+                $tracking['additional_fields'] = $tracking['additional_fields'] ?? [];
+                $tracking['slug'] = $tracking['slug'] ?? '';
+                $tracking['line_items'] = $fulfillment['items'];
+                $tracking['metrics']['created_at'] = $fulfillment['created_at'];
+                $tracking['metrics']['updated_at'] = $fulfillment['updated_at'];
+				$trackings[] = $tracking;
+			}
+        }
+		return $trackings;
     }
 
     private function is_any_fulfillment_from_tracking($fulfillments)
