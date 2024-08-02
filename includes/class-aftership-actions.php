@@ -1258,7 +1258,7 @@ class AfterShip_Actions {
 	 * Function for getting all tracking items associated with the order
 	 */
 	public function get_order_detail() {
-//		check_ajax_referer( 'get-tracking-item', 'security', true );
+		check_ajax_referer( 'get-tracking-item', 'security', true );
 
 		if ( empty( $_REQUEST['order_id'] ) ) {
 			$this->format_aftership_tracking_output( 422, 'missing order_id field' );
