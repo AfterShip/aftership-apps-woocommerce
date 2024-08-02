@@ -1286,28 +1286,32 @@ class AfterShip_Actions {
 	}
 
     public function get_order_fulfillments_controller() {
-        check_ajax_referer( 'get-tracking-item', 'security', true );
+        try {
+            check_ajax_referer( 'get-tracking-item', 'security', true );
 
-        if ( empty( $_REQUEST['order_id'] ) ) {
-            $this->format_aftership_tracking_output( 422, 'missing order_id field' );
-        }
-        $order_id = wc_clean( $_REQUEST['order_id'] );
+            if ( empty( $_REQUEST['order_id'] ) ) {
+                $this->format_aftership_tracking_output( 422, 'missing order_id field' );
+            }
+            $order_id = wc_clean( $_REQUEST['order_id'] );
 
-        // migrate old tracking data
-        $this->convert_old_meta_in_order( $order_id );
+            // migrate old tracking data
+            $this->convert_old_meta_in_order( $order_id );
 
-        $order_line_items = $this->get_order_item_data( $order_id );
-        $order_fulfillment_items = $this->get_fulfillments_by_wc( $order_id );
+            $order_line_items = $this->get_order_item_data( $order_id );
+            $order_fulfillment_items = $this->get_fulfillments_by_wc( $order_id );
 //		error_log('order_fulfillment_items' . var_export($order_fulfillment_items, true));
 
-        $order = new WC_Order( $order_id );
-        $order_trackings = array(
-            'line_items' => $order_line_items,
-            'fulfillments'  => $order_fulfillment_items,
-            'number'     => (string) $order->get_order_number(),
-        );
+            $order = new WC_Order( $order_id );
+            $order_trackings = array(
+                'line_items' => $order_line_items,
+                'fulfillments'  => $order_fulfillment_items,
+                'number'     => (string) $order->get_order_number(),
+            );
 
-        $this->format_aftership_tracking_output( 200, 'success', $order_trackings );
+            $this->format_aftership_tracking_output( 200, 'success', $order_trackings );
+        } catch (Exception $e) {
+			$this->format_aftership_tracking_output( 500, 'server error' . $e->getMessage() );
+		}
     }
 
 	/**
@@ -1337,25 +1341,29 @@ class AfterShip_Actions {
 
     public function save_order_fulfillments_controller()
     {
-        check_ajax_referer( 'create-tracking-item', 'security', true );
-        $params          = json_decode( file_get_contents( 'php://input' ), true );
-        $order_id        = wc_clean( $params['order_id'] );
-        $order_fulfillments = $params['fulfillments'];
-        // check
-        $order_fulfillments = $this->check_aftership_fulfillments_fields($order_id, $order_fulfillments);
-        $this->check_order_fulfillments_items($order_id, $order_fulfillments);
-        // clear old tracking
-        $old_trackings = $this->fulfillments_to_trackings($order_fulfillments);
-		// migrate old tracking data
-		$this->save_tracking_items( $order_id, $old_trackings);
-        // save
-        $this->save_fulfillments_to_wc($order_id, $order_fulfillments);
-        // date_modified update
-        $order = new WC_Order( $order_id );
-        $order->set_date_modified( current_time( 'mysql' ) );
-        $order->save();
-        // response
-        $this->format_aftership_tracking_output( 200, 'success' );
+        try {
+            check_ajax_referer( 'create-tracking-item', 'security', true );
+            $params          = json_decode( file_get_contents( 'php://input' ), true );
+            $order_id        = wc_clean( $params['order_id'] );
+            $order_fulfillments = $params['fulfillments'];
+            // check
+            $order_fulfillments = $this->check_aftership_fulfillments_fields($order_id, $order_fulfillments);
+            $this->check_order_fulfillments_items($order_id, $order_fulfillments);
+            // clear old tracking
+            $old_trackings = $this->fulfillments_to_trackings($order_fulfillments);
+            // migrate old tracking data
+            $this->save_tracking_items( $order_id, $old_trackings);
+            // save
+            $this->save_fulfillments_to_wc($order_id, $order_fulfillments);
+            // date_modified update
+            $order = new WC_Order( $order_id );
+            $order->set_date_modified( current_time( 'mysql' ) );
+            $order->save();
+            // response
+            $this->format_aftership_tracking_output( 200, 'success' );
+        } catch (Exception $e) {
+			$this->format_aftership_tracking_output( 500, 'server error' . $e->getMessage() );
+		}
     }
 
 	private function fulfillments_to_trackings($fulfillments)
@@ -1413,49 +1421,57 @@ class AfterShip_Actions {
 	}
 
     public function delete_order_fulfillments_controller() {
-        check_ajax_referer( 'delete-tracking-item', 'security', true );
+        try {
+            check_ajax_referer( 'delete-tracking-item', 'security', true );
 
-        $params      = json_decode( file_get_contents( 'php://input' ), true );
-        $order_id    = wc_clean( $params['order_id'] );
-        $fulfillment_id = wc_clean( $params['fulfillment_id'] );
+            $params      = json_decode( file_get_contents( 'php://input' ), true );
+            $order_id    = wc_clean( $params['order_id'] );
+            $fulfillment_id = wc_clean( $params['fulfillment_id'] );
 
-        if ( empty( $order_id ) || empty( $fulfillment_id ) ) {
-            $this->format_aftership_tracking_output( 422, 'missing required field' );
-        }
+            if ( empty( $order_id ) || empty( $fulfillment_id ) ) {
+                $this->format_aftership_tracking_output( 422, 'missing required field' );
+            }
 
-        $deleted_fulfillment = $this->delete_fulfillment($order_id, $fulfillment_id);
-		foreach ($deleted_fulfillment['trackings'] as $tracking) {
-            $this->delete_tracking_item( $order_id, $tracking['tracking_id'] );
+            $deleted_fulfillment = $this->delete_fulfillment($order_id, $fulfillment_id);
+            foreach ($deleted_fulfillment['trackings'] as $tracking) {
+                $this->delete_tracking_item( $order_id, $tracking['tracking_id'] );
+            }
+
+            // date_modified update
+            $order = new WC_Order( $order_id );
+            $order->set_date_modified( current_time( 'mysql' ) );
+            $order->save();
+
+            $this->format_aftership_tracking_output( 200, 'success' );
+        } catch (Exception $e) {
+			$this->format_aftership_tracking_output( 500, 'server error' . $e->getMessage() );
 		}
-
-        // date_modified update
-        $order = new WC_Order( $order_id );
-        $order->set_date_modified( current_time( 'mysql' ) );
-        $order->save();
-
-        $this->format_aftership_tracking_output( 200, 'success' );
     }
 
     public function delete_order_fulfillment_tracking_controller() {
-        check_ajax_referer( 'delete-tracking-item', 'security', true );
+        try {
+            check_ajax_referer( 'delete-tracking-item', 'security', true );
 
-        $params      = json_decode( file_get_contents( 'php://input' ), true );
-        $order_id    = wc_clean( $params['order_id'] );
-        $tracking_id = wc_clean( $params['tracking_id'] );
+            $params      = json_decode( file_get_contents( 'php://input' ), true );
+            $order_id    = wc_clean( $params['order_id'] );
+            $tracking_id = wc_clean( $params['tracking_id'] );
 
-        if ( empty( $order_id ) || empty( $tracking_id ) ) {
-            $this->format_aftership_tracking_output( 422, 'missing required field' );
-        }
+            if ( empty( $order_id ) || empty( $tracking_id ) ) {
+                $this->format_aftership_tracking_output( 422, 'missing required field' );
+            }
 
-        $this->delete_fulfillment_tracking( $order_id, $tracking_id );
-        $this->delete_tracking_item( $order_id, $tracking_id );
+            $this->delete_fulfillment_tracking( $order_id, $tracking_id );
+            $this->delete_tracking_item( $order_id, $tracking_id );
 
-        // date_modified update
-        $order = new WC_Order( $order_id );
-        $order->set_date_modified( current_time( 'mysql' ) );
-        $order->save();
+            // date_modified update
+            $order = new WC_Order( $order_id );
+            $order->set_date_modified( current_time( 'mysql' ) );
+            $order->save();
 
-        $this->format_aftership_tracking_output( 200, 'success' );
+            $this->format_aftership_tracking_output( 200, 'success' );
+        } catch (Exception $e) {
+			$this->format_aftership_tracking_output( 500, 'server error' . $e->getMessage() );
+		}
     }
 
 	/**
