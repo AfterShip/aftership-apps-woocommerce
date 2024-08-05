@@ -146,7 +146,7 @@ export default function EditTrackingModal(props: Props) {
             }
 
             // check if tracking number has already been added by other fulfillments
-            var exist = otherFulfillmentsTrackings().get(tracking.slug + tracking.tracking_number);
+            let exist = otherFulfillmentsTrackings().get(tracking.slug + tracking.tracking_number);
             if (exist) {
                 return { isValid: false, errors: 'Tracking number has already been added' };
             }
@@ -160,11 +160,11 @@ export default function EditTrackingModal(props: Props) {
                 filter.set(tracking.slug + tracking.tracking_number, true);
             }
 
-            var requiredFields = courierMap().get(tracking.slug)?.required_fields || [];
+            let requiredFields = courierMap().get(tracking.slug)?.required_fields || [];
             if (requiredFields.length > 0) {
                 requiredFields.forEach((field) => {
-                    var fieldKey = field.replace(/^tracking_/, '') as keyof AdditionalFields;
-                    var fieldName = fieldKey.split('_').join(' ');
+                    let fieldKey = field.replace(/^tracking_/, '') as keyof AdditionalFields;
+                    let fieldName = fieldKey.split('_').join(' ');
                     if (tracking.additional_fields[fieldKey] === '') {
                         isValid = false;
                         errors = `Required ${fieldName}`;
@@ -188,7 +188,7 @@ export default function EditTrackingModal(props: Props) {
     const handleLineItemChange = (id: number, value: number) => {
         setEditingFulfillment(f => {
             const newFulfillment = {...f};
-            var i = newFulfillment.items?.find((item) => item.id === id);
+            let i = newFulfillment.items?.find((item) => item.id === id);
             if (i !== undefined) {
                 i.quantity = value
             } else {
@@ -204,7 +204,7 @@ export default function EditTrackingModal(props: Props) {
 
     const title = createMemo(
         () => {
-            var ts = editingFulfillment().trackings;
+            let ts = editingFulfillment().trackings;
             if (ts === undefined) {
                 return `order - #${props.orderId}`
             }
@@ -214,7 +214,7 @@ export default function EditTrackingModal(props: Props) {
 
     const buttonText = createMemo(
         () => {
-            var ts = editingFulfillment().trackings;
+            let ts = editingFulfillment().trackings;
             if (ts === undefined) {
                 return `Add`
             }
