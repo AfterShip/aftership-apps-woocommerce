@@ -3,8 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-include 'util.php';
-
 /**
  * AfterShip Actions
  */
