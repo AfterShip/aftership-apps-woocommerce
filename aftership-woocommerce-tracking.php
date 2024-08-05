@@ -152,7 +152,7 @@ if ( is_woocommerce_active() ) {
 
                 // CSS
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
-                // FE Order
+                // FE Order Page Delete Tracking Button & Add Tracking Button
                 add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
                 // FE Metabox
                 add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );

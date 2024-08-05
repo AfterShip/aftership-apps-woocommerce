@@ -73,6 +73,21 @@ class AfterShip_Actions {
 		wp_enqueue_style( 'aftership_styles', $plugin_url . '/assets/css/admin.css', array(), AFTERSHIP_VERSION );
 	}
 
+    // 前端版本控制器、前端灰度
+	private function frontend_version_controller()
+    {
+//		return 'v2';
+        $version = 'v1';
+        $options = get_option( 'aftership_option_name' );
+        if ($options) {
+            $enable_fulfillment_tracking = safeArrayGet($options, 'enable_fulfillment_tracking', false);
+			if ($enable_fulfillment_tracking) {
+                $version = 'v2';
+            }
+        }
+		return $version;
+    }
+
 	/**
 	 * Load aftership orders page script.
 	 * Comment：
@@ -81,7 +96,7 @@ class AfterShip_Actions {
 	 *      order edit page: page id = "shop_order"
 	 */
 	public function load_orders_page_script( $hook ) {
-		if ( 'edit.php' !== $hook && 'woocommerce_page_wc-orders' !== $hook ) {
+		if (!in_array($hook, ['edit.php', 'woocommerce_page_wc-orders'])) {
 			return;
 		}
 		// The following code will be executed only when the detect page which the function belongs to
@@ -117,16 +132,16 @@ class AfterShip_Actions {
 
 		// 前端灰度
         $plugin_url = $GLOBALS['AfterShip']->plugin_url;
-        $options = get_option( 'aftership_option_name' );
-        if ($options) {
-            $enable_fulfillment_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : false;
-//            $enable_fulfillment_tracking = true;
-            if ( $enable_fulfillment_tracking === true ) {
-                $src = $plugin_url . '/assets/frontendv2/dist/orders/index.js';
-            } else {
-                $src = $plugin_url . '/assets/frontend/dist/orders/index.js';
-			}
-        }
+        $version = $this->frontend_version_controller();
+		$src = '';
+		switch ($version) {
+			case 'v1':
+				$src = $plugin_url . '/assets/frontend/dist/orders/index.js';
+				break;
+			case 'v2':
+				$src = $plugin_url . '/assets/frontendv2/dist/orders/index.js';
+				break;
+		}
 
 		wp_enqueue_script(
 			'aftership-orders-page-script',
@@ -202,7 +217,7 @@ class AfterShip_Actions {
 	 */
 	public function generate_tracking_page_link( $item ) {
 		$custom_domain = str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain );
-		return sprintf( 'https://%s/%s/%s', $custom_domain, isset($item['slug']) ? $item['slug'] : '', isset($item['tracking_number']) ? $item['tracking_number'] : '' );
+		return sprintf( 'https://%s/%s/%s', $custom_domain, safeArrayGet($item, 'slug', ''), safeArrayGet($item, 'tracking_number', ''));
 	}
 
 	/**
@@ -268,15 +283,15 @@ class AfterShip_Actions {
 
         // 前端灰度
         $plugin_url = $GLOBALS['AfterShip']->plugin_url;
-        $options = get_option( 'aftership_option_name' );
-        if ($options) {
-            $enable_fulfillment_tracking = isset( $options['enable_fulfillment_tracking'] ) ? $options['enable_fulfillment_tracking'] : false;
-//            $enable_fulfillment_tracking = true;
-            if ( $enable_fulfillment_tracking === true ) {
-                $src = $plugin_url . '/assets/frontendv2/dist/metabox/index.js';
-            } else {
+        $version = $this->frontend_version_controller();
+        $src = '';
+        switch ($version) {
+            case 'v1':
                 $src = $plugin_url . '/assets/frontend/dist/metabox/index.js';
-            }
+                break;
+            case 'v2':
+                $src = $plugin_url . '/assets/frontendv2/dist/metabox/index.js';
+                break;
         }
 
 		wp_enqueue_script( 'aftership-js-tracking-items', $src, array(), AFTERSHIP_VERSION );
@@ -736,14 +751,14 @@ class AfterShip_Actions {
         foreach ( $trackings as $index => $tracking ) {
             $item = [];
             $item['id'] = $index;
-            $item['trackings']['tracking_id'] = isset($tracking['tracking_id']) ? $tracking['tracking_id'] : '';
-            $item['trackings']['tracking_number'] = isset($tracking['tracking_number']) ? $tracking['tracking_number'] : '';
-            $item['trackings']['slug'] = isset($tracking['slug']) ? $tracking['slug'] : '';
-            $item['trackings']['additional_fields'] = isset($tracking['additional_fields']) ? $tracking['additional_fields'] : [];
-            $item['items'] = isset($tracking['line_items']) ? $tracking['line_items'] : [];
+            $item['trackings']['tracking_id'] = safeArrayGet($tracking, 'tracking_id', '');
+            $item['trackings']['tracking_number'] = safeArrayGet($tracking, 'tracking_number', '');
+            $item['trackings']['slug'] = safeArrayGet($tracking, 'slug', '');
+            $item['trackings']['additional_fields'] = safeArrayGet($tracking, 'additional_fields', []);
+            $item['items'] = safeArrayGet($tracking, 'line_items', []);
 			if (isset($tracking['metrics'])) {
-                $item['created_at'] = isset($tracking['metrics']['created_at']) ? $tracking['metrics']['created_at'] : '';
-                $item['updated_at'] = isset($tracking['metrics']['updated_at']) ? $tracking['metrics']['updated_at'] : '';
+                $item['created_at'] = safeArrayGet($tracking['metrics'], 'created_at', '');
+                $item['updated_at'] = safeArrayGet($tracking['metrics'], 'updated_at', '');
             }
             $item['from_tracking'] = true;
             $fulfillments[] = $item;
@@ -1207,7 +1222,7 @@ class AfterShip_Actions {
             echo '<ul class="wcas-tracking-number-list">';
             foreach ( $tracking_items as $tracking_item ) {
                 // 根据 slug，匹配显示的 courier name
-                $provider_courier = $this->get_courier_by_slug( isset($tracking_item['slug']) ? $tracking_item['slug'] : '' );
+                $provider_courier = $this->get_courier_by_slug(safeArrayGet($tracking_item, 'slug', ''));
                 // 根据规则，生成 tracking link
                 $aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
 
@@ -1221,11 +1236,11 @@ class AfterShip_Actions {
                         <span class="dashicons dashicons-trash"></span>
                     </a>
                 </li>',
-                    esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : (isset($tracking_item['slug']) ? $tracking_item['slug'] : '') ),
+                    esc_html( safeArrayGet($provider_courier, 'name', safeArrayGet($tracking_item, 'slug', ''))),
                     esc_url( $aftership_tracking_link ),
-                    esc_html( isset($tracking_item['tracking_number']) ? $tracking_item['tracking_number'] : ''),
-                    esc_html( isset($tracking_item['tracking_number']) ? $tracking_item['tracking_number'] : ''),
-                    esc_attr( isset($tracking_item['tracking_id']) ? $tracking_item['tracking_id'] : ''),
+                    esc_html( safeArrayGet($tracking_item, 'tracking_number', '')),
+                    esc_html( safeArrayGet($tracking_item, 'tracking_number', '')),
+                    esc_attr( safeArrayGet($tracking_item, 'tracking_id', '')),
                     esc_attr( $order_id )
                 );
             }
@@ -1371,13 +1386,13 @@ class AfterShip_Actions {
         $trackings = array();
 		foreach ($fulfillments as $fulfillment) {
 			foreach ($fulfillment['trackings'] as $tracking) {
-                $tracking['tracking_number'] = isset($tracking['tracking_number']) ? $tracking['tracking_number'] : '';
-                $tracking['tracking_id'] = isset($tracking['tracking_id']) ? $tracking['tracking_id'] : '';
-                $tracking['additional_fields'] = isset($tracking['additional_fields']) ? $tracking['additional_fields'] : [];
-                $tracking['slug'] = isset($tracking['slug']) ? $tracking['slug'] : '';
-                $tracking['line_items'] = isset($fulfillment['items']) ? $fulfillment['items'] : [];
-                $tracking['metrics']['created_at'] = isset($fulfillment['created_at']) ? $fulfillment['created_at'] : '';
-                $tracking['metrics']['updated_at'] = isset($fulfillment['updated_at']) ? $fulfillment['updated_at'] : '';
+                $tracking['tracking_number'] = safeArrayGet($tracking, 'tracking_number', '');
+                $tracking['tracking_id'] = safeArrayGet($tracking, 'tracking_id', '');
+                $tracking['additional_fields'] = safeArrayGet($tracking, 'additional_fields', []);
+                $tracking['slug'] = safeArrayGet($tracking, 'slug', '');
+                $tracking['line_items'] = safeArrayGet($tracking, 'items', []);
+                $tracking['metrics']['created_at'] = safeArrayGet($tracking, 'created_at', '');
+                $tracking['metrics']['updated_at'] = safeArrayGet($tracking, 'updated_at', '');
 				$trackings[] = $tracking;
 			}
         }
@@ -1500,7 +1515,7 @@ class AfterShip_Actions {
                 $this->format_aftership_tracking_output( 422, 'missing required field' );
             }
             foreach ($fulfillment['trackings'] as $j => $tracking) {
-                $tracking_number = str_replace(' ', '', isset($tracking['tracking_number']) ? $tracking['tracking_number'] : '');
+                $tracking_number = str_replace(' ', '', safeArrayGet($tracking, 'tracking_number', ''));
                 if (empty($tracking_number) || empty($tracking['slug'])) {
                     $this->format_aftership_tracking_output( 422, 'missing required field' );
                 }
@@ -1509,7 +1524,7 @@ class AfterShip_Actions {
                 }
                 $fulfillments[$i]['trackings'][$j]['tracking_number'] = $tracking_number;
 
-                $additional_fields = isset($tracking['additional_fields']) ? $tracking['additional_fields'] : [];
+                $additional_fields = safeArrayGet($tracking, 'additional_fields', []);
 				foreach ($additional_fields as $key => $value) {
                     $value = str_replace(' ', '', isset($value) ? $value : '');
 					if (strlen($value) > 256) {
