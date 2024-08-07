@@ -1400,8 +1400,8 @@ class AfterShip_Actions {
                 $tracking['additional_fields'] = safeArrayGet($tracking, 'additional_fields', []);
                 $tracking['slug'] = safeArrayGet($tracking, 'slug', '');
                 $tracking['line_items'] = safeArrayGet($tracking, 'items', []);
-                $tracking['metrics']['created_at'] = safeArrayGet($tracking, 'created_at', '');
-                $tracking['metrics']['updated_at'] = safeArrayGet($tracking, 'updated_at', '');
+                $tracking['metrics']['created_at'] = safeArrayGet($fulfillment, 'created_at', '');
+                $tracking['metrics']['updated_at'] = safeArrayGet($fulfillment, 'updated_at', '');
 				$trackings[] = $tracking;
 			}
         }
