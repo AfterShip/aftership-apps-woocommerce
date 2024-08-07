@@ -80,8 +80,8 @@ class AfterShip_Actions {
         $version = 'v1';
         $options = get_option( 'aftership_option_name' );
         if ($options) {
-            $enable_fulfillment_tracking = safeArrayGet($options, 'enable_fulfillment_tracking', false);
-			if ($enable_fulfillment_tracking) {
+            $enable_fulfillment_tracking = safeArrayGet($options, 'enable_fulfillment_tracking', 0);
+			if ($enable_fulfillment_tracking === 1) {
                 $version = 'v2';
             }
         }
