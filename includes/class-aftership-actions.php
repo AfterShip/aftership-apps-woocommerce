@@ -568,7 +568,7 @@ class AfterShip_Actions {
 
         if ( count( $fulfillments ) > 0 ) {
             foreach ( $fulfillments as $key => $item ) {
-                if ( $item['id'] === $fulfillment_id ) {
+                if ( $item['id'] == $fulfillment_id ) {
                     $deleted_fulfillment = $item;
                     unset( $fulfillments[ $key ] );
                     break;
@@ -742,26 +742,35 @@ class AfterShip_Actions {
             return $fulfillments;
         }
         $trackings = $this->get_tracking_items($order_id);
-        return $this->trackings_to_fulfillments($trackings);
+        $fulfillments = $this->trackings_to_fulfillments($trackings);
+		$this->save_fulfillments_to_wc($order_id, $fulfillments);
+		return $fulfillments;
     }
 
     public function trackings_to_fulfillments($trackings)
     {
         $fulfillments = array();
-        foreach ( $trackings as $index => $tracking ) {
-            $item = [];
-            $item['id'] = $index;
-            $item['trackings']['tracking_id'] = safeArrayGet($tracking, 'tracking_id', '');
-            $item['trackings']['tracking_number'] = safeArrayGet($tracking, 'tracking_number', '');
-            $item['trackings']['slug'] = safeArrayGet($tracking, 'slug', '');
-            $item['trackings']['additional_fields'] = safeArrayGet($tracking, 'additional_fields', []);
-            $item['items'] = safeArrayGet($tracking, 'line_items', []);
-			if (isset($tracking['metrics'])) {
-                $item['created_at'] = safeArrayGet($tracking['metrics'], 'created_at', '');
-                $item['updated_at'] = safeArrayGet($tracking['metrics'], 'updated_at', '');
+        foreach ($trackings as $index => $tracking ) {
+            $f = [];
+            $f['id'] = $index;
+            $f['items'] = safeArrayGet($tracking, 'line_items', []);
+            if (isset($tracking['metrics'])) {
+                $f['created_at'] = safeArrayGet($tracking['metrics'], 'created_at', '');
+                $f['updated_at'] = safeArrayGet($tracking['metrics'], 'updated_at', '');
             }
-            $item['from_tracking'] = true;
-            $fulfillments[] = $item;
+            $f['from_tracking'] = true;
+
+			// trackings to fulfillment trackings
+			$t_arr = [];
+			$t_arr[] = [
+				'tracking_id' => safeArrayGet($tracking, 'tracking_id', ''),
+				'tracking_number'=> safeArrayGet($tracking, 'tracking_number', ''),
+				'slug' => safeArrayGet($tracking, 'slug', ''),
+                'additional_fields' => safeArrayGet($tracking, 'additional_fields', []),
+			];
+			$f['trackings'] = $t_arr;
+
+            $fulfillments[] = $f;
         }
         return $fulfillments;
     }
@@ -1443,12 +1452,12 @@ class AfterShip_Actions {
             $order_id    = wc_clean( $params['order_id'] );
             $fulfillment_id = wc_clean( $params['fulfillment_id'] );
 
-            if ( empty( $order_id ) || empty( $fulfillment_id ) ) {
+            if ( empty( $order_id ) ) {
                 $this->format_aftership_tracking_output( 422, 'missing required field' );
             }
 
             $deleted_fulfillment = $this->delete_fulfillment($order_id, $fulfillment_id);
-            foreach ($deleted_fulfillment['trackings'] as $tracking) {
+            foreach (safeArrayGet($deleted_fulfillment, 'trackings', []) as $tracking) {
                 $this->delete_tracking_item( $order_id, $tracking['tracking_id'] );
             }
 
