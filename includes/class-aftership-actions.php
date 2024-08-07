@@ -752,7 +752,7 @@ class AfterShip_Actions {
         $fulfillments = array();
         foreach ($trackings as $index => $tracking ) {
             $f = [];
-            $f['id'] = $index;
+            $f['id'] = (string)$index;
             $f['items'] = safeArrayGet($tracking, 'line_items', []);
             if (isset($tracking['metrics'])) {
                 $f['created_at'] = safeArrayGet($tracking['metrics'], 'created_at', '');
