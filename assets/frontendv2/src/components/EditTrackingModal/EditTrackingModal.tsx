@@ -23,6 +23,7 @@ interface Props {
 export const [title, setTitle] = createSignal('');
 export const [editingFulfillment, setEditingFulfillment] = createSignal<Fulfillment>(FulfillmentFactory.createDefault());
 export default function EditTrackingModal(props: Props) {
+    const MAX_TRACKING_NUMBER = 20;
     function updateFormValueAtIndex(index: Accessor<number>, field: string, newValue: string) {
         setEditingFulfillment(f => {
             const newFulfillments = {...f};
@@ -178,7 +179,7 @@ export default function EditTrackingModal(props: Props) {
             }
         }
 
-        if (editingFulfillment().trackings.length > 20) {
+        if (editingFulfillment().trackings.length > MAX_TRACKING_NUMBER) {
             isValid = false;
             errors = 'Tracking number limit exceeded';
         }
@@ -317,7 +318,7 @@ export default function EditTrackingModal(props: Props) {
                     }
                 </For>
                 <br/>
-                <button onClick={addTracking}>Add Tracking Number</button>
+                <button disabled={editingFulfillment().trackings.length >= MAX_TRACKING_NUMBER} onClick={addTracking}>Add Tracking Number</button>
             </div>
         </Modal>
     );
