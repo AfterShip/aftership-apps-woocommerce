@@ -1,5 +1,5 @@
 import { Component, createSignal, onCleanup, onMount } from 'solid-js';
-import EditTrackingModal from '@src/components/EditTrackingModal';
+import EditTrackingModal, {setTitle} from '@src/components/EditTrackingModal';
 import {
   fetchOrderFulfillments,
   fetchSelectedCouriers,
@@ -28,6 +28,7 @@ const Orders: Component = () => {
         if (match) {
             await setOrderId(match[1]);
             await fetchOrderFulfillments(match[1]);
+            setTitle('Add')
             setShowModal(true);
         }
     };

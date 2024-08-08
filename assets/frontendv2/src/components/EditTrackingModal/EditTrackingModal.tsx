@@ -20,6 +20,7 @@ interface Props {
   orderId: string;
 }
 
+export const [title, setTitle] = createSignal('');
 export const [editingFulfillment, setEditingFulfillment] = createSignal<Fulfillment>(FulfillmentFactory.createDefault());
 export default function EditTrackingModal(props: Props) {
     function updateFormValueAtIndex(index: Accessor<number>, field: string, newValue: string) {
@@ -202,13 +203,9 @@ export default function EditTrackingModal(props: Props) {
         props.onOk(editingFulfillment());
     };
 
-    const title = createMemo(
+    const getTitle = createMemo(
         () => {
-            let ts = editingFulfillment().trackings;
-            if (ts === undefined) {
-                return `order - #${props.orderId}`
-            }
-            return `${ts.length > 0 ? 'Edit tracking' : 'Add tracking'} - order - #${props.orderId}`
+            return title().toString() + ` tracking - order - #${props.orderId}`
         }
     );
 
@@ -227,7 +224,7 @@ export default function EditTrackingModal(props: Props) {
 
     return (
         <Modal
-            title={title()}
+            title={getTitle()}
             visible={props.visible}
             okText={buttonText().toString()}
             onOk={handleOk}

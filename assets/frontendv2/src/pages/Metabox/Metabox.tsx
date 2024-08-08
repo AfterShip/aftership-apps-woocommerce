@@ -12,7 +12,8 @@ import {
 } from '@src/storages/tracking';
 import EditTrackingModal, {
     editingFulfillment,
-    setEditingFulfillment
+    setEditingFulfillment,
+    setTitle
 } from '@src/components/EditTrackingModal';
 import {
     Fulfillment,
@@ -99,6 +100,7 @@ export const Metabox: Component = () => {
                                         // 💩 update data first, user maybe modify line_items
                                         await fetchOrderFulfillments(orderId);
                                         setEditingFulfillment(fulfillment);
+                                        setTitle('Edit');
                                         setShowModal(true);
                                     }}>
                                     Edit
@@ -134,6 +136,7 @@ export const Metabox: Component = () => {
                 <Button
                     onClick={async () => {
                         await fetchOrderFulfillments(orderId);
+                        setTitle('Add');
                         setShowModal(true);
                     }}
                     style={{width: '100%'}}
