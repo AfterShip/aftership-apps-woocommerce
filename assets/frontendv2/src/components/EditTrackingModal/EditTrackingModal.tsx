@@ -24,6 +24,8 @@ export const [title, setTitle] = createSignal('');
 export const [editingFulfillment, setEditingFulfillment] = createSignal<Fulfillment>(FulfillmentFactory.createDefault());
 export default function EditTrackingModal(props: Props) {
     const MAX_TRACKING_NUMBER = 20;
+    const [trackingIndexCourierMap, setTrackingIndexCourierMap] = createSignal(new Map<number, string>());
+
     function updateFormValueAtIndex(index: Accessor<number>, field: string, newValue: string) {
         setEditingFulfillment(f => {
             const newFulfillments = {...f};
@@ -33,6 +35,11 @@ export default function EditTrackingModal(props: Props) {
                     break;
                 case "slug":
                     newFulfillments.trackings[index()].slug = newValue
+                    setTrackingIndexCourierMap(prev => {
+                        const m = new Map(Object.assign([], prev));
+                        m.set(index(), newValue);
+                        return m;
+                    });
                     break;
             }
             return newFulfillments;
@@ -80,8 +87,9 @@ export default function EditTrackingModal(props: Props) {
         setEditingFulfillment({ ...editingFulfillment(), trackings: newTrackings });
     }
 
-    function additionalFields(index: Accessor<number>) {
-        const r = courierMap().get(editingFulfillment().trackings[index()].slug)?.required_fields || [];
+    function additionalFields(slug: string) {
+        console.log(slug)
+        const r = courierMap().get(slug)?.required_fields || [];
         return r.map((item) => ({
             key: item.replace(/^tracking_/, '') as keyof AdditionalFields,
             name: item
@@ -299,7 +307,7 @@ export default function EditTrackingModal(props: Props) {
                             <button onClick={() => removeTracking(index)}>x</button>
                         </div>
                         <div className={styles.input}>
-                            <For each={additionalFields(index)}>
+                            <For each={additionalFields(trackingIndexCourierMap().get(index()) ?? '')}>
                                 {(item) => (
                                     <div>
                                         <label>
