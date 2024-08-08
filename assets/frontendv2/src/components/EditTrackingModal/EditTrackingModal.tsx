@@ -88,7 +88,6 @@ export default function EditTrackingModal(props: Props) {
     }
 
     function additionalFields(slug: string) {
-        console.log(slug)
         const r = courierMap().get(slug)?.required_fields || [];
         return r.map((item) => ({
             key: item.replace(/^tracking_/, '') as keyof AdditionalFields,
