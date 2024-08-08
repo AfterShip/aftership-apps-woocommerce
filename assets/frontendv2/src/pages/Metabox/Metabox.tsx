@@ -118,14 +118,18 @@ export const Metabox: Component = () => {
                             <div className={styles.content}>
                                 <div>Tracking {index + 1}</div>
                                 <div className={styles.number}>
-                                    <strong>{courierMap().get(tracking.slug)?.name || tracking.slug}&nbsp;</strong>
-                                    <a
-                                        title={tracking.tracking_number}
-                                        href={formatTackingLink(tracking.tracking_number, tracking.slug)}
-                                        target="_blank"
-                                    >
-                                        {tracking.tracking_number}
-                                    </a>
+                                    <div>
+                                        <strong>{courierMap().get(tracking.slug)?.name || tracking.slug}&nbsp;</strong>
+                                    </div>
+                                    <div>
+                                        <a
+                                            title={tracking.tracking_number}
+                                            href={formatTackingLink(tracking.tracking_number, tracking.slug)}
+                                            target="_blank"
+                                        >
+                                            {tracking.tracking_number}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         ))}
