@@ -1399,7 +1399,7 @@ class AfterShip_Actions {
                 $tracking['tracking_id'] = safeArrayGet($tracking, 'tracking_id', '');
                 $tracking['additional_fields'] = safeArrayGet($tracking, 'additional_fields', []);
                 $tracking['slug'] = safeArrayGet($tracking, 'slug', '');
-                $tracking['line_items'] = safeArrayGet($tracking, 'items', []);
+                $tracking['line_items'] = safeArrayGet($fulfillment, 'items', []);
                 $tracking['metrics']['created_at'] = safeArrayGet($fulfillment, 'created_at', '');
                 $tracking['metrics']['updated_at'] = safeArrayGet($fulfillment, 'updated_at', '');
 				$trackings[] = $tracking;
