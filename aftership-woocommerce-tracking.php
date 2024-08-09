@@ -46,6 +46,11 @@ if ( is_woocommerce_active() ) {
 			 */
 			public $actions;
 
+            /***
+             * @var AfterShip_Fulfillment
+             */
+            public $fulfillment_actions;
+
 			/**
 			 * Instance of AfterShip_Protection.
 			 *
@@ -201,10 +206,10 @@ if ( is_woocommerce_active() ) {
 				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
 				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
                 // Fulfillment API
-                add_action( 'wp_ajax_aftership_save_order_fulfillments', array( $this->actions, 'save_order_fulfillments_controller') );
-                add_action( 'wp_ajax_aftership_get_order_fulfillments', array( $this->actions, 'get_order_fulfillments_controller') );
-                add_action( 'wp_ajax_aftership_delete_order_fulfillments', array( $this->actions, 'delete_order_fulfillments_controller') );
-                add_action( 'wp_ajax_aftership_delete_order_fulfillment_tracking', array( $this->actions, 'delete_order_fulfillment_tracking_controller' ) );
+                add_action( 'wp_ajax_aftership_save_order_fulfillments', array( $this->fulfillment_actions, 'save_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_get_order_fulfillments', array( $this->fulfillment_actions, 'get_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_delete_order_fulfillments', array( $this->fulfillment_actions, 'delete_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_delete_order_fulfillment_tracking', array( $this->fulfillment_actions, 'delete_order_fulfillment_tracking_controller' ) );
 
 				// Register Add Tracking Action for AfterShip
                 // A button to update tracking status
@@ -474,6 +479,8 @@ if ( is_woocommerce_active() ) {
 				require_once( $this->plugin_dir . '/includes/define.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
 				$this->import_csv = new AfterShip_Import_Csv($this->actions, $this->couriers);
+                require( $this->plugin_dir . '/includes/class-aftership-fulfillment.php' );
+                $this->fulfillment_actions = AfterShip_Fulfillment::get_instance();
 			}
 
 			/**
