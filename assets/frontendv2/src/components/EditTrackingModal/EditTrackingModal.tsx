@@ -186,7 +186,7 @@ export default function EditTrackingModal(props: Props) {
             }
         }
 
-        if (editingFulfillment().trackings.length > MAX_TRACKING_NUMBER) {
+        if (editingFulfillment().trackings.length > MAX_TRACKING_NUMBER || editingFulfillment().trackings.length == 0) {
             isValid = false;
             errors = 'Tracking number limit exceeded';
         }
@@ -219,14 +219,10 @@ export default function EditTrackingModal(props: Props) {
 
     const buttonText = createMemo(
         () => {
-            let ts = editingFulfillment().trackings;
-            if (ts === undefined) {
-                return `Add`
+            if (title().toString() == 'Edit') {
+                return 'Save'
             }
-            if (ts.length > 0) {
-                return `Save`
-            }
-            return `Add`
+            return 'Add'
         }
     );
 
