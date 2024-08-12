@@ -9198,6 +9198,12 @@ function get_aftership_couriers() {
 			"name": "ZYEX",
 			"other_name": "众优",
 			"required_fields": []
+		},
+		{
+			"slug": "other",
+			"name": "other",
+			"other_name": "other",
+			"required_fields": []
 		}
 	];
 	return data;

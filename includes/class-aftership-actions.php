@@ -1106,7 +1106,7 @@ class AfterShip_Actions {
     public function get_automizely_aftership_tracking_column( $order_id ) {
         ob_start();
 
-        $fulfilments = $this->get_fulfillments_by_wc( $order_id );
+        $fulfilments = AfterShip_Fulfillment::get_instance()->get_fulfillments_by_wc( $order_id );
         $tracking_items = [];
         foreach ($fulfilments as $fulfilment) {
             if (isset($fulfilment['trackings'])) {
