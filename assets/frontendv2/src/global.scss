@@ -1,0 +1,21 @@
+:host {
+  all: initial;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+@import url('normalize.css/normalize.css');
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+  color: #2271b1;
+  transition: color 0.5s ease-in-out;
+
+  &:hover {
+    color: #135e96;
+  }
+}

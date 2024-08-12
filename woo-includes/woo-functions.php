@@ -14,6 +14,12 @@ if ( ! function_exists( 'is_woocommerce_active' ) ) {
 	}
 }
 
+if ( ! function_exists( 'safeArrayGet' ) ) {
+    function safeArrayGet($array, $key, $default = null) {
+        return isset($array[$key]) ? $array[$key] : $default;
+    }
+}
+
 if ( ! function_exists( 'wc_order_util_method_exists' ) ) {
 	function wc_order_util_method_exists($method_name) {
 		return class_exists('Automattic\WooCommerce\Utilities\OrderUtil') && method_exists('Automattic\WooCommerce\Utilities\OrderUtil', $method_name);

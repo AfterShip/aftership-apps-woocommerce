@@ -109,6 +109,10 @@ if ( ! class_exists( 'AM_REST_Settings_Controller' ) ) {
 				$options['enable_import_tracking'] = $data['enable_import_tracking'];
 			}
 
+            if ( isset( $data['enable_fulfillment_tracking'] ) && $data['enable_fulfillment_tracking'] ) {
+                $options['enable_fulfillment_tracking'] = $data['enable_fulfillment_tracking'];
+            }
+
 			// save notes to meta, value: 1 or -1
 			if ( isset( $data['save_notes_to_meta_data'] ) && $data['save_notes_to_meta_data'] ) {
 				$options['save_notes_to_meta_data'] = $data['save_notes_to_meta_data'];

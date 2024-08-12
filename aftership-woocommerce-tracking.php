@@ -3,7 +3,7 @@
  * Plugin Name: AfterShip Tracking - All-In-One WooCommerce Order Tracking (Free plan available)
  * Plugin URI: http://aftership.com/
  * Description: Track orders in one place. shipment tracking, automated notifications, order lookup, branded tracking page, delivery day prediction
- * Version: 1.17.14
+ * Version: 1.17.15
  * Author: AfterShip
  * Author URI: http://aftership.com
  *
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( 'woo-includes/woo-functions.php' );
 
-define( 'AFTERSHIP_VERSION', '1.17.14' );
+define( 'AFTERSHIP_VERSION', '1.17.15' );
 define( 'AFTERSHIP_PATH', dirname( __FILE__ ) );
 define( 'AFTERSHIP_ASSETS_URL', plugins_url() . '/' . basename( AFTERSHIP_PATH ) );
 define( 'AFTERSHIP_SCRIPT_TAGS', 'aftership_script_tags' );
@@ -45,6 +45,11 @@ if ( is_woocommerce_active() ) {
 			 * @var AfterShip_Actions
 			 */
 			public $actions;
+
+            /***
+             * @var AfterShip_Fulfillment
+             */
+            public $fulfillment_actions;
 
 			/**
 			 * Instance of AfterShip_Protection.
@@ -145,21 +150,29 @@ if ( is_woocommerce_active() ) {
 				$this->includes();
 
 				// Check if woocommerce active.
+                // Add afterShip API to woocommerce REST API
 				if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 					add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'add_rest_api' ) );
 				}
 
+                // CSS
 				add_action( 'admin_print_styles', array( $this->actions, 'admin_styles' ) );
-				add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
-				add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
-				// Remove other plugins notice message for setting and landing page
-				add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
+                // FE Order Page Delete Tracking Button & Add Tracking Button
+                add_action( 'admin_enqueue_scripts', array( $this->actions, 'load_orders_page_script' ) );
+                // FE Metabox
+                add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
+                // CSS
+                add_action( 'admin_enqueue_scripts', array( $this, 'automizely_aftership_add_admin_css' ) );
 
-				// Enqueue js on frontend.
-				add_action( 'wp_enqueue_scripts', array( $this, 'as_enqueue_frontend_js' ) );
-
-				add_action( 'add_meta_boxes', array( $this->actions, 'add_meta_box' ) );
+                // Remove other plugins notice message for setting and landing page
+                // Old Version Plugin
+                add_action( 'admin_enqueue_scripts', array( $this, 'as_admin_remove_notice_style' ) );
+                // Enqueue js on frontend.
+                // Old Version Plugin
+                add_action( 'wp_enqueue_scripts', array( $this, 'as_enqueue_frontend_js' ) );
+                // Old Version Plugin
 				add_action( 'woocommerce_process_shop_order_meta', array( $this->actions, 'save_meta_box' ), 0, 2 );
+
 				// register admin pages for the plugin
 				add_action( 'admin_menu', array( $this, 'automizely_aftership_admin_menu' ) );
 				add_action( 'admin_menu', array( $this, 'automizely_aftership_connect_page' ) );
@@ -168,29 +181,43 @@ if ( is_woocommerce_active() ) {
 				 * Admin Initialization calls registration
 				 * We need this to send user to plugin's Admin page on activation
 				 */
+                // init configs & options
 				add_action( 'admin_init', array( $this, 'automizely_aftership_plugin_active' ) );
+                // UNKNOWN
 				add_action( 'admin_footer', array( $this, 'deactivate_modal' ) );
 
 				// View Order Page.
+                // Display tracking with templates
 				add_action( 'woocommerce_view_order', array( $this->actions, 'display_tracking_info' ) );
+                // Display email with templates
 				add_action( 'woocommerce_email_before_order_table', array( $this->actions, 'email_display' ), 0, 4 );
 
 				// Order page metabox actions.
+                // Old Version Plugin API
 				add_action( 'wp_ajax_aftership_get_item', array( $this->actions, 'get_meta_box_item_ajax' ) );
 				add_action( 'wp_ajax_aftership_delete_item', array( $this->actions, 'meta_box_delete_tracking' ) );
 				add_action( 'wp_ajax_aftership_save_form', array( $this->actions, 'save_meta_box_ajax' ) );
 				add_action( 'wp_ajax_aftership_get_items', array( $this->actions, 'get_meta_box_items_ajax' ) );
 
+                // API for FE
+                // Tracking API
 				add_action( 'wp_ajax_aftership_delete_order_tracking', array( $this->actions, 'delete_order_tracking' ) );
 				add_action( 'wp_ajax_aftership_save_order_tracking', array( $this->actions, 'save_order_tracking' ) );
 				add_action( 'wp_ajax_aftership_get_order_trackings', array( $this->actions, 'get_order_detail' ) );
 				add_action( 'wp_ajax_aftership_get_settings', array( $this->actions, 'get_settings' ) );
+                // Fulfillment API
+                add_action( 'wp_ajax_aftership_save_order_fulfillments', array( $this->fulfillment_actions, 'save_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_get_order_fulfillments', array( $this->fulfillment_actions, 'get_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_delete_order_fulfillments', array( $this->fulfillment_actions, 'delete_order_fulfillments_controller') );
+                add_action( 'wp_ajax_aftership_delete_order_fulfillment_tracking', array( $this->fulfillment_actions, 'delete_order_fulfillment_tracking_controller' ) );
 
 				// Register Add Tracking Action for AfterShip
+                // A button to update tracking status
 				add_filter( 'woocommerce_admin_order_actions', array( $this->actions, 'add_aftership_tracking_actions_button' ), 100, 2 );
 				// Custom AfterShip Tracking column in admin orders list.
 				add_filter( 'manage_shop_order_posts_columns', array( $this->actions, 'shop_order_columns' ), 99 );
 				add_action( 'manage_shop_order_posts_custom_column', array( $this->actions, 'render_shop_order_columns' ) );
+                // Custom AfterShip Tracking column in admin orders list(Woocommerce High-Performance Order Storage Support)
 				add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this->actions, 'shop_order_columns' ), 99 );
 				add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this->actions, 'render_wc_orders_list_columns' ), 10, 2 );
 
@@ -226,9 +253,11 @@ if ( is_woocommerce_active() ) {
 				add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this->actions, 'add_query' ), 10, 2 );
 				add_filter( 'woocommerce_rest_customer_query', array( $this->actions, 'add_customer_query' ), 10, 2 );
 
+                // install or uninstall
 				register_activation_hook( __FILE__, array( 'AfterShip', 'install' ) );
 				register_deactivation_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
 				register_uninstall_hook( __FILE__, array( 'AfterShip', 'deactivation' ) );
+                // string cache for AFTERSHIP_VERSION
 				set_transient( 'wc-aftership-plugin' . AFTERSHIP_VERSION, 'alive', 7 * 24 * 3600 );
 			}
 
@@ -450,6 +479,8 @@ if ( is_woocommerce_active() ) {
 				require_once( $this->plugin_dir . '/includes/define.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
 				$this->import_csv = new AfterShip_Import_Csv($this->actions, $this->couriers);
+                require( $this->plugin_dir . '/includes/class-aftership-fulfillment.php' );
+                $this->fulfillment_actions = AfterShip_Fulfillment::get_instance();
 			}
 
 			/**

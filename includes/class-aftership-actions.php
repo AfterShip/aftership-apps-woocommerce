@@ -81,12 +81,13 @@ class AfterShip_Actions {
 	 *      order edit page: page id = "shop_order"
 	 */
 	public function load_orders_page_script( $hook ) {
-		if ( 'edit.php' !== $hook ) {
+		if (!in_array($hook, ['edit.php', 'woocommerce_page_wc-orders'])) {
 			return;
 		}
 		// The following code will be executed only when the detect page which the function belongs to
 		$page_screen            = get_current_screen()->id;
 		$screen_handle_tracking = array(
+            'woocommerce_page_wc-orders',
 			'edit-shop_order',
 			'shop_order',
 		);
@@ -114,10 +115,22 @@ class AfterShip_Actions {
 		);
 		echo '<aftership-orders-modal></aftership-orders-modal>';
 
-		$plugin_url = $GLOBALS['AfterShip']->plugin_url;
+		// 前端灰度
+        $plugin_url = $GLOBALS['AfterShip']->plugin_url;
+        $version = AfterShip_Fulfillment::get_instance()->frontend_version_controller();
+		$src = '';
+		switch ($version) {
+			case 'v1':
+				$src = $plugin_url . '/assets/frontend/dist/orders/index.js';
+				break;
+			case 'v2':
+				$src = $plugin_url . '/assets/frontendv2/dist/orders/index.js';
+				break;
+		}
+
 		wp_enqueue_script(
 			'aftership-orders-page-script',
-			$plugin_url . '/assets/frontend/dist/orders/index.js',
+            $src,
 			array( 'wc-admin-order-meta-boxes' ),
 			AFTERSHIP_VERSION
 		);
@@ -189,7 +202,7 @@ class AfterShip_Actions {
 	 */
 	public function generate_tracking_page_link( $item ) {
 		$custom_domain = str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain );
-		return sprintf( 'https://%s/%s/%s', $custom_domain, $item['slug'], $item['tracking_number'] );
+		return sprintf( 'https://%s/%s/%s', $custom_domain, safeArrayGet($item, 'slug', ''), safeArrayGet($item, 'tracking_number', ''));
 	}
 
 	/**
@@ -226,7 +239,7 @@ class AfterShip_Actions {
 	public function meta_box() {
 		global $post;
 
-		$this->convert_old_meta_in_order( $post->ID );
+		$this->convert_old_meta_in_order( isset($post->ID) ? $post->ID : 0);
 
 		$this->migrate();
 
@@ -252,7 +265,21 @@ class AfterShip_Actions {
 		);
 
 		echo '<aftership-meta-box></aftership-meta-box>';
-		wp_enqueue_script( 'aftership-js-tracking-items', $GLOBALS['AfterShip']->plugin_url . '/assets/frontend/dist/metabox/index.js', array(), AFTERSHIP_VERSION );
+
+        // 前端灰度
+        $plugin_url = $GLOBALS['AfterShip']->plugin_url;
+        $version = AfterShip_Fulfillment::get_instance()->frontend_version_controller();
+        $src = '';
+        switch ($version) {
+            case 'v1':
+                $src = $plugin_url . '/assets/frontend/dist/metabox/index.js';
+                break;
+            case 'v2':
+                $src = $plugin_url . '/assets/frontendv2/dist/metabox/index.js';
+                break;
+        }
+
+		wp_enqueue_script( 'aftership-js-tracking-items', $src, array(), AFTERSHIP_VERSION );
 	}
 
 	/**
@@ -588,6 +615,7 @@ class AfterShip_Actions {
 			}
 		}
 	}
+
 
 	/**
 	 * Gets a single tracking item from the post_meta array for an order.
@@ -1075,44 +1103,49 @@ class AfterShip_Actions {
 	 *
 	 * @return string Column content to render
 	 */
-	public function get_automizely_aftership_tracking_column( $order_id ) {
-		ob_start();
+    public function get_automizely_aftership_tracking_column( $order_id ) {
+        ob_start();
 
-		$tracking_items = $this->get_tracking_items( $order_id );
+        $fulfilments = $this->get_fulfillments_by_wc( $order_id );
+        $tracking_items = [];
+        foreach ($fulfilments as $fulfilment) {
+            if (isset($fulfilment['trackings'])) {
+                $tracking_items = array_merge($tracking_items, $fulfilment['trackings']);
+            }
+        }
 
-		if ( count( $tracking_items ) > 0 ) {
-			echo '<ul class="wcas-tracking-number-list">';
+        if ( count( $tracking_items ) > 0 ) {
+            echo '<ul class="wcas-tracking-number-list">';
+            foreach ( $tracking_items as $tracking_item ) {
+                // 根据 slug，匹配显示的 courier name
+                $provider_courier = $this->get_courier_by_slug(safeArrayGet($tracking_item, 'slug', ''));
+                // 根据规则，生成 tracking link
+                $aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
 
-			foreach ( $tracking_items as $tracking_item ) {
-				// 根据 slug，匹配显示的 courier name
-				$provider_courier = $this->get_courier_by_slug( $tracking_item['slug'] );
-				// 根据规则，生成 tracking link
-				$aftership_tracking_link = $this->generate_tracking_page_link( $tracking_item );
-
-				printf(
-					'<li>
-						<div>
-							<b>%s</b>
-						</div>
-						<a href="%s" title="%s" target="_blank" class=ft11>%s</a>
-						<a href="#" class="aftership_inline_tracking_delete" data-tracking-id="%s" data-order-id="%s">
-							<span class="dashicons dashicons-trash"></span>
-						</a>
-					</li>',
-					esc_html( isset( $provider_courier['name'] ) ? $provider_courier['name'] : $tracking_item['slug'] ),
-					esc_url( $aftership_tracking_link ),
-					esc_html( $tracking_item['tracking_number'] ),
-					esc_html( $tracking_item['tracking_number'] ),
-					esc_attr( $tracking_item['tracking_id'] ),
-					esc_attr( $order_id )
-				);
-			}
-			echo '</ul>';
-		} else {
-			echo '–';
-		}
-		return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
-	}
+                printf(
+                    '<li>
+                    <div>
+                        <b>%s</b>
+                    </div>
+                    <a href="%s" title="%s" target="_blank" class=ft11>%s</a>
+                    <a href="#" class="aftership_inline_tracking_delete" data-tracking-id="%s" data-order-id="%s">
+                        <span class="dashicons dashicons-trash"></span>
+                    </a>
+                </li>',
+                    esc_html( safeArrayGet($provider_courier, 'name', safeArrayGet($tracking_item, 'slug', ''))),
+                    esc_url( $aftership_tracking_link ),
+                    esc_html( safeArrayGet($tracking_item, 'tracking_number', '')),
+                    esc_html( safeArrayGet($tracking_item, 'tracking_number', '')),
+                    esc_attr( safeArrayGet($tracking_item, 'tracking_id', '')),
+                    esc_attr( $order_id )
+                );
+            }
+            echo '</ul>';
+        } else {
+            echo '–';
+        }
+        return apply_filters( 'woocommerce_shipment_tracking_get_automizely_aftership_tracking_column', ob_get_clean(), $order_id, $tracking_items );
+    }
 
 	/**
 	 * Order Tracking Get All Order Items AJAX
@@ -1188,6 +1221,17 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
+
+    private function is_any_fulfillment_from_tracking($fulfillments)
+    {
+        foreach ($fulfillments as $fulfillment) {
+            if ($fulfillment['from_tracking']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Order Tracking Delete
 	 *
@@ -1214,6 +1258,10 @@ class AfterShip_Actions {
 		$this->format_aftership_tracking_output( 200, 'success' );
 	}
 
+
+
+
+
 	/**
 	 * Validate required fields
 	 */
@@ -1229,6 +1277,8 @@ class AfterShip_Actions {
 			}
 		}
 	}
+
+
 
 	/**
 	 * Check fulfill item quantity
@@ -1258,7 +1308,7 @@ class AfterShip_Actions {
 	/**
 	 * Get order item detail
 	 */
-	private function get_order_item_data( $order_id ) {
+	public function get_order_item_data( $order_id ) {
 		$order      = wc_get_order( $order_id );
 		$line_items = array();
 		foreach ( $order->get_items() as  $item_key => $item ) {
@@ -1297,7 +1347,7 @@ class AfterShip_Actions {
 	/**
 	 * Format output
 	 */
-	private function format_aftership_tracking_output( $code, $message, $data = array() ) {
+	public function format_aftership_tracking_output( $code, $message, $data = array() ) {
 		$response = array(
 			'meta' => array(
 				'code'    => $code,

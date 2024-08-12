@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  height: 30px;
+  overflow: hidden;
+  input {
+    line-height: 26px;
+    border: 0;
+    padding-left: 8px;
+    &:focus {
+      outline: 0;
+    }
+    &[type='number']::-webkit-outer-spin-button,
+    &[type='number']::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+    &[type='number'] {
+      appearance: textfield;
+    }
+  }
+  .suffix {
+    color: hsl(210, 4%, 44%);
+    margin-right: 8px;
+    cursor: default;
+  }
+  .action {
+    width: 22px;
+    padding: 2px;
+    height: 100%;
+    display: grid;
+    row-gap: 2px;
+    div {
+      border-radius: 2px;
+      background-color: #e4e5e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover {
+        background-color: #c9cbcf;
+      }
+      &:active {
+        background-color: #b3b5b9;
+      }
+      img {
+        width: 10px;
+        height: 10px;
+        user-select: none;
+      }
+    }
+  }
+}
