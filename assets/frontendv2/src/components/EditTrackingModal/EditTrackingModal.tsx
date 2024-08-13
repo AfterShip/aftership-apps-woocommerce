@@ -153,6 +153,9 @@ export default function EditTrackingModal(props: Props) {
             if (tracking.tracking_number.length > 256) {
                 return { isValid: false, errors: 'Tracking number invalid' };
             }
+            if (tracking.tracking_number.includes(',')) {
+                return { isValid: false, errors: 'Tracking number invalid' };
+            }
 
             // check if tracking number has already been added by other fulfillments
             let exist = otherFulfillmentsTrackings().get(tracking.slug + tracking.tracking_number);

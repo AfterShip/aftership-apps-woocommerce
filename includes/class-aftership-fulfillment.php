@@ -74,15 +74,17 @@ class AfterShip_Fulfillment {
             $f['from_tracking'] = true;
 
             // trackings to fulfillment trackings
+            $tracking_numbers = explode(',', $tracking['tracking_number']);
             $t_arr = [];
-            $t_arr[] = [
-                'tracking_id' => safeArrayGet($tracking, 'tracking_id', ''),
-                'tracking_number'=> safeArrayGet($tracking, 'tracking_number', ''),
-                'slug' => safeArrayGet($tracking, 'slug', ''),
-                'additional_fields' => safeArrayGet($tracking, 'additional_fields', []),
-            ];
+            foreach ($tracking_numbers as $tracking_number) {
+                $t_arr[] = [
+                    'tracking_id' => safeArrayGet($tracking, 'tracking_id', ''),
+                    'tracking_number'=> $tracking_number,
+                    'slug' => safeArrayGet($tracking, 'slug', ''),
+                    'additional_fields' => safeArrayGet($tracking, 'additional_fields', []),
+                ];
+            }
             $f['trackings'] = $t_arr;
-
             $fulfillments[] = $f;
         }
         return $fulfillments;
