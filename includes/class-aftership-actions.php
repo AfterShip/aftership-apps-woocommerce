@@ -724,6 +724,13 @@ class AfterShip_Actions {
 			return;
 		}
 
+        $tracking_items = $this->get_tracking_items($order_id);
+		foreach ($tracking_items as $item) {
+			if ($item['tracking_number'] === $tracking_number && $item['slug'] === $aftership_tracking_provider_name) {
+				return;
+			}
+		}
+
 		// 需要判断 _aftership_tracking_provider_name 是否正确，否则 slug 为 空
 		$slug = null;
 		// 值是正确的slug，直接使用
@@ -1106,12 +1113,17 @@ class AfterShip_Actions {
     public function get_automizely_aftership_tracking_column( $order_id ) {
         ob_start();
 
-        $fulfilments = AfterShip_Fulfillment::get_instance()->get_fulfillments_by_wc( $order_id );
         $tracking_items = [];
-        foreach ($fulfilments as $fulfilment) {
-            if (isset($fulfilment['trackings'])) {
-                $tracking_items = array_merge($tracking_items, $fulfilment['trackings']);
+        $version = AfterShip_Fulfillment::get_instance()->frontend_version_controller();
+        if ( $version === 'v2' ) {
+            $fulfilments = AfterShip_Fulfillment::get_instance()->get_fulfillments_by_wc( $order_id );
+            foreach ($fulfilments as $fulfilment) {
+                if (isset($fulfilment['trackings'])) {
+                    $tracking_items = array_merge($tracking_items, $fulfilment['trackings']);
+                }
             }
+        } else {
+            $tracking_items = $this->get_tracking_items( $order_id );
         }
 
         if ( count( $tracking_items ) > 0 ) {
