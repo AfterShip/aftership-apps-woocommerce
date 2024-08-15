@@ -142,8 +142,8 @@ Tailor a dynamic branded tracking page. Upload promotional banner, logo, and fav
 == Changelog ==
 
 = 1.17.15 =
-* Support multi tracking numbers in one shipment (BETA)
-* Add "other" options to the courier list
+* Support multiple tracking numbers in one Shipment (Beta)
+* Enable the option to select 'Other' as a courier when fulfilling orders.
 
 = 1.17.14 =
 * Fix known issue
