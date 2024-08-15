@@ -478,7 +478,7 @@ if ( is_woocommerce_active() ) {
 				// require new files, don't adjust file order
 				require_once( $this->plugin_dir . '/includes/define.php' );
 				require_once( $this->plugin_dir . '/includes/class-aftership-import-csv.php' );
-				$this->import_csv = new AfterShip_Import_Csv($this->actions, $this->couriers);
+				$this->import_csv = new AfterShip_Import_Csv($this->couriers);
                 require( $this->plugin_dir . '/includes/class-aftership-fulfillment.php' );
                 $this->fulfillment_actions = AfterShip_Fulfillment::get_instance();
 			}

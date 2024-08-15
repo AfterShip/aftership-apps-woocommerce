@@ -7,6 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+//require 'import/data.php';
+//require 'import/log.php';
+//require 'import/functions.php';
+
 class AfterShip_Import_Csv {
 	protected $settings;
 	protected $options;
@@ -24,8 +28,7 @@ class AfterShip_Import_Csv {
 	protected $selected_carrier_slugs;
 	protected $actions;
 
-	public function __construct( $actions, $couriers ) {
-		$this->actions                = $actions;
+	public function __construct( $couriers ) {
 		$this->options                = get_option( 'aftership_option_name' ) ? get_option( 'aftership_option_name' ) : array();
 		$selected_carrier_slugs       = explode( ',', ( isset( $this->options['couriers'] ) ? $this->options['couriers'] : '' ) );
 		$this->selected_carrier_slugs = array_filter( $selected_carrier_slugs );
@@ -497,7 +500,7 @@ class AfterShip_Import_Csv {
 							'tracking_number' => $item['tracking_number'],
 							'line_items'      => $import_line_items,
 						);
-						$updated_order_tracking = $this->actions->post_order_tracking( $order_id, $post_tracking_params );
+						$updated_order_tracking = AfterShip_Actions::get_instance()->post_order_tracking( $order_id, $post_tracking_params );
 						if ( count( $updated_order_tracking ) ) {
 							$change ++;
 						} else {
