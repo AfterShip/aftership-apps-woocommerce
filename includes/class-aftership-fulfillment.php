@@ -19,7 +19,7 @@ class AfterShip_Fulfillment {
     // 前端版本控制器、前端灰度
     public function frontend_version_controller()
     {
-//		return 'v2';
+		// return 'v2';
         $version = 'v1';
         $options = get_option( 'aftership_option_name' );
         if ($options) {
