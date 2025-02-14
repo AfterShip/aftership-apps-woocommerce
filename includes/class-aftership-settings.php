@@ -137,13 +137,14 @@ class AfterShip_Settings {
 			'aftership_setting_section_id'
 		);
 
-		add_settings_field(
-			'save_notes_to_meta_data',
-			'',
-			array( $this, 'save_notes_to_meta_data_callback' ),
-			'aftership-setting-admin',
-			'aftership_setting_section_id'
-		);
+		//  CNT-34475 下掉相关的选项
+		// add_settings_field(
+		// 	'save_notes_to_meta_data',
+		// 	'',
+		// 	array( $this, 'save_notes_to_meta_data_callback' ),
+		// 	'aftership-setting-admin',
+		// 	'aftership_setting_section_id'
+		// );
 
 		add_settings_field(
 			$this->dom_id_show_order_actions,
