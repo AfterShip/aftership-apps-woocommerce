@@ -3,7 +3,7 @@ import path from 'path';
 import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
-  base: '/wp-content/plugins/aftership-woocommerce-tracking/assets/frontend/',
+  base: '/wp-content/plugins/aftership-woocommerce-tracking/assets/frontendv2/',
   plugins: [solidPlugin()],
   resolve: {
     alias: {
