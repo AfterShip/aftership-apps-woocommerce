@@ -83,8 +83,8 @@ export const Metabox: Component = () => {
 
     const formatTackingLink = (tracking_number: string, slug: string) => {
         return /^https?:\/\//.test(customDomain())
-            ? `${customDomain()}/${slug}/${tracking_number}`
-            : `https://${customDomain()}/${slug}/${tracking_number}`;
+            ? `${customDomain()}/${tracking_number}`
+            : `https://${customDomain()}/${tracking_number}`;
     };
 
     return (

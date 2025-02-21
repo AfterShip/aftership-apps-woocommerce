@@ -202,7 +202,7 @@ class AfterShip_Actions {
 	 */
 	public function generate_tracking_page_link( $item ) {
 		$custom_domain = str_replace( array( 'https://', 'http://' ), '', $GLOBALS['AfterShip']->custom_domain );
-		return sprintf( 'https://%s/%s/%s', $custom_domain, safeArrayGet($item, 'slug', ''), safeArrayGet($item, 'tracking_number', ''));
+		return sprintf( 'https://%s/%s', $custom_domain,  safeArrayGet($item, 'tracking_number', ''));
 	}
 
 	/**

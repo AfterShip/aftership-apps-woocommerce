@@ -5,7 +5,7 @@ import solidPlugin from 'vite-plugin-solid';
 import MyExamplePlugin from './plugins/hotReloadShadowDomCss.js';
 
 export default defineConfig({
-  base: '/wp-content/plugins/aftership-woocommerce-tracking/assets/frontend/',
+  base: '/wp-content/plugins/aftership-woocommerce-tracking/assets/frontendv2/',
   plugins: [solidPlugin(), MyExamplePlugin('aftership-meta-box')],
   resolve: {
     alias: {

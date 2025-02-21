@@ -258,8 +258,8 @@ export default function EditTrackingModal(props: Props) {
               <select
                 value={_val()?.slug}
                 onChange={(e) => {
-                  resetAdditionalFields();
                   handleChange('slug', e.currentTarget.value);
+                  resetAdditionalFields(); 
                 }}>
                 <For each={selectedCouriers()}>
                   {(item) => <option value={item.slug}>{item.name || item.other_name}</option>}
